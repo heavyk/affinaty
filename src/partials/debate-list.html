@@ -45,7 +45,6 @@ let scroll = require('../lib/on-scroll.js')
 let masonry = require('masonry-layout')
 let assign = require('../lib/lodash/object/assign')
 let throttle = require('../lib/lodash/function/throttle')
-let search = require('../lib/text-search')
 
 function insert (element, array, comparer) {
   let idx = locationOf(element, array, comparer) + 1
@@ -154,7 +153,6 @@ component.exports = {
       Ractive.header.fire('search', '')
     })
 
-    window.search = search
     Ractive.header.on('search', (_txt) => {
       this.set('query.text', _txt)
       this.clear()

@@ -75,7 +75,6 @@ genny.run(function* (resume) {
 
 process.on('exit', () => {
   console.log('process: on exit')
-  module.exports.destroy()
   genny.run(function* (resume) {
     let out
     out = yield spawn(local_psy, ['stop', 'gobbler'], {cwd: local_dir})
