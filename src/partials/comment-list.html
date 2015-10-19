@@ -1,0 +1,290 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/time.html'>
+<link rel='ractive' href='../partials/are-you-sure.html'>
+
+<div class="comments">
+  <h6 class="title">
+    Debate
+  </h6>
+  <div class="comments-container">
+    <div class="add-comment">
+      <form on-submit="add">
+        <div class="text-container">
+          <textarea
+            class="animate"
+            on-blur-focus="toggle-focus"
+            on-nlSubmit="add"
+            value="{{text}}"
+            maxlength="500"
+            placeholder="Escribe tu comentario"
+            decorator="nlElastic">
+          </textarea>
+        </div>
+        <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
+          <button type="submit" on-click="add">
+            <i class="fa fa-comment-o"></i> send
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="list-container" style="height: {{height}}px">
+      <div class="gm-scrollbar -vertical">
+        <div class="thumb"></div>
+      </div>
+      <div class="gm-scrollbar -horizontal">
+        <div class="thumb"></div>
+      </div>
+      <div class="gm-scroll-view">
+        {{#if loading}}
+          loading...
+        {{else}}
+          {{#list}}
+            <div class="comment">
+              <div class="header">
+                <span class="user">
+                  <a href="/profile/{{.creator._id}}">
+                    <foto src="{{.creator.foto}}" size="z" />
+                    <h4>{{.creator.name}}</h4>
+                  </a>
+                  <time time="{{.created}}" class="since" />
+                </span>
+                {{#if ._canDelete}}
+                  <div class="others" on-click="remove">
+                    <!-- <i class="fa fa-ellipsis-h"></i> -->
+                    <i class="fa fa-close"></i>
+                  </div>
+                {{/if}}
+              </div>
+              <div class="comment-body" decorator="markdown:'text'">
+              </div>
+            </div>
+          {{/list}}
+        {{/if loading}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+@import '../../../node_modules/gemini-scrollbar/gemini-scrollbar.css';
+.comments-container {
+  background-color: #fff;
+  border-right: 1px solid #d5d5d5;
+  border-left: 1px solid #d5d5d5;
+}
+h6 {
+  font-family: 'Pacifico';
+  text-align: center;
+  color: #fd270d;
+  font-size: 110%;
+  margin: 20px 0 0 0;
+}
+.title {
+  background-color: #fff;
+  border: 1px solid #d5d5d5;
+  /*border-bottom: 1px solid #f3f3f3;*/
+  border-bottom: 1px solid #dadada;
+  border-radius: 30px 11px 0 0;
+  text-align: center;
+  padding-top: 9px;
+  padding-bottom: 10px;
+}
+.list-container {
+  overflow-y: scroll;
+  background-color: #fff;
+  margin-bottom: 4px;
+}
+.comment-body {
+  padding-left: 15px;
+  margin: 0 0 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #d2d2d2;
+  word-wrap: break-word;
+}
+.header {
+  position: relative;
+}
+.user {
+  width: 100%;
+  float: left;
+  padding-top: 10px;
+}
+.user img {
+  float: left;
+  margin-right: 12px;
+  margin-left: 15px;
+  vertical-align: middle;
+}
+.user h4 {
+  font-size: 15px;
+  text-decoration: none;
+  color: #000;
+}
+.user h4 a {
+  color: #414141;
+  text-decoration: none;
+}
+.user h4 a:hover {
+  color: #fd270d;
+}
+.others {
+  /*float: right;*/
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #dadada;
+}
+.others:hover {
+  color: #f00;
+  cursor: pointer;
+}
+.add-comment {
+  position: relative;
+  font-size: 16px;
+  padding: 5px;
+  border-bottom: 1px solid #f3f3f3;
+}
+.text-container {
+  position: relative;
+  width: 100%;
+  margin-left: -15px;
+}
+textarea.animate {
+  padding: 10px;
+  margin: 0 15px;
+  width: 100%;
+  height: 35px;
+}
+.submit {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  margin: 5px;
+}
+.submit button {
+  padding: 1px 20px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+	opacity: .7;
+	transition: all .3s ease-in-out;
+}
+.submit button:hover {
+	opacity: 1;
+	background-color: #fff;
+	border-color: #ccc;
+}
+.submit .fa {
+  color: #fd270d;
+}
+</style>
+
+<script>
+let api = require('../api')
+let assign = require('../lib/lodash/object/assign')
+let onresize = require('../lib/dom/element-onresize')
+let findIndex = require('../lib/lodash/array/findIndex')
+component.exports = {
+  // adapt: ['promise-alt'],
+  isolated: true,
+  modal: require('../modal'),
+  onconfig () {
+    this.get('text') || this.set('text', '')
+  },
+  oninit () {
+    let query = assign({}, {
+      debate: this.get('debate'),
+      poll: this.get('poll'),
+    })
+    // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
+    this.set('loading', true)
+    api.action('comment*', assign({sort: '+created'}, query), (data) => {
+      for (var i = 0; i < data.length; i++) {
+        data[i]._canDelete = data[i].creator._id === api.me._id
+      }
+      this.set({
+        loading: false,
+        list: data
+      })
+    })
+    this.on('add', (event) => {
+      event.original.preventDefault()
+      let text = this.get('text').trim()
+      if (text.length < 2) return
+      this.set('saving', true)
+      this.set('text', '')
+      this.fire('elastic:adjust')
+      api.action('comment+', assign({text: text}, query), (data) => {
+        let list = this.get('list')
+        this.set('saving', false)
+        data.creator = api.me
+        data._canDelete = true
+        list.unshift(data)
+      }, (error) => {
+        this.set('error', error)
+        this.set('saving', false)
+      })
+    })
+    this.on('toggle-focus', () => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.toggle('focused')
+      }, 200)
+    })
+    this.on('remove', (event) => {
+      let id = event.context._id
+      let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
+      // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
+      api.my.opinion.on('answer', (v) => {
+        if (v !== void 0) {
+          modal.teardown()
+          if (v) {
+            api.action('comment-', {_id: id}, (res) => {
+              // if (res) api.comment.fire('-', id)
+              if (res) {
+                let list = this.get('list')
+                let idx = findIndex(list, (r) => r._id === id)
+                console.log('idx', idx)
+                list.splice(idx, 1)
+              }
+            })
+          }
+        }
+      })
+    })
+  },
+  oncomplete () {
+    let title = this.find('.title')
+    let adder = this.find('.add-comment')
+    let container = this.find('.list-container')
+
+    let _resizer, resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+      this.set('height', window.innerHeight - 65 - title.scrollHeight - adder.scrollHeight)
+    }, true)
+    onresize.addResizeListener(container, resizer)
+    resizer()
+    let gemini = new (require('gemini-scrollbar'))({
+      element: container,
+      autoshow: true,
+      createElements: false,
+    }).create()
+
+    this.observe('list', (v) => {
+      gemini.update()
+      resizer()
+    })
+    this.once('teardown', () => {
+      gemini.destroy()
+      onresize.removeResizeListener(container, resizer)
+    })
+  },
+  decorators: {
+    nlElastic: require('../lib/decorators/nlElastic'),
+    // scrollGlue: require('../lib/decorators/scrollGlue'),
+    markdown: require('../lib/decorators/markdown')
+  },
+  events: {
+    nlSubmit: require('../lib/events/nlSubmit')
+  },
+}
+</script>

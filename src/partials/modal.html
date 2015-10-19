@@ -1,0 +1,153 @@
+
+<div class="modal-background" on-tap-mousedown="modal-close" intro="fade" outro="fade">
+  <div class="modal-outer {{modalName}}">
+    <div class="modal">
+      <h1>
+        {{title}}
+        <div class="modal-close" on-tap-click="modal-close">
+          <i class="fa fa-close"></i>
+        </div>
+      </h1>
+      {{>modalContent}}
+    </div>
+  </div>
+</div>
+
+<style>
+.button-sign-up {
+  width: 110%;
+  border-radius: 10px 0px 10px 0px;
+  background: #fd270d;
+  text-align: center;
+  color: #fff;
+}
+
+.modal-background {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  padding: 0.5em;
+  text-align: center;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+.modal-outer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
+.modal-close {
+  display: block;
+  content: "\00D7";
+  background: #fd270d;
+  color: #ffffff;
+  width: 30px;
+  height: 30px;
+  padding-right: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 100;
+  line-height: 1px;
+  text-indent: 1px;
+  border-radius: 0 0 0 4px;
+  cursor: pointer;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.modal {
+  position: relative;
+  background-color: white;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  margin: 0 auto;
+  display: inline-block;
+  max-width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: solid 1px #9a9a9a;
+}
+
+.modal-button {
+  text-align: center;
+  background-color: rgb(70,70,180);
+  color: white;
+  padding: 0.5em 1em;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.modal h1 {
+  margin: 0;
+  color: #fff;
+  border-bottom: 1px solid #fe8172;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: #FF3300;
+  font-size: 19px;
+  padding-top: 10px;
+  text-overflow: ellipsis;
+  overflow-y: hidden;
+  white-space: nowrap;
+  position: relative;
+  padding-right: 35px;
+}
+
+</style>
+
+<script>
+let onresize = require('../lib/dom/element-onresize.js')
+component.exports = {
+  // by default, the modal should sit atop the <body>...
+  // ...but it should append to it rather than overwriting its contents
+  el: document.body,
+  append: true,
+
+  onrender () {
+    this.outer = this.find('.modal-outer')
+    this.modal = this.find('.modal')
+    this.closeButton = this.find('.modal-close')
+
+    let resizeHandler = () => {
+      let outerHeight = this.outer.clientHeight
+      let modalHeight = this.modal.clientHeight
+      let verticalSpace = (outerHeight - modalHeight) / 2
+      this.modal.style.top = verticalSpace + 'px'
+    }
+
+    this.on('resize', resizeHandler)
+
+    this.on('modal-close', function (event) {
+      event.original.stopImmediatePropagation()
+      if (!this.modal.contains(event.original.target) || this.closeButton.contains(event.original.target)) {
+        this.teardown()
+      }
+    })
+
+    // when the window resizes, keep the modal horizontally and vertically centred
+    window.addEventListener('resize', resizeHandler, false)
+
+    // when the modal element size changes, same thing
+    onresize.addResizeListener(this.modal, resizeHandler)
+
+    this.once('teardown', () => {
+      window.removeEventListener('resize', resizeHandler)
+      onresize.removeResizeListener(this.modal, resizeHandler)
+    })
+
+    setTimeout(resizeHandler, 1)
+  },
+	events: {
+		tap: require('ractive-events-tap'),
+	},
+	transitions: {
+		fade: require('ractive-transitions-fade'),
+	},
+}
+</script>

@@ -1,0 +1,78 @@
+<link rel='ractive' href='../partials/set-up.html'>
+
+<div class="options">
+  {{#each d.options : i}}
+  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-click="selection">
+    {{.text}}
+  </button>
+  {{/each}}
+</div>
+
+<style>
+.options {
+  padding: 20px;
+}
+.option {
+  border: 1px solid #ccc;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  width: 100%;
+  background: #fffefe;
+  margin-bottom: 6px;
+}
+.option:hover, .selected {
+  background: #3AA550;
+  border-bottom: solid 1px #2e8034;
+  color: #fff;
+}
+.option:hover {
+  border: solid 1px #2e8034;
+}
+.unselected {
+  border: 1px solid rgba(253, 39, 13, 0.5);
+  cursor: pointer;
+}
+.option:hover {
+  background: #2e8034;
+}
+
+
+</style>
+
+<script>
+let api = require('../api')
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  oninit () {
+    this.on('selection', (event) => {
+      let idx = this.get('d.idx')
+      let iidx = event.index.i
+      if (idx !== iidx) {
+        this.idx(iidx, idx)
+      }
+    })
+  },
+  idx (iidx, idx, skip) {
+    if (idx !== iidx && !skip) {
+      if (!api.me.birthdate || api.me.planet == null) {
+        this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
+          setTimeout(() => {
+            this.idx(iidx, idx, !api.me.birthdate || api.me.planet == null ? true : false)
+          }, 200)
+        })
+      } else {
+        this.set('d.idx', iidx)
+        // api.my.opinion.create({poll: this.get('d._id')}, idx)
+        api.action('selection!', {poll: this.get('d._id'), idx: iidx}, (d) => {
+          if (idx != null)
+            this.subtract('d.totals.'+idx, 1)
+          this.set('d.idx', d.idx)
+          this.add('d.totals.'+d.idx, 1)
+        })
+      }
+    }
+  },
+}
+</script>

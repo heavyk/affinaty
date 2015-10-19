@@ -1,0 +1,218 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="affinaties-container" style="max-height: {{height}}px">
+  <div class="title">Affines</div>
+  <div class="list-container">
+    <div class="gm-scrollbar -vertical">
+      <div class="thumb"></div>
+    </div>
+    <div class="gm-scrollbar -horizontal">
+      <div class="thumb"></div>
+    </div>
+    <div class="gm-scroll-view">
+      {{#if loading}}
+        <spinner scale="0.2" />
+      {{else}}
+        {{#list}}
+          <div class="list">
+            <div class="rank {{affinaty > 0 ? 'pos' : affinaty < 0 ? 'neg' : 'neutral' }}">
+              {{#if .affinaty > 0}}
+                <i class="fa fa-chevron-up"></i>
+                <div class="pos-text">
+                  {{Math.round(.affinaty * 100)}}%
+                </div>
+              {{else}}
+                {{#if affinaty < 0}}
+                  <div class="pos-text">
+                    {{Math.round(.affinaty * 100)}}%
+                  </div>
+                  <i class="fa fa-chevron-down"></i>
+                {{else}}
+                  <div class="pos-text">
+                    -
+                  </div>
+                {{/if}}
+              {{/if}}
+            </div>
+            <div class="user">
+              <a href="/profile/{{._id}}" title="{{.name}}">
+                <foto src="{{foto}}" size="y" />
+              </a>
+              <div>
+                <h4><a href="/profile/{{._id}}" title="{{.name}}"> {{name}}</a></h4>
+                <h5>{{title}}</h5>
+              </div>
+            </div>
+          </div>
+        {{else}}
+          Aquí verás tu afinidad con usuarios a los que sigues
+        {{/list}}
+      {{/if loading}}
+    </div>
+  </div>
+</div>
+
+<style>
+.affinaties-container {
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
+  border-radius: 30px 9px 30px 9px;
+}
+
+.title {
+  background-color: #fff;
+  border-radius: 30px 9px 0px 0px;
+  text-align: center;
+  width: 100%;
+  height: 30px;
+  border-bottom: solid 1px #E6E6E6;
+  font-family: 'Pacifico';
+  color: #fd270d;
+  font-size: 17px;
+}
+
+.list-container {
+  overflow-y: scroll;
+  width: 100%;
+  min-height: 100px;
+  max-height: 720px;
+  background: #fff;
+  position: relative;
+  border-radius: 0px 0px 30px 9px;
+}
+.list {
+  width: 100%;
+  background-color: #ffffff;
+  transition: background-color 333ms ease-in-out;
+}
+.rank {
+  color: #333;
+  float: left;
+  width: 32px;
+  margin-left: 8px;
+  text-align: center;
+  padding: 0 4px;
+}
+.pos-text {
+  margin: -8px 0;
+}
+.pos {
+  color: #5a9727;
+  padding-top: 4px;
+}
+.neg {
+  color: #f00;
+  padding-top: 12px;
+}
+.neutral {
+  margin-top: 10px;
+}
+
+.updated {
+  background-color: #B8E7FF;
+}
+
+.user {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dadada;
+}
+.user img {
+  float: left;
+  margin-right: 12px;
+  margin-left: 16px;
+  vertical-align: middle;
+  margin-top: 5px;
+  width: 36px;
+  height: 36px;
+}
+.user h4,
+.user h5 {
+  margin: 0;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.user h4 {
+  padding-top: 10px;
+}
+.user h4 a {
+  color: #414141;
+  text-decoration: none;
+}
+.user h4 a:hover {
+  color: #fd270d;
+}
+.user h5 {
+  color: #c2c2c2;
+  font-size: 12px;
+  font-weight: 200;
+}
+
+.view_plus {
+  background-color: #fff;
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  padding-top: 3px;
+  border-radius: 0px 0px 30px 9px;
+  border-top: solid 1px #e6e6e6;
+  font-weight: bold;
+}
+
+</style>
+
+<script>
+
+let api = require('../api')
+component.exports = {
+  onconfig () {
+    this.set('list', this.list = [])
+  },
+  oninit () {
+    this.set('loading', true)
+    api.my.affinaties.until('/', () => {
+      this.set('loading', false)
+      this.set('list', api.my.affinaties.list)
+    })
+    api.my.affinaties.on('updated', (updated) => {
+      let els = this.findAll('.list')
+      clearTimeout(this.timeout)
+      for (var i = 0; i < els.length; i++) {
+        if (~updated.indexOf(i)) els[i].className += ' updated'
+      }
+      this.timeout = setTimeout(() => {
+        for (var i = 0; i < els.length; i++) {
+          els[i].className = 'list'
+        }
+      }, 2000)
+      // TODO set them a different color or something
+    })
+  },
+  oncomplete () {
+    let title = this.find('.title')
+    let container = this.find('.list-container')
+    let onresize = require('../lib/dom/element-onresize')
+    let _resizer, resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+      this.set('height', window.innerHeight - 65 - title.scrollHeight)
+    }, true)
+    onresize.addResizeListener(container, resizer)
+    resizer()
+    let gemini = new (require('gemini-scrollbar'))({
+      element: container,
+      autoshow: true,
+      createElements: false,
+    }).create()
+
+    this.observe('list', (v) => {
+      gemini.update()
+      resizer()
+    }, {initial: false})
+
+    this.once('teardown', () => {
+      gemini.destroy()
+      onresize.removeResizeListener(container, resizer)
+    })
+  }
+}
+</script>

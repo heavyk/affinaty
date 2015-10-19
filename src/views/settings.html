@@ -1,0 +1,521 @@
+<link rel='ractive' href='../partials/spinner.html'>
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/foto-upload.html'>
+
+
+<div class="container">
+  <div class="row">
+
+    <!-- left column -->
+    <div class="col-sm-4 col-md-3 col-threads">
+      <div class="menu">
+        <h4>Settings</h4>
+        <nav>
+          <li on-click="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
+            Editar perfil
+          </li>
+          <li on-click="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
+            Configuración
+          </li>
+          <li on-click="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
+            Redes Sociales
+          </li>
+        </nav>
+      </div>
+    </div>
+
+    <!-- right column -->
+    <div class="col-sm-8 col-md-9">
+      {{#if active === 'appearance' }}
+      <div class="settings">
+        <div class="profile-foto">
+          <span class="change-foto" on-click="toggle('change_foto')">
+            {{#if change_foto}}
+            <i class="fa fa-close"></i> Cancelar
+            {{else}}
+            <i class="fa fa-camera"></i> Cambiar foto
+            {{/if}}
+          </span>
+          {{#if change_foto}}
+          <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{cropped}}" />
+          {{else}}
+          <foto src="{{me.foto}}" size="t" />
+          {{/if}}
+        </div>
+
+        <form on-submit="change-appearance">
+          <div><h5>Cambia tu nombre</h5></div>
+          <input type="text" maxlength="50" value="{{me.name}}" placeholder="{{me.name}}">
+
+          <div><h5>Cambia tu descripción</h5></div>
+          <input type="text" maxlength="100" value="{{me.title}}" placeholder="{{me.title}}">
+
+          <div><h5>Cambia tu localización</h5></div>
+          <div class="row">
+            <div class="col-xs-6">
+              <select value="{{country}}">
+                <option value="">País</option>
+                {{#each countries}}
+                <option value="{{short}}">{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{#if provinces}}
+            <div class="col-xs-6">
+              <select value="{{province}}">
+                <option value="">Provincia</option>
+                {{#each provinces}}
+                <option value="{{short}}">{{name}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+          </div>
+
+          <div><h5>Cambia tu fecha de nacimiento</h5></div>
+          <input type="text" placeholder="{{f_birthdate}}" decorator="pikaday:'me.birthdate','me.birthdate'" on-focus="pikaday">
+
+          <div><h5>Cambia tu género</h5></div>
+          <div style="text-align: center">
+            <div class="planet row">
+              <div class="col-xs-6">
+                <i class="fa fa-venus {{new_planet == 0 ? 'selected' : me.planet == 0 ? 'active' : ''}}" on-click="set('new_planet', 0)"></i>
+                <div>Mujer</div>
+              </div>
+              <div class="col-xs-6">
+                <i class="fa fa-mars {{new_planet == 1 ? 'selected' : me.planet == 1 ? 'active' : ''}}" on-click="set('new_planet', 1)"></i>
+                <div>Hombre</div>
+              </div>
+            </div>
+
+            <div style="margin-top: 60px">
+              <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+              {{#if saving}}
+                <spinner />
+              {{/if}}
+            </div>
+          </div>
+        </form>
+      </div>
+      {{/if}}
+
+      {{#if active === 'identities' }}
+      <div class="settings">
+        <!-- <form on-submit="change-identities">
+          <div>
+            <div><h5>Correo elecrónico</h5></div>
+            <input type="text" maxlength="100" value="{{new_email}}" placeholder="{{ident.ident}}">
+          </div>
+        </form> -->
+        <form on-submit="change-password">
+          <div>
+            <div><h5>Contraseña actual</h5></div>
+            <input type="password" maxlength="100" value="{{pw.oldPassword}}" placeholder="tu contraseña actual">
+          </div>
+          <div>
+            <div><h5>Nueva contraseña</h5></div>
+            <input type="password" maxlength="100" value="{{pw.newPassword}}" placeholder="tu nueva contraseña">
+          </div>
+          <div>
+            <div><h5>Confimar Contraseña</h5></div>
+            <input type="password" maxlength="100" value="{{pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
+          </div>
+          <div style="margin-top: 60px">
+            <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+            {{#if saving}}
+              <spinner />
+            {{/if saving}}
+            {{#if passwd_success}}
+              <div>{{passwd_success}}</div>
+            {{/if passwd_success}}
+          </div>
+        </form>
+      </div>
+      {{/if}}
+
+      {{#if active === 'networks' }}
+      <div class="settings">
+        <div class="heading">
+          Estos datos aparecen en tu perfil
+        </div>
+        <form on-submit="change-networks">
+          <div>
+            <div><h5>Blog:</h5></div>
+            <input type="text" maxlength="200" value="{{net.blog}}" placeholder="(ej. http://wordpress.com/pepelotero)" class="{{errors.net.blog ? 'invalid' : ''}}" />
+          </div>
+          <div>
+            <div><h5>Facebook:</h5></div>
+            <input type="text" maxlength="200" value="{{net.facebook}}" placeholder="(ej. https://facebook.com/pepelotero)" class="{{errors.net.facebook ? 'invalid' : ''}}" />
+          </div>
+          <div>
+            <div><h5>Twitter:</h5></div>
+            <input type="text" maxlength="200" value="{{net.twitter}}" placeholder="(ej. https://twitter.com/pepelotero)" class="{{errors.net.twitter ? 'invalid' : ''}}" />
+          </div>
+          <div>
+            <div><h5>GitHub:</h5></div>
+            <input type="text" maxlength="200" value="{{net.github}}" placeholder="(ej. http://github.com/PepeLotero)" class="{{errors.net.github ? 'invalid' : ''}}" />
+          </div>
+          <div>
+            <div><h5>Canal de Youtube:</h5></div>
+            <input type="text" maxlength="200" value="{{net.youtube}}" placeholder="(ej. http://youtube.com/user/PepeLotero)" class="{{errors.net.youtube ? 'invalid' : ''}}" />
+          </div>
+          <div style="margin-top: 60px">
+            <button class="button-sign-up" on-click="change-networks">Guardar</button> {{save_success}}
+            {{#if saving}}
+              <spinner />
+            {{/if saving}}
+            {{#if passwd_success}}
+              <div>{{passwd_success}}</div>
+            {{/if passwd_success}}
+          </div>
+        </form>
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<style>
+h4, h5, .change-foto {
+  color: #fd270d;
+  text-shadow: 1px 2px 1px rgba(0,0,0,.2);
+}
+.menu {
+  position: fixed;
+  max-height: 90%;
+  min-width: 266px;
+}
+
+.heading {
+  font-size: 120%;
+  text-align: center;
+  color: #999;
+  margin-bottom: 20px;
+}
+
+.menu, .settings {
+  background: #ffffff;
+  margin: 30px 0;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 5px 11px 20px -3px rgba(41, 41, 41, 0.53);
+}
+
+.profile-foto {
+  text-align: center;
+}
+
+.menu nav {
+  list-style-type: none;
+}
+
+nav li {
+  cursor: pointer;
+  padding-left: 5px;
+}
+nav li:hover,
+li.active {
+  background-color: #eee;
+}
+
+button.button-sign-up {
+  width: 50%;
+  margin: 0 25%;
+  border-radius: 8px;
+}
+
+.change-foto {
+  cursor: pointer;
+  position: absolute;
+  top: 60px;
+  right: 30px;
+}
+
+.foto-upload {
+  margin: 0 auto;
+  position: relative;
+}
+
+.foto-upload .message {
+  font-size: 16px;
+  position: absolute;
+  left: 0;
+  width: 240px;
+  top: 160px;
+}
+
+.dropzone-area {
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  width: 240px;
+  height: 240px;
+  margin: 0 0 6px 0;
+  display: inline-block;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.planet {
+  text-align: center;
+}
+
+.planet .fa {
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+  font-size: 120%;
+  margin: 5px;
+  background: #fff;
+  border: solid 3px #505050;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+  border-radius: 50%;
+}
+
+.planet .fa:before {
+  font-size: 300%;
+}
+
+.planet .active {
+  border: solid 3px #fd270d;
+  color: #f00;
+}
+
+.planet .selected {
+  border: solid 3px #00f;
+  color: #00f;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let moment = require('moment')
+let pikaday = require('pikaday')
+let _provinces = require('provinces')
+let assign = require('../lib/lodash/object/assign')
+let isEqual = require('../lib/lodash/lang/isEqual')
+let Validator = require('../validator')
+component.exports = {
+  isolated:true,
+  onconfig () {
+    // my existing data
+    this.get('active') || this.set('active', 'appearance')
+
+    // TODO - this should exist somewhere else - perhaps on the server?
+    let countries = [
+      {name: 'United States', short: 'US'},
+      {name: 'United Kingdom', short: 'GB'},
+      {name: 'Canada', short: 'CA'},
+      {name: 'Mexico', short: 'MX'},
+      {name: 'España', short: 'ES'},
+      {name: 'Australia', short: 'AU'},
+      {name: 'China', short: 'CN'},
+      {name: 'Germany', short: 'DE'},
+      {name: 'Belgium', short: 'BE'},
+      {name: 'Netherlands', short: 'NL'},
+      {name: 'Denmark', short: 'DK'},
+      {name: 'Turkey', short: 'TR'},
+      {name: 'Indonesia', short: 'ID'},
+      {name: 'Jordan', short: 'JO'},
+      {name: 'India', short: 'IN'},
+      {name: 'Cambodia', short: 'KH'},
+      {name: 'Ethiopia', short: 'ET'},
+      {name: 'Peru', short: 'PE'},
+      {name: 'Cuba', short: 'CU'},
+      {name: 'Argentina', short: 'AR'},
+      {name: 'Chile', short: 'CL'},
+      {name: 'Bolivia', short: 'BO'},
+      {name: 'Bangladesh', short: 'BD'},
+      {name: 'Pakistan', short: 'PK'},
+      {name: 'Nigeria', short: 'NG'},
+      {name: 'Japan', short: 'JP'},
+      {name: 'Austria', short: 'AT'},
+      {name: 'Brazil', short: 'BR'},
+      {name: 'Philippines', short: 'PH'},
+      {name: 'Vietnam', short: 'VN'},
+    ]
+    countries.sort((a, b) => {
+      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+    })
+    this.set('countries', countries)
+  },
+  oninit () {
+    let me = api.get('me')
+    this.old_me = assign({}, me)
+    api.observe('me', (_me) => {
+      this.set('me', _me)
+      if (_me && _me.networks)
+        this.set('net', _me.networks)
+      me = _me
+    })
+
+    this.observe('me', (me) => {
+      if (me) api.set('me', me)
+    })
+
+    // change-appearance
+    this.observe('cropped', (v) => {
+      if (v && v.length) this.set('me.foto', v[0])
+    })
+
+    // TODO - a proper form with validation
+    this.on('change-appearance', (e) => {
+      e.original.preventDefault()
+      var d = {}
+      let new_name = this.get('new_name')
+      if (new_name && new_name !== me.name)
+        d.name = new_name
+
+      let new_foto = this.get('new_foto')
+      if (new_foto && new_foto !== me.foto)
+        d.foto = new_foto
+
+      let new_title = this.get('new_title')
+      if (new_title && new_title !== me.title)
+        d.title = new_title
+
+      let new_planet = this.get('new_planet')
+      if (new_planet !== void 0 && new_planet !== me.planet)
+        d.planet = new_planet
+
+      let new_birthdate = this.get('new_birthdate')
+      if (new_birthdate !== void 0 && new_birthdate !== me.birthdate)
+        d.birthdate = new_birthdate
+
+      // TODO - use the validator
+      if (Object.keys(d).length) {
+        this.set('saving', true)
+        api.action('change-appearance', d, (data) => {
+          if (data) {
+            this.set('save_success', 'Saved..')
+            api.whoIaM(data)
+            this.set('change_foto', false)
+            this.set('saving', false)
+            setTimeout(() => {
+              this.set('save_success', null)
+              // clear the values after 3 seconds
+              for (let k in data) {
+                this.set('new_' + k, void 0)
+              }
+            }, 3000)
+          }
+        })
+      }
+    })
+
+    // change-password
+    this.pw = new Validator('pw', {
+      'oldPassword': {required: true, min: 4, max: 100},
+      'newPassword': {required: true, min: 4, max: 100, password: 'd.confirm'},
+      'confirmPassword': {required: true, min: 4, max: 100, password: 'd.password'},
+    })
+    this.observe('pw', () => {
+      if (this.pw.submitted)
+        this.set('errors', this.pw.validate(this).errors)
+    })
+    this.on('change-password', (e) => {
+      e.original.preventDefault()
+      this.pw.submitted = true
+      let form = this.pw.validate(this)
+      this.set('errors', form.errors)
+      if (form.valid) api.action('change-password', form.data, function (data) {
+        if (data)
+          this.set('passwd_success', 'Password changed successfully')
+      })
+    })
+
+    // change-networks
+    this.net = new Validator('net', {
+      'blog': {required: false, type: 'string', min: 4, max: 100},
+      'facebook': {required: false, type: 'string', min: 4, max: 100},
+      'twitter': {required: false, type: 'string', min: 4, max: 100},
+      'youtube': {required: false, type: 'string', min: 4, max: 100},
+      'github': {required: false, type: 'string', min: 4, max: 100},
+    })
+    this.observe('net', () => {
+      if (this.net.submitted)
+        this.set('errors', this.net.validate(this).errors)
+    })
+    this.on('change-networks', (e) => {
+      e.original.preventDefault()
+      this.net.submitted = true
+      let form = this.net.validate(this)
+      this.set('errors', form.errors)
+      if (form.valid)
+        this.set('saving', true)
+      && api.action('change-appearance', {networks: form.data}, (data) => {
+        this.set('saving', false)
+        if (data) {
+          api.whoIaM(data)
+          this.set('success', true)
+        }
+      })
+    })
+  },
+  onteardown () {
+    let me = this.get('me')
+    if (!isEqual(me, this.old_me)) {
+      let update = {}
+      // save it
+      for (var k in me) {
+        if (me[k] !== this.old_me[k])
+          update[k] = me[k]
+      }
+      if (!isEqual({}, update)) {
+        api.action('change-appearance', update, (data) => {
+          if (data) {
+            api.whoIaM(data)
+            this.set('change_foto', false)
+            this.set('saving', false)
+            setTimeout(() => {
+              this.set('save_success', null)
+              // clear the values after 3 seconds
+              for (let k in data) {
+                this.set('new_' + k, void 0)
+              }
+            }, 3000)
+          }
+        })
+      }
+    }
+  },
+  computed: {
+    f_birthdate () {
+      let d = this.get('new_birthdate') || this.get('me.birthdate')
+      return d ? moment(d).format('DD/MM/YYYY') : 'fecha de cumpleaños'
+    },
+    provinces () {
+      let country = this.get('country')
+      let provinces = []
+      for (let p of _provinces) {
+        if (p.country === country)
+          provinces.push({name: p.name, short: p.short})
+      }
+      provinces.sort((a, b) => {
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+      })
+      return provinces
+    }
+  },
+  decorators: {
+    pikaday: require('../lib/decorators/pikaday')
+  },
+  activate (sub, id) {
+    Ractive.router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
+  },
+}
+</script>

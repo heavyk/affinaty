@@ -1,0 +1,144 @@
+<link rel='ractive' href='../partials/categories.html'>
+<link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/tag-completer.html'>
+
+<div class="square">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="row">
+        <categories L="{selector:'Seleccione una categoría', selected: ''}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" />
+      </div>
+      <div class="row">
+        <tag-completer selected="{{tags}}" />
+      </div>
+      <div class="row">
+        <textarea
+          placeholder="Escribe tu opinion"
+          name="text"
+          maxlength="2048"
+          value="{{d.text}}"
+          class="{{errors.d.text ? 'invalid' : ''}}">
+        </textarea>
+      </div>
+      <button on-click="submit" class="row button-sign-up">
+        Opinar
+      </button>
+    </div>
+    <div class="col-xs-6">
+      <foto-upload icon="camera" cropped="{{cropped}}" />
+    </div>
+  </div>
+</div>
+
+<style>
+.categories {
+  position: fixed;
+  z-index: 100;
+  margin-top: -15px;
+}
+
+.categories-button {
+  float: none;
+  text-align: center;
+}
+
+.foto-crop {
+  margin-left: 10px;
+}
+
+.square {
+  margin: 30px;
+  /* width should be set dynamically, based on the device */
+  width: 520px;
+}
+
+.invalid {
+  border: solid 1px #f00;
+}
+
+.dropzone-area {
+  /*color: #fd270d;*/
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
+  display: inline-block;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropzone-area .fa {
+  padding: 50%;
+}
+.categories-button {
+  margin-bottom: 20px;
+}
+</style>
+
+<script>
+let api = require('../api')
+let pluck = require('../lib/lodash/collection/pluck')
+let Validator = require('../validator')
+component.exports = {
+  isolated: true,
+  oninit () {
+    this.set('d.pos', 2)
+    this.validator = new Validator('d', {
+      'text': {required: true, min: 2, max: 2048},
+      'category': {required: true, type: 'id'},
+      'pos': {required: true, type: 'integer', min: -2, max: 2},
+      'tag': {required: false, type: 'array', max: 3},
+      'foto': {required: false, type: 'id'},
+    })
+    this.on('category', (category) => {
+      this.set('d.category', category._id)
+      if (this.submitted) {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+      }
+    })
+    this.observe('cropped', (v) => {
+      if (v && v.length) this.set('d.foto', v[0])
+    })
+    this.observe('tags', (tags) => {
+      this.set('d.tag', pluck(tags, '_id'))
+    })
+    this.on('submit', (event) => {
+      event.original.preventDefault()
+      if (this.get('saving')) return
+      this.submitted = true
+
+      this.fire('submitting', () => {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+        if (form.valid) {
+          // api.debate.create(form.data, )
+          // TODO spinner
+          this.set('saving', true)
+          api.action('debate+', form.data, (d) => {
+            this.set('saving', false)
+            Ractive.nexus.debate.create(d)
+            this.parent.teardown()
+          })
+        }
+      })
+    })
+  },
+}
+</script>

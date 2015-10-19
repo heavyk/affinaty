@@ -1,0 +1,239 @@
+
+<link rel='ractive' href='../partials/selection-sm.html'>
+<link rel='ractive' href='../partials/social-sm.html'>
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/time.html'>
+
+<div class="debate">
+  <div class="user clearfix">
+    <a class="stats" href="/poll/{{d._id}}">
+      <div class="stats">
+        <i class="fa fa-chevron-right"></i>
+        <div class="stats-box">
+          {{#each d.options : i}}
+          <button
+            class="bar-bg"
+            style="width: {{ bar(i, 52) }}px; margin: 0 0 {{margin}}px 0; padding: {{padding}}px"
+            title="{{ bar_txt(i) }}">
+          </button>
+          {{/each}}
+        </div>
+      </div>
+
+      <div class="total">
+        {{#if limits.sum}}
+          {{limits.sum}} votos
+        {{else}}
+          sin votos
+        {{/if}}
+      </div>
+    </a>
+
+    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}">
+      <foto src="{{d.creator.foto}}" size="z" />
+    </a>
+
+    <div>
+      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
+      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
+      <time time="{{d.created}}" class="since" />
+    </div>
+  </div>
+
+  {{#if d.tag}}
+  <div class="heading">
+    <p class="tags">
+      {{#d.tag}}
+        <a class="tag" href="/tag/{{_id}}">{{title}}</a>[[' ']]
+      {{/d.tag}}
+    </p>
+  </div>
+  {{/if d.tag}}
+  {{#if list}}
+    <div class="text">
+      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+    </div>
+    {{#if read_more}}
+      <a href="/poll/{{d._id}}" class="read-more">leer más</a>
+    {{/if read_more}}
+  {{else}}
+    <div class="text" decorator="markdown:'d.text'">lala</div>
+  {{/if}}
+
+  <h6>¿Qué opinas?</h6>
+  <selection-sm d="{{d}}" />
+
+  {{#if d.foto}}
+    <p class="foto" on-click="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+      <foto src="{{d.foto}}" size="t" shape="sq" class="lala" />
+    </p>
+  {{/if d.foto}}
+
+  <social-sm d="{{d}}" />
+</div>
+
+<style>
+.heading {
+  width: 100%;
+  display: inline-block;
+}
+h6 {
+  font-family: 'Pacifico';
+  text-align: center;
+  color: #fd270d;
+  font-size: 110%;
+  margin: 20px 0 0 0;
+}
+.stats {
+  float: right;
+  cursor: pointer;
+  margin: 0 18px 15px 0;
+  height: 36px;
+  text-decoration: none;
+  color: #ccc;
+}
+.stats .fa {
+  font-size: 10px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+  top: 24px;
+  right: 5px;
+  color: #aaa;
+  float: right;
+}
+.stats .fa:hover {
+  color: #fd270d;
+}
+.stats div.total {
+  font-size: 12px;
+  white-space: nowrap;
+  position: relative;
+  top: 38px;
+}
+.stats:hover {
+  color: #fd270d;
+}
+
+
+.stats-box {
+  width: 34px;
+  margin: 2px;
+}
+.stats-box button {
+  margin: 0;
+  padding: 2px;
+  transition: .3s width;
+  display: block;
+}
+
+.social {
+  margin-bottom: 10px;
+}
+
+.foto img {
+  width: 100%;
+  height: 289px;
+}
+.foto {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.debate .text {
+  color: #414141;
+  margin: 10px 15px 0;
+  text-decoration: none;
+  display: block;
+}
+.list-text {
+  max-height: 200px;
+  overflow: hidden;
+}
+.read-more {
+  text-align: center;
+  border: solid 1px #dadada;
+  width: 50%;
+  margin: 5px auto;
+  border-radius: 4px;
+  display: block;
+}
+
+.tags {
+  margin: 5px 10px;
+}
+
+.bar-bg {
+  background: #fd270d;
+}
+</style>
+
+
+<script>
+let api = require('../api')
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  onconfig () {
+    this.set('bar', (i, px) => {
+      let v = this.get('d.totals.'+i)
+      let c = this.get('limits')
+      return Math.round(v / c.max * px)
+    })
+    this.set('bar_txt', (i) => {
+      return this.get('d.options.'+i+'.text')
+    })
+  },
+  oninit () {
+    let tags = this.get('d.tags')
+    if (!tags || !tags.length) {
+      this.set('d.tags', [
+        {title: 'lala', _id: 1234},
+        {title: 'hehe', _id: 1111},
+        {title: 'jiji', _id: 1155},
+      ])
+    }
+  },
+  oncomplete () {
+    let n
+    if (this.get('list')) {
+      n = this.find('a.text')
+      this.set('read_more', n.scrollHeight > n.clientHeight)
+    }
+    if (n = this.find('.foto img')) {
+      n.style.height = n.clientWidth + 'px'
+    }
+  },
+  computed: {
+    limits () {
+      let totals = this.get('d.totals')
+      let r = { sum: 0, max: 0 }
+      for (let i = 0; i < totals.length; i++) {
+        let v = totals[i]
+        r.sum += v
+        if (v > r.max) r.max = v
+      }
+      return r
+    },
+    margin () {
+      let c = this.get('d.options.length')
+      return c > 2 ? 2 : 4
+    },
+    padding () {
+      let p
+      switch (this.get('d.options.length')) {
+        case 2: p = 5; break
+        case 3: p = 5; break
+        case 4: p = 4; break
+        case 5: p = 3; break
+        default: p = 2; break
+      }
+      return p
+    }
+  },
+  decorators: {
+    markdown: require('../lib/decorators/markdown')
+  }
+}
+</script>

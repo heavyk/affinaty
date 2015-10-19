@@ -1,0 +1,90 @@
+
+<div class="age-graph">
+  <ul class="legend">
+    {{#each legend}}
+      <li>
+        <span style="background-color: {{color}}"></span>
+        {{.label}}: {{.value}}
+      </li>
+    {{/each legend}}
+  </ul>
+  <canvas width="200" height="200"></canvas>
+</div>
+
+<style>
+
+canvas {
+  float: right;
+  margin-right: 20px;
+}
+
+.legend {
+  list-style-type: none;
+  float: left;
+}
+
+.legend li {
+  display: block;
+  float: left;
+  clear: both;
+  padding: 5px;
+}
+
+.legend li span {
+  width: 25px;
+  height: 25px;
+  display: block;
+  float: left;
+  margin-right: 10px;
+}
+
+</style>
+
+
+<script>
+let api = require('../api')
+let Chart = require('chart.js')
+let assign = require('../lib/lodash/object/assign')
+component.exports = {
+  isolated: true,
+  oncomplete () {
+    let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
+
+    let ranges = []
+    let mages = api.my.opinion.ages.concat('<')
+    let r, pr, a
+    for (a = 0; a < mages.length; a++) {
+      let rr = mages[a]
+      if (a) pr = r
+      r = rr
+      ranges.push({
+        label: (r === '<' ? '< ' + pr : (pr ? pr + '-' : '> ') + r) + ' years',
+        value: 0, // s
+        color: colors[a]
+      })
+    }
+    this.set('legend', ranges)
+
+    let ctx = this.find('canvas').getContext('2d')
+    let chart = new Chart(ctx).Doughnut(ranges, {
+      responsive: false,
+      segmentShowStroke: true,
+      animation: false,
+      scaleColor: false,
+      lineWidth: 10,
+      rotate: 0,
+      lineCap: 'butt'
+    })
+
+    this.observe('ranges', (r) => {
+      if (r) for (let i = 0; i < r.length; i++) {
+        chart.segments[i].value = r[i]
+        // this is a stupid hack to remove NaN values on initial 0
+        chart.segments[i].circumference = 3
+        this.set('legend.'+i+'.value', r[i])
+      }
+      chart.update()
+    })
+  },
+}
+</script>

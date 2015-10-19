@@ -1,0 +1,32 @@
+<subheader>
+  <div ng-if="view !== 'search'" class="row">
+    <div class="col-xs-4">
+      <a ng-click="superPanel.activate('params')" ng-class="{active: superPanel.active === 'params'}" >
+        <i class="fa fa-paper-plane-o"></i>Params
+      </a>
+    </div>
+    <div class="col-xs-4">
+      <a ng-click="superPanel.activate('response')" ng-class="{active: superPanel.active === 'response'}">
+        <i class="fa fa-database"></i>Response
+      </a>
+    </div>
+    <div class="col-xs-4" disabled="log.response.error">
+      <a ng-click="superPanel.activate('error')" ng-class="{active: superPanel.active === 'error', error: log.response.error}">
+        <i class="fa fa-exclamation-circle"></i>Error
+      </a>
+    </div>
+  </div>
+</subheader>
+<div class="re-quest">
+  <h3>“{{log.action}}” ({{log.duration}}ms)</h3>
+  <h5 am-time-ago="log.time"></h5>
+  <h5>{{active}}</h5>
+  <!-- <pre class="params" pretty-json="json" /> -->
+  <!-- <pre class="params" pretty-json="log.params" /> -->
+  <pre class="params" ng-if="superPanel.active === 'params'">{{log.params | json}}</pre>
+  <pre class="response" ng-if="superPanel.active === 'response'">{{log.response | json}}</pre>
+  <pre class="error" ng-if="superPanel.active === 'error'">{{log.response.error}}</pre>
+  <!-- <h5>response</h5>
+  <pre class="response" pretty-json="log.response" />
+  <pre class="error" ng-if="log.response.error" pretty-json="log.response.error" /> -->
+</div>

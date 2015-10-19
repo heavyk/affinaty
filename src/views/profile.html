@@ -1,0 +1,672 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/relation-list.html'>
+<link rel='ractive' href='../partials/debate-list.html'>
+<!-- <link rel='ractive' href='../partials/opinion-breakdown.html'> -->
+<link rel='ractive' href='../partials/chat.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="container">
+
+  <div class="profile">
+    <div class="cover"></div>
+    <div class="center-foto" on-click="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
+      {{#if loading}}
+        <spinner />
+      {{else}}
+        <foto src="{{foto}}" size="a" />
+      {{/if loading}}
+    </div>
+    <div class="name">
+      <h2>{{name}}</h2>
+    </div>
+    <div class="title">
+      <h3>{{title}}</h3>
+    </div>
+    {{#if networks}}
+      <div class="networks">
+        {{#if networks.blog}}
+        <div class="net-blog">
+          <a href="{{networks.blog}}" target="blog">
+            <i class="fa fa-pencil" /> blog
+          </a>
+        </div>
+        {{/if networks.blog}}
+
+        {{#if networks.github}}
+        <div class="net-github">
+          <a href="{{networks.github}}" target="github">
+            <i class="fa fa-github" /> GitHub
+          </a>
+        </div>
+        {{/if networks.github}}
+
+        {{#if networks.twitter}}
+        <div class="net-twitter">
+          <a href="{{networks.twitter}}" target="twitter">
+            <i class="fa fa-twitter" /> Twitter
+          </a>
+        </div>
+        {{/if networks.twitter}}
+
+        {{#if networks.facebook}}
+        <div class="net-facebook">
+          <a href="{{networks.facebook}}" target="facebook">
+            <i class="fa fa-facebook" /> Facebook
+          </a>
+        </div>
+        {{/if networks.facebook}}
+
+        {{#if networks.youtube}}
+        <div class="net-youtube">
+          <a href="{{networks.youtube}}" target="youtube">
+            <i class="fa fa-youtube" /> YouTube
+          </a>
+        </div>
+        {{/if networks.youtube}}
+      </div>
+    {{/if networks}}
+    {{#if mine}}
+      <a class="message" href="/settings">
+        <div class="message-inner">
+          <i class="fa fa-pencil-square-o" />
+          <div class="follow-text">
+            edit profile
+          </div>
+        </div>
+      </a>
+    {{else}}
+      <div class="follow" on-click="follow">
+        <div class="follow-inner">
+          {{#if !following}}
+            <img src="/img/follow.svg" title="follow" width="40" height="40" />
+          {{else}}
+            <img src="/img/unfollow.svg" title="unfollow" width="40" height="40" />
+          {{/if}}
+          <div class="follow-text">
+            {{#if following}}
+              No Seguir
+            {{else}}
+              Seguir
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      <div class="message" on-click="send-message">
+        <div class="message-inner">
+          <i class="fa fa-envelope" />
+          <div class="follow-text">
+            message
+          </div>
+        </div>
+      </div>
+
+
+      <div class="affinaty {{floating ? 'floating' : ''}}">
+        {{#if floating}}
+        <div class="affinaty-left">
+          <foto src="{{me.foto}}" size="z" class="me" />
+          <span class="affin-neg">- affin</span>
+          <span class="affin-gradient-left"></span>
+          <span class="affin-gradient">
+            <div class="gradient-pos" style="">
+              <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+                <i class="fa fa-circle"></i>
+              </span>
+              <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+                {{Math.round(affinaty_percent)}}%
+              </span>
+            </div>
+          </span>
+          <span class="affin-gradient-right"></span>
+          <span class="affin-pos">+ affin</span>
+          <foto src="{{foto}}" size="z" class="you" />
+        </div>
+        <div class="affinaty-right">
+          <div class="follow floating" on-click="follow">
+            <div class="follow-inner">
+              {{#if !following}}
+                <img src="/img/follow.svg" title="follow" width="30" height="30" />
+              {{else}}
+                <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
+              {{/if}}
+            </div>
+          </div>
+          <div class="message floating" on-click="send-message">
+            <div class="message-inner">
+              <i class="fa fa-envelope" />
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <span class="affin-neg">- affin</span>
+        <span class="affin-gradient-left"></span>
+        <span class="affin-gradient">
+          <div class="gradient-pos" style="">
+            <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+              <i class="fa fa-circle"></i>
+            </span>
+            <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+              {{Math.round(affinaty_percent)}}%
+            </span>
+          </div>
+        </span>
+        <span class="affin-gradient-right"></span>
+        <span class="affin-pos">+ affin</span>
+      {{/if floating}}
+    </div>
+    {{/if me}}
+  </div>
+
+  <subheader>
+    <div class="row">
+      <div class="col-xs-2" style="margin-left: 16.666666%">
+        <a href="/profile/{{id}}/debates" class="{{active === 'debates' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-list"></i></div>
+          Publicaciones
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/profile/{{id}}/opinions" class="{{active === 'opinions' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-comment-o"></i></div>
+          Opinión
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/profile/{{id}}/follows" class="{{active === 'follows' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-user"></i></div>
+          Siguiendo{{#if numFollows}} ({{numFollows}}){{/if}}
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/profile/{{id}}/following" class="{{active === 'following' ? 'active' : '' }}">
+          <div class="symbol"><i class="fa fa-user"></i></div>
+          Seguidores{{#if numFollowing}} ({{numFollowing}}){{/if}}
+        </a>
+      </div>
+    </div>
+  </subheader>
+  <div class="lists">
+    {{#if active === 'debates'}}
+      <debate-list creator="{{id}}" />
+    {{/if}}
+    {{#if active === 'opinions'}}
+      <debate-list opinions="{{id}}" />
+      <!-- <opinion-breakdown creator="{{id}}" /> -->
+    {{/if}}
+    {{#if active === 'follows'}}
+      <relation-list follows="{{id}}" />
+    {{/if}}
+    {{#if active === 'following'}}
+      <relation-list following="{{id}}" />
+    {{/if}}
+  </div>
+</div>
+
+<style>
+.profile {
+  margin: 0;
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+.networks {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+}
+.lists {
+  min-height: 300px;
+  position: relative;
+}
+.affin-neg, .affin-pos {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 23px;
+  padding: 0 20px;
+  color: red;
+  margin-top: -16px;
+}
+.gradient-pos {
+  position: relative;
+  top: -7px;
+  font-size: 18px;
+}
+.floating .gradient-pos {
+  top: -6px;
+}
+.gradient-point {
+  position: absolute;
+  width: 30px;
+  text-align: center;
+  margin-left: -15px;
+  margin-top: 1px;
+  /*color: #fff;*/
+  color: #FFEF00;
+}
+.gradient-percent {
+  top: -20px;
+  font-weight: bold;
+  position: absolute;
+  color: #414141;
+}
+
+.affin-pos {
+  color: green;
+}
+.affin-gradient {
+  display: inline-block;
+  background: #ff3232;
+  background: linear-gradient(to right, #ff3232 0%,#f93f31 22%,#24b52d 78%,#4f935a 100%);
+  width: 50%;
+  height: 16px;
+  /*border-radius: 16px;*/
+}
+.affin-gradient-left,
+.affin-gradient-right {
+  width: 16px;
+  height: 16px;
+}
+.affin-gradient-left {
+  background: #ff3232;
+  border-radius: 16px 0 0 16px;
+  margin-right: -10px;
+}
+.affin-gradient-right {
+  background: #4f935a;
+  border-radius: 0 16px 16px 0;
+  margin-left: -10px;
+}
+
+.cover {
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 270px;
+  background: #d4d2d4;
+  background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);
+}
+.center-foto {
+  margin: 0px auto -119px;
+  position: relative;
+  width: 120px;
+  height: 120px;
+  top: -60px;
+}
+.name {
+  width: 100%;
+  margin-top: 80px;
+  text-align: center;
+}
+.name h2 {
+  white-space: nowrap;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  color: #333;
+  font-size: 33px;
+  font-weight: bold;
+  height: 40px;
+  margin: 8px auto 0;
+  max-width: 520px;
+  text-align: center;
+}
+.title {
+  width: 100%;
+  margin-top: 10px;
+  text-align: center;
+}
+.title h3 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #a1a1a1;
+  font-size: 21px;
+  height: 40px;
+  margin: 8px auto 0;
+  max-width: 520px;
+  text-align: center;
+}
+.message.floating,
+.follow.floating {
+  font-size: 10px;
+  border: 0;
+  padding: 0px;
+  position: absolute;
+  top: 8px;
+  /*right: 50px;*/
+  width: 40px;
+  height: 40px;
+}
+.floating .follow-inner,
+.floating .message-inner {
+  right: 50px;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+}
+.message.floating:hover,
+.follow.floating:hover {
+  font-size: 10px;
+  border: 0;
+
+}
+.floating .affinaty-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 56px;
+  width: 75%;
+  border: solid 1px #dadada;
+  border-radius: 50px;
+}
+.floating .affinaty-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 56px;
+  width: 25%;
+}
+.floating span {
+  margin-top: 8px;
+}
+.floating .affin-gradient-left,
+.floating .affin-gradient-right,
+.floating .affin-gradient {
+  margin-top: 24px;
+}
+.floating .gradient-point {
+  margin-top: 0;
+}
+
+.message.floating {
+  right: 60px;
+}
+.follow.floating {
+  right: 120px;
+}
+.floating img.me {
+  position: absolute;
+  left: 4px;
+  top: 2px;
+}
+.floating img.you {
+  position: absolute;
+  right: 4px;
+  top: 2px;
+}
+.message,
+.follow {
+  position: absolute;
+  right: 33px;
+  top: 250px;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  cursor: pointer;
+  padding: 20px;
+  white-space: nowrap;
+  border: solid 1px #dadada;
+  border-radius: 8px;
+}
+.message:hover,
+.follow:hover {
+  background: rgba(253, 39, 13, 0.08);
+  /*background: rgba(209, 217, 255, 0.290196);*/
+  border: solid 1px #FD270D;
+  text-decoration: none;
+}
+.message-inner,
+.follow-inner {
+  margin: auto;
+}
+.message-text,
+.follow-text {
+  color: #737373;
+}
+.message {
+  /*left: 33px;*/
+  top: 130px;
+}
+.message .fa {
+  color: #FF3000;
+  font-size: 250%;
+}
+.planet {
+  color: #9A00FF;
+  position: absolute;
+  top: 150px;
+  float: right;
+  right: 100px;
+  text-shadow: 2px 2px 2px rgba(0, 0, 0, .5);
+  width: 100px;
+  height: 100px;
+  background-color: #f00;
+  border-radius: 50%;
+  text-align: center;
+  border: solid;
+}
+.planet .fa {
+  font-size: 400%;
+  padding: 20px;
+}
+.symbol {
+  text-align: center;
+  padding-left: 20px;
+  color: #fd270d;
+}
+a.active {
+  color: #414141;
+  background: #dcdcdc;
+}
+
+.affinaty.floating {
+  position: fixed;
+  top: 50px;
+  left: 5%;
+  width: 90%;
+  background: #fff;
+  /* 99 because header is 100 */
+  z-index: 99;
+  height: 60px;
+  padding-top: 25px;
+  border-radius: 30px;
+  border: solid 2px #ccc;
+}
+.affinaty {
+  text-align: center;
+  margin-top: 20px;
+  padding: 4px;
+}
+.affinaty span {
+  display: inline-block;
+  vertical-align: top;
+}
+.amin {
+  float: left;
+  font-size: 200%;
+  font-weight: 500;
+}
+.aneg {
+  text-align: right;
+  width: 30%;
+}
+.pts {
+  width: 20%;
+  font-size: 200%;
+  font-weight: 500;
+  border: solid 4px #ccc;
+  padding: 4px;
+}
+.amax {
+  float: right;
+  font-size: 200%;
+  font-weight: 500;
+}
+.apos {
+  text-align: left;
+  width: 30%;
+}
+.bar_progress {
+  width: 100%;
+  float: left;
+}
+.bar_progress .bar_negative {
+  /* float: left; */
+  width: 50%;
+  float: left;
+  text-align: right;
+}
+.bar_progress .bar_negative .negative {
+  transform: rotate(-180deg);
+}
+.bar_progress .bar_positive {
+  width: 50%;
+  float: right;
+  text-align: left;
+}
+.degradado {
+  display: inline-block;
+  padding-top: 5px;
+  background: #ff3232;
+  background: linear-gradient(to right, #ff3232 0%, #f93f31 22%, #24b52d 78%, #4f935a 100%);
+  width: 50%;
+  height: 16px;
+  border-radius: 22px;
+}
+.degradado .degrad_negative {
+  width: 10%;
+  display: inline-block;
+  margin-top: -50px;
+  transition: padding 0.5s linear;
+}
+.degradado .degrad_positive {
+  width: 10%;
+  display: inline-block;
+  transition: padding-left 0.3s ease-in;
+}
+.degradado .point {
+  font-size: 32px;
+  margin-top: 1px;
+}
+.degradado .point2 {
+  font-size: 16px;
+  position: relative;
+  top: 10px;
+}
+
+
+</style>
+
+<script>
+let api = require('../api')
+let calcAffinaties = require('../lib/calc/affinaties.js')
+let calcAffinaty = require('../lib/calc/affinaty.js')
+let assign = require('../lib/lodash/object/assign')
+let debounce = require('../lib/lodash/function/debounce')
+let opinion_ = require('../api/opinion')
+component.exports = {
+  modal: require('../modal'),
+  oninit () {
+    let __id
+    this.observe('id', (id) => { if (id && id !== __id) {
+      __id = id
+      api.my.notifier.remove_box(id)
+      // if (api.me && api.me._id === id && false) {
+      //   this.set(assign({ mine: true, }, api.me))
+      // } else {
+        this.set({ mine: api.me._id === id, loading: true })
+        this.opinion = new opinion_(id)
+        this.opinion.until('/', () => {
+          this.refresh()
+        })
+        api.action('creator', {_id: id}, (data) => {
+          this.set(assign({ loading: false, foto: null, networks: null }, data))
+        })
+      // }
+
+      this.on('send-message', () => {
+        this.modal('chat', {title: this.get('name'), minimize: true, id: this.get('id')})
+      })
+
+      this.on('follow', () => {
+        let following = this.get('following')
+        api.action('relation' + (following ? '-' : '+'), {
+          other: id,
+          creator: api.me._id
+        }, (data) => {
+          this.set('following', following ? false : data)
+        })
+      })
+    }})
+    this.set('me', api.me)
+
+    this.observe('active', (active) => {
+      if (!active) return this.set('active', active = 'debates')
+      Ractive.router.dispatch(`/profile/${this.get('id')}/${active || ''}`, {history: false})
+    })
+    this.refresh = debounce(() => {
+      this.set('affinaty_update', 1 + this.get('affinaty_update') || 0)
+    }, 200, false)
+    this.set('affinaty_update', 0)
+    api.my.opinion.on([api.me._id, '*'], () => {
+      this.refresh()
+    })
+    api.my.opinion.until('/', () => {
+      this.refresh()
+    })
+  },
+  oncomplete () {
+    if (!this.get('mine')) {
+      let affinaty = this.find('.affinaty')
+      let rect = affinaty.getBoundingClientRect()
+      window.addEventListener('scroll', this.onscroll = () => {
+        this.set('floating', window.scrollY + 100 > rect.top)
+      })
+    }
+  },
+  onteardown () {
+    if (!this.get('mine')) {
+      window.removeEventListener('scroll', this.onscroll)
+    }
+  },
+  computed: {
+    affinaty () {
+      let update = this.get('affinaty_update')
+      if (!this.opinion) return 0
+      let their_opinions = this.opinion
+      let affinaty = 0
+      let coinciding = []
+      let shorter_mine = api.my.opinion.list.length < this.opinion.list
+      let shorter, longer
+      if (shorter_mine) {
+        shorter = api.my.opinion
+        longer = this.opinion
+      } else {
+        longer = api.my.opinion
+        shorter = this.opinion
+      }
+      if(!shorter.list) debugger
+      for (var i = 0; i < shorter.list.length; i++) {
+        let d = shorter.list[i]
+        let p1 = d.pos
+        let p2 = longer.debate_pos(d.debate)
+        if (p1 && p2) {
+          affinaty += calcAffinaty(p1, p2)
+          coinciding.push(d.debate)
+        }
+      }
+      this.coinciding = coinciding
+      return affinaty
+    },
+    affinaty_percent () {
+      let affinaty = this.get('affinaty')
+      let affinaty_max = this.coinciding ? this.coinciding.length * 4 : 0
+      return affinaty_max ? affinaty / affinaty_max * 100 : 0
+    },
+  },
+  activate (sub) {
+    this.set('active', sub)
+    Ractive.router.dispatch(`/profile/${this.get('id')}/${sub}`, { history: false })
+  }
+}
+</script>

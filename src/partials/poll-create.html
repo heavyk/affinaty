@@ -1,0 +1,254 @@
+<link rel='ractive' href='../partials/categories.html'>
+<link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/tag-completer.html'>
+
+<div class="square">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="row">
+        <categories L="{selector:'Seleccione una categoría', selected: ''}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" />
+      </div>
+      <div class="row {{errors.d.tag ? 'invalid' : ''}}">
+        <tag-completer selected="{{tags}}" />
+      </div>
+      <div class="row">
+        <textarea
+          placeholder="Escribe texto de tu encuesta..."
+          name="text"
+          maxlength="2048"
+          value="{{d.text}}"
+          class="{{errors.d.text ? 'invalid' : ''}}">
+        </textarea>
+      </div>
+      <div class="row {{errors.d.options ? 'invalid' : ''}}">
+        {{#each d.options : i}}
+        <div class="row">
+          <div class="text-option col-xs-10">
+            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{text}}" />
+          </div>
+
+          <div class="remove-option col-xs-2 {{#if d.options.length <= 2}}disabled{{/if}}" on-click="remove-option">
+            <i class="fa fa-minus"></i>
+          </div>
+
+        </div>
+        {{/each}}
+      </div>
+      {{#if d.options.length < 5}}
+      <div class="row">
+        <div class="new-poll">
+          <div class="text-option col-xs-10">
+            <input type="text"
+              maxlength="30"
+              decorator="focusSelect"
+              on-focus-blur="toggle('highlight')"
+              placeholder="Escribe más opciones"
+              value="{{new_option.text}}"
+              on-nlSubmit="add-option"
+              class="{{errors.new_option.text ? 'invalid' : ''}}"
+             />
+          </div>
+
+          <div class="add-option col-xs-2 {{highlight ? 'highlight' : ''}}" on-click="add-option">
+            <a><i class="fa fa-plus"></i></a>
+          </div>
+
+        </div>
+      </div>
+      {{/if options.length >= 5}}
+
+      <button on-click="submit" class="row button-sign-up">
+        Pide opinión
+      </button>
+    </div>
+
+    <div class="col-xs-6" >
+      <foto-upload icon="camera" cropped="{{cropped}}" />
+    </div>
+  </div>
+</div>
+
+
+<style>
+.text-option {
+  float: left;
+}
+
+.remove-option,
+.add-option {
+  width: 40px;
+  height: 40px;
+  float: left;
+  padding: 8px;
+  margin: 6px 0 0 6px;
+  border-radius: 8px;
+}
+
+.disabled {
+  color: #ccc;
+}
+
+.add-option:hover,
+.remove-option:hover {
+  color: #f5a;
+  background-color: #ddd;
+}
+.add-option:hover {
+  color: #5d4;
+}
+
+.highlight {
+  background: rgba(253, 39, 13, 0.29);
+  color: #FD270D;
+  border: solid 1px #FD270D;
+}
+
+.categories {
+  position: fixed;
+  z-index: 100;
+  margin-top: -15px;
+}
+
+.categories-button {
+  float: none;
+  text-align: center;
+}
+
+.foto-crop {
+  margin-left: 10px;
+}
+
+.foto-upload {
+  width: 330px;
+}
+
+.row {
+  padding: 0 5px;
+}
+
+.button-sign-up {
+  padding: 10px;
+}
+
+.square {
+  margin: 30px;
+  /* width should be set dynamically, based on the device */
+  width: 720px;
+}
+
+.invalid {
+  border: solid 1px #f00;
+}
+
+.dropzone-area {
+  /*color: #fd270d;*/
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
+  display: inline-block;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropzone-area .fa {
+  padding: 50%;
+}
+.categories-button {
+  margin-bottom: 20px;
+}
+</style>
+
+<script>
+let api = require('../api')
+let pluck = require('../lib/lodash/collection/pluck')
+let Validator = require('../validator')
+component.exports = {
+  isolated: true,
+  data: {},
+  oninit () {
+    let options = [{text: ''}, {text: ''}]
+    this.validator = new Validator('d', {
+      'text': {required: true, min: 2, max: 2048},
+      'category': {required: true, type: 'id'},
+      'options': {required: true, type: 'array', min: 2, max: 5},
+      'tag': {required: false, type: 'array', max: 3},
+      'foto': {required: false, type: 'id'},
+    })
+    this.option_validator = new Validator('new_option', {
+      'text': {required: true, type: 'string', min: 1, max: 30},
+    })
+    this.on('category', (category) => {
+      this.set('d.category', category._id)
+      if (this.submitted) {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+      }
+    })
+    this.on('add-option', () => {
+      if (options.length < 5) {
+        let form = this.option_validator.validate(this)
+        this.set('errors', form.errors)
+        if (form.valid) {
+          options.push(form.data)
+          this.set('new_option.text', '')
+        }
+      }
+    })
+    this.on('remove-option', (event) => {
+      if (options.length > 2) {
+        options.splice(event.index.i, 1)
+      }
+    })
+    this.observe('cropped', (v) => {
+      if (v && v.length) this.set('d.foto', v[0])
+    })
+    this.observe('tags', (tags) => {
+      this.set('d.tag', pluck(tags, '_id'))
+    })
+    this.set('d.options', options)
+    this.on('submit', (event) => {
+      if (this.get('saving')) return
+      event.original.preventDefault()
+      if (this.get('new_option.text')) {
+        this.fire('add-option')
+      }
+      this.submitted = true
+      this.fire('submitting', () => {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+        if (form.valid) {
+          this.set('saving', true)
+          api.action('poll+', form.data, (d) => {
+            this.set('saving', false)
+            Ractive.nexus.debate.create(d)
+            this.parent.teardown()
+          })
+        }
+      })
+    })
+  },
+  decorators: {
+    focusSelect: require('../lib/decorators/focusSelect'),
+  },
+  events: {
+    nlSubmit: require('../lib/events/nlSubmit')
+  },
+}
+</script>

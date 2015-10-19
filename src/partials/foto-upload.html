@@ -1,0 +1,93 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/foto-crop.html'>
+
+<div class="foto-upload col-{{size}}">
+  {{#if uploaded && cropping}}
+    {{#each uploaded : i}}
+      <foto-crop src="{{.}}" area-type="{{shape}}" rect="{{rect[i]}}" foto="{{cropped[i]}}" />
+    {{/each}}
+  {{else}}
+    <div class="dropzone-area dz-message">
+      [[#if icon]]
+        <i class="fa fa-[[icon]]"></i>
+      [[/if]]
+      [[#if L.message]]
+        <div class="message">[[L.message]]</div>
+      [[/if]]
+    </div>
+  {{/if}}
+</div>
+
+<script>
+let api = require('../api')
+let extend = require('../lib/lodash/object/assign')
+component.exports = {
+  isolated: true,
+  data: {
+    shape: 'square'
+  },
+  oninit () {
+    this.set('uploaded', [])
+    this.set('rect', [])
+    this.set('cropped', [])
+    this.set('size', 't')
+  },
+  oncomplete () {
+    // for testing:
+    // this.set('uploaded', [api.me.foto])
+    // this.set(cropping', true)
+
+    let Dropzone = require('dropzone')
+    Dropzone.autoDiscover = false
+
+    let cfg = extend({
+      previewsContainer: false,
+      clickable: true,
+      url: api.get('url') + '/i/upload',
+      headers: { 'Access-Token': api.token },
+      parallelUploads: 3,
+      maxFileSize: 5,
+    }, this.get('dropzone-config'))
+
+    let events = extend({
+      // TODO: progress bar for upload
+      totaluploadprogress: (percent, total, bytes) => {
+        console.log('upload:', percent.toFixed(2))
+        this.set('progress', {
+          percent: percent.toFixed(2),
+          bytes, total,
+        })
+      },
+      // addedfile: (file) => {
+      //   console.log('added file: ', file)
+      // },
+      error: (ev) => {
+        console.log('error', ev)
+        this.set('error', ev)
+      },
+      complete: (ev) => {
+        let res = JSON.parse(ev.xhr.response)
+        this.merge('uploaded', res)
+      },
+      queuecomplete: () => {
+        let uploaded = this.get('uploaded')
+        if (uploaded && uploaded.length) {
+          this.set('cropping', true)
+        }
+      }
+    }, this.get('dropzone-events'))
+
+    this.parent.on('submitting', (cb) => {
+      if (cb) if (this.get('cropping')) {
+        this.fire('finish-cropping', cb)
+      } else cb()
+    })
+
+    let dz = new Dropzone(this.find('.foto-upload'), cfg)
+    for (let event in events) {
+      dz.on(event, events[event])
+    }
+
+  },
+}
+</script>

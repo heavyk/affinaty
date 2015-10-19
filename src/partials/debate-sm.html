@@ -1,0 +1,247 @@
+<link rel='ractive' href='../partials/opinion-sm.html'>
+<link rel='ractive' href='../partials/social-sm.html'>
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/time.html'>
+
+<div class="debate">
+  <div class="user clearfix">
+    <a class="stats" href="/debate/{{d._id}}">
+      <div class="stats">
+        <div class="stats-box">
+          <button class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
+          <button class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
+          <button class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
+          <button class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
+        </div>
+        <i class="fa fa-chevron-right"></i>
+      </div>
+
+      <div class="total">
+        {{#if limits.sum}}
+          {{limits.sum}} opiniones
+        {{else}}
+          no opinions
+        {{/if}}
+      </div>
+    </a>
+
+    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}">
+      <foto src="{{d.creator.foto}}" size="z" />
+    </a>
+
+    <div>
+      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
+      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
+      <time time="{{d.created}}" class="since" />
+    </div>
+  </div>
+
+  {{#if d.tag}}
+  <div class="heading">
+    <p class="tags">
+      {{#d.tag}}
+        <a class="tag" href="/tag/{{_id}}">{{title}}</a>[[' ']]
+      {{/d.tag}}
+    </p>
+  </div>
+  {{/if d.tag}}
+
+  {{#if list}}
+    <div class="text">
+      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+    </div>
+    {{#if read_more}}
+      <a href="/debate/{{d._id}}" class="read-more">leer más</a>
+    {{/if read_more}}
+  {{else}}
+    <div class="text" decorator="markdown:d.text"></div>
+  {{/if}}
+
+  {{#if d.foto}}
+    <p class="foto" on-click="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+      <foto src="{{d.foto}}" size="t" shape="sq" />
+    </p>
+  {{/if d.foto}}
+
+  <social-sm d="{{d}}" />
+  <opinion-sm d="{{d}}" />
+</div>
+
+<style>
+.stats {
+  float: right;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 10px 15px 0;
+  height: 36px;
+  text-decoration: none;
+  color: #b9b9b9;
+}
+.stats .fa {
+  font-size: 10px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+  top: 24px;
+  right: 5px;
+  color: #aaa;
+  float: right;
+}
+.stats .fa:hover {
+  color: #fd270d;
+}
+.stats div.total {
+  font-size: 12px;
+  white-space: nowrap;
+  position: relative;
+  top: 38px;
+}
+.stats:hover {
+  color: #fd270d;
+}
+
+.heading {
+  width: 100%;
+  display: inline-block;
+}
+
+.stats-box {
+  width: 34px;
+  margin: 0 2px;
+}
+.stats-box button {
+  margin: 0;
+  padding: 2px;
+  transition: 0.3s height;
+  position: relative;
+  bottom: 0;
+  display: inline;
+  vertical-align: bottom;
+}
+.stats-box .mas-mas {
+  background: #2e8034;
+}
+.stats-box .mas {
+  background: #5a9727;
+}
+.stats-box .woa {
+  background: #cc4d41;
+}
+.stats-box .woa-woa {
+  background: #bb0217;
+}
+
+.foto {
+  width: 100%;
+  margin-bottom: 15px;
+}
+.foto img {
+  width: 100%;
+  height: 289px;
+}
+.debate .text {
+  color: #414141;
+  margin: 10px 15px 0;
+  text-decoration: none;
+  display: block;
+}
+.list-text {
+  max-height: 200px;
+  overflow: hidden;
+}
+.read-more {
+  text-align: center;
+  border: solid 1px #dadada;
+  width: 50%;
+  margin: 5px auto;
+  border-radius: 4px;
+  display: block;
+}
+.tags {
+  margin: 5px 10px;
+}
+</style>
+
+
+
+<script>
+let api = require('../api')
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  oninit () {
+    let id = this.get('id')
+    let d = this.get('d') || Ractive.nexus.db.get(id)
+    this.set('category', api.category.get(this.get(d.$category)))
+    let tags = this.get('d.tags')
+    if (!tags || !tags.length) {
+      this.set('d.tags', [
+        {title: 'lala', _id: 1234},
+        {title: 'hehe', _id: 1111},
+        {title: 'jiji', _id: 1155},
+      ])
+    }
+
+    api.my.opinion.on(id + '.' + api.me._id, this.on_opinion = (d, _d) => {
+      let pos
+      let totals = this.get('d.totals')
+      if (totals && _d) {
+        pos = _d.pos
+        totals[pos > 0 ? pos + 1 : pos + 2]--
+      }
+
+      if (totals) {
+        if (pos = d.pos)
+          totals[pos > 0 ? pos + 1 : pos + 2]++
+        this.set('d.totals', totals)
+      }
+    })
+  },
+  oncomplete () {
+    let n
+    if (this.get('list')) {
+      n = this.find('a.text')
+      this.set('read_more', n.scrollHeight > n.clientHeight)
+    }
+    if (n = this.find('.foto img')) {
+      n.style.height = n.clientWidth + 'px'
+    }
+  },
+  computed: {
+    limits () {
+      let r = { sum: 0, max: 0 }
+      let totals = this.get('d.totals')
+      if (totals) for (let i = 0; i < totals.length; i++) {
+        let v = totals[i]
+        r.sum += v
+        if (v > r.max) r.max = v
+      }
+      return r
+    },
+    muyDeAcuerdo () {
+      let v = this.get('d.totals.3')
+      let c = this.get('limits')
+      return v / c.max
+    },
+    deAcuerdo () {
+      let v = this.get('d.totals.2')
+      let c = this.get('limits')
+      return v / c.max
+    },
+    desAcuerdo () {
+      let v = this.get('d.totals.1')
+      let c = this.get('limits')
+      return v / c.max
+    },
+    muyDesAcuerdo () {
+      let v = this.get('d.totals.0')
+      let c = this.get('limits')
+      return v / c.max
+    },
+  },
+  decorators: {
+    markdown: require('../lib/decorators/markdown')
+  }
+}
+</script>

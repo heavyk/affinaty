@@ -1,0 +1,318 @@
+<link rel='ractive' href='../partials/debate-sm.html'>
+<link rel='ractive' href='../partials/poll-sm.html'>
+
+{{#txt}}
+  <div class="search">
+    searching for: '{{txt}}'
+    {{#if results > 0}}
+      {{results}} results
+    {{elseif results === 0}}
+      no results
+    {{else}}
+      loading...
+    {{/if}}
+    <span class="clear-search" on-click="clear-search"><i class="fa fa-times" /> clear</span>
+  </div>
+{{/txt}}
+
+<div class="debates row">
+  {{#each list}}
+    {{#if .options}}
+    <poll-sm id="{{._id}}" d={{.}} list="true" />
+    {{else}}
+    <debate-sm id="{{._id}}" d={{.}} list="true" />
+    {{/if}}
+  {{/each}}
+</div>
+
+<style>
+.search {
+  padding: 20px;
+  border-radius: 10px;
+  border: solid 1px #00f;
+  background: #83F7FF;
+}
+.clear-search {
+  float: right;
+  margin-right: 10px;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let scroll = require('../lib/on-scroll.js')
+let masonry = require('masonry-layout')
+let assign = require('../lib/lodash/object/assign')
+let throttle = require('../lib/lodash/function/throttle')
+let search = require('../lib/text-search')
+
+function insert (element, array, comparer) {
+  let idx = locationOf(element, array, comparer) + 1
+  array.splice(idx, 0, element)
+  return idx
+}
+
+function locationOf (element, array, comparer, start, end) {
+  if (array.length === 0) return -1
+
+  start = start || 0
+  end = end || array.length
+  let pivot = (start + end) >> 1
+
+  let c = comparer(element, array[pivot])
+  if (end - start <= 1) return c == -1 ? pivot - 1 : pivot
+
+  switch (c) {
+    case -1: return locationOf(element, array, comparer, start, pivot)
+    case 0: return pivot
+    case 1: return locationOf(element, array, comparer, pivot, end)
+  }
+}
+
+
+component.exports = {
+  oninit () {
+    let list = this.list = []
+    this.set('list', list)
+    this.clear()
+
+    Ractive.header.on('category', (category) => {
+      this.set('category', (this.category = category ? category._id : null))
+    })
+
+    this.op = this.get('opinions')
+
+    this.set('sort', true)
+    this.set('query', this.query = assign({}, {
+      sort: '+created',
+      limit: 9,
+      creator: this.op ? this.op : this.get('creator'),
+      category: this.get('category'),
+      tag: this.get('tag'),
+    }))
+
+    this.layout = throttle(() => {
+      if (this.m) setTimeout(() => {
+        this.m.reloadItems()
+        this.m.layout()
+      }, 1)
+    }, 500, true)
+
+    let __creator
+    this.observe('creator', (creator) => { if (creator && creator !== __creator) {
+      this.set('query.creator', this.query.creator = creator)
+      this.clear()
+      this.go()
+      __creator = creator
+    }})
+
+    let __tag
+    this.observe('tag', (tag) => {
+      this.set('query.tag', this.query.tag = tag)
+      this.clear()
+      this.go()
+
+      if (tag) {
+        for (let i = 0; i < this.list.length; i++) {
+          let d = this.list[i]
+          if (this.tag !== d._tag) {
+            this.list.splice(i--, 1)
+            this.exists[d._id] = void 0
+          }
+        }
+        this.layout()
+      }
+      __tag = tag
+    })
+
+
+    let __category
+    this.observe('category', (category) => { if (category !== __category) {
+      Ractive.header.fire('category', category ? {_id: category} : null)
+      this.set('query.category', this.query.category = category)
+      this.clear()
+
+      if (category) {
+        for (let i = 0; i < this.list.length; i++) {
+          let d = this.list[i]
+          if (this.category !== d._category) {
+            this.list.splice(i--, 1)
+            this.exists[d._id] = void 0
+          }
+        }
+        this.layout()
+      }
+      this.go()
+      __category = category
+    }})
+
+    this.on('clear-search', () => {
+      this.set('query.text', null)
+      Ractive.header.set('text', '')
+      Ractive.header.fire('clear')
+      Ractive.header.fire('search', '')
+    })
+
+    window.search = search
+    Ractive.header.on('search', (_txt) => {
+      this.set('query.text', _txt)
+      this.clear()
+      this.go()
+    })
+
+    Ractive.nexus.debate.on('+', (d) => {
+      this.add(d)
+    })
+
+    Ractive.nexus.debate.on('-', (id) => {
+      let exists = this.exists[id]
+      if (exists !== void 0) {
+        // TODO need proper remove function
+        this.list.splice(exists, 1)
+        this.exists[id] = void 0
+        for (let i in this.exists) {
+          if (this.exists[i] > exists) this.exists[i]--
+        }
+        this.layout()
+      }
+    })
+  },
+  clear () {
+    this.set('list.length', 0)
+    this.debates = 0
+    this.polls = 0
+    this.appended = [] // array of the previously appended ids
+    this.exists = {} // map of ids -> offset (for adding and removing)
+  },
+  // matches (d) {
+  //   let r = this._matches(d)
+  //   console.log('matches', r)
+  //   return r
+  // },
+  matches (d) {
+    if (this.op) return this.op !== d._creator
+
+    let m = false
+    if ( this.query.creator && (m = true) && this.query.creator === d._creator
+      || this.query.category && (m = true) && this.query.category === d._category
+      || this.query.tag && (m = true) && ~d._tag.indexOf(this.query.tag)
+    ) return true
+
+    return !m
+  },
+  oncomplete () {
+    let el = this.find('.debates')
+    this.els = this.findAll('.debate', {live: true})
+
+    this.m = new masonry(el, {
+      itemSelector: '.debate',
+      columnWidth: 289,
+      gutter: 20,
+    })
+
+    let s = scroll(null, 1.3, (cb) => {
+      this.go(cb)
+    })
+    this.once('teardown', () => {
+      s.cancel()
+    })
+
+    this.observe('list', (v, vv) => {
+      if (!v || !v.length) return
+      setTimeout(() => {
+        let i, c = 0, add = [], append = []
+        while (c++ < 3 && (i = this.appended.pop())) {
+          let idx = this.exists[i]
+          if (idx === this.els.length - 1) append.push(this.els[idx])
+          else add.push(this.els[idx])
+        }
+
+        if (add.length) {
+          this.m.addItems(add)
+          this.layout()
+        } else if (append.length) {
+          this.m.appended(append)
+          this.layout()
+        }
+      }, 1)
+    })
+    // this.add = throttle((d, _id) => {
+    //   let id = _id || d._id
+    //   if (this.exists[id] !== void 0 || !this.matches(d)) return
+    //   this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
+    //   this.appended.push(d._id)
+    //   this.layout()
+    // }, 100)
+  },
+  add (d, _id) {
+    let id = _id || d._id
+    // console.log('added:', ++this.added)
+    if (this.exists[id] !== void 0 || !this.matches(d)) return
+    this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
+    this.appended.push(d._id)
+    this.layout()
+  },
+  go (next) {
+    let query = this.get('query')
+    let list = this.get('list')
+    let opinions_creator = this.get('opinions')
+    let txt = query.text
+    this.set('loading', true)
+    let action = opinions_creator ? 'opinion:debate*' : 'debate' + (txt ? '@' : '*')
+    let params = assign({skip: this.debates}, query)
+
+    api.action(action, params, (data) => {
+      // these are temporary until I fix the api
+      this.set('loading', false)
+      for (let i = 0; i < data.length; i++) {
+        let d = data[i]
+        if (!d) continue
+
+        d._creator = d.creator._id
+        d._category = d.category._id
+        d._tag = d.tag.map((t) => t._id)
+        // delete d.category
+        // delete d.creator
+        // delete d.tag
+        Ractive.nexus.dd.set(d._id, d)
+        Ractive.nexus.debate.insert(d)
+      }
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i]) this.add(data[i])
+      }
+
+      // TODO change the queries to go based on time
+      // eg. give all >= created
+      this.debates += data.length
+      // TODO better next handling
+      if (next) next()
+    })
+
+    action = opinions_creator ? 'selection:poll*' : 'poll' + (txt ? '@' : '*')
+    api.action(action, assign({skip: this.polls}, query), (data) => {
+      // these are temporary until I fix the api
+      for (let i = 0; i < data.length; i++) {
+        let d = data[i]
+        if (!d) continue
+
+        d._creator = d.creator._id
+        d._category = d.category._id
+        d._tag = d.tag.map((t) => t._id)
+        // delete d.category
+        // delete d.creator
+        // delete d.tag
+        Ractive.nexus.dd.set(d._id, d)
+        Ractive.nexus.debate.insert(d)
+      }
+
+      for (let i = 0; i < data.length; i++)
+        if (data[i]) this.add(data[i])
+
+      this.polls += data.length
+      // if (next) next()
+    })
+  },
+}
+</script>

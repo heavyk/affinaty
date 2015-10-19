@@ -1,0 +1,37 @@
+<div title="{{abs}}" class="[[class]]">
+  {{since}}
+</div>
+
+<script>
+// in case I need a better timer with lower drift,
+// https://github.com/dbkaplun/rolex
+// I use crontabjs as a grouped timer in api.rolex
+// (stole the name from the guy above... lol)
+// https://github.com/yss/crontabjs
+
+let api = require('../api')
+let moment = require('moment')
+component.exports = {
+  data: {
+    format: 'MMMM Do YYYY, h:mm:ss a',
+  },
+  oninit () {
+    this.set('update', this.i = 1)
+    this.time = api.rolex.on(60000, () => {
+      this.set('update', ++this.i)
+    })
+  },
+  onteardown () {
+    api.rolex.off(this.time)
+  },
+  computed: {
+    since () {
+      this.get('update')
+      return moment(this.get('time')).fromNow() // .startOf('day')
+    },
+    abs () {
+      return moment(this.get('time')).format(this.get('format'))
+    },
+  }
+}
+</script>

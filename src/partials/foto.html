@@ -1,0 +1,29 @@
+
+<img src="{{url}}" class="{{cls}}" style="{{style}}" />
+
+
+<script>
+let repeat = require('../lib/utils').repeat
+let api = require('../api')
+let dpr = Math.round(window.devicePixelRatio || 1)
+component.exports = {
+  onconfig () {
+    this.get('src') || this.set('src', null)
+    this.get('shape') || this.set('shape', 'rd')
+    this.get('default') || this.set('default', '/img/default.svg')
+  },
+  computed: {
+    cls () {
+      let str = this.get('shape') + '-' + this.get('size')
+      if (!this.get('src')) str = 'n-' + str
+      let cls = this.get('class')
+      if (cls) str += ' ' + cls
+      return str
+    },
+    url () {
+      let id = this.get('src')
+      return id ? api.get('url') + '/i/' + repeat(this.get('size'), dpr) + '/' + id : this.get('default')
+    }
+  }
+}
+</script>

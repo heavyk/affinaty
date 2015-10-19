@@ -1,0 +1,74 @@
+<link rel='ractive' href='../partials/relation-sm.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+
+<div class="relations">
+  {{#if loading}}
+    <spinner />
+    <!-- loading... -->
+  {{else}}
+    {{#list}}
+      <!-- d: {{JSON.stringify(this)}} -->
+      <relation-sm d="{{.}}" />
+    {{else}}
+      no relations
+    {{/list}}
+  {{/if loading}}
+</div>
+
+
+
+
+<script>
+let api = require('../api')
+let assign = require('../lib/lodash/object/assign')
+component.exports = {
+  // adapt: ['promise-alt'],
+  isolated: true,
+  oninit () {
+    let sort = this.get('sort') || '+created'
+    let creator = this.get('creator')
+    let following = this.get('following')
+    let list = []
+    this.set('list', list)
+
+    let __follows
+    this.observe('follows', (follows) => { if (follows && follows !== __follows) {
+      this.set('loading', true)
+      api.action('relation*', {
+        creator: follows,
+        skip: list.length,
+        sort: sort,
+        limit: 27 * 3,
+      }, (d) => {
+        this.set('loading', false)
+        // list.push.apply(list, d)
+        // this.set('list', d)
+        list.splice.apply(list, [0, list.length].concat(d))
+      })
+    }})
+
+    let __following
+    this.observe('following', (following) => { if (following && following !== __following) {
+      this.set('loading', true)
+      api.action('relation*', {
+        skip: list.length,
+        following: following,
+        sort: sort,
+        limit: 27 * 3,
+      }, (d) => {
+        this.set('loading', false)
+        // list.push.apply(list, d)
+        // this.set('list', d)
+        list.splice.apply(list, [0, list.length].concat(d))
+      })
+    }})
+  },
+}
+</script>
+
+<style>
+.user {
+  float: left;
+}
+</style>

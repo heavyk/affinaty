@@ -1,0 +1,329 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/time.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+<link rel='ractive' href='../partials/modal.html'>
+
+<div class="action-docs">
+
+  <subheader>
+    <div class="row">
+      <div class="col-xs-2" style="margin-left: 16.666666%">
+        <a href="/action-docs/api" class="{{active === 'api' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-heart-o"></i></div>
+          API
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/action-docs/fns" class="{{active === 'fns' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-plug"></i></div>
+          fns
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/action-docs/data" class="{{active === 'data' ? 'active' : ''}}">
+          <div class="symbol"><i class="fa fa-files-o"></i></div>
+          data
+        </a>
+      </div>
+      <div class="col-xs-2">
+        <a href="/action-docs/try" class="{{active === 'try' ? 'active' : '' }}">
+          <div class="symbol"><i class="fa fa-sliders"></i></div>
+          try it!
+        </a>
+      </div>
+    </div>
+  </subheader>
+  {{#if active === 'api'}}
+    <h1>affinaty.com api</h1>
+    TODO :)
+  {{/if active === 'api'}}
+  <div class="lists">
+    <table>
+      <!-- {{#each field}}
+        <th>{{.}}</th>
+      {{/each field}} -->
+
+      <!-- {{#each list}}
+        {{# {item: . } }}
+        <tr>
+          {{#each field}}
+          <td>
+            {{item[.]}}
+          </td>
+          {{/each field}}
+        </tr>
+        {{/}}
+      {{/each list}} -->
+
+      {{#if active === 'data'}}
+      I am data {{id}}
+      {{/if active === 'data'}}
+
+      {{#if active === 'fns'}}
+        <th>name</th>
+        <th>version</th>
+        <th>description</th>
+        <th>inputs</th>
+        {{#each fns:name}}
+        <tr>
+          {{#each this:version}}
+          <td>{{name}}</td>
+          <td>{{version}}</td>
+          <td>{{description}}</td>
+          <td>
+              <!-- {{JSON.stringify(this)}} -->
+              {{#each .inputs:param}}
+              <div class="param p-{{ .type }}">
+
+                <!-- {{param}} ::: {{JSON.stringify(this)}} -->
+                <span class="param {{.required ? 'required' : ''}}">
+                  <!-- {{#if .required}}
+                    <i class="fa fa-exclamation" />
+                  {{/if}} -->
+                  {{param}}
+                </span>
+                &nbsp;->&nbsp;
+                {{#if .type === 'array-o-i-d'}}
+                  <span class="target t-array-o-i-d">
+                    <i class="fa fa-link" />
+                    <span class="bracket">[</span>
+                    <a href="/action-docs/data/{{.key}}">
+                      {{.key}}
+                    </a>
+                    <span class="bracket">]</span>
+                  </span>
+                {{/if}}
+                {{#if .type === 'o-i-d'}}
+                  <span class="target t-o-i-d">
+                    <i class="fa fa-link" />
+                    <a href="/action-docs/data/{{.key}}">
+                      {{.key}}
+                    </a>
+                  </span>
+                {{/if}}
+                {{#if .type === 'string'}}
+                  <span class="target t-string">
+                    string
+                    {{#if .min === .max}}
+                      ( {{ .min }} )
+                    {{else}}
+                      {{#if .min}}
+                        (min: {{.min}})
+                      {{/if}}
+                      {{#if .max}}
+                        (max: {{.max}})
+                      {{/if}}
+                    {{/if}}
+                  </span>
+                {{/if}}
+                {{#if .type === 'integer'}}
+                  <span class="target t-integer">
+                    integer
+                    {{#if .min}}
+                      (min: {{.min}})
+                    {{/if}}
+                    {{#if .max}}
+                      (max: {{.max}})
+                    {{/if}}
+                  </span>
+                {{/if}}
+                {{#if .type === 'order'}}
+                  <span class="target t-order">
+                    { sort }
+                  </span>
+                {{/if}}
+              </div>
+              {{/each .inputs}}
+              <!-- <a href="/action-docs/creator/{{.}}">{{.}}</a> -->
+          </td>
+          {{/each .}}
+          <!-- <td><time time="{{.created}}" class="since" /></td> -->
+          <!-- <td>
+            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+          </td> -->
+        </tr>
+        {{/each fns}}
+      {{/if}}
+
+    </table>
+  </div>
+</div>
+
+<style>
+.symbol {
+  text-align: center;
+  padding-left: 20px;
+  color: #fd270d;
+}
+a.active {
+  color: #414141;
+  background: #f6f6f6;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  padding: 4px;
+}
+tr:hover {
+  /*background: #dadada;*/
+  background: #fff;
+}
+
+tr, th {
+  text-align: center;
+  border-bottom: solid 2px #dadada;
+}
+
+span.action {
+  border-radius: 4px;
+  padding: 4px;
+  border: solid 1px #eee;
+}
+span.action:hover {
+  color: #f5a;
+  background-color: #eee;
+  border: solid 1px #f5a;
+  margin: 0;
+  cursor: pointer;
+}
+
+.p-o-i-d,
+.t-o-i-d,
+.o-i-d {
+  color: #BBAC57;
+}
+
+.p-array-o-i-d,
+.array-o-i-d {
+  color: #cd2;
+}
+
+/*.p-integer,*/
+.t-integer {
+  color: #55f;
+}
+
+.p-order,
+.t-order {
+  color: #ccc;
+}
+
+.bracket {
+  font-size: 135%;
+  color: #aaa;
+  font-weight: 800;
+}
+
+.param.required {
+  color: #DE4646;
+  font-weight: 600;
+}
+
+.fa-link {
+  color: #FF8600;
+  font-size: 120%;
+  font-weight: bold;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let assign = require('../lib/lodash/object/assign')
+let debounce = require('../lib/lodash/function/debounce')
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  onconfig () {
+
+  },
+  oninit () {
+    // let __id
+    // this.observe('id', (id) => { if (id && id !== __id) {
+    //   __id = id
+    // }})
+
+
+    this.observe('active', (active) => {
+      this.set('list', false)
+      switch (active) {
+        case 'api':
+          // this.set('list', false)
+          break
+        case 'try':
+          // this.set('list', false)
+          break
+        case 'data':
+          // this.set('list', false)
+          break
+        case 'fns':
+          // this.set('list', this.fns)
+          api.action('action-docs', {}, (data) => {
+            // debugger
+            this.set('fns', this.fns = data)
+          })
+          break
+        // case 'mundial':
+        //   api.action('admin:quest', {t: 'mundial', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        // case 'categories':
+        //   api.action('admin:quest', {t: 'category', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        // case 'images':
+        //   api.action('admin:quest', {t: 'foto', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        //
+        // case 'debates':
+        //   api.action('admin:quest', {t: 'debate', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        // case 'polls':
+        //   api.action('admin:quest', {t: 'poll', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        // case 'comments':
+        //   api.action('admin:quest', {t: 'comment', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        // case 'relations':
+        //   api.action('admin:quest', {t: 'relation', limit: 1000}, (data) => {
+        //     this.set('list', data)
+        //   })
+        //   break
+        default: this.set('active', active = 'fns')
+      }
+      Ractive.router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
+    })
+  },
+  oncomplete () {},
+  onteardown () {},
+  computed: {
+    _type () {
+      debugger
+      let t = this.get('.type')
+      switch (t) {
+        // case 'ObjectId': return 'o-i-d'
+        case 'ObjectId': return 'o-i-d'
+        case '[ObjectId': return 'o-i-ds'
+      }
+      return t
+    }
+  },
+  activate (sub) {
+    this.set('active', sub)
+    Ractive.router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
+  },
+}
+</script>

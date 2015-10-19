@@ -1,0 +1,148 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="popular">
+  <div class="list-container popular">
+    {{#if loading}}
+      <spinner scale="0.2" />
+    {{else}}
+      {{#list}}
+        <div class="list" on-mouseover-blur="toggle('engaged')">
+          <div class="img">
+            <a href="/tag/{{.d._id}}">
+              <foto src="{{.d.foto}}" size="a" shape="sq" default="/img/default-tag.svg" />
+            </a>
+          </div>
+          <div class="tag">
+            <a class="tag" href="/tag/{{.d._id}}">{{d.title}}</a>
+          </div>
+          <div class="stats">
+            <div class="opin">{{.score}} opins</div>
+            <div class="opin">{{.posts}} posts</div>
+          </div>
+        </div>
+      {{/list}}
+    {{/if loading}}
+  </div>
+</div>
+
+
+<style>
+.list-container {
+  width: 100%;
+  height: 202px;
+  background: #fff;
+  position: relative;
+  overflow:hidden;
+}
+.list {
+  float: left;
+  width: 140px;
+  background-color: #ffffff;
+  height: 202px;
+  border: solid 1px #dadada;
+  border-radius: 4px;
+  margin-right: 8px;
+  opacity: 0;
+  transition: all 333ms ease-in-out;
+}
+.list.loaded {
+  opacity: 1;
+}
+.stats {
+  width: 140px;
+  color: #414141;
+  text-align: center;
+  font-size: 11px;
+}
+div.tag {
+  font-size: 15px;
+  text-align: center;
+}
+div.opin {
+  float: left;
+  margin: 0 4px;
+  width: 62px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.popular {
+  max-height: 202px;
+}
+img {
+  margin: 8px 8px 0 8px;
+  width: 120px;
+  height: 120px;
+}
+a.tag {
+  margin: 4px;
+  max-width: 120px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+</style>
+
+
+<script>
+
+var api = require('../api')
+
+component.exports = {
+  onconfig () {
+    var list = []
+    this.set('list', this.list = list)
+  },
+  oninit () {
+    this.observe('category', (category) => {
+      this.set('list.length', 0)
+      this.set('query.category', category)
+      this.go()
+    })
+
+    // get the category changes from the header
+    Ractive.header.on('category', (category) => {
+      this.set('category', (category ? category._id : null))
+    })
+    this.doFade = (force) => {
+      if (!this.get('engaged') || force) {
+        this.list.unshift(this.list.pop())
+        var els = this.findAll('.list')
+        for (var i = 0; i < els.length; i++) {
+          els[i].className = i === 0 && !force ? 'list loading' : 'list loaded'
+        }
+        if (els.length) setTimeout(() => {
+          els[0].className = 'list loaded'
+        }, 100)
+      }
+    }
+    // setInterval(this.doFade, 5000)
+    this.time = api.rolex.on(5000, () => {
+      this.doFade()
+    })
+  },
+  onteardown () {
+    api.rolex.off(this.time)
+  },
+  go () {
+    this.set('loading', true)
+    api.action('pop:tag*', this.get('query'), (data) => {
+      this.set('loading', false)
+
+      // each(data.score, (v, id) => {
+      //   let d = data[id]
+      //   this.list.push({d: d, score: v, posts: data.posts[id]})
+      // })
+      let add = []
+      for (let id in data.score) {
+        add.push({ d: data[id], score: data.score[id], posts: data.posts[id] })
+      }
+
+      this.list.push.apply(this.list, add)
+      this.list.sort((a, b) => a.score > b.score ? -1 : 1)
+      this.doFade(true)
+    })
+  }
+}
+</script>

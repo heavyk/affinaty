@@ -1,0 +1,236 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/chat.html'>
+
+<div class="container">
+  <div class="row">
+
+    <!-- left column -->
+    <div class="col-sm-4 col-md-3 col-threads">
+      <div class="threads">
+        <h4>Mensajería</h4>
+        <nav>
+          <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
+          <li on-click="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
+            <i class="fa fa-toggle-on"></i>
+            Preferencias
+          </li>
+          <li on-click="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
+            <i class="fa fa-users"></i>
+            Buscador
+          </li>
+          {{#each threads}}
+          <li on-click="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
+            <foto src="{{members.0.foto}}" size="y" />
+            <span class="name">{{members.0.name}}</span>
+            {{#if .nm}}
+              <span class="new-msg">{{.nm}}</span>
+            {{/if}}
+          </li>
+          {{else}}
+          no threads
+          {{/each threads}}
+        </nav>
+      </div>
+    </div>
+
+    <!-- right column -->
+    <div class="col-sm-8 col-md-9 col-content">
+      <!-- settings page -->
+      {{#if panel === 'settings'}}
+      <div class="messages summary">
+        <h3>Preferencias <span class="not-yet">(Función aún no activa)</span></h3>
+        <div>Con los filtros de control podrás:</div>
+        <ul>
+          <li>Bloquear usuarios</li>
+          <li>Denunciar</li>
+          <li>Formatear la visualización de tus conversaciones</li>
+          <li>Borrar historal</li>
+        </ul>
+      </div>
+      {{/if}}
+
+      <!-- thread view -->
+      {{#if panel === 'thread'}}
+      <chat members={{members}} />
+      {{/if}}
+
+      {{#if !panel || panel === 'encounter'}}
+      <div class="messages summary">
+        <h3>Buscador <span class="not-yet">(Función aún no activa)</span></h3>
+        <!-- <div>some status updates</div> -->
+        <!-- <div>maybe some suggesgions too</div> -->
+      </div>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<style>
+
+.threads {
+  position: fixed;
+  max-height: 90%;
+  min-width: 266px;
+}
+
+.threads, .messages {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 5px 11px 20px -3px rgba(41, 41, 41, 0.53);
+}
+
+.messages {
+  position: relative;
+  padding: 10px;
+}
+.wrapper {
+  height: 100%;
+  overflow-y: auto;
+  padding: 15px 0 5px;
+}
+.input {
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+  bottom: 0;
+}
+.new-msg {
+  /*position: relative;
+  top: 5px;
+  right: 6px;*/
+  background: #5a9727;
+  color: #fff;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  font-size: 12px;
+  text-align: center;
+  display: inline-block;
+}
+li.thread,
+li.settings,
+li.encounter {
+  padding: 4px 8px;
+  color: #ff3232;
+  border-bottom: solid 1px #F1F1F1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+li.active {
+  background: #fd270d;
+  color: #fff;
+}
+nav .fa {
+  /*font-size: 28px;*/
+  font-size: 19px;
+  /*width: 49px;*/
+  width: 36px;
+  height: 36px;
+  background-color: #FFFFFF;
+  padding: 6px;
+  border-radius: 50%;
+  border: solid 2px;
+  color: #414141;
+}
+.col-threads, .col-content {
+  height: 100%;
+}
+.settings, .encounter {
+  border-top: solid 1px #A0A0A0;
+  background-color: #fff0f2;
+}
+li.encounter {
+  border-bottom: solid 1px #A0A0A0;
+  background-color: #e9f7ea;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let local = require('../local')
+let assign = require('../lib/lodash/object/assign')
+let each = require('../lib/lodash/collection/each')
+let onresize = require('../lib/dom/element-onresize')
+
+component.exports = {
+  oninit () {
+    api.action('mbox*', {limit: 20, sort: '+active'}, (data) => {
+      let threads = {}
+      for (let i = 0; i < data.length; i++) {
+        let t = data[i]
+        for (let j = 0; j < t.members.length; j++) {
+          let m = t.members[j]
+          if (m === api.me._id) {
+            t.members.splice(j, 1)
+          }
+        }
+        t.nm = api.my.notifier.get_box(t._id)
+        threads[t._id] = t
+      }
+      this.set('threads', threads)
+      let mbox = this.get('mbox')
+      if (mbox) {
+        this.set_members(mbox)
+      }
+    })
+
+    api.my.notifier.on('msg*', () => {
+      let threads = this.get('threads')
+      if (threads) each(threads, (t, id) => {
+        let c = api.my.notifier.get_box(id)
+        if (t.nm !== c) {
+          this.set(`threads.${id}.nm`, c)
+        }
+      })
+    })
+
+    this.on('add', (event) => {
+      event.original.preventDefault()
+      let text = this.get('text').trim()
+      if (text.length <= 2) return
+      this.set('saving', true)
+      this.set('text', '')
+      this.fire('elastic:adjust')
+      let msg = {
+        text: text,
+        creator: api.me._id,
+        created: Date.now(),
+        saving: true
+      }
+      this.get('msgs').push(msg)
+      api.action('msg+', {text: text, mbox: this.get('mbox')}, function (data) {
+        msg.saving = false
+        assign(msg, data)
+      }, (error) => {
+        msg.saving = false
+        msg.error = error
+      })
+    })
+    this.on('toggle-focus', () => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.toggle('focused')
+      }, 200)
+    })
+  },
+  activate (sub, mbox) {
+    if (mbox) this.set('msgs', [])
+    Ractive.router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
+  },
+  set_members (mbox) {
+    let thread = this.get('threads.' + mbox)
+    if (!thread) return
+    let members = {}
+    members[api.me._id] = members.me = api.me
+    for (let i = 0; i < thread.members.length; i++) {
+      let m = thread.members[i]
+      members[m._id] = m
+    }
+    this.set('members', members)
+  },
+}
+</script>

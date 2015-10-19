@@ -1,0 +1,302 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/foto-upload.html'>
+
+<div class="{{prevote ? 'square' : 'rectangle'}} container">
+  {{#if prevote}}
+  <div class="notice">
+    Para que funcionen bien las estadisticas, necesitamos que rellenes los datos indicados antes de opinar.
+  </div>
+  {{/if}}
+  <form on-submit="submit">
+
+    <div class="{{prevote ? '' : 'left-column'}}">
+
+      <div class="field localization" style="display: {{prevote ? 'none' : 'block'}}">
+        <div class="left-column">
+          <select value="{{d.country}}" class="{{errors.d.country ? 'invalid' : ''}}">
+            <option value="">País</option>
+            {{#each countries}}
+            <option value="{{short}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+        {{#if provinces}}
+        <div class="col-right">
+          <select value="{{d.province}}" class="{{errors.d.province ? 'invalid' : ''}}">
+            <option value="">Provincia</option>
+            {{#each provinces}}
+            <option value="{{short}}">{{name}}</option>
+            {{/each}}
+          </select>
+        </div>
+        {{/if}}
+      </div>
+
+      <div class="field planet">
+        <div class="left-column {{errors.d.planet ? 'invalid' : ''}}" on-click="set('d.planet', 0)">
+          <input type="radio" name="{{d.planet}}" value="0"> Mujer
+        </div>
+        <div class="col-right {{errors.d.planet ? 'invalid' : ''}}" on-click="set('d.planet', 1)">
+          <input type="radio" name="{{d.planet}}" value="1"> Hombre
+        </div>
+      </div>
+
+      <div class="field birthdate">
+        <input type="text" class="birthdate {{errors.d.birthdate ? 'invalid' : ''}}" placeholder="fecha de cumpleaños" decorator="pikaday:d.birthdate">
+      </div>
+
+      <button on-click="change-appearance" class="button-sign-up">
+        {{#if prevote}}
+        Votar
+        {{else}}
+        Vente y opina <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
+        {{/if}}
+      </button>
+
+    </div>
+
+    <!-- right column -->
+    <div class="col-right" style="display: {{prevote ? 'none' : 'block'}}">
+      <div class="foto {{errors.d.foto ? 'invalid' : ''}}">
+        <!-- Sí, quiero esta foto -->
+        {{#if change_foto}}
+        <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{cropped}}" />
+        {{else}}
+        <foto src="{{me.foto}}" size="t" />
+        {{/if}}
+      </div>
+    </div>
+  </form>
+</div>
+
+
+<style>
+div.square {
+  width: 350px;
+  padding: 20px;
+}
+div.rectangle {
+  width: 700px;
+  padding: 20px;
+}
+
+.left-column, .col-right {
+  width: 50%;
+  padding: 10px;
+  float: left;
+}
+
+.col-right {
+  float: right;
+}
+
+.field {
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.birthdate {
+  margin: 5px 0 10px 0;
+}
+
+.left-column .col-right,
+.left-column .left-column {
+  padding: 5px;
+}
+
+div.foto {
+  margin: 0 auto;
+  position: relative;
+  width: 248px;
+  padding: 2px;
+}
+
+.invalid {
+  border: solid 1px #f00;
+  border-radius: 8px;
+}
+
+.notice {
+  color: #3378FF;
+  margin-bottom: 30px;
+}
+
+button.button-sign-up {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.change-foto {
+  cursor: pointer;
+  position: absolute;
+  top: 60px;
+  right: 30px;
+}
+
+.foto-upload {
+  margin: 0 auto;
+  position: relative;
+}
+
+.foto-upload .message {
+  font-size: 16px;
+  position: absolute;
+  left: 50%;
+  margin-left: -120px;
+  width: 240px;
+  top: 160px;
+}
+
+.dropzone-area {
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
+  display: inline-block;
+  position: relative;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropzone-area .fa {
+  padding: 50%;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let moment = require('moment')
+let pikaday = require('pikaday')
+let _provinces = require('provinces')
+let Validator = require('../validator')
+component.exports = {
+  // isolated: true,
+  onconfig () {
+    this.get('d.country') || this.set('d.country', null)
+  },
+  oninit () {
+    let pika
+    let me = api.get('me')
+    this.set('active', 'appearance')
+    api.observe('me', (_me) => {
+      this.set('me', _me)
+      this.set('d', _me)
+      me = _me
+    })
+    this.set('change_foto', true)
+    this.set('d.country', '')
+    this.set('d.birthdate', me.birthdate)
+    let countries = [
+      {name: 'United States', short: 'US'},
+      {name: 'United Kingdom', short: 'GB'},
+      {name: 'Canada', short: 'CA'},
+      {name: 'Mexico', short: 'MX'},
+      {name: 'España', short: 'ES'},
+      {name: 'Australia', short: 'AU'},
+      {name: 'China', short: 'CN'},
+      {name: 'Germany', short: 'DE'},
+      {name: 'Belgium', short: 'BE'},
+      {name: 'Netherlands', short: 'NL'},
+      {name: 'Denmark', short: 'DK'},
+      {name: 'Turkey', short: 'TR'},
+      {name: 'Indonesia', short: 'ID'},
+      {name: 'Jordan', short: 'JO'},
+      {name: 'India', short: 'IN'},
+      {name: 'Cambodia', short: 'KH'},
+      {name: 'Ethiopia', short: 'ET'},
+      {name: 'Peru', short: 'PE'},
+      {name: 'Cuba', short: 'CU'},
+      {name: 'Argentina', short: 'AR'},
+      {name: 'Chile', short: 'CL'},
+      {name: 'Bolivia', short: 'BO'},
+      {name: 'Bangladesh', short: 'BD'},
+      {name: 'Pakistan', short: 'PK'},
+      {name: 'Nigeria', short: 'NG'},
+      {name: 'Japan', short: 'JP'},
+      {name: 'Austria', short: 'AT'},
+      {name: 'Brazil', short: 'BR'},
+      {name: 'Philippines', short: 'PH'},
+      {name: 'Vietnam', short: 'VN'},
+    ]
+    countries.sort((a, b) => {
+      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+    })
+    this.set('countries', countries)
+    this.observe('cropped', (v) => {
+      if (v && v.length) this.set('d.foto', v[0])
+    })
+
+    this.d = new Validator('d', {
+      'foto': {required: false, type: 'id'},
+      'planet': {required: true, type: 'integer', min: 0, max: 1},
+      'country': {required: false, type: 'string'},
+      'province': {required: false, type: 'string'},
+      'birthdate': {required: true, type: 'integer'}, // TODO min / max - eg. min: new Date(...).valueOf()
+    })
+    this.observe('d', () => {
+      if (this.d.submitted)
+        this.set('errors', this.d.validate(this).errors)
+    })
+    this.on('submit', (e) => {
+      e.original.preventDefault()
+      e.original.stopImmediatePropagation()
+      this.d.submitted = true
+      this.fire('submitting', () => {
+        let form = this.d.validate(this)
+        console.log('form', form)
+        this.set('errors', form.errors)
+        // need to do like in the settings panel.
+        //
+        if (form.valid) api.action('change-appearance', form.data, (data) => {
+          if (data) {
+            api.whoIaM(data)
+            this.parent.teardown()
+          }
+        })
+      })
+    })
+    if (this.get('prevote')) {
+      this.set('d', api.me)
+      this.d.submitted = true
+      let form = this.d.validate(this)
+      this.set('errors', form.errors)
+    }
+  },
+  computed: {
+    provinces () {
+      let country = this.get('d.country')
+      let provinces = []
+      for (let p of _provinces) {
+        if (p.country === country)
+          provinces.push({name: p.name, short: p.short})
+      }
+      provinces.sort((a, b) => {
+        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+      })
+      return provinces
+    }
+  },
+  decorators: {
+    pikaday: require('../lib/decorators/pikaday')
+  }
+}
+</script>

@@ -1,0 +1,28 @@
+<subheader>
+  <div class="container">
+    <div ng-if="view === 'search'" class="search">
+      Buscar: <span class="query">{{query}}</span>
+    </div>
+    <!--<div ng-if="view !== 'search'" class="row">
+      <div class="col-xs-4">
+        <a ng-class="{active: view === 'home'}" href="/home">
+          <i class="fa fa-home"></i>Inicio
+        </a>
+      </div>
+      <div class="col-xs-4">
+        <a ng-class="{active: view === 'affines'}" href="/affines">
+          <i class="fa fa-users"></i>Afines
+        </a>
+      </div>
+      <div class="col-xs-4">
+        <a ng-class="{active: view === 'top'}" href="/top">
+          <i class="fa fa-star"></i>Populares
+        </a>
+      </div>
+    </div>-->
+  </div>
+</subheader>
+<div class="container">
+  <debate-list ng-if="!loading" cols="[6, 4]" category="{{id}}"></debate-list>
+  <spinner ng-if="loading"></spinner>
+</div>

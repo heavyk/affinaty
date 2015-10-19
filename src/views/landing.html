@@ -1,0 +1,139 @@
+<link rel='ractive' href='../partials/sign-in.html'>
+<link rel='ractive' href='../partials/footer.html'>
+
+<div class="container">
+  <div class="row1 row">
+    <div class="central col-md-8">
+      <div class="lead">
+        <h1><img src="/img/landing.svg" /></h1>
+        <h2>¡Súmate a opinar y a debatir con nosotros!</h2>
+        <h2>Da tu opinión y encuentra personas affines a ti</h2>
+        <img class="cover" src="/img/cover-0.0.2.png">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="app-buttons">
+        <div class="app-buttons-header">
+          Descarga la app en:
+        </div>
+        <div class="col-md-6">
+          <a href="/download/ios" class="btn-app btn-app-store" decorator="tip:'función aún no disponible'">Descarga la app para iOS</a>
+        </div>
+        <div class="col-md-6">
+          <a href="/download/android" class="btn-app btn-google-play" decorator="tip:'función aún no disponible'">Descarga la app para android</a>
+        </div>
+      </div>
+      <sign-in />
+    </div>
+  </div>
+</div>
+<footer />
+
+<style>
+.cover {
+  margin: -20px 64px 0 0;
+}
+.app-buttons {
+  position: absolute;
+  top: 100px;
+  width: 420px;
+  text-align: center;
+  padding: 0 20px;
+  margin-left: -36px;
+}
+.app-buttons-header {
+  font-size: 120%;
+  letter-spacing: 0.05em;
+  margin: 4px;
+}
+.btn-app {
+  background-color: #000;
+  background-repeat: no-repeat;
+  background-position: left top;
+  border-radius: 4px;
+  background-clip: padding-box;
+  display: block;
+  width: 200px;
+  height: 60px;
+  text-indent: -9999px;
+  margin-right: 30px;
+  transition: background-color 333ms ease-in-out;
+}
+.btn-app:hover {
+  background-color: #1F6692;
+}
+.btn-app-store {
+  background-image: url('/img/btn-app-store.png');
+  margin-left: -20px;
+}
+.btn-google-play {
+  background-image: url('/img/btn-google-play.png');
+}
+.lead {
+  float: left;
+  float: right;
+}
+h1 {
+  font-size: 72px;
+  font-family: 'Pacifico';
+  height: 80px;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+  }
+}
+h2 {
+  font-weight: 300;
+  margin: 15px;
+  font-size: 160%;
+}
+h5 {
+  margin-top: 30px;
+}
+.row1 {
+  padding-top: 32px;
+}
+.central {
+  padding-right: 50px;
+}
+@media (max-width: 768px) {
+  .central {
+    display: none;
+  }
+  .opin {
+    display: none;
+  }
+}
+.enter {
+  padding: 0px 30px;
+}
+.sign-in {
+  width: 367px;
+  float: left;
+  background-color: #ffffff;
+  color: #000;
+  text-align: center;
+  border-radius: 30px 11px;
+  margin-top: 220px;
+}
+.buttons {
+  margin: 60px auto;
+  max-width: 400px;
+}
+.buttons .btn {
+  font-size: 24px;
+  padding: 12px 24px;
+}
+</style>
+<script>
+// let api = require('../api')
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  decorators: {
+    tip: require('../lib/decorators/tip')
+  }
+}
+</script>

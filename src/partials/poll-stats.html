@@ -1,0 +1,187 @@
+<link rel='ractive' href='../partials/sex-stats.html'>
+<link rel='ractive' href='../partials/age-stats.html'>
+
+<div class="poll-stats">
+  <h6 class="title">Estadística</h6>
+
+  {{#if totals}}
+    <div class="stats-box">
+      {{#totals : i}}
+      <div class="bar-desc">{{ text(i) }}</div>
+      <div class="bar">
+        <button class="button-votes {{idx === i ? 'selected' : ''}}">{{.}}</button>
+        <!-- <span class="num_votes">{{.}}</span> -->
+        <button class="bar" style="width: {{ bar(i, 200) }}px" />
+      </div>
+      {{/totals}}
+    </div>
+  {{/if totals}}
+
+  <sex-stats planets="{{planets}}" percents="{{percents}}" />
+  <age-stats legend="{{legend}}" ranges="{{ranges}}" />
+</div>
+
+<style>
+h6 {
+  font-family: 'Pacifico';
+  text-align: center;
+  font-size: 160%;
+  margin: 20px 0 0 0;
+}
+h6.title {
+  color: #fd270d;
+}
+
+.num_votes {
+  float: right;
+  margin-right: 20px;
+}
+
+.title {
+  text-align: center;
+  color: #747474;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+div.bar {
+  height: 30px;
+  margin-bottom: 10px;
+}
+button {
+  padding: 4px 10px;
+}
+.poll-stats {
+  float: left;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 30px 0px 30px 0px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.sex-stats {
+  margin: 0 20px;
+  /*for some stupid reason, it won't calc the height */
+  height: 180px;
+}
+
+.age-graph {
+  margin: 20px;
+  height: 220px;
+}
+
+.stats-box {
+  margin: 20px;
+}
+button.bar {
+  float: left;
+  margin: 10px 0;
+  padding: 2px;
+  transition: 0.3s width;
+  position: relative;
+  bottom: 0;
+  display: inline;
+  float: left;
+  height: 10px;
+  background: #fd270d;
+}
+
+button.button-votes {
+  /*color:#dadada;*/
+  color: #fd270d;
+  float: left;
+  padding: 4px 10px;
+  border: solid 1px #ddd;
+  margin-right: 5px;
+  min-width: 30px;
+  height: 30px;
+  padding: 5px;
+  position: relative;
+  background: #f9f9f9;
+}
+button.selected {
+  color: #fd270d;
+}
+
+/*.bar-desc {
+  margin-left: 35px;
+}*/
+
+</style>
+
+
+<script>
+let api = require('../api')
+let pie = require('easy-pie-chart')
+let Chart = require('chart.js')
+let extend = require('../lib/lodash/object/assign')
+component.exports = {
+  oncomplete () {
+    let id = this.get('id')
+    let num_planets = this.get('S.moarPlanets') ? 4 : 2
+    let ages = api.my.opinion.ages
+    api.action('poll-stats', {_id: id, ages}, (data) => {
+      this.set('options', data.options)
+      let r, rr, i, sum, gender, option, k, t
+      let count = data.options.length
+      let totals = new Array(count)
+      let planets = new Array(num_planets)
+      let total = 0
+      let ages = data.ages.concat('>')
+      let ranges = new Array(ages.length)
+      for (i = 0; i < count; i++) totals[i] = 0
+      for (i = 0; i < num_planets; i++) planets[i] = 0
+      for (i = 0; i < ages.length; i++) {
+        rr = ages[i]
+        r = rr
+        sum = 0
+        for (gender = 0; gender < num_planets; gender++) {
+          for (option = 0; option < count; option++) {
+            k = rr + '-' + gender + option
+            if (t = data[k]) {
+              totals[option] += t
+              planets[gender] += t
+              sum += t
+            }
+          }
+        }
+
+        ranges[i] = sum
+        total += sum
+      }
+
+      let percents = new Array(count)
+      for (gender = 0; gender < num_planets; gender++)
+        percents[gender] = planets[gender] / total * 100
+
+      this.set('totals', totals)
+      this.set('percents', percents)
+      this.set('planets', planets)
+      this.set('ranges', ranges)
+    })
+  },
+  computed: {
+    limits () {
+      let values = this.get('totals')
+      let r = { sum: 0, max: 0 }
+      for (let i = 0; i < values.length; i++) {
+        let v = values[i]
+        r.sum += v
+        if (v > r.max) r.max = v
+      }
+      return r
+    },
+  },
+  data: {
+    bar (i, px) {
+      let v = this.get('totals.'+i)
+      let c = this.get('limits')
+      return Math.round(v / c.max * px)
+    },
+    text (i) {
+      return this.get('options.'+i+'.text')
+    }
+  },
+}
+</script>

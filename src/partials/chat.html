@@ -1,0 +1,224 @@
+<link rel='ractive' href='../partials/foto.html'>
+<div class="messages" style="height: {{outerHeight}}px">
+	<div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{innerHeight}}px">
+		{{#each msgs:i}}
+		<div class="{{.creator === members.me._id ? 'left' : 'right'}}">
+			<div style="float: {{.creator === members.me._id ? 'left' : 'right'}}">
+				<foto src="{{members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
+			</div>
+			<div class="message">
+				<!-- <span class="text">{{.text}}</span> -->
+				<span class="text" decorator="markdown:'text'">{{.text}}</span>
+			</div>
+		</div>
+		{{/each}}
+	</div>
+	<form on-submit="add">
+		<div class="text-container">
+			<textarea
+				class="animate"
+				on-blur-focus="toggle-focus"
+				on-nlSubmit="add"
+				maxlength="2048"
+				value="{{text}}"
+				placeholder="Escribe tu comentario"
+				decorator="nlElastic" />
+		</div>
+		<div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
+			<button type="submit" on-click="add">
+				<i class="fa fa-comment-o"></i> send
+			</button>
+		</div>
+	</form>
+</div>
+
+<style>
+.wrapper {
+  height: 100%;
+  overflow-y: auto;
+  padding: 15px 0 5px;
+}
+.messages {
+  position: relative;
+  padding: 10px;
+	text-align: left;
+}
+
+.message {
+  position: relative;
+  display: inline-block;
+  margin: 0 45px 10px 15px;
+  padding: 10px 15px;
+  border-radius: 30px 9px 30px 9px;
+  background: #f3f3f3;
+  max-width: 80%;
+  z-index: 1;
+  color: #8e8e8e;
+	word-break: break-all;
+}
+.message .user {
+  position: relative;
+  float: left;
+  margin-right: 10px;
+}
+.right {
+  text-align: right;
+}
+.right .message {
+  text-align: right;
+  margin-left: 45px;
+  margin-right: 15px;
+  border: solid 1px #ababab;
+}
+.right .message .user {
+  float: right;
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.text-container {
+  position: relative;
+  width: 100%;
+  margin-left: -15px;
+}
+textarea.animate {
+  margin: 0 15px;
+  width: 100%;
+  height: 35px;
+}
+.submit {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  margin: 5px;
+}
+.submit button {
+  padding: 1px 20px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+	opacity: .7;
+	transition: all .3s ease-in-out;
+}
+.submit button:hover {
+	opacity: 1;
+	background-color: #fff;
+	border-color: #ccc;
+}
+.submit .fa {
+  color: #fd270d;
+}
+
+form {
+  position: relative;
+}
+
+.left .message {
+  border: solid 1px #fd270d;
+}
+
+</style>
+
+<script>
+let api = require('../api')
+let assign = require('../lib/lodash/object/assign')
+let throttle = require('../lib/lodash/function/throttle')
+component.exports = {
+	isolated: true,
+	oncomplete () {
+		let tbox = this.find('textarea')
+		setTimeout(() => {
+			tbox.focus()
+		}, 200)
+		let _outer
+		let resizer = () => {
+			let outer = window.innerHeight - 100
+			this.set('outerHeight', outer)
+			this.set('innerHeight', outer - tbox.clientHeight - 25)
+			if (_outer !== outer) this.parent.fire('resize')
+			_outer = outer
+		}
+		let _resizer = throttle(resizer, 500, true)
+		this.parent.on('resize', _resizer)
+		window.addEventListener('resize', _resizer)
+		this.on('elastic:resize', _resizer)
+		let teardown = () => {
+			window.removeEventListener('resize', _resizer)
+			this.off('elastic:resize', _resizer)
+		}
+
+		this.once('teardown', teardown)
+		let id = this.parent.get('id')
+		let __mbox = this.parent.get('mbox')
+		let msgs = []
+		this.set('msgs', msgs)
+
+		let on_mbox = (mbox) => { if (mbox) {
+			this.set('msgs.length', 0)
+			api.action('msg*', {mbox, limit: 100, sort: '-created'}, (data) => {
+				this.set('msgs', data)
+			})
+			api.my.notifier.until('/', () => {
+				api.my.notifier.remove_box(mbox)
+			})
+			__mbox = mbox
+		}}
+
+		if (id && !__mbox) {
+			console.info('get mbox!')
+			api.action('mbox', {creator: id}, (data) => {
+				let members = {}
+		    members[api.me._id] = members.me = api.me
+		    for (let i = 0; i < data.members.length; i++) {
+		      let m = data.members[i]
+		      members[m._id] = m
+		    }
+				this.parent.set('mbox', data._id)
+				this.set('members', members)
+			})
+		} else {
+			console.info('no get inbox', this.get('members'))
+		}
+		this.parent.observe('mbox', on_mbox)
+
+		this.on('toggle-focus', () => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.toggle('focused')
+      }, 200)
+    })
+
+		this.on('add', (event) => {
+      event.original.preventDefault()
+      let text = this.get('text').trim()
+      if (text.length < 2) return
+			if (!__mbox) return
+      this.set('saving', true)
+      this.set('text', '')
+      this.fire('elastic:adjust')
+      let msg = {
+        text: text,
+        creator: api.me._id,
+        created: Date.now(),
+        saving: true
+      }
+      this.get('msgs').push(msg)
+      api.action('msg+', {text: text, mbox: __mbox}, function (data) {
+        msg.saving = false
+        assign(msg, data)
+      }, (error) => {
+        msg.saving = false
+        msg.error = error
+      })
+    })
+	},
+	decorators: {
+    nlElastic: require('../lib/decorators/nlElastic'),
+    scrollGlue: require('../lib/decorators/scrollGlue'),
+		markdown: require('../lib/decorators/markdown'),
+  },
+  events: {
+    nlSubmit: require('../lib/events/nlSubmit')
+  },
+}
+</script>

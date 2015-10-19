@@ -1,0 +1,118 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="popular">
+  <span class="title">Populares</span>
+  <div class="list-container popular">
+    {{#if loading}}
+      <spinner scale="0.2" />
+    {{else}}
+      {{#list}}
+        <div class="list">
+          <a href="/tag/{{d._id}}">
+            <foto src="{{d.foto}}" size="z" shape="sq" />
+          </a>
+          <div class="tag">
+            <a class="tag" href="/tag/{{d._id}}">{{d.title}}</a>
+          </div>
+          <div class="stats">
+            <div class="opin">{{score}} opin</div>
+            <div class="opin">{{posts}} posts</div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      {{/list}}
+    {{/if loading}}
+  </div>
+  <span class="view_plus">Ver más</span>
+  <div class="clear"></div>
+</div>
+
+
+<style>
+.list-container {
+  float: left;
+  overflow-y: scroll;
+  width: 100%;
+  min-height: 100px;
+  max-height: 360px;
+  background: #fff;
+  position: relative;
+}
+.list {
+  width: 100%;
+  background-color: #ffffff;
+  height: 55px;
+  border-bottom: solid 1px #dadada;
+}
+.stats {
+  float: right;
+}
+div.tag {
+  float: left;
+  /*margin: 15px 10px;*/
+  font-size: 15px;
+  text-overflow: ellipsis;
+  width: 100px;
+  white-space: nowrap;
+}
+span.opin {
+  float: right;
+  padding-top: 10px;
+  padding-right: 10px;
+}
+div.opin {
+  float: right;
+  clear: right;
+  margin: 2px 4px;
+}
+.popular {
+  max-height: 260px;
+}
+img {
+  float: left;
+  margin: 2px;
+}
+a.tag {
+  margin: 14px 4px;
+}
+</style>
+
+
+<script>
+
+let api = require('../api')
+let each = require('../lib/lodash/collection/each')
+
+component.exports = {
+  onconfig () {
+    let list = []
+    this.set('list', this.list = list)
+  },
+  oninit () {
+    this.observe('category', (category) => {
+      this.list.splice(0, this.list.length)
+      this.set('query.category', category)
+      this.go()
+    })
+
+    // get the category changes from the header
+    Ractive.header.on('category', (category) => {
+      this.set('category', (category ? category._id : null))
+    })
+  },
+  go () {
+    this.set('loading', true)
+    api.action('pop:tag*', this.get('query'), (data) => {
+      this.set('loading', false)
+
+      each(data.score, (v, id) => {
+        let d = data[id]
+        this.list.push({d: d, score: v, posts: data.posts[id]})
+      })
+
+      this.list.sort((a, b) => a.score > b.score ? -1 : 1)
+    })
+  }
+}
+</script>

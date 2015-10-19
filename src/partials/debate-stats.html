@@ -1,0 +1,379 @@
+<link rel='ractive' href='../partials/sex-stats.html'>
+<link rel='ractive' href='../partials/age-stats.html'>
+
+<div class="debate-stats">
+  <h6 class="title">Estadísticas</h6>
+
+  {{#if totals}}
+    <div class="stats-box">
+      <div class="bar">
+        <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}">
+          <i class="fa fa-times"></i>
+          <i class="fa fa-times"></i>
+        </button>
+        <span class="num_votes">{{totals[0]}}</span>
+        <button class="bar woa-woa" style="width: {{Math.round(muyDesAcuerdo * 200)}}px" />
+      </div>
+      <div class="bar">
+        <button class="button-woa {{d.pos === -1 ? 'active' : ''}} single">
+          <i class="fa fa-times"></i>
+        </button>
+        <span class="num_votes">{{totals[1]}}</span>
+        <button class="bar woa" style="width: {{Math.round(desAcuerdo * 200)}}px" />
+      </div>
+      <div class="bar">
+        <button class="button-mas {{d.pos === 1 ? 'active' : ''}} single">
+          <i class="fa fa-check"></i>
+        </button>
+        <span class="num_votes">{{totals[2]}}</span>
+        <button class="bar mas" style="width: {{Math.round(deAcuerdo * 200)}}px" />
+      </div>
+      <div class="bar">
+        <button class="button-mas-mas {{d.pos === 2 ? 'active' : ''}}">
+          <i class="fa fa-check"></i>
+          <i class="fa fa-check"></i>
+        </button>
+        <span class="num_votes">{{totals[3]}}</span>
+        <button class="bar mas-mas" style="width: {{Math.round(muyDeAcuerdo * 200)}}px" />
+      </div>
+    </div>
+  {{/if totals}}
+
+  <sex-stats planets="{{planets}}" percents="{{percents}}" />
+  <age-stats legend="{{legend}}" ranges="{{ranges}}" />
+</div>
+
+
+<style>
+h6 {
+  font-family: 'Pacifico';
+  text-align: center;
+  font-size: 160%;
+  margin: 20px 0 0 0;
+}
+h6.title {
+  color: #fd270d;
+}
+.num_votes {
+  float: right;
+  margin-right: 20px;
+}
+.title {
+  text-align: center;
+  color: #747474;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+div.bar {
+  height: 40px;
+}
+
+.debate-stats {
+  float: left;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 30px 0px 30px 0px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.sex-stats {
+  margin: 0 20px;
+  /*for some stupid reason, it won't calc the height */
+  height: 180px;
+}
+
+.age-graph {
+  margin: 20px;
+  height: 220px;
+}
+
+.stats-box {
+  margin: 20px;
+}
+button.bar {
+  margin: 10px 0;
+  padding: 2px;
+  transition: 0.3s width;
+  position: relative;
+  bottom: 0;
+  display: inline;
+  float: left;
+  height: 10px;
+}
+.stats-box .mas-mas {
+  background: #2e8034;
+}
+.stats-box .mas {
+  background: #5a9727;
+}
+.stats-box .woa {
+  background: #cc4d41;
+}
+.stats-box .woa-woa {
+  background: #bb0217;
+}
+
+button {
+  padding: 4px 10px;
+}
+.active {
+  background-color: #333;
+}
+.fa {
+  margin: 0;
+}
+
+
+button.button-mas:hover,
+button.button-mas-mas:hover,
+button.button-woa:hover,
+button.button-woa-woa:hover {
+  background: #f9f9f9;
+}
+button.button-mas,
+button.button-mas-mas,
+button.button-woa,
+button.button-woa-woa {
+  color:#f00;
+  float: left;
+  padding: 4px 10px;
+  border: solid 1px #ddd;
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  position: relative;
+  background: #f9f9f9;
+}
+
+button.button-mas-mas {
+  color: #2e8034;
+  border-bottom: solid 1px #2e8034;
+}
+button.button-mas {
+  color: #5a9727;
+  border-bottom: solid 1px #5a9727;
+}
+button.button-woa {
+  color: #cc4d41;
+  border-bottom: solid 1px #cc4d41;
+}
+button.button-woa-woa {
+  color: #bb0217;
+  border-bottom: solid 1px #bb0217;
+}
+
+button.button-mas:first-child {
+  position: relative;
+}
+
+button.button-woa:last-child {
+  position: relative;
+}
+
+
+.fa-times {
+  position: relative;
+  top: -5px;
+  right: 0;
+}
+.fa-times:nth-child(2) {
+  position: absolute;
+  top: 13px;
+  left: 0;
+}
+.single .fa-times {
+  top: 0;
+}
+
+.fa-check {
+  position: relative;
+  top: -5px;
+}
+
+.fa-check:nth-child(2) {
+  position: absolute;
+  top: 10px;
+  left: 7px;
+}
+
+.single .fa-check {
+  top: 0;
+}
+
+
+</style>
+
+<script>
+let api = require('../api')
+let pie = require('easy-pie-chart')
+let Chart = require('chart.js')
+let assign = require('../lib/lodash/object/assign')
+let after = require('../lib/lodash/function/after')
+let ageStats = require('../lib/calc/age-stats')
+let Stats = require('../api/age-stats')
+component.exports = {
+  isolated: true,
+  dd: new Map,
+  oninit () {
+    let id = this.get('debate')
+    this.stats = new Stats('debate', id)
+    // really I should do this in stats ... for now, this is fine
+    let onloaded = after(2, () => {
+      let stats = this.stats.data
+      let d = api.my.opinion.debate(id)
+      let calc = this.calc(stats)
+      this.set('totals', calc.totals)
+      this.set('percents', calc.percents)
+      this.set('planets', calc.planets)
+      this.set('ranges', calc.ranges)
+    })
+    this.stats.until('/', onloaded)
+    api.my.opinion.until('/', onloaded)
+
+    let key = id + '.' + api.me._id
+    api.my.opinion.on(key, this.on_opinion = (d, _d) => {
+      let stats = this.stats.data
+      if (stats) {
+        if (_d) ageStats.subtract(api.me, stats, _d)
+        ageStats.add(api.me, stats, d)
+        let calc = this.calc(stats)
+        this.set('totals', calc.totals)
+        this.set('percents', calc.percents)
+        this.set('planets', calc.planets)
+        this.set('ranges', calc.ranges)
+      }
+    })
+  },
+  oncomplete () {
+    let num_planets = this.get('S.moarPlanets') ? 4 : 2
+    let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
+    let barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
+    let options = {
+      animate: {
+        duration: 0,
+        enabled: false
+      },
+      scaleColor: false,
+      lineWidth: 10,
+      rotate: 0,
+      lineCap: 'butt'
+    }
+
+    let ranges = []
+    let mages = api.my.opinion.ages.concat('>')
+    let r, pr, a
+    for (a = 0; a < mages.length; a++) {
+      let rr = mages[a]
+      if (a) pr = r
+      r = rr
+      ranges.push({
+        label: (r === '>' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' years',
+        value: 0, // s
+        color: colors[a]
+      })
+    }
+    this.set('legend', ranges)
+
+    let els = this.findAll('.sex-graph')
+    for (let i = 0; i < num_planets; i++) {
+      let p = new pie(els[i], assign({}, options, {barColor: barColors[i]}))
+      this.observe('percents.'+i, function (v) { p.update(v) })
+    }
+
+    let ctx = this.find('canvas').getContext('2d')
+    let chart = new Chart(ctx).Doughnut(ranges, {
+      responsive: false,
+      segmentShowStroke: true,
+      animateRotate: false,
+    })
+    this.observe('ranges', (r) => {
+      if (r) for (let i = 0; i < r.length; i++) {
+        chart.segments[i].value = r[i]
+        // this is a stupid hack to remove NaN values on initial 0
+        chart.segments[i].circumference = 3
+        this.set('legend.'+i+'.value', r[i])
+      }
+      chart.update()
+    })
+  },
+  calc (data) {
+    let num_planets = 2
+    let total = 0
+    let totals = [0, 0, 0, 0]
+    let planets = [0, 0, 0, 0]
+    let percents = [0, 0, 0, 0]
+    let ranges = new Array(api.my.opinion.ages.length + 1)
+    let ages = api.my.opinion.ages.concat('>')
+    let r, pr, i, sum, gender, pos, k, t
+    for (i = 0; i < ages.length; i++) {
+      let age = ages[i]
+      if (i) pr = r
+      r = age
+      sum = 0
+      for (gender = 0; gender < num_planets; gender++) {
+        for (pos = 0; pos < 4; pos++) {
+          k = age + '-' + gender + pos
+          if (t = data[k]) {
+            totals[pos] += t
+            planets[gender] += t
+            sum += t
+          }
+        }
+      }
+
+      ranges[i] = sum
+      total += sum
+    }
+
+    for (gender = 0; gender < num_planets; gender++)
+      percents[gender] = planets[gender] / total * 100
+
+    return {
+      planets: planets,
+      percents: percents,
+      ranges: ranges,
+      totals: totals,
+      stats: data,
+    }
+  },
+  computed: {
+    limits () {
+      let r = { sum: 0, max: 0 }
+      let values = this.get('totals')
+      if (values) for (let i = 0; i < values.length; i++) {
+        let v = values[i]
+        r.sum += v
+        if (v > r.max) r.max = v
+      }
+      return r
+    },
+    muyDeAcuerdo () {
+      let v = this.get('totals.3')
+      let c = this.get('limits')
+      let px = this.get('px')
+      return v / c.max
+    },
+    deAcuerdo () {
+      let v = this.get('totals.2')
+      let c = this.get('limits')
+      let px = this.get('px')
+      return v / c.max
+    },
+    desAcuerdo () {
+      let v = this.get('totals.1')
+      let c = this.get('limits')
+      let px = this.get('px')
+      return v / c.max
+    },
+    muyDesAcuerdo () {
+      let v = this.get('totals.0')
+      let c = this.get('limits')
+      let px = this.get('px')
+      return v / c.max
+    }
+  }
+}
+</script>

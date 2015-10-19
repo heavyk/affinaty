@@ -1,0 +1,156 @@
+<link rel='ractive' href='../partials/foto.html'>
+
+<!-- much of this code has been borrowed from https://github.com/alexk111/ngImgCrop -->
+
+<div class="foto-crop">
+  <canvas style="display: {{cropped ? 'none' : 'block'}}"></canvas>
+  {{#if cropped}}
+    {{#if foto}}
+      <foto src="{{foto}}" shape="{{shape}}" size="{{size}}" />
+    {{else}}
+      <img src="{{image}}" width="{{width}}" height="{{height}}" />
+    {{/if}}
+  {{/if}}
+  <button on-click="done" class="{{cropped ? 'done' : ''}}">
+    {{#if cropped}}
+      modify
+    {{else}}
+      sí, quiero esta foto
+    {{/if}}
+  </button>
+</div>
+
+<style>
+button.done {
+  position: absolute;
+  top: 10px;
+  right: 30px;
+}
+button {
+  background: #fd270d;
+  color: #fff;
+  padding: 2px 10px;
+  margin-top: 10px;
+}
+</style>
+
+<script>
+let api = require('../api')
+let extend = require('../lib/lodash/object/assign')
+let CropHost = require('../lib/crop-host')
+let isEqual = require('../lib/lodash/lang/isEqual.js')
+let EventEmitter = require('events').EventEmitter
+component.exports = {
+  isolated: true,
+  define (key, val) {
+    let v = this.get(key)
+    if (typeof v === 'undefined' || v !== val)
+      this.set(key, val)
+  },
+  oninit () {
+    this.define('cropped', false)
+    // TODO retina compat
+    this.define('width', 240)
+    this.define('height', 240)
+    this.define('size', 't')
+    this.on('done', (cb) => {
+      let cropped = this.get('cropped')
+      this.set('cropped', !cropped)
+      if (!cropped) {
+        let r = this.cropHost.getRect()
+        let s = r.size / 2
+        let rect = {
+          l: (r.x - s) / r.w,
+          t: (r.y - s) / r.h,
+          w: r.size / r.w,
+          h: r.size / r.h,
+        }
+        if (rect.l === 0 && rect.t === 0 && rect.w === 1 && rect.h === 1) {
+          this.set('foto', this.get('src'))
+        } else {
+          api.action('foto<', {
+            _id: this.get('src'),
+            rect: rect,
+          }, (res) => {
+            res && this.set('foto', res)
+            typeof cb === 'function' && cb()
+          })
+        }
+      }
+    })
+    this.parent.on('finish-cropping', (cb) => {
+      if (this.get('cropped')) cb()
+      else this.fire('done', cb)
+    })
+  },
+  oncomplete () {
+    let lastRect
+    let updateResultImage = () => {
+      let rect = cropHost.getRect()
+      if (!rect.size || lastRect && isEqual(lastRect, rect)) return
+      let resultImage = cropHost.getResultImageDataURI()
+      this.set('image', resultImage)
+      this.set('rect', rect)
+      lastRect = rect
+    }
+
+    let events = new EventEmitter
+    let cropHost = this.cropHost = new CropHost(this.find('canvas'), {}, events)
+
+    // on the fly events
+    events.on('area-move', updateResultImage)
+    events.on('area-resize', updateResultImage)
+
+    // normal events
+    events.on('area-move-end', updateResultImage)
+    events.on('image-updated', updateResultImage)
+    events.on('area-resize-end', updateResultImage)
+
+    this.observe('src', (v, vv) => {
+      console.log('foto:', v, vv)
+      // TODO - check if (v.substr(0, 4) === 'http') - and if not, upload it
+      // cropHost.setNewImageSource(api.get('url') + '/i/' + this.get('size') + '/' + v)
+      cropHost.setNewImageSource(`${ api.get('url') }/i/${ this.get('size') }/${ v }`)
+    })
+    // this.observe('src', (v) => {
+    //   cropHost.setNewImageSource(v)
+    // })
+    this.observe('area-type', (v) => {
+      this.set('shape', v === 'circle' ? 'rd' : 'sq')
+      cropHost.setAreaType(v)
+      updateResultImage()
+    })
+    this.observe('area-min-size', (v) => {
+      cropHost.setAreaMinSize(v)
+      updateResultImage()
+    })
+    this.observe('result-image-size', (v) => {
+      cropHost.setResultImageSize(v)
+      updateResultImage()
+    })
+    this.observe('result-image-format', (v) => {
+      cropHost.setResultImageFormat(v)
+      updateResultImage()
+    })
+    this.observe('result-image-quality', (v) => {
+      cropHost.setResultImageQuality(v)
+      updateResultImage()
+    })
+
+    // TODO Update CropHost dimensions when the directive element is resized
+    // scope.$watch(
+    //   function () {
+    //     return [element[0].clientWidth, element[0].clientHeight]
+    //   },
+    //   function (value) {
+    //     cropHost.setMaxDimensions(value[0], value[1])
+    //     updateResultImage(scope)
+    //   },
+    //   true
+    // )
+  },
+  onteardown () {
+    this.cropHost.destroy()
+  }
+}
+</script>

@@ -1,0 +1,60 @@
+<link rel='ractive' href='../partials/debate-sm.html'>
+<link rel='ractive' href='../partials/debate-stats.html'>
+<link rel='ractive' href='../partials/comment-list.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6 col-lg-7">
+      {{#if loading}}
+        <spinner />
+      {{/if loading}}
+
+      {{#if error}}
+        ERROR: {{error}}
+      {{/if error}}
+
+      {{#if debate}}
+        <debate-sm id="{{id}}" d={{debate}} />
+      {{/if debate}}
+      <comment-list debate="{{id}}"></comment-list>
+    </div>
+    <div class="col-xs-6 col-lg-5">
+      <debate-stats debate="{{id}}"></debate-stats>
+    </div>
+  </div>
+</div>
+
+<script>
+let api = require('../api')
+component.exports = {
+  oninit: function () {
+    let __id
+    this.observe('id', (_id) => {
+      this.set('loading', true)
+      api.my.notifier.remove_box(_id)
+      api.action('debate', {_id}, (data) => {
+        this.set('loading', false)
+        this.set('debate', data)
+      }, (err) => {
+        this.set('loading', false)
+        this.set('error', err)
+      })
+    }, { defer: true })
+  },
+  onrender () {
+    this.observe('active', (v) => {
+      if (v && v === 'comments') {
+        // need to observe 'debate' so that I don't focus the textarea until after the data
+        // has been loaded, and the text box has been pushed down a bit by the content
+        this.observeOnce('debate', () => {
+          setTimeout(() => {
+            this.find('.comments').scrollIntoView()
+            this.find('.comments textarea').focus()
+          }, 1)
+        })
+      }
+    }, { defer: true })
+  },
+}
+</script>

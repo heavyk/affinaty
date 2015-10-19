@@ -1,0 +1,389 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/categories.html'>
+<link rel='ractive' href='../partials/notification-list.html'>
+<link rel='ractive' href='../partials/debate-create.html'>
+<link rel='ractive' href='../partials/poll-create.html'>
+<!-- <link rel='ractive' href='../partials/opinion-list.html'> -->
+<!-- <link rel='ractive' href='../partials/set-up.html'> -->
+<div class="header-container">
+  {{#if me}}
+  <nav>
+    <li class="dropdown moar-dropdown">
+      <a class="dropdown-toggle moar-toggle">
+        <img src="/img/opin.svg" width="26" height="26" class="opin" />
+        <span class="txt_moar"> Opina</span>
+      </a>
+      <ul class="action-down">
+        <li class="moar moar-debate">
+          <a on-click="modal('debate-create', {title: 'da tu opinión'})">
+            <img src="/img/opinion.svg" width="26" height="26" class="opin" />
+            <span class="txt_moar">Da tu opinión</span>
+          </a>
+        </li>
+        <li class="moar moar-poll">
+          <a on-click="modal('poll-create', {title: 'pide opinión'})">
+            <img src="/img/poll.svg" width="26" height="26" class="opin" />
+            <span class="txt_moar">Pide opinión</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+    <li class="button">
+      <a class="home" href="/home">
+        <img src="/img/home.svg" width="30" height="30" />
+      </a>
+    </li>
+    <li class="button">
+      <a class="notifications" href="/inbox">
+        <img src="/img/inbox.svg" width="30" height="30" />
+        {{#if new_msgs}}
+          <span class="count">{{new_msgs}}</span>
+        {{/if}}
+      </a>
+    </li>
+    <li class="button {{show_n ? 'selected' : ''}}">
+      <a class="notifications" on-click="toggle('show_n')"><!-- href="/notifications" -->
+        <img src="/img/notifications.svg" width="30" height="30" />
+        {{#if notifications}}
+          <span class="count">{{notifications}}</span>
+        {{/if}}
+      </a>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle">
+        <foto src="{{me.foto}}" size="y" />
+        <span class="name">{{me.name}}</span>
+        <i class="fa fa-caret-down"></i>
+      </a>
+      <ul>
+        <!-- <li on-click="modal('opinion-list', {title: 'my opinions', creator: me._id})">
+          <a><i class="fa fa-fw fa-list"></i>My Opinions</a>
+        </li> -->
+        <!-- <li on-click="modal('set-up', {title: 'testing'})">
+          <a><i class="fa fa-fw fa-user"></i>Set-Up</a>
+        </li> -->
+        <!-- <li>
+          <a href="/inbox"><i class="fa fa-fw fa-envelope"></i>Inbox</a>
+        </li> -->
+        <li>
+          <a href="/profile/{{me._id}}"><i class="fa fa-fw fa-user"></i>Perfil</a>
+        </li>
+        <li>
+          <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
+        </li>
+        <li>
+          <a on-click="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+        </li>
+      </ul>
+    </li>
+  </nav>
+  <div class="logo">
+    <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
+  </div>
+  <div class="search-box search">
+    <input type="text" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: {{search_width}}px">
+    <i class="fa fa-search"></i>
+    <div class="submit">
+      <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
+        &nbsp;<i class="fa fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+  <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
+
+  <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+    <notification-list />
+    <!-- <div class="view-all">
+      <a href="/notifications">view all</a>
+    </div> -->
+  </div>
+  {{else}}
+  <div class="logo">
+    <h1><a href="/">Affinaty</a></h1>
+  </div>
+  {{/if me}}
+</div>
+
+<style>
+.header-container {
+  padding: 0 40px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  position: fixed;
+  left: 50%;
+  padding: 0 15px;
+  width: 200px;
+  margin-left: -100px;
+  text-align: center;
+}
+h1 a {
+  display: inline-block;
+  padding: 12px 0;
+  color: #ffffff;
+  font-family: 'Pacifico';
+}
+a:hover {
+  text-decoration: none;
+}
+li a:hover,
+h1:hover,
+li.selected {
+  background: #D2210B;
+}
+/*li.button a:hover,
+h1:hover {
+  text-shadow: 2px 2px #000;
+}*/
+
+span.name {
+  margin: 0 0 0 8px;
+}
+
+.count {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  background: #000;
+  border-radius: 50%;
+  height: 17px;
+  width: 17px;
+  font-size: 10px;
+  text-align: center;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.dropdown img.opin {
+  vertical-align: top;
+  margin: 4px;
+}
+
+/* don't want this to get background */
+.moar-dropdown a:hover {
+  background: initial;
+}
+.search-box {
+  position: relative;
+  left: 0;
+  top: 12px;
+  display: inline;
+  float: left;
+}
+.logo {
+  display: inline;
+  position: relative;
+  width: 100%;
+}
+
+.categories-button {
+  margin-left: 20px;
+}
+
+.categories {
+  position: fixed;
+  top: 50px;
+}
+
+.moar-dropdown {
+  background-color: #fff;
+  color: #fd270d;
+  font-size: 20px;
+  border: solid 2px #fff;
+  border-radius: 6px 6px 6px 6px;
+  border: 0px solid #000;
+  font-weight: bold;
+  height: 32px;
+  margin: 8px 8px 0 0;
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
+}
+
+.search input[type="text"] {
+  box-shadow: 5px 4px 20px -4px rgba(41,41,41,.53);
+  margin: 0;
+}
+
+.search {
+  display: none;
+  position: relative;
+  vertical-align: middle;
+}
+.search .fa {
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  color: #414141;
+}
+.search input[type="text"] {
+  height: 26px;
+  width: 200px;
+  padding: 0 12px 0 30px;
+  background: #ffffff;
+  -webkit-transition: width ease 0.15s;
+          transition: width ease 0.15s;
+}
+.search input[type="text"]:focus {
+  background: #ffffff;
+  /*width: 300px;*/
+}
+
+li.moar {
+  background: #fff;
+  border-radius: 20px;
+}
+
+li.moar a,
+.moar-toggle {
+  color: #414141;
+}
+a.dropdown-toggle.moar-toggle {
+  padding: 0;
+}
+
+.action-down {
+  border: solid 1px #eee;
+  border-radius: 20px;
+  background: #fff;
+  left: -35px;
+  margin-top: 5px;
+}
+
+.moar-toggle,
+.action-down a:hover {
+  background: initial;
+  color: #fd270d;
+  text-decoration: none;
+}
+
+.submit {
+  position: absolute;
+  right: 2px;
+  top: 1px;
+  /*margin: 5px;*/
+}
+.submit .fa {
+  left: 7px;
+}
+.submit button {
+  padding: 1px 8px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+  border-radius: 15px;
+  width: 24px;
+  height: 24px;
+}
+
+/* responsive layout */
+.search input[type="submit"] {
+  display: none;
+}
+@media (min-width: 768px) {
+  .search {
+    display: inline-block;
+  }
+}
+
+.notifications {
+  position: relative;
+}
+.notification-list {
+  position: fixed;
+  right: 100px;
+  top: 50px;
+  color: #414141;
+  border: solid 1px #dadada;
+  border-width: 0 1px 1px 1px;
+  z-index: -10;
+  min-width: 350px;
+  max-width: 600px;
+  background: #fff;
+}
+
+/*.view-all {
+  text-align: center;
+  font-size: 11px;
+}*/
+
+</style>
+
+
+<script>
+let api = require('../api')
+component.exports = {
+  isolated: true,
+  onconfig () {
+    // this.set('show_n', true)
+    // this.set('show_m', true)
+    // this.set('notifications', 3)
+    // this.set('new_msgs', 3)
+    api.my.notifier.on('msg*', (c) => {
+      this.set('new_msgs', c)
+    })
+    api.my.notifier.on('list*', (c) => {
+      this.set('notifications', c)
+    })
+    api.observe('me', (me) => {
+      this.set('me', me)
+    })
+    this.set('search_width', 200)
+    this.on('toggle-focus', (event) => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.set('search_width', event.context.focused ? 200 : 300)
+        this.toggle('focused')
+      }, 200)
+    })
+  },
+  oninit () {
+    this.on('send_text', (event) => {
+      this.fire('search', event.context.text)
+    })
+    this.on('text', (event) => {
+      if (event && event.original) {
+        event.original.stopImmediatePropagation()
+        let key = event.original.which
+        if (key === 13 || key === void 9) {
+          this.fire('search', event.context.text)
+        }
+      }
+    })
+    this.on('category', (category) => {
+      if (category) {
+        let uri = '/category/'+category._id
+        if (uri !== Ractive.router.getUri())
+          Ractive.router.dispatch(uri, {history: false})
+        this.fire('set-category', category._id)
+      } else {
+        if (Ractive.router.getUri().substr(0, 9) === '/category')
+          Ractive.router.dispatch('/home')
+        this.fire('set-category', null)
+      }
+    })
+  },
+  oncomplete () {
+    let onclick = (e) => {
+      let status = this.get('show_n') || this.get('show_m')
+      if (!status) return
+      let target = e.target
+      let pEl = target
+      // debugger
+      do {
+        if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list')))  return
+      } while (pEl = pEl.parentNode)
+      // debugger
+      this.set({show_n: false, show_m: false})
+    }
+    window.addEventListener('click', onclick, true)
+    this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+  },
+  signOut () {
+    api.signOut(true)
+  },
+  modal: require('../modal')
+}
+</script>

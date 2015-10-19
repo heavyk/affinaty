@@ -1,0 +1,11 @@
+<div class="super-panel">
+  <div class="host">host: <b>{{api.clientURL}}</b></div>
+  <div class="token">token: <b>{{api.token}}</b></div>
+  <div ng-repeat="log in api.log" class="log">
+    <a ng-dialog="/partials/re-quest.html" ng-dialog-scope="this">
+      <h3>“{{log.action}}” ({{log.duration}}ms)</h3>
+      <h5 am-time-ago="log.time"></h5>
+      <div class="error" ng-if="log.response.error">{{log.response.error}}</div>
+    </a>
+  </div>
+</div>
