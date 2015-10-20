@@ -1,5 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
 <link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/date-select.html'>
 <link rel='ractive' href='../partials/foto-upload.html'>
 
 
@@ -73,17 +74,17 @@
           </div>
 
           <div><h5>Cambia tu fecha de nacimiento</h5></div>
-          <input type="text" placeholder="{{f_birthdate}}" decorator="pikaday:'me.birthdate','me.birthdate'" on-focus="pikaday">
+          <date-select value="{{me.birthdate}}" />
 
           <div><h5>Cambia tu género</h5></div>
           <div style="text-align: center">
             <div class="planet row">
               <div class="col-xs-6">
-                <i class="fa fa-venus {{new_planet == 0 ? 'selected' : me.planet == 0 ? 'active' : ''}}" on-click="set('new_planet', 0)"></i>
+                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-click="set('me.planet', 0)"></i>
                 <div>Mujer</div>
               </div>
               <div class="col-xs-6">
-                <i class="fa fa-mars {{new_planet == 1 ? 'selected' : me.planet == 1 ? 'active' : ''}}" on-click="set('new_planet', 1)"></i>
+                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-click="set('me.planet', 1)"></i>
                 <div>Hombre</div>
               </div>
             </div>
@@ -304,7 +305,6 @@ button.button-sign-up {
 <script>
 let api = require('../api')
 let moment = require('moment')
-let pikaday = require('pikaday')
 let _provinces = require('provinces')
 let assign = require('../lib/lodash/object/assign')
 let isEqual = require('../lib/lodash/lang/isEqual')
@@ -352,8 +352,7 @@ component.exports = {
       return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
     })
     this.set('countries', countries)
-  },
-  oninit () {
+
     let me = api.get('me')
     this.old_me = assign({}, me)
     api.observe('me', (_me) => {
@@ -374,46 +373,24 @@ component.exports = {
 
     // TODO - a proper form with validation
     this.on('change-appearance', (e) => {
-      e.original.preventDefault()
-      var d = {}
-      let new_name = this.get('new_name')
-      if (new_name && new_name !== me.name)
-        d.name = new_name
-
-      let new_foto = this.get('new_foto')
-      if (new_foto && new_foto !== me.foto)
-        d.foto = new_foto
-
-      let new_title = this.get('new_title')
-      if (new_title && new_title !== me.title)
-        d.title = new_title
-
-      let new_planet = this.get('new_planet')
-      if (new_planet !== void 0 && new_planet !== me.planet)
-        d.planet = new_planet
-
-      let new_birthdate = this.get('new_birthdate')
-      if (new_birthdate !== void 0 && new_birthdate !== me.birthdate)
-        d.birthdate = new_birthdate
-
-      // TODO - use the validator
-      if (Object.keys(d).length) {
-        this.set('saving', true)
-        api.action('change-appearance', d, (data) => {
-          if (data) {
-            this.set('save_success', 'Saved..')
-            api.whoIaM(data)
-            this.set('change_foto', false)
-            this.set('saving', false)
-            setTimeout(() => {
-              this.set('save_success', null)
-              // clear the values after 3 seconds
-              for (let k in data) {
-                this.set('new_' + k, void 0)
-              }
-            }, 3000)
-          }
-        })
+      if (e) e.original.preventDefault()
+      let me = this.get('me')
+      if (!isEqual(me, this.old_me)) {
+        let update = {}
+        // save it
+        for (var k in me) {
+          if (me[k] !== this.old_me[k])
+            update[k] = me[k]
+        }
+        if (!isEqual({}, update)) {
+          api.action('change-appearance', update, (data) => {
+            if (data) {
+              api.whoIaM(data)
+              this.set('change_foto', false)
+              this.set('saving', false)
+            }
+          })
+        }
       }
     })
 
@@ -467,37 +444,9 @@ component.exports = {
     })
   },
   onteardown () {
-    let me = this.get('me')
-    if (!isEqual(me, this.old_me)) {
-      let update = {}
-      // save it
-      for (var k in me) {
-        if (me[k] !== this.old_me[k])
-          update[k] = me[k]
-      }
-      if (!isEqual({}, update)) {
-        api.action('change-appearance', update, (data) => {
-          if (data) {
-            api.whoIaM(data)
-            this.set('change_foto', false)
-            this.set('saving', false)
-            setTimeout(() => {
-              this.set('save_success', null)
-              // clear the values after 3 seconds
-              for (let k in data) {
-                this.set('new_' + k, void 0)
-              }
-            }, 3000)
-          }
-        })
-      }
-    }
+    this.fire('change-appearance')
   },
   computed: {
-    f_birthdate () {
-      let d = this.get('new_birthdate') || this.get('me.birthdate')
-      return d ? moment(d).format('DD/MM/YYYY') : 'fecha de cumpleaños'
-    },
     provinces () {
       let country = this.get('country')
       let provinces = []
@@ -510,9 +459,6 @@ component.exports = {
       })
       return provinces
     }
-  },
-  decorators: {
-    pikaday: require('../lib/decorators/pikaday')
   },
   activate (sub, id) {
     Ractive.router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })

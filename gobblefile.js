@@ -58,7 +58,6 @@ var affinaty = gobble([
 		// 	external: [
 		// 		'ractive',
 		// 		'moment',
-		// 		'pikaday', // this needs to be replaced by a generic date picker
 		// 		'provinces', // this needs to be moved to the server
 		// 		'gemini-scrollbar',
 		// 		'masonry-layout',

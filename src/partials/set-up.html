@@ -1,5 +1,6 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/date-select.html'>
 
 <div class="{{prevote ? 'square' : 'rectangle'}} container">
   {{#if prevote}}
@@ -41,8 +42,9 @@
         </div>
       </div>
 
-      <div class="field birthdate">
-        <input type="text" class="birthdate {{errors.d.birthdate ? 'invalid' : ''}}" placeholder="fecha de cumpleaños" decorator="pikaday:d.birthdate">
+      <div class="field birthdate {{errors.d.birthdate ? 'invalid' : ''}}">
+        <!-- <input type="text" class="birthdate {{errors.d.birthdate ? 'invalid' : ''}}" placeholder="fecha de cumpleaños" decorator="pikaday:d.birthdate"> -->
+        <date-select value="{{d.birthdate}}" />
       </div>
 
       <button on-click="change-appearance" class="button-sign-up">
@@ -185,7 +187,6 @@ button.button-sign-up {
 <script>
 let api = require('../api')
 let moment = require('moment')
-let pikaday = require('pikaday')
 let _provinces = require('provinces')
 let Validator = require('../validator')
 component.exports = {
@@ -295,8 +296,5 @@ component.exports = {
       return provinces
     }
   },
-  decorators: {
-    pikaday: require('../lib/decorators/pikaday')
-  }
 }
 </script>
