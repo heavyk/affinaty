@@ -48,7 +48,7 @@
     "localforage": "1.2.8",
     "markdown-it": "^5.0.0",
     "markdown-it-emoji": "^1.1.0",
-    "markdown-it-video": "heavyk/markdown-it-video",
+    "markdown-it-video": "heavyk/markdown-it-video#vine-parser",
     "masonry-layout": "^3.3.2",
     "moment": "^2.10.6",
     "pikaday": "^1.3.3",
