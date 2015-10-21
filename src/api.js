@@ -142,6 +142,14 @@ let Api = Ractive.extend({
 				setTimeout(() => {
 					console.log('response:', action, _params, res)
 					if (res.error) {
+            // this is temporary
+            // TODO: remember the time that the session has existed and either forward to landing or make a popup
+            // TODO: delete me
+            if (~res.error.indexOf('you should sign-in')) {
+              if (router.uri.path !== '/') router.redirect('/')
+              return
+            }
+            // TODO: log errors
 						if (reject) reject(res.error)
 						else _reject(res.error)
 					} else {

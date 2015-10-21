@@ -34,10 +34,10 @@ let router = new Router({ el: 'view' }, function (request) {
   // maybe should be logging this as well
   this.redirect(api.me ? '/home' : '/')
 }, function (path, options) {
-  if (path === '/' && api.me) {
-    router.redirect('/home')
-    return false
-  }
+  if (path === '/' && api.me)
+    return router.redirect('/home')
+  if (path !== '/' && !api.me)
+    return router.redirect('/')
 })
 
 // implement enter / leave

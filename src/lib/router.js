@@ -129,7 +129,7 @@ export default class Router extends EventEmitter {
 
   redirect (path) {
     location.pathname = joinPaths(this.basePath, path)
-    return this
+    return false
   }
 
   unwatchLinks () {
