@@ -59,7 +59,7 @@
     "promise": "^7.0.4",
     "provinces": "^1.8.0",
     "psy": "^1.4.5",
-    "ractive": "^0.7.3",
+    "ractive": "heavyk/ractive#stable",
     "ractive-component-iscroll": "0.0.3",
     "ractive-events-tap": "^0.2.0",
     "ractive-promise-alt": "^0.5.3",
