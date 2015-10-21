@@ -20,6 +20,16 @@ function ractive (source, options) {
 	}
 
 	var parsed = rcu.parse(source)
+	var dup = {}
+	for (var i = 0; i < parsed.modules.length; i++) {
+		var m = parsed.modules[i]
+		if (dup[m]) {
+			console.warn(' * WARN:', this.src)
+			console.warn(' * duplicate import:', m)
+			parsed.modules.splice(i--, 1)
+		}
+		dup[m] = true
+	}
 
 	// perhaps this should go instead into rcu-builders
 	// for now this is here, but soon, just use the custom postcss enabled rcu-builders.js
