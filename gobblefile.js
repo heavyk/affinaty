@@ -65,7 +65,6 @@ var affinaty = gobble([
 		// 		'dropzone', // this needs to be replaced by generic code
 		// 		'easy-pie-chart',
 		// 		'chart.js',
-		// 		'events', // this should be drip
 		// 	],
 		// 	strict: true
 		// })
