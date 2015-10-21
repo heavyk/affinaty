@@ -8,7 +8,7 @@ import assign from './lodash/object/assign'
 import isEmpty from './lodash/lang/isEmpty'
 
 export default class Router extends EventEmitter {
-  constructor (options, unhandled) {
+  constructor (options, onunhandled, ondispatch) {
     super()
     this.globals = options.globals || []
     this.basePath = options.basePath || ''
@@ -19,7 +19,8 @@ export default class Router extends EventEmitter {
     this.linksWatcher = null
     this.stateWatcher = null
     this.route = null
-    this.unhandled = unhandled
+    this.onunhandled = onunhandled
+    this.ondispatch = ondispatch
     this.routes = []
     this.uri = {}
   }
@@ -51,16 +52,18 @@ export default class Router extends EventEmitter {
     return stringifyQS(assign.apply(null, [{}].concat(mixIn, this.route.getState().qs)))
   }
 
-  dispatch (request, options) {
+  dispatch (path, options) {
     options = options || {}
-    var uri = parseUri(request)
+    // short circuit a path if necessary
+    if (typeof this.ondispatch === 'function' && this.ondispatch.call(this, path, options) === false) return
+    var uri = parseUri(path)
     var route = this.match(uri.path)
     var oldUri = this.uri
 
     // 404
     if (!route) {
-      return typeof this.unhandled === 'function' ? this.unhandled(request)
-        : this.redirect(request)
+      return typeof this.onunhandled === 'function' ? this.onunhandled(path)
+        : this.redirect(path)
     }
 
     // prepare data
@@ -112,11 +115,11 @@ export default class Router extends EventEmitter {
     return this.dispatch(this.getUri(), assign({ history: false }, options))
   }
 
-  match (request) {
+  match (path) {
     var i = -1
 
     while (this.routes[++i]) {
-      if (this.routes[i].match(request)) {
+      if (this.routes[i].match(path)) {
         return this.routes[i]
       }
     }
@@ -124,8 +127,8 @@ export default class Router extends EventEmitter {
     return null
   }
 
-  redirect (request) {
-    location.pathname = joinPaths(this.basePath, request)
+  redirect (path) {
+    location.pathname = joinPaths(this.basePath, path)
     return this
   }
 
