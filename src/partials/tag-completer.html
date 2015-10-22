@@ -86,8 +86,6 @@ li.tag {
 </style>
 
 <script>
-
-
 function idx(tags, id, field) {
 	field = field || '_id'
 	for (let i = 0; i < tags.length; i++) {
@@ -96,7 +94,6 @@ function idx(tags, id, field) {
 	return -1
 }
 
-let api = require('../api')
 let assign = require('../lib/lodash/object/assign')
 let uniq = require('../lib/lodash/array/uniq')
 let compact = require('../lib/lodash/array/compact')

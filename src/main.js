@@ -77,12 +77,17 @@ import api from './api'
 import footer from './partials/footer'
 import header from './partials/header'
 
-Ractive.footer = new footer({ el: 'footer' })
-Ractive.header = new header({ el: 'header' })
+window.onerror = function () {
+  debugger
+}
+
+window.Ractive = Ractive
+window.api = api
+
 Ractive.api = api
 Ractive.router = router
   .watchLinks()
   .watchState()
 
-// this comes in handy, let me tell you
-window.Ractive = Ractive
+Ractive.footer = new footer({ el: 'footer' })
+Ractive.header = new header({ el: 'header' })
