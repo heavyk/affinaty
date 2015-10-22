@@ -40,34 +40,34 @@ var affinaty = gobble([
 				require('cssnano'),
 			]
 		})
-		.transform('babel', {
-			whitelist: babelWhitelist,
-			inputSourceMap: false
-		})
-		.transform('esperanto-bundle', {
-			entry: 'main',
-			dest: 'app.js',
-			type: 'cjs',
-			strict: true
-		})
-		// ----- THIS IS THE ONE I WANT TO USE -----
-		// .transform('rollup-babel', {
-		// 	entry: 'main.js',
+		// .transform('babel', {
+		// 	whitelist: babelWhitelist,
+		// 	inputSourceMap: false
+		// })
+		// .transform('esperanto-bundle', {
+		// 	entry: 'main',
 		// 	dest: 'app.js',
-		// 	format: 'cjs',
-		// 	external: [
-		// 		'ractive',
-		// 		'moment',
-		// 		'provinces', // this needs to be moved to the server
-		// 		'gemini-scrollbar',
-		// 		'masonry-layout',
-		// 		'spin.js',
-		// 		'dropzone', // this needs to be replaced by generic code
-		// 		'easy-pie-chart',
-		// 		'chart.js',
-		// 	],
+		// 	type: 'cjs',
 		// 	strict: true
 		// })
+		// ----- THIS IS THE ONE I WANT TO USE -----
+		.transform('rollup-babel', {
+			entry: 'main.js',
+			dest: 'app.js',
+			format: 'cjs',
+			external: [
+				'ractive',
+				'moment',
+				'provinces', // this needs to be moved to the server
+				'gemini-scrollbar',
+				'masonry-layout',
+				'spin.js',
+				'dropzone', // this needs to be replaced by generic code
+				'easy-pie-chart',
+				'chart.js',
+			],
+			strict: true
+		})
 		// ----- THIS IS THE ONE I WANT TO USE -----
 		.transform('derequire')
 		.transform('browserify', {
@@ -75,6 +75,10 @@ var affinaty = gobble([
 			dest: 'app.js',
 			standalone: 'app',
 			debug: false
+		})
+		.transformIf(gobble.env() !== 'production', function (source, options) {
+			// return this.src === 'app.js' ? source.replace('deferred.reject(e)', 'deferred.reject(e); debugger') : source
+			return source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 		})
 		.transformIf(gobble.env() === 'production', 'uglifyjs')
 		// .transform('uglifyjs')
