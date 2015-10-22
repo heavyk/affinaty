@@ -110,7 +110,7 @@ component.exports = {
 		let recent = []
 		// let recent = api.tag.recent
 		api.local.getItem('tags:recent', (err, tags) => {
-			if (err) return
+			if (!tags) return
 			recent.push.apply(recent, uniq(tags, '_id'))
 			for (let i = 0; i < tags.length; i++) {
 				api.tag.insert(tags[i])
@@ -170,7 +170,6 @@ component.exports = {
 		this.once('teardown', () => {
 			api.local.getItem('tags:recent', (err, _recent) => {
 				let save = compact(uniq(selected.concat(_recent).concat(recent), '_id'))
-				if (save.length !== save2.length) debugger
 				api.local.setItem('tags:recent', save, (err) => {
 					console.log('saved recent tags', save)
 				})
