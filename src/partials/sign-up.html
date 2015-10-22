@@ -111,7 +111,7 @@ component.exports = {
           this.set('saving', false)
           api.signIn(data).then(() => {
             this.parent.teardown()
-            Ractive.router.dispatch('/home')
+            router.dispatch('/home')
             this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
           })
         }, (err) => {

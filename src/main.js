@@ -71,23 +71,26 @@ Ractive.nexus = {
   }),
 }
 
+// globals
+window.Ractive = Ractive
 import router from './router'
+window.router = router
 import api from './api'
+window.api = api
+import local from './local'
+window.local = local
 
-import footer from './partials/footer'
-import header from './partials/header'
-
+// error handler
 window.onerror = function () {
   debugger
 }
 
-window.Ractive = Ractive
-window.api = api
-
-Ractive.api = api
-Ractive.router = router
+// router init
+router
   .watchLinks()
   .watchState()
 
+import footer from './partials/footer'
 Ractive.footer = new footer({ el: 'footer' })
+import header from './partials/header'
 Ractive.header = new header({ el: 'header' })

@@ -601,7 +601,7 @@ component.exports = {
 
     this.observe('active', (active) => {
       if (!active) return this.set('active', active = 'debates')
-      Ractive.router.dispatch(`/profile/${this.get('id')}/${active || ''}`, {history: false})
+      router.dispatch(`/profile/${this.get('id')}/${active || ''}`, {history: false})
     })
     this.refresh = debounce(() => {
       this.set('affinaty_update', 1 + this.get('affinaty_update') || 0)
@@ -665,7 +665,7 @@ component.exports = {
   },
   activate (sub) {
     this.set('active', sub)
-    Ractive.router.dispatch(`/profile/${this.get('id')}/${sub}`, { history: false })
+    router.dispatch(`/profile/${this.get('id')}/${sub}`, { history: false })
   }
 }
 </script>

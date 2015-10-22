@@ -460,7 +460,7 @@ component.exports = {
     }
   },
   activate (sub, id) {
-    Ractive.router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
+    router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
   },
 }
 </script>

@@ -303,7 +303,7 @@ component.exports = {
         //   break
         default: this.set('active', active = 'fns')
       }
-      Ractive.router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
+      router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
     })
   },
   oncomplete () {},
@@ -322,7 +322,7 @@ component.exports = {
   },
   activate (sub) {
     this.set('active', sub)
-    Ractive.router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
+    router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
   },
 }
 </script>

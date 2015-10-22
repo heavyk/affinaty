@@ -149,7 +149,6 @@ li.encounter {
 </style>
 
 <script>
-let local = require('../local')
 let assign = require('../lib/lodash/object/assign')
 let each = require('../lib/lodash/collection/each')
 let onresize = require('../lib/dom/element-onresize')
@@ -218,7 +217,7 @@ component.exports = {
   },
   activate (sub, mbox) {
     if (mbox) this.set('msgs', [])
-    Ractive.router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
+    router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
   },
   set_members (mbox) {
     let thread = this.get('threads.' + mbox)

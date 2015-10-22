@@ -220,7 +220,7 @@ component.exports = {
       api.action('sign-in', opts, (data) => {
         api.signIn(data).then(function () {
           setTimeout(() => {
-            Ractive.router.dispatch('/home')
+            router.dispatch('/home')
           }, 1)
         })
       }, (error) => {
