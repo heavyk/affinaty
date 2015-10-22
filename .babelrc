@@ -5,8 +5,15 @@
 		"es6.classes",
 		"es6.constants",
 		"es6.destructuring",
+		"es6.forOf",
+		"es6.tailCall",
 		"es6.properties.shorthand",
-		"es6.templateLiterals"
+		"es6.properties.computed",
+		"es6.templateLiterals",
+		"es7.classProperties",
+		"minification.memberExpressionLiterals",
+		"minification.propertyLiterals",
+		"spec.undefinedToVoid"
 	],
 	"loose": [
 		"es6.forOf",

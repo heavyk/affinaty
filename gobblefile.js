@@ -4,29 +4,15 @@ var gobble = require('gobble')
 gobble.cwd(__dirname)
 gobble.env('development')
 
-var babelWhitelist = [
-	'es6.arrowFunctions',
-	'es6.blockScoping',
-	'es6.classes',
-	'es6.constants',
-	'es6.destructuring',
-	'es6.forOf',
-	'es6.tailCall',
-	'es6.properties.shorthand',
-	'es6.properties.computed',
-	'es6.templateLiterals',
-	'es7.classProperties',
-	'minification.memberExpressionLiterals',
-	'minification.propertyLiterals',
-	'spec.undefinedToVoid',
-]
-
-if (gobble.env() === 'production')
+if (gobble.env() === 'production') {
+	// TODO: write this / remove this in the babelrc
+	// maybe it's doable actually with uglifyjs
 	babelWhitelist = babelWhitelist.concat([
 		// for production env
 		'minification.removeConsole',
 		'minification.removeDebugger',
 	])
+}
 
 var affinaty = gobble([
 	gobble('src')
