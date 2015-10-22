@@ -40,17 +40,6 @@ var affinaty = gobble([
 				require('cssnano'),
 			]
 		})
-		// .transform('babel', {
-		// 	whitelist: babelWhitelist,
-		// 	inputSourceMap: false
-		// })
-		// .transform('esperanto-bundle', {
-		// 	entry: 'main',
-		// 	dest: 'app.js',
-		// 	type: 'cjs',
-		// 	strict: true
-		// })
-		// ----- THIS IS THE ONE I WANT TO USE -----
 		.transform('rollup-babel', {
 			entry: 'main.js',
 			dest: 'app.js',
@@ -68,7 +57,6 @@ var affinaty = gobble([
 			],
 			strict: true
 		})
-		// ----- THIS IS THE ONE I WANT TO USE -----
 		.transform('derequire')
 		.transform('browserify', {
 			entries: [ './app' ],
@@ -77,7 +65,6 @@ var affinaty = gobble([
 			debug: false
 		})
 		.transformIf(gobble.env() !== 'production', function (source, options) {
-			// return this.src === 'app.js' ? source.replace('deferred.reject(e)', 'deferred.reject(e); debugger') : source
 			return source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 		})
 		.transformIf(gobble.env() === 'production', 'uglifyjs')
