@@ -43,7 +43,7 @@ component.exports = {
     let cfg = extend({
       previewsContainer: false,
       clickable: true,
-      url: api.get('url') + '/i/upload',
+      url: api.url + '/i/upload',
       headers: { 'Access-Token': api.token },
       parallelUploads: 3,
       maxFileSize: 5,

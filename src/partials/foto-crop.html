@@ -109,8 +109,8 @@ component.exports = {
     this.observe('src', (v, vv) => {
       console.log('foto:', v, vv)
       // TODO - check if (v.substr(0, 4) === 'http') - and if not, upload it
-      // cropHost.setNewImageSource(api.get('url') + '/i/' + this.get('size') + '/' + v)
-      cropHost.setNewImageSource(`${ api.get('url') }/i/${ this.get('size') }/${ v }`)
+      // cropHost.setNewImageSource(api.url + '/i/' + this.get('size') + '/' + v)
+      cropHost.setNewImageSource(`${ api.url }/i/${ this.get('size') }/${ v }`)
     })
     // this.observe('src', (v) => {
     //   cropHost.setNewImageSource(v)
