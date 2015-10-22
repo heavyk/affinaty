@@ -106,7 +106,7 @@ div.bar {
 }
 button.bar {
   margin: 5px 0;
-  padding: 1px;
+  padding: 10px;
   transition: .3s width;
   bottom: 0;
   display: inline;
@@ -261,7 +261,7 @@ component.exports = {
   },
   oncomplete () {
     let stats_el = this.find('.debate-stats')
-    // TODO: resize me 
+    // TODO: resize me
     this.set('bar_width', stats_el.clientWidth - 120)
     let num_planets = this.get('S.moarPlanets') ? 4 : 2
     let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
