@@ -31,7 +31,13 @@ let classView = {
 
 let router = new Router({ el: 'view' }, function (request) {
   // TODO better redirects - to a 404 page
-  this.redirect('/')
+  // maybe should be logging this as well
+  this.redirect(api.me ? '/home' : '/')
+}, function (path, options) {
+  if (path === '/' && api.me)
+    return router.redirect('/home')
+  if (path !== '/' && !api.me)
+    return router.redirect('/')
 })
 
 // implement enter / leave
@@ -92,14 +98,14 @@ setTimeout(function () {
       // console.log('me:', me, _me)
       if (me) {
         if (!_me) router.init()
-        else if (isEqual(me, _me))
-          console.log('the same me')
-        else
-          console.log('something about me changed')
+        // else if (isEqual(me, _me))
+        //   console.log('the same me')
+        // else
+        //   console.log('something about me changed')
       } else {
         if (_me) api.signOut(true)
-        else
-          console.log("I'm still no one")
+        // else
+        //   console.log("I'm still no one")
       }
     })
   } else {

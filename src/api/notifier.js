@@ -32,6 +32,7 @@ function locationOf(element, array, comparer, start, end) {
 class notifier extends Ambition {
   constructor (creator) {
     super()
+    this.box = {}
     this.situations = {
       'loading': {
         '>' () {
@@ -51,7 +52,6 @@ class notifier extends Ambition {
           this.vote = []
           this.vote_exists = {}
 
-          this.box = {}
           this.go()
         }
       },
@@ -214,6 +214,7 @@ class notifier extends Ambition {
   }
 
   remove_box (id) {
+    // TODO: this should execute only once it's reached the state '/'
     let b = this.box[id]
     if (b) {
       for (var i = 0; i < b.length; i++) {

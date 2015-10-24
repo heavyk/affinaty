@@ -1,12 +1,11 @@
 'use strict'
 
-let fs = require('fs')
-let Path = require('path')
-let fS = require('co-fs-plus')
-let genny = require('genny')
+var Path = require('path')
+var fS = require('co-fs-extra')
+var genny = require('genny')
+var spawn = require('co-child-process')
 
-var Fs = require('co-fs-plus')
-let gobbleProxy = require('http-proxy').createProxyServer({
+var gobbleProxy = require('http-proxy').createProxyServer({
   target: {
     host: 'localhost',
     port: 5678
@@ -17,8 +16,8 @@ gobbleProxy.on('error', function (err) {
   console.error('proxy error', err)
 })
 
-let gobbler = require('http').createServer(function (req, res) {
-  let url = req.url
+var gobbler = require('http').createServer(function (req, res) {
+  var url = req.url
 
   if (url !== '/'
     // this is mainly for dev purposes until koala-deployer is done
@@ -52,34 +51,58 @@ let gobbler = require('http').createServer(function (req, res) {
 gobbler.on('error', function (err) {
   console.log('gobbler-http err:', err)
 })
-gobbler.listen(1111, function (err) {
-  if (err) {
-    throw err
-  } else {
-    console.log('listening on port: ' + gobbler.address().port)
-    console.log('  http://localhost:' + gobbler.address().port)
-  }
-})
 
 // psy-gobbler
-let local_psy = Path.resolve(__dirname + '/../node_modules/.bin/psy')
-let local_dir = Path.resolve(__dirname + '/..')
+var pkg_dir = Path.join(__dirname, '..')
+var local_psy = Path.join(pkg_dir, 'node_modules', '.bin', 'psy')
+var local_gobble = Path.join(pkg_dir, 'node_modules', '.bin', 'gobble')
+var pkg_path = Path.join(pkg_dir, 'package.json')
+var cfg_path = Path.join(pkg_dir, '.config.json')
 
-let spawn = require('co-child-process')
+function readJson (path, cb) {
+  fS.readFile(path, 'utf-8', function (err, txt) {
+    if (err) return cb(null, {})
+    try {
+      cb(null, JSON.parse(txt))
+    } catch (e) {
+      cb(e)
+    }
+  })
+}
+
 genny.run(function* (resume) {
-  yield spawn(local_psy, ['rm', 'gobbler'], {cwd: local_dir})
-  let out = yield spawn(local_psy,
-    ['start', '-n', 'gobbler', '--', local_dir + '/node_modules/.bin/gobble', '-p', '5678'], {cwd: local_dir})
+  // first check to see if npm install needs to be run
+  var pkg = yield readJson(pkg_path, resume())
+  var h_deps = require('crypto').createHash('sha256').update(JSON.stringify([pkg.devDependencies, pkg.dependencies])).digest('hex')
+  var cfg = yield readJson(cfg_path, resume())
+  if (cfg.h_deps !== h_deps) {
+    cfg.h_deps = h_deps
+    console.log('deps changed. installing...')
+    yield spawn('npm', ['install'], {cwd: pkg_dir})
+    yield fS.outputJson(cfg_path, cfg)
+  }
+
+  yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
+  var out = yield spawn(local_psy,
+    ['start', '-n', 'gobbler', '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
   console.log('gobble started', out)
+  gobbler.listen(1111, function (err) {
+    if (err) {
+      throw err
+    } else {
+      console.log('listening on port: ' + gobbler.address().port)
+      console.log('  http://localhost:' + gobbler.address().port)
+    }
+  })
 })
 
 process.on('exit', () => {
   console.log('process: on exit')
   genny.run(function* (resume) {
-    let out
-    out = yield spawn(local_psy, ['stop', 'gobbler'], {cwd: local_dir})
+    var out
+    out = yield spawn(local_psy, ['stop', 'gobbler'], {cwd: pkg_dir})
     console.log('gobble stopped', out)
-    out = yield spawn(local_psy, ['rm', 'gobbler'], {cwd: local_dir})
+    out = yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
     console.log('gobbler removed', out)
   })
 })

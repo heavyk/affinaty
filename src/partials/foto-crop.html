@@ -35,11 +35,10 @@ button {
 </style>
 
 <script>
-let api = require('../api')
 let extend = require('../lib/lodash/object/assign')
 let CropHost = require('../lib/crop-host')
 let isEqual = require('../lib/lodash/lang/isEqual.js')
-let EventEmitter = require('events').EventEmitter
+let EventEmitter = require('../lib/drip/emitter')
 component.exports = {
   isolated: true,
   define (key, val) {
@@ -109,8 +108,8 @@ component.exports = {
     this.observe('src', (v, vv) => {
       console.log('foto:', v, vv)
       // TODO - check if (v.substr(0, 4) === 'http') - and if not, upload it
-      // cropHost.setNewImageSource(api.get('url') + '/i/' + this.get('size') + '/' + v)
-      cropHost.setNewImageSource(`${ api.get('url') }/i/${ this.get('size') }/${ v }`)
+      // cropHost.setNewImageSource(api.url + '/i/' + this.get('size') + '/' + v)
+      cropHost.setNewImageSource(`${ api.url }/i/${ this.get('size') }/${ v }`)
     })
     // this.observe('src', (v) => {
     //   cropHost.setNewImageSource(v)

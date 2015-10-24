@@ -7,34 +7,42 @@
   {{#if totals}}
     <div class="stats-box">
       <div class="bar">
-        <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}">
-          <i class="fa fa-times"></i>
-          <i class="fa fa-times"></i>
-        </button>
-        <span class="num_votes">{{totals[0]}}</span>
-        <button class="bar woa-woa" style="width: {{Math.round(muyDesAcuerdo * 200)}}px" />
-      </div>
-      <div class="bar">
-        <button class="button-woa {{d.pos === -1 ? 'active' : ''}} single">
-          <i class="fa fa-times"></i>
-        </button>
-        <span class="num_votes">{{totals[1]}}</span>
-        <button class="bar woa" style="width: {{Math.round(desAcuerdo * 200)}}px" />
-      </div>
-      <div class="bar">
-        <button class="button-mas {{d.pos === 1 ? 'active' : ''}} single">
-          <i class="fa fa-check"></i>
-        </button>
-        <span class="num_votes">{{totals[2]}}</span>
-        <button class="bar mas" style="width: {{Math.round(deAcuerdo * 200)}}px" />
-      </div>
-      <div class="bar">
+        <div class="stat-text">Muy de acuerdo</div>
         <button class="button-mas-mas {{d.pos === 2 ? 'active' : ''}}">
           <i class="fa fa-check"></i>
           <i class="fa fa-check"></i>
         </button>
         <span class="num_votes">{{totals[3]}}</span>
-        <button class="bar mas-mas" style="width: {{Math.round(muyDeAcuerdo * 200)}}px" />
+          <button class="bar mas-mas" style="width: {{Math.round(muyDeAcuerdo * bar_width)}}px" />
+        <!-- <div>
+          <button class="bar shadow" />
+
+        </div> -->
+      </div>
+      <div class="bar">
+        <div class="stat-text">De acuerdo</div>
+        <button class="button-mas {{d.pos === 1 ? 'active' : ''}} single">
+          <i class="fa fa-check"></i>
+        </button>
+        <span class="num_votes">{{totals[2]}}</span>
+        <button class="bar mas" style="width: {{Math.round(deAcuerdo * bar_width)}}px" />
+      </div>
+      <div class="bar">
+        <div class="stat-text">En desacuerdo</div>
+        <button class="button-woa {{d.pos === -1 ? 'active' : ''}} single">
+          <i class="fa fa-times"></i>
+        </button>
+        <span class="num_votes">{{totals[1]}}</span>
+        <button class="bar woa" style="width: {{Math.round(desAcuerdo * bar_width)}}px" />
+      </div>
+      <div class="bar">
+        <div class="stat-text">Muy en desacuerdo</div>
+        <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}">
+          <i class="fa fa-times"></i>
+          <i class="fa fa-times"></i>
+        </button>
+        <span class="num_votes">{{totals[0]}}</span>
+        <button class="bar woa-woa" style="width: {{Math.round(muyDesAcuerdo * bar_width)}}px" />
       </div>
     </div>
   {{/if totals}}
@@ -65,7 +73,11 @@ h6.title {
   margin-bottom: 10px;
 }
 div.bar {
-  height: 40px;
+  height: 55px;
+}
+
+.stat-text {
+  margin-left: 35px;
 }
 
 .debate-stats {
@@ -93,14 +105,12 @@ div.bar {
   margin: 20px;
 }
 button.bar {
-  margin: 10px 0;
-  padding: 2px;
-  transition: 0.3s width;
-  position: relative;
+  margin: 5px 0;
+  padding: 10px;
+  transition: .3s width;
   bottom: 0;
   display: inline;
-  float: left;
-  height: 10px;
+  height: 20px;
 }
 .stats-box .mas-mas {
   background: #2e8034;
@@ -113,6 +123,9 @@ button.bar {
 }
 .stats-box .woa-woa {
   background: #bb0217;
+}
+button.shadow {
+  background: #dadada;
 }
 
 button {
@@ -207,7 +220,6 @@ button.button-woa:last-child {
 </style>
 
 <script>
-let api = require('../api')
 let pie = require('easy-pie-chart')
 let Chart = require('chart.js')
 let assign = require('../lib/lodash/object/assign')
@@ -248,6 +260,9 @@ component.exports = {
     })
   },
   oncomplete () {
+    let stats_el = this.find('.debate-stats')
+    // TODO: resize me
+    this.set('bar_width', stats_el.clientWidth - 120)
     let num_planets = this.get('S.moarPlanets') ? 4 : 2
     let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
     let barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']

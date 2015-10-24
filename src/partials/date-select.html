@@ -1,0 +1,83 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/spinner.html'>
+
+<div class="pick-date">
+  <select on-change="select-day" value="{{day}}">
+    {{#each days}}
+      <option value="{{.}}">{{.}}</option>
+    {{/each}}
+  </select>
+  <select on-change="select-day" value="{{month}}">
+    {{#each months : i}}
+      <option value="{{i}}">{{.}}</option>
+    {{/each}}
+  </select>
+  <select on-change="select-day" value="{{year}}">
+    {{#each years}}
+      <option value="{{.}}">{{.}}</option>
+    {{/each}}
+  </select>
+</div>
+
+
+<style>
+select {
+  width: auto;
+  display: inline;
+}
+</style>
+
+
+<script>
+component.exports = {
+  isolated: true,
+  onconfig () {
+    let days = []
+    let years = []
+    for (var i = 2000; i >= 1930; i--) {
+      years.push(i)
+    }
+
+    for (var i = 1; i <= 31; i++) {
+      days.push(i)
+    }
+
+    this.observe('value', (v) => {
+      if (v) {
+        let d = new Date(v)
+        this.set({
+          year: d.getUTCFullYear(),
+          month: d.getUTCMonth(),
+          day: d.getUTCDate()
+        })
+      } else {
+        this.set({
+          year: 2000,
+          month: 1,
+          day: 1
+        })
+      }
+    }, {defer: true})
+
+    this.set({
+      days, years,
+      months: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Augusto','Septiembre','Octubre','Noviembre','Diciembre']
+    })
+
+    this.on('select-day', () => {
+      let day = this.get('day')
+      let month = this.get('month')
+      let year = this.get('year')
+      let num_days = new Date(year, month, 0).getDate()
+      while (days.length > num_days) days.pop()
+      for (var i = days.length + 1; i <= num_days; i++) {
+        days.push(i)
+      }
+
+      this.set('value', Date.UTC(year, month, day))
+    })
+  },
+  oninit () {
+  },
+}
+</script>

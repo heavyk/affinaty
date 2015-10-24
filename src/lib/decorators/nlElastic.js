@@ -3,11 +3,12 @@ import assign from '../lodash/object/assign'
 import h from '../dom/hyper-hermes'
 import each from '../lodash/collection/each'
 
-function nlElastic (node, keypath) {
+function nlElastic (node, keypath, padding) {
   function int(str) {
     return parseInt(str, 10)
   }
 
+  padding = padding || 24
   var ta = node,
     $ta = node
 
@@ -146,10 +147,11 @@ function nlElastic (node, keypath) {
       } else if (mirrorHeight < minHeight) {
         mirrorHeight = minHeight
       }
-      mirrorHeight += boxOuter.height
+      mirrorHeight += boxOuter.height + 24
       ta.style.overflowY = overflow || 'hidden'
 
       if (taHeight !== mirrorHeight) {
+        console.log('h:', mirrorHeight)
         ta.style.height = mirrorHeight + 'px'
         ractive.fire('elastic:resize', $ta)
       }

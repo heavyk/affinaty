@@ -312,7 +312,6 @@ a.dropdown-toggle.moar-toggle {
 
 
 <script>
-let api = require('../api')
 component.exports = {
   isolated: true,
   onconfig () {
@@ -355,12 +354,12 @@ component.exports = {
     this.on('category', (category) => {
       if (category) {
         let uri = '/category/'+category._id
-        if (uri !== Ractive.router.getUri())
-          Ractive.router.dispatch(uri, {history: false})
+        if (uri !== router.getUri())
+          router.dispatch(uri, {history: false})
         this.fire('set-category', category._id)
       } else {
-        if (Ractive.router.getUri().substr(0, 9) === '/category')
-          Ractive.router.dispatch('/home')
+        if (router.getUri().substr(0, 9) === '/category')
+          router.dispatch('/home')
         this.fire('set-category', null)
       }
     })

@@ -33,6 +33,7 @@ let Api = Ractive.extend({
 	data: {
 		authenticated: false,
 		connected: false,
+	},
 		url: (function() {
     	try {
     		let host = window.location.host
@@ -55,7 +56,6 @@ let Api = Ractive.extend({
     			: window.location.origin
     	} catch(e) {}
     }()),
-	},
 	my: {
     affinaties: new affinaties,
     notifier: new notifier,
@@ -65,7 +65,7 @@ let Api = Ractive.extend({
     this._token = hashCode(this.url + ':token')
 		this.token = window.localStorage.getItem(this._token)
 		this.rolex = new CronTab(20000)
-		let store = 'affinaty_'+hashCode(this.get('url'))
+		let store = 'affinaty_'+hashCode(this.url)
 		this.local = local.createInstance({
 		  name: store,
 		  storeName: store,
@@ -83,7 +83,7 @@ let Api = Ractive.extend({
 			if (err || !this.token) return this.signOut()
 			this.set('me', val)
 		})
-		this.client = new ActionheroClient({ url: this.get('url') })
+		this.client = new ActionheroClient({ url: this.url })
 		this.client.on('connected', () => this.set('connected', Date.now()))
 		this.client.on('disconnected', () => this.set('connected', 0))
 		// reconnecting logic?
@@ -142,6 +142,14 @@ let Api = Ractive.extend({
 				setTimeout(() => {
 					console.log('response:', action, _params, res)
 					if (res.error) {
+            // this is temporary
+            // TODO: remember the time that the session has existed and either forward to landing or make a popup
+            // TODO: delete me
+            if (~res.error.indexOf('you should sign-in')) {
+              if (router.uri.path !== '/') router.redirect('/')
+              return
+            }
+            // TODO: log errors
 						if (reject) reject(res.error)
 						else _reject(res.error)
 					} else {

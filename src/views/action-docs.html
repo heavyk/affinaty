@@ -231,7 +231,6 @@ span.action:hover {
 </style>
 
 <script>
-let api = require('../api')
 let assign = require('../lib/lodash/object/assign')
 let debounce = require('../lib/lodash/function/debounce')
 component.exports = {
@@ -304,7 +303,7 @@ component.exports = {
         //   break
         default: this.set('active', active = 'fns')
       }
-      Ractive.router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
+      router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
     })
   },
   oncomplete () {},
@@ -323,7 +322,7 @@ component.exports = {
   },
   activate (sub) {
     this.set('active', sub)
-    Ractive.router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
+    router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
   },
 }
 </script>

@@ -286,11 +286,9 @@ span.action:hover {
 </style>
 
 <script>
-
 // implement this:
 // https://github.com/JonDum/ractive-datatable
 
-let api = require('../api')
 let assign = require('../lib/lodash/object/assign')
 let debounce = require('../lib/lodash/function/debounce')
 component.exports = {
@@ -368,7 +366,7 @@ component.exports = {
           break
         default: this.set('active', active = 'debates')
       }
-      Ractive.router.dispatch(`/cpanel/${active || ''}/${this.get('id') || ''}`, {history: false})
+      router.dispatch(`/cpanel/${active || ''}/${this.get('id') || ''}`, {history: false})
     })
   },
   oncomplete () {},
@@ -381,7 +379,7 @@ component.exports = {
   },
   activate (sub) {
     this.set('active', sub)
-    Ractive.router.dispatch(`/cpanel/${sub}/${this.get('id') || ''}`, { history: false })
+    router.dispatch(`/cpanel/${sub}/${this.get('id') || ''}`, { history: false })
   }
 }
 </script>

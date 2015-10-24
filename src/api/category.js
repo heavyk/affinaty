@@ -1,6 +1,7 @@
 
 import api from '../api'
-// import local from '../local'
+import local from '../local'
+
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
@@ -54,7 +55,7 @@ class category_ extends Ambition {
       limit: 100,
     }
 
-    api.local.getItems(['category', 'category:+created', 'category:-created'], (err, data) => {
+    local.getItems(['category', 'category:+created', 'category:-created'], (err, data) => {
       if (data && data.category) {
         for (var i = 0; i < data.category.length; i++)
           this.insert(data.category[i])
@@ -111,7 +112,7 @@ class category_ extends Ambition {
       if (data.length === this.query.limit) setTimeout(() => this.go(), 100)
       else this.now('/')
 
-      api.local.setItems({
+      local.setItems({
         'category': this.list,
         'category:+created': this['+created'],
         'category:-created': this['-created'],

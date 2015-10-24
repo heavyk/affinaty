@@ -7,8 +7,8 @@
   {{#if totals}}
     <div class="stats-box">
       {{#totals : i}}
-      <div class="bar-desc">{{ text(i) }}</div>
       <div class="bar">
+        <div class="bar-desc">{{ options[i].text }}</div>
         <button class="button-votes {{idx === i ? 'selected' : ''}}">{{.}}</button>
         <!-- <span class="num_votes">{{.}}</span> -->
         <button class="bar" style="width: {{ bar(i, 200) }}px" />
@@ -44,8 +44,10 @@ h6.title {
   margin-bottom: 10px;
 }
 div.bar {
-  height: 30px;
-  margin-bottom: 10px;
+  height: 55px;
+}
+.stat-text {
+  margin-left: 35px;
 }
 button {
   padding: 4px 10px;
@@ -75,15 +77,13 @@ button {
   margin: 20px;
 }
 button.bar {
-  float: left;
-  margin: 10px 0;
-  padding: 2px;
-  transition: 0.3s width;
+  margin: 5px 0;
+  padding: 10px;
+  transition: .3s width;
   position: relative;
   bottom: 0;
   display: inline;
-  float: left;
-  height: 10px;
+  height: 18px;
   background: #fd270d;
 }
 
@@ -104,15 +104,14 @@ button.selected {
   color: #fd270d;
 }
 
-/*.bar-desc {
+.bar-desc {
   margin-left: 35px;
-}*/
+}
 
 </style>
 
 
 <script>
-let api = require('../api')
 let pie = require('easy-pie-chart')
 let Chart = require('chart.js')
 let extend = require('../lib/lodash/object/assign')
@@ -160,6 +159,9 @@ component.exports = {
       this.set('planets', planets)
       this.set('ranges', ranges)
     })
+    let stats_el = this.find('.poll-stats')
+    // TODO: resize me
+    this.set('bar_width', stats_el.clientWidth - 120)
   },
   computed: {
     limits () {

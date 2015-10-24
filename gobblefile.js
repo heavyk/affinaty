@@ -4,29 +4,15 @@ var gobble = require('gobble')
 gobble.cwd(__dirname)
 gobble.env('development')
 
-var babelWhitelist = [
-	'es6.arrowFunctions',
-	'es6.blockScoping',
-	'es6.classes',
-	'es6.constants',
-	'es6.destructuring',
-	'es6.forOf',
-	'es6.tailCall',
-	'es6.properties.shorthand',
-	'es6.properties.computed',
-	'es6.templateLiterals',
-	'es7.classProperties',
-	'minification.memberExpressionLiterals',
-	'minification.propertyLiterals',
-	'spec.undefinedToVoid',
-]
-
-if (gobble.env() === 'production')
+if (gobble.env() === 'production') {
+	// TODO: write this / remove this in the babelrc
+	// maybe it's doable actually with uglifyjs
 	babelWhitelist = babelWhitelist.concat([
 		// for production env
 		'minification.removeConsole',
 		'minification.removeDebugger',
 	])
+}
 
 var affinaty = gobble([
 	gobble('src')
@@ -40,43 +26,32 @@ var affinaty = gobble([
 				require('cssnano'),
 			]
 		})
-		.transform('babel', {
-			whitelist: babelWhitelist,
-			inputSourceMap: false
-		})
-		.transform('esperanto-bundle', {
-			entry: 'main',
+		.transform('rollup-babel', {
+			entry: 'main.js',
 			dest: 'app.js',
-			type: 'cjs',
+			format: 'cjs',
+			external: [
+				'ractive',
+				'moment',
+				'provinces', // this needs to be moved to the server
+				'gemini-scrollbar',
+				'masonry-layout',
+				'spin.js',
+				'dropzone', // this needs to be replaced by generic code
+				'easy-pie-chart',
+				'chart.js',
+			],
 			strict: true
 		})
-		// ----- THIS IS THE ONE I WANT TO USE -----
-		// .transform('rollup-babel', {
-		// 	entry: 'main.js',
-		// 	dest: 'app.js',
-		// 	format: 'cjs',
-		// 	external: [
-		// 		'ractive',
-		// 		'moment',
-		// 		'pikaday', // this needs to be replaced by a generic date picker
-		// 		'provinces', // this needs to be moved to the server
-		// 		'gemini-scrollbar',
-		// 		'masonry-layout',
-		// 		'spin.js',
-		// 		'dropzone', // this needs to be replaced by generic code
-		// 		'easy-pie-chart',
-		// 		'chart.js',
-		// 		'events', // this should be drip
-		// 	],
-		// 	strict: true
-		// })
-		// ----- THIS IS THE ONE I WANT TO USE -----
 		.transform('derequire')
 		.transform('browserify', {
 			entries: [ './app' ],
 			dest: 'app.js',
 			standalone: 'app',
 			debug: false
+		})
+		.transformIf(gobble.env() !== 'production', function (source, options) {
+			return source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 		})
 		.transformIf(gobble.env() === 'production', 'uglifyjs')
 		// .transform('uglifyjs')

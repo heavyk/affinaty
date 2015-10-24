@@ -3,7 +3,7 @@
 <link rel='ractive' href='../partials/are-you-sure.html'>
 
 <div class="comments">
-  <h6 class="title">
+  <h6 class="header">
     Debate
   </h6>
   <div class="comments-container">
@@ -72,14 +72,12 @@
   border-right: 1px solid #d5d5d5;
   border-left: 1px solid #d5d5d5;
 }
-h6 {
+h6.header {
   font-family: 'Pacifico';
   text-align: center;
   color: #fd270d;
   font-size: 110%;
   margin: 20px 0 0 0;
-}
-.title {
   background-color: #fff;
   border: 1px solid #d5d5d5;
   /*border-bottom: 1px solid #f3f3f3;*/
@@ -95,14 +93,18 @@ h6 {
   margin-bottom: 4px;
 }
 .comment-body {
-  padding-left: 15px;
   margin: 0 0 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #d2d2d2;
   word-wrap: break-word;
 }
+p, h1, h2, h3, h4, h5, h6 {
+  padding: 0 15px;
+}
 .header {
   position: relative;
+  display: inline-block;
+  width: 100%;
 }
 .user {
   width: 100%;
@@ -179,7 +181,6 @@ textarea.animate {
 </style>
 
 <script>
-let api = require('../api')
 let assign = require('../lib/lodash/object/assign')
 let onresize = require('../lib/dom/element-onresize')
 let findIndex = require('../lib/lodash/array/findIndex')
@@ -254,7 +255,7 @@ component.exports = {
     })
   },
   oncomplete () {
-    let title = this.find('.title')
+    let title = this.find('.header')
     let adder = this.find('.add-comment')
     let container = this.find('.list-container')
 

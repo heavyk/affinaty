@@ -4,7 +4,6 @@
 
 <script>
 let repeat = require('../lib/utils').repeat
-let api = require('../api')
 let dpr = Math.round(window.devicePixelRatio || 1)
 component.exports = {
   onconfig () {
@@ -22,7 +21,7 @@ component.exports = {
     },
     url () {
       let id = this.get('src')
-      return id ? api.get('url') + '/i/' + repeat(this.get('size'), dpr) + '/' + id : this.get('default')
+      return id ? api.url + '/i/' + repeat(this.get('size'), dpr) + '/' + id : this.get('default')
     }
   }
 }

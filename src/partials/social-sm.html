@@ -66,7 +66,6 @@
 
 
 <script>
-let api = require('../api')
 component.exports = {
   isolated: true,
   modal: require('../modal'),
@@ -74,7 +73,7 @@ component.exports = {
     let type = this.get('d.options') ? 'poll' : 'debate'
     let id = this.get('d._id')
     this.dispatch = (active) => {
-      Ractive.router.dispatch(`/${type}/${id}/${active}`)
+      router.dispatch(`/${type}/${id}/${active}`)
     }
     this.on('remove', () => {
       let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
