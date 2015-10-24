@@ -1,7 +1,7 @@
 {
   "name": "affinaty",
-  "description": "ractive affinaty.com",
-  "version": "1.0.1",
+  "description": "affinaty.com - web client",
+  "version": "1.0.2",
   "author": "Kenneth Bentley",
   "license": "AGPL-3.0",
   "repository": "https://github.com/heavyk/affinaty",
