@@ -3,7 +3,7 @@
   "description": "ractive affinaty.com",
   "version": "1.0.1",
   "author": "Kenneth Bentley",
-  "license": "Unlicense",
+  "license": "AGPL-3.0",
   "repository": "https://github.com/heavyk/affinaty",
   "main": "gobbler/gobbler.js",
   "files": [
