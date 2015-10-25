@@ -1,0 +1,23 @@
+#!/usr/bin/env lsc
+
+require! \clean-whitespace
+f-s = require \co-fs-plus
+Path = require \path
+require! \genny
+
+# TODO: search downward for the package.json
+
+p-root = Path.join __dirname, '..'
+p-src = Path.join p-root, \src
+
+genny.run ->*
+  files = yield f-s.readdir p-src, null, []
+  for f in files
+    file = Path.basename f
+    if file.0 is '.' => continue
+    console.log f
+    d = yield f-s.read-file f, \utf-8
+    dc = clean-whitespace d, { tab: '  ' }
+    if dc.length isnt d.length
+      console.log d.length, "->", dc.length
+      yield f-s.write-file f, dc

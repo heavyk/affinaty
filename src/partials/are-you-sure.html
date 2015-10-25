@@ -1,44 +1,44 @@
 
 <div class="border">
-	<div class="message">
-		¿Seguro que quieres eliminar esta publicación?
-	</div>
+  <div class="message">
+    ¿Seguro que quieres eliminar esta publicación?
+  </div>
 
-	<div>
-		<button on-click="set('answer', true)">
-			<i class="fa fa-check" /> Sí
-		</button>
+  <div>
+    <button on-click="set('answer', true)">
+      <i class="fa fa-check" /> Sí
+    </button>
 
-		<button on-click="set('answer', false)">
-			<i class="fa fa-cancel" /> No
-		</button>
-	</div>
+    <button on-click="set('answer', false)">
+      <i class="fa fa-cancel" /> No
+    </button>
+  </div>
 </div>
 
 <style>
 .border {
-	margin: 20px;
+  margin: 20px;
 }
 .message {
-	margin: 10px;
+  margin: 10px;
 }
 </style>
 
 <script>
 component.exports = {
-	oninit () {
-		this.observe('answer', (v) => {
-			if (v !== void 0) {
-				api.my.opinion.emit('answer', v)
-			}
-		})
-		window.addEventListener('keyup', this.onkeypress = (event) => {
-			if (event.which === 27) api.my.opinion.emit('answer', false)
-			else if (event.which === 13) api.my.opinion.emit('answer', true)
-		})
-		this.once('teardown', () => {
-			window.removeEventListener('keyup', this.onkeypress)
-		})
-	}
+  oninit () {
+    this.observe('answer', (v) => {
+      if (v !== void 0) {
+        api.my.opinion.emit('answer', v)
+      }
+    })
+    window.addEventListener('keyup', this.onkeypress = (event) => {
+      if (event.which === 27) api.my.opinion.emit('answer', false)
+      else if (event.which === 13) api.my.opinion.emit('answer', true)
+    })
+    this.once('teardown', () => {
+      window.removeEventListener('keyup', this.onkeypress)
+    })
+  }
 }
 </script>

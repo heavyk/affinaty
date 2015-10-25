@@ -207,7 +207,7 @@ class notifier extends Ambition {
     // remove it anyway
     api.action('n-', {t: d.t, k: d._id}, () => {
       // good
-		}, () => {
+    }, () => {
       // some sort of error
       // this.insert(d)
     })

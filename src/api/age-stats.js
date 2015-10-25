@@ -50,7 +50,7 @@ class Stats extends Ambition {
         this.now('update')
       }
 
-		})
+    })
   }
 
   go (next) {

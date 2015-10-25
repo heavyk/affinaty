@@ -64,7 +64,7 @@ class category_ extends Ambition {
       }
 
       this.go()
-		})
+    })
   }
 
   insert (d, silent) {

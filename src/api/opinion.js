@@ -68,14 +68,14 @@ class opinion_ extends Ambition {
       }
 
       this.go()
-		})
+    })
     // api.local.getItem('opinion*:' + creator, (err, data) => {
     //   if (data) {
     //     for (var i = 0; i < data.length; i++)
     //       this.insert(data[i])
     //     this.skip += data.length
     //   }
-		// })
+    // })
 
     // this.go()
   }

@@ -73,14 +73,14 @@ router.addRoute('/action-docs/:active?/:id?', api_docs)
 
 // TODO remove me when the styles are fixed
 router.on('route', (route) => {
-	let cls = 'default'
+  let cls = 'default'
   for (let k in classView) {
     if (route.view instanceof classView[k])
       cls = k
   }
 
-	body.className = cls
-	route.view.el.className = 'view-' + cls
+  body.className = cls
+  route.view.el.className = 'view-' + cls
 })
 
 export default router

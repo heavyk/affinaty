@@ -62,7 +62,7 @@ class tag_ extends Ambition {
       this.now('/')
 
       // this.go()
-		})
+    })
   }
 
   insert (d, silent) {
