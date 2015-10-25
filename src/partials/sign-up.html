@@ -62,7 +62,7 @@ div.square {
 }
 
 .terms {
-  font-weight: 100;
+  font-weight: 300;
   font-size: 88%;
   margin-top: 20px;
   color: #333;
@@ -87,8 +87,6 @@ component.exports = {
       name: '',
       // ident: 'random' + Math.round(Math.random() * 100) + '@affinaty.com',
       ident: window.localStorage.email,
-      // password: window.localStorage.password,
-      // confirm: window.localStorage.password,
     })
     this.validator = new Validator('d', {
       'name': {required: true, min: 4, max: 30, type: 'string'},
