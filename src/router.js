@@ -16,6 +16,7 @@ import poll from './views/poll'
 import notifications from './views/notifications'
 import cpanel from './views/cpanel'
 import api_docs from './views/action-docs'
+import blog from './views/blog'
 
 // these are the views which will change the body's class to view-### otherwise view-default
 let classView = {
@@ -27,6 +28,7 @@ let classView = {
   category,
   debate,
   poll,
+  blog,
 }
 
 let router = new Router({ el: 'view' }, function (request) {
@@ -38,6 +40,7 @@ let router = new Router({ el: 'view' }, function (request) {
     return router.redirect('/home')
   if (path !== '/' && !api.me)
     return router.redirect('/')
+
 })
 
 // implement enter / leave
@@ -70,6 +73,8 @@ router.addRoute('/notifications/:id?', notifications)
 router.addRoute('/cpanel/:active?/:id?', cpanel)
 // api-docs (remove me)
 router.addRoute('/action-docs/:active?/:id?', api_docs)
+//blog
+router.addRoute('/blog', blog)
 
 // TODO remove me when the styles are fixed
 router.on('route', (route) => {

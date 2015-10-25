@@ -28,6 +28,7 @@ var gobbler = require('http').createServer(function (req, res) {
       || url.substr(-3) === '.js'
       || url.substr(-4) === '.map'
       || url.substr(-4) === '.css'
+      || url.substr(-4) === '.ico'
       || url.substr(-4) === '.ttf'
       || url.substr(-4) === '.svg'
       || url.substr(-4) === '.png'
