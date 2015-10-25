@@ -11,9 +11,9 @@
     <i class="fa fa-share"></i>
   </div>
   {{#if mine}}
-  <div class="others" on-click="remove">
+  <div class="others" on-click="remove" decorator="tip:'Eliminar'">
     <!-- <i class="fa fa-ellipsis-h"></i> -->
-    <i class="fa fa-close"></i>
+    <i class="fa fa-close" ></i>
   </div>
   {{/if mine}}
 </div>
@@ -68,7 +68,11 @@
 <script>
 component.exports = {
   isolated: true,
+  decorators: {
+    tip: require('../lib/decorators/tip')
+  },
   modal: require('../modal'),
+
   oninit () {
     let type = this.get('d.options') ? 'poll' : 'debate'
     let id = this.get('d._id')
