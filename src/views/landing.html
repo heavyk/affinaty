@@ -6,13 +6,15 @@
     <div class="central col-md-8">
       <div class="lead">
         <h1><img src="/img/landing.svg" /></h1>
-        <h2>¡Súmate a opinar y a debatir con nosotros!</h2>
-        <h2>Da tu opinión y encuentra personas affines a ti</h2>
+        <h2 id="yin">{{slogan_yin}}</h2>
+        <h2 id="yang">{{slogan_yang}}</h2>
+        <!-- <h2>¡Súmate a opinar y a debatir con nosotros!</h2> -->
+        <!-- <h2>Da tu opinión y encuentra personas affines a ti</h2> -->
         <img class="cover" src="/img/cover-0.0.2.png">
       </div>
     </div>
     <div class="col-md-4">
-      <div class="app-buttons">
+      <!-- <div class="app-buttons">
         <div class="app-buttons-header">
           Descarga la app en:
         </div>
@@ -22,7 +24,7 @@
         <div class="col-md-6">
           <a href="/download/android" class="btn-app btn-google-play" decorator="tip:'función aún no disponible'">Descarga la app para android</a>
         </div>
-      </div>
+      </div> -->
       <sign-in />
     </div>
   </div>
@@ -32,6 +34,8 @@
 <style>
 .cover {
   margin: -20px 64px 0 0;
+  position: absolute;
+  top: 196px;
 }
 .app-buttons {
   position: absolute;
@@ -70,24 +74,31 @@
   background-image: url('/img/btn-google-play.png');
 }
 .lead {
-  float: left;
   float: right;
 }
 h1 {
   font-size: 72px;
   font-family: 'Pacifico';
   height: 80px;
+  margin-left: 80px;
 }
 
 @media (max-width: 768px) {
   h1 {
     font-size: 28px;
+    margin-left: 0;
+  }
+  .cover {
+    display: none;
+  }
+}
+@media (max-width: 960px) {
+  .cover {
+    display: none;
   }
 }
 h2 {
-  font-weight: 300;
-  margin: 15px;
-  font-size: 160%;
+  margin-left: 111px;
 }
 h5 {
   margin-top: 30px;
@@ -126,11 +137,75 @@ h5 {
   font-size: 24px;
   padding: 12px 24px;
 }
+h2 {
+  font-weight: 100;
+  /*margin: 15px;*/
+  font-size: 190%;
+  transition: 3s all ease-in-out;
+  /*transition: 1s opacity ease-in-out;*/
+  opacity: 0;
+  /*text-shadow: 1px 1px 1px #FF7600,3px 3px 5px #FFF;*/
+  position: absolute;
+  margin-top: -9px;
+}
+h2.slogan {
+  /*transition: 2s all ease-in-out;*/
+  /*text-shadow: 1px 1px 1px #fff,3px 3px 5px #ff7600;*/
+}
 </style>
+
+
 <script>
+let rand = require('../lib/lodash/number/random')
 component.exports = {
   isolated: true,
   modal: require('../modal'),
+  onconfig () {
+    this.set('is_yang', !!rand(1))
+  },
+  oncomplete () {
+    // let els = this.findAll('h2')
+    let yin = this.find('#yin')
+    let yang = this.find('#yang')
+    let els = [ yin, yang ]
+    let slogans = [
+      // `Una red para explicarte`,
+      // `Un sito para expresarte`,
+      `Una red para expresarte`,
+      // `Un sito donde te puedes expresar`,
+      // `Donde te puedes expresar`,
+    ]
+    // this.set('slogans')
+    let len = slogans.length
+    let is_yang = rand(1)
+    this.change_slogan = () => {
+      let idx = 0 // rand(len - 1)
+      this.set({
+        idx,
+        is_yang: is_yang = !is_yang,
+        slogan_yang: slogans[idx],
+        slogan_yin: slogans[idx]
+      })
+      // this.set('idx', idx)
+      // this.toggle('is_yang')
+      // this.set('slogan_yin', slogans[idx++ % len])
+      // this.set('slogan_yang', slogans[idx++ % len])
+      els.forEach((el, i) => {
+        // el.style.paddingLeft = rand(3, 11) + 'px'
+        el.style.transform = `translate(${rand(9, 11)}px, ${rand(-1, 1)}px)`
+        // el.style.transform = `translate(${rand(3, 11)}px, 0)`
+
+        // el.style.fontSize = rand(80, 130) + '%'
+        // el.style.fontWeight = rand(1, 9) * 100
+        // el.style.textShadow = `${rand(3)}px ${rand(3)}px ${rand(3)}px #${i && is_yang ? 'FFF' : 'FF7600'}`
+        el.style.opacity = i
+          ? (is_yang ? rand(.7, .9) : rand(.8, 1))
+          : (is_yang ? rand(.8, 1) : rand(.7, .9))
+      })
+      setTimeout(this.change_slogan, rand(2222, 5555))
+    }
+    this.change_slogan()
+  },
   decorators: {
     tip: require('../lib/decorators/tip')
   }
