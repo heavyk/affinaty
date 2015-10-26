@@ -1,27 +1,25 @@
 
 import h from '../dom/hyper-hermes'
 
-function tip (node, text) {
-  let el
+function tip (node, text, offset) {
+  offset = offset || 5
+  let el, rect
   let body = document.body
-  let rect = node.getBoundingClientRect()
-  let o = (rect.width / 2)
-  let s = {
-    position: 'absolute',
-    top: 5 + rect.top + 'px',
-    left: (rect.right - o) + 'px'
-  }
   let onmouseover = () => {
+    // let rect = node.getBoundingClientRect()
+    if (!rect) rect = node.getBoundingClientRect()
     if (!el) {
       body.appendChild(el =
-        h('div', {s},
+        h('div', {s: {position: 'absolute'}},
           h('div', {c: 'tooltip-arrow'}),
           h('div', {c: 'tooltip-inner'}, text)
         )
       )
     }
     el.style.display = 'block'
-    el.style.marginLeft = -(el.clientWidth / 2) + 'px'
+    el.style.top = offset + rect.top + 'px'
+    el.style.left = Math.ceil(rect.right - (rect.width / 2)) + 'px'
+    el.style.marginLeft = -Math.ceil((el.clientWidth-4) / 2) + 'px'
   }
   let onmouseout = () => {
     el.style.display = 'none'
