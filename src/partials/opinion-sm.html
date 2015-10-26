@@ -2,26 +2,26 @@
 
 <div class="voting clearfix">
   <div class="right">
-    <button class="{{d.pos === 1 ? 'active' : ''}} single" on-click="+1" on-mouseover="+1" on-mouseout="+1">
+    <button class="button-mas {{d.pos === 1 ? 'active' : ''}}" on-click="+1" on-mouseover="+1" on-mouseout="+1">
       <i class="fa fa-check"></i>
     </button>
-    <button class="{{d.pos === 2 ? 'active' : ''}}" on-click="+2" on-mouseover="+2" on-mouseout="+2">
+    <button class="button-mas-mas {{d.pos === 2 ? 'active' : ''}}" on-click="+2" on-mouseover="+2" on-mouseout="+2">
       <i class="fa fa-check"></i>
       <i class="fa fa-check"></i>
     </button>
   </div>
   <div class="left">
-    <button class="{{d.pos === -2 ? 'active' : ''}}" on-click="-2" on-mouseover="-2" on-mouseout="-2">
+    <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}" on-click="-2" on-mouseover="-2" on-mouseout="-2">
       <i class="fa fa-times"></i>
       <i class="fa fa-times"></i>
     </button>
-    <button class="{{d.pos === -1 ? 'active' : ''}} single" on-click="-1" on-mouseover="-1" on-mouseout="-1">
+    <button class="button-woa {{d.pos === -1 ? 'active' : ''}}" on-click="-1" on-mouseover="-1" on-mouseout="-1">
       <i class="fa fa-times"></i>
     </button>
   </div>
   <div class="cancel">
     {{#d.pos}}
-      <button on-click="cancel" on-mouseover="cancel" on-mouseout="cancel">
+      <button class="cancel" on-click="cancel" on-mouseover="cancel" on-mouseout="cancel">
         <i class="fa fa-ban"></i>
       </button>
     {{/d.pos}}
@@ -53,21 +53,31 @@
   border-top: 1px solid #dadada;
   border-radius: 0px 0px 30px 9px;
 }
-button {
-  padding: 4px 10px;
+button.cancel {
+  padding: 4px 8px;
   border: solid 1px #ddd;
   color: #aaa;
+  position: relative;
+}
+button {
+  cursor: pointer;
+}
+button.cancel .fa-ban {
+  /*position: absolute;*/
+  /*top: 7px;
+  left: 8px;*/
 }
 button:hover {
-  color: #333;
+  /*color: #333;*/
+  background-color: #444;
 }
-
 .active {
   background-color: #333;
 }
 
-.fa {
+.fa-ban {
   margin: 0;
+  margin-left: 1px;
 }
 .cancel {
   text-align: center;
@@ -77,8 +87,12 @@ button:hover {
   float: left;
   margin-left: 20px;
 }
+.right {
+  float: right;
+  margin-right: 20px;
+}
 
-.left button {
+/*.left button {
   color:#f00;
 }
 .right button:hover,
@@ -89,9 +103,9 @@ button:hover {
 .left button:first-child {
   position: relative;
   margin-right: 5px;
-}
+}*/
 
-.fa-times {
+/*.fa-times {
   position: relative;
   top: -5px;
   right: 0;
@@ -100,12 +114,8 @@ button:hover {
   position: absolute;
   top: 13px;
   left: 0;
-}
-.single .fa-times {
-  top: 0;
-}
-
-.fa-check {
+}*/
+/*.fa-check {
   position: relative;
   top: -5px;
 }
@@ -120,11 +130,6 @@ button:hover {
   top: 0;
 }
 
-.right {
-  float: right;
-  margin-right: 20px;
-}
-
 .right button:last-child {
   position: relative;
   margin-left: 5px;
@@ -132,7 +137,7 @@ button:hover {
 
 .right button {
   color:#329841;
-}
+}*/
 
 .status {
   padding: 0px 0;
