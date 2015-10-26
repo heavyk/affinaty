@@ -1,7 +1,7 @@
 <link rel='ractive' href='../partials/are-you-sure.html'>
 
 <div class="social">
-  <div class="comm" on-click="dispatch('comments')">
+  <div class="comm" on-click="dispatch('comments')" decorator="tip:'Comentar',39">
     <i class="fa fa-comment"></i>
     {{#if d.numComments}}
       <span class="num-comments">{{d.numComments}}</span>
@@ -11,7 +11,7 @@
     <i class="fa fa-share"></i>
   </div> -->
   {{#if mine}}
-  <div class="others" on-click="remove" decorator="tip:'Eliminar'">
+  <div class="others" on-click="remove" decorator="tip:'Eliminar',39">
     <!-- <i class="fa fa-ellipsis-h"></i> -->
     <i class="fa fa-close" ></i>
   </div>
