@@ -170,7 +170,8 @@ component.exports = {
     let els = [ yin, yang ]
     let slogans = [
       // `Una red para explicarte`,
-      `Un sito para expresarte`,
+      // `Un sito para expresarte`,
+      `Una red para expresarte`,
       // `Un sito donde te puedes expresar`,
       // `Donde te puedes expresar`,
     ]
@@ -191,7 +192,8 @@ component.exports = {
       // this.set('slogan_yang', slogans[idx++ % len])
       els.forEach((el, i) => {
         // el.style.paddingLeft = rand(3, 11) + 'px'
-        el.style.transform = `translate(${rand(3, 11)}px, ${rand(-2, 2)}px)`
+        el.style.transform = `translate(${rand(9, 11)}px, ${rand(-1, 1)}px)`
+        // el.style.transform = `translate(${rand(3, 11)}px, 0)`
 
         // el.style.fontSize = rand(80, 130) + '%'
         // el.style.fontWeight = rand(1, 9) * 100
