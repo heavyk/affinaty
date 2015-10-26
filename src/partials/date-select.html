@@ -68,7 +68,7 @@ component.exports = {
       let day = this.get('day')
       let month = this.get('month')
       let year = this.get('year')
-      let num_days = new Date(year, month, 0).getDate()
+      let num_days = new Date(year, month+1, 0).getDate()
       while (days.length > num_days) days.pop()
       for (var i = days.length + 1; i <= num_days; i++) {
         days.push(i)
