@@ -32,7 +32,7 @@
     "esperanto": "^0.7.4",
     "gemini-scrollbar": "^1.2.9",
     "genny": "^0.5.6",
-    "gobble": "^0.10.2",
+    "gobble": "heavyk/gobble#pathwatcher",
     "gobble-babel": "^5.5.8",
     "gobble-browserify": "^0.6.1",
     "gobble-cli": "^0.4.2",
