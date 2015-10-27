@@ -83,9 +83,13 @@ genny.run(function* (resume) {
     yield fS.outputJson(cfg_path, cfg)
   }
 
-  yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
-  var out = yield spawn(local_psy,
-    ['start', '-n', 'gobbler', '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
+  try {
+    yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
+  } catch (e) {}
+  try {
+    var out = yield spawn(local_psy,
+      ['start', '-n', 'gobbler', '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
+  } catch (e) {}
   console.log('gobble started', out)
   gobbler.listen(1111, function (err) {
     if (err) {

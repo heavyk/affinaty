@@ -136,19 +136,25 @@
 
       {{#if active === 'networks' }}
       <div class="settings">
-        <select class="network-list" value="{{new_network}}" on-change="add-network">
-          <option value="">Añadir una nueva red</option>
-          {{#each network_list}}
-            {{#if me.networks[.id] === undefined}}
-              <option value="{{.id}}">{{.title}}</option>
-            {{/if}}
-          {{/each}}
-        </select>
         <div class="heading">
           Estos datos aparecen en tu perfil
         </div>
+        <div class="row">
+          <select class="network-list" value="{{new_network}}" on-change="add-network">
+            <option value="">Añadir una nueva red</option>
+            {{#each network_list}}
+              {{#if me.networks[.id] === undefined}}
+                <option value="{{.id}}">{{.title}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </div>
         <form on-submit="change-networks">
           <!-- {{#each me.networks}} -->
+
+          {{#if network_count === 0}}
+          <span class="not_network"> No tienes ninguna red añadida. </span>
+          {{/if}}
           {{#each network_list}}
             <!-- | {{.id}} -->
             {{#if me.networks[.id] !== undefined}}
@@ -354,12 +360,12 @@ component.exports = {
     this.get('active') || this.set('active', 'appearance')
 
     let network_list = [
-      {id: 'github', text: '(ej. http://wordpress.com/pepelotero)', title: 'Github' },
-      {id: 'youtube', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
-      {id: 'facebook', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
-      {id: 'twitter', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
+      {id: 'facebook', text: '(ej. https://facebook.com/pepelotero)', title: 'Facebook' },
+      {id: 'twitter', text: '(ej. https://twitter.com/pepelotero)', title: 'Twitter' },
+      {id: 'youtube', text: '(ej. http://youtube.com/user/PepeLotero)', title: 'Youtube' },
+      {id: 'github', text: '(ej. http://github.com/PepeLotero)', title: 'Github' },
       {id: 'blog', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
-      {id: 'linkedin', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
+      {id: 'linkedin', text: '(ej. http://linkedin.com/pepelotero)', title: 'Linkedin' },
     ]
     this.set('network_list', network_list)
 
@@ -400,7 +406,6 @@ component.exports = {
       return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
     })
     this.set('countries', countries)
-
     api.observe('me', (_me) => {
       if (!_me.networks) _me.networks = {}
       this.set('me', _me)
@@ -541,7 +546,10 @@ component.exports = {
         return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
       })
       return provinces
-    }
+    },
+    network_count () {
+      return Object.keys(this.get('me.networks')).length
+    },
   },
   activate (sub, id) {
     router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
