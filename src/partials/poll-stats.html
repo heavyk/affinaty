@@ -2,7 +2,8 @@
 <link rel='ractive' href='../partials/age-stats.html'>
 
 <div class="poll-stats">
-  <h6 class="title">Estadística</h6>
+  <h4 class="title">Estadísticas</h4>
+  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
 
   {{#if totals}}
     <div class="stats-box">
@@ -32,24 +33,31 @@
 
 <style>
 h6 {
-  font-family: 'Pacifico';
   text-align: center;
   font-size: 160%;
   margin: 20px 0 0 0;
+  padding: 0 0 5px;
+  font-weight: 300;
 }
-h6.title {
+h6.total {
   color: #fd270d;
+  border-bottom: solid 1px #dadada;
+}
+span.total {
+  float: right;
+  margin-right: 20px;
 }
 
 .num_votes {
   float: right;
-  margin-right: 20px;
+  /*margin-right: 20px;*/
 }
 
 .title {
   text-align: center;
   color: #747474;
-  font-size: 16px;
+  font-size: 24px;
+  font-weight: 400;
   margin-bottom: 10px;
 }
 div.bar {
@@ -173,7 +181,7 @@ component.exports = {
     })
     let stats_el = this.find('.poll-stats')
     // TODO: resize me
-    this.set('bar_width', stats_el.clientWidth - 120)
+    this.set('bar_width', stats_el.clientWidth - 100)
   },
   computed: {
     limits () {
