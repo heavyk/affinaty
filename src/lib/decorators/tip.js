@@ -6,7 +6,7 @@ function tip (node, text, offset) {
   let el, rect
   let body = document.body
   let onmouseover = () => {
-    // let rect = node.getBoundingClientRect()
+    let r = body.getBoundingClientRect()
     if (!rect) rect = node.getBoundingClientRect()
     if (!el) {
       body.appendChild(el =
@@ -17,7 +17,7 @@ function tip (node, text, offset) {
       )
     }
     el.style.display = 'block'
-    el.style.top = offset + rect.top + 'px'
+    el.style.top = offset + rect.top - r.top + 'px'
     el.style.left = Math.ceil(rect.right - (rect.width / 2)) + 'px'
     el.style.marginLeft = -Math.ceil((el.clientWidth-4) / 2) + 'px'
   }
