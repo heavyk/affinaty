@@ -220,23 +220,27 @@ component.exports = {
       return r
     },
     muyDeAcuerdo () {
-      let v = this.get('d.totals.3')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.3')
       return v / c.max
     },
     deAcuerdo () {
-      let v = this.get('d.totals.2')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.2')
       return v / c.max
     },
     desAcuerdo () {
-      let v = this.get('d.totals.1')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.1')
       return v / c.max
     },
     muyDesAcuerdo () {
-      let v = this.get('d.totals.0')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.0')
       return v / c.max
     },
   },
