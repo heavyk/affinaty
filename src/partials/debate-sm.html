@@ -8,10 +8,10 @@
     <a class="stats" href="/debate/{{d._id}}">
       <div class="stats">
         <div class="stats-box">
-          <button class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
-          <button class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
-          <button class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
-          <button class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
+          <span class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
+          <span class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
+          <span class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
+          <span class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
         </div>
         <i class="fa fa-chevron-right"></i>
       </div>
@@ -109,15 +109,17 @@
 
 .stats-box {
   width: 34px;
+  height: 38px;
   margin: 0 2px;
 }
-.stats-box button {
+.stats-box span {
   margin: 0;
   padding: 2px;
   transition: 0.3s height;
   position: relative;
   bottom: 0;
-  display: inline;
+  display: inline-block;
+  border-radius: 4px;
   vertical-align: bottom;
 }
 .stats-box .mas-mas {
