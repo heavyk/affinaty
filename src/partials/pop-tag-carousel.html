@@ -14,12 +14,12 @@
             </a>
           </div>
           <div class="tag">
-            <a class="tag" href="/tag/{{.d._id}}">{{d.title}}</a>
+            <a class="tag_home" href="/tag/{{.d._id}}">_{{d.title}}</a>
           </div>
-          <div class="stats">
+          <!-- <div class="stats">
             <div class="opin">{{.score}} opins</div>
             <div class="opin">{{.posts}} posts</div>
-          </div>
+          </div> -->
         </div>
       {{/list}}
     {{/if loading}}
@@ -30,21 +30,21 @@
 <style>
 .list-container {
   width: 100%;
-  height: 202px;
-  background: #fff;
+  height: 160px;
   position: relative;
   overflow:hidden;
 }
 .list {
   float: left;
-  width: 140px;
+  width: 120px;
   background-color: #ffffff;
-  height: 202px;
-  border: solid 1px #dadada;
-  border-radius: 4px;
+  /*border: solid 1px #dadada;
+  border-radius: 4px;*/
   margin-right: 8px;
   opacity: 0;
   transition: all 333ms ease-in-out;
+  border-radius: 0px 20px 0px 20px;
+  height: 159px
 }
 .list.loaded {
   opacity: 1;
@@ -57,7 +57,9 @@
 }
 div.tag {
   font-size: 15px;
-  text-align: center;
+  text-align: left;
+  height: 40px;
+  margin-top: -6px;
 }
 div.opin {
   float: left;
@@ -68,14 +70,28 @@ div.opin {
   overflow: hidden;
 }
 .popular {
-  max-height: 202px;
+  max-height: 165px;
+  background-color: #F0F0F0;
+    border: 1px solid #F0F0F0;
+    border-radius: 0 20px;
 }
 img {
-  margin: 8px 8px 0 8px;
+  /*margin: 8px 8px 0 8px;*/
   width: 120px;
   height: 120px;
+  border-radius: 0px 20px 0px 0px
 }
-a.tag {
+.tag_home {
+    padding: 0 4px;
+    margin: 4px;
+    /* border: solid 1px #fd270d; */
+    /* border-radius: 8px; */
+    /* color: #fd270d; */
+    color: #191A4E;
+    display: inline-block;
+    text-align: left;
+}
+a.tag_home {
   margin: 4px;
   max-width: 120px;
   text-overflow: ellipsis;
