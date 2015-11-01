@@ -144,12 +144,11 @@ component.exports = {
     this.parent.on('resize', _resizer)
     window.addEventListener('resize', _resizer)
     this.on('elastic:resize', _resizer)
-    let teardown = () => {
+    this.once('teardown', () => {
       window.removeEventListener('resize', _resizer)
       this.off('elastic:resize', _resizer)
-    }
-
-    this.once('teardown', teardown)
+      this.parent.off('resize', _resizer)
+    })
     let id = this.parent.get('id')
     let __mbox = this.parent.get('mbox')
     let msgs = []

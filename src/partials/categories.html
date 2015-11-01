@@ -122,7 +122,7 @@ component.exports = {
     this.on('clear', () => {
       this.activate({context: null})
     })
-    this.parent.on('set-category', (id) => {
+    this.parent.on('set-category', this.onsetCategory = (id) => {
       api.category.until('/', () => {
         this.set('selected', id ? api.category.get(id) : null)
       })
@@ -133,5 +133,8 @@ component.exports = {
     this.fire('select', event.context)
     this.set('menu', menu || false)
   },
+  onteardown () {
+    this.parent.off('set-category', this.onsetCategory)
+  }
 }
 </script>

@@ -90,7 +90,7 @@ component.exports = {
       }
     }, this.get('dropzone-events'))
 
-    this.parent.on('submitting', (cb) => {
+    this.parent.on('submitting', this.onsubmitting = (cb) => {
       if (cb) if (this.get('cropping')) {
         this.fire('finish-cropping', cb)
       } else cb()
@@ -100,12 +100,14 @@ component.exports = {
     for (let event in events) {
       dz.on(event, events[event])
     }
-    this.on('delete-foto',(event)=>{
+    this.on('delete-foto', (event) => {
       this.set('cropping', false)
       this.set('uploaded', [])
       this.set('cropped', [])
     })
-
   },
+  onteardown () {
+    this.parent.off('submitting', this.onsubmitting)
+  }
 }
 </script>
