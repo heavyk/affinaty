@@ -9,7 +9,7 @@ function tip (node, text, offset) {
     let rect = node.getBoundingClientRect()
     if (!el) {
       body.appendChild(el =
-        h('div', {s: {position: 'absolute'}},
+        h('div', {c: 'tooltip-outer', s: {position: 'absolute'}},
           h('div', {c: 'tooltip-arrow'}),
           h('div', {c: 'tooltip-inner'}, text)
         )
