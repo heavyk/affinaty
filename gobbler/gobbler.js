@@ -4,6 +4,7 @@ var Path = require('path')
 var fS = require('co-fs-extra')
 var genny = require('genny')
 var spawn = require('co-child-process')
+var pkg = require(Path.join(__dirname, '..', 'package.json'))
 
 var gobbleProxy = require('http-proxy').createProxyServer({
   target: {
@@ -84,11 +85,11 @@ genny.run(function* (resume) {
   }
 
   try {
-    yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
+    yield spawn(local_psy, ['rm', 'gobbler-' + pkg.name], {cwd: pkg_dir})
   } catch (e) {}
   try {
     var out = yield spawn(local_psy,
-      ['start', '-n', 'gobbler', '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
+      ['start', '-n', 'gobbler-' + pkg.name, '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
   } catch (e) {}
   console.log('gobble started', out)
   gobbler.listen(1111, function (err) {
@@ -106,8 +107,8 @@ var onexit = function () {
   genny.run(function* (resume) {
     var out
     try {
-      out = yield spawn(local_psy, ['stop', 'gobbler'], {cwd: pkg_dir})
-      out = yield spawn(local_psy, ['rm', 'gobbler'], {cwd: pkg_dir})
+      out = yield spawn(local_psy, ['stop', 'gobbler-' + pkg.name], {cwd: pkg_dir})
+      out = yield spawn(local_psy, ['rm', 'gobbler-' + pkg.name], {cwd: pkg_dir})
     } catch (e) {}
   })
 }
