@@ -5,13 +5,13 @@
   {{#if uploaded && cropping}}
     {{#each uploaded : i}}
       <foto-crop src="{{.}}" area-type="{{shape}}" rect="{{rect[i]}}" foto="{{cropped[i]}}" />
-      <div class="others" on-click="delete-foto" decorator="tip:'Eliminar',39">
+      <div class="others" on-click="delete-foto" decorator="tip:'Eliminar',10">
         <!-- <i class="fa fa-ellipsis-h"></i> -->
         <i class="fa fa-close" ></i>
       </div>
       <!-- <div class="del">
         <button on-click="delete-foto" class="row ">
-          Eliminar
+          Eliminar *
         </button>
       </div> -->
     {{/each}}
