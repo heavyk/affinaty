@@ -18,6 +18,12 @@
       [[#if L.message]]
         <div class="message">[[L.message]]</div>
       [[/if]]
+      {{#if progress}}
+        <div class="uploading">
+          <div class="uploading-bar" style="width: {{progress.percent}}%" />
+          <div class="uploading-progress">{{progress.bytes}} / {{progress.total}}</div>
+        </div>
+      {{/if}}
     </div>
   {{/if}}
 </div>
@@ -25,6 +31,31 @@
 <style>
 .cancel {
   cursor: pointer;
+}
+.uploading {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  height: 40px;
+  border: solid 1px #dadada;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 220px;
+}
+.uploading-bar {
+  position: absolute;
+  left: 0;
+  height: 40px;
+  background: #f00;
+}
+.uploading-progress {
+  color: #000;
+  font-size: 12px;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  z-index: 2;
+  margin-left: -25%;
 }
 </style>
 
@@ -38,17 +69,21 @@ component.exports = {
   data: {
     shape: 'square'
   },
-  oninit () {
+  onconfig () {
     this.set('uploaded', [])
     this.set('rect', [])
     this.set('cropped', [])
     this.set('size', 't')
-
   },
   oncomplete () {
     // for testing:
     // this.set('uploaded', [api.me.foto])
     // this.set(cropping', true)
+    // this.set('progress', {
+    //   percent: 50,
+    //   bytes: 2000000 * 0.5,
+    //   total: 2000000,
+    // })
 
     let Dropzone = require('dropzone')
     Dropzone.autoDiscover = false
@@ -65,17 +100,23 @@ component.exports = {
     let events = extend({
       // TODO: progress bar for upload
       totaluploadprogress: (percent, total, bytes) => {
-        console.log('upload:', percent.toFixed(2))
+        // console.log('upload:', percent.toFixed(2))
         this.set('progress', {
           percent: percent.toFixed(2),
           bytes, total,
         })
       },
-      // addedfile: (file) => {
-      //   console.log('added file: ', file)
-      // },
+      addedfile: (file) => {
+        this.set('progress', {
+          percent: 0,
+          bytes: 0,
+          total: file.size,
+        })
+      },
       error: (ev) => {
+        // TODO: if an error occurs, handle it
         console.log('error', ev)
+        this.fire('delete-foto')
         this.set('error', ev)
       },
       complete: (ev) => {
@@ -100,10 +141,11 @@ component.exports = {
     for (let event in events) {
       dz.on(event, events[event])
     }
-    this.on('delete-foto', (event) => {
+    this.on('delete-foto', () => {
       this.set('cropping', false)
       this.set('uploaded', [])
       this.set('cropped', [])
+      this.set('progress', null)
     })
   },
   onteardown () {
