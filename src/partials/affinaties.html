@@ -57,19 +57,9 @@
 .affinaties-container {
   box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
   border-radius: 30px 9px 30px 9px;
+  overflow: hidden;
 }
 
-.title {
-  background-color: #fff;
-  border-radius: 30px 9px 0px 0px;
-  text-align: center;
-  width: 100%;
-  height: 30px;
-  border-bottom: solid 1px #E6E6E6;
-  font-family: 'Pacifico';
-  color: #fd270d;
-  font-size: 17px;
-}
 
 .list-container {
   overflow-y: scroll;
@@ -192,7 +182,10 @@ component.exports = {
     let container = this.find('.list-container')
     let onresize = require('../lib/dom/element-onresize')
     let _resizer, resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
-      this.set('height', window.innerHeight - 65 - title.scrollHeight)
+      let ih = window.innerHeight
+      let th = title.scrollHeight
+      let h = ih - 65 - th
+      this.set('height', Math.min((ih / 2) - th, h))
     }, true)
     onresize.addResizeListener(container, resizer)
     resizer()
