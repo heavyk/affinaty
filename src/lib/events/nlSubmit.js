@@ -3,6 +3,7 @@
   // var submit = _event || 'submit'
 function nlSubmit (node, fire) {
   // var submit = 'submit'
+  var ractive = Ractive.getNodeInfo(node).ractive
   var not_ta = node.nodeName !== 'TEXTAREA'
   node.addEventListener('keydown', handler)
   function handler (e) {
@@ -24,7 +25,7 @@ function nlSubmit (node, fire) {
 
         e.target.value = ''
         e.preventDefault()
-        node._ractive.root.fire('elastic:adjust')
+        ractive.fire('elastic:adjust')
       }
     }
   }

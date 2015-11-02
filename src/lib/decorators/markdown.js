@@ -25,6 +25,7 @@ let md = _markdown({
 })
 
 function markdown (node, keypath) {
+  let info = Ractive.getNodeInfo(node)
   let transform = (text) => {
     text = text ? md.render(text) : ''
     node.innerHTML = text.replace(/<a href=/g, '<a target="blank" href=')
@@ -37,8 +38,8 @@ function markdown (node, keypath) {
     }
   }
 
-  if (node._ractive.keypath.str) {
-    transform(this.get(node._ractive.keypath.str + '.' + keypath))
+  if (info.keypath) {
+    transform(this.get(info.keypath + '.' + keypath))
   } else {
     this.observe(keypath, transform, {defer: true})
   }
