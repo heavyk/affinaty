@@ -12,7 +12,9 @@
     "README.md"
   ],
   "scripts": {
-    "start": "node gobbler/gobbler.js"
+    "start": "node gobbler/gobbler.js",
+    "use-edge": "mv node_modules/ractive node_modules/ractive-normal && npm link ractive",
+    "use-normal": "rm -f node_modules/ractive && mv node_modules/ractive-normal node_modules/ractive"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",

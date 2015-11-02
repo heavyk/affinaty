@@ -98,9 +98,7 @@ component.exports = {
     }, this.get('dropzone-config'))
 
     let events = extend({
-      // TODO: progress bar for upload
       totaluploadprogress: (percent, total, bytes) => {
-        // console.log('upload:', percent.toFixed(2))
         this.set('progress', {
           percent: percent.toFixed(2),
           bytes, total,
