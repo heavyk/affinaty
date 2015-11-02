@@ -51,6 +51,7 @@ let router = new Router({ el: 'view' }, function (request) {
 router.addRoute('/', landing)
 // listing (of posts)
 router.addRoute('/home', listing)
+router.addRoute('/mis-top', listing)
 router.addRoute('/tag/:id', listing)
 router.addRoute('/category/:category', listing)
 router.addRoute('/search/:query', listing)

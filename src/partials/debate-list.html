@@ -105,6 +105,12 @@ component.exports = {
       __creator = creator
     }})
 
+    this.observe('top', (top) => {
+      this.set('query.top', this.query.top = top || null)
+      this.clear()
+      this.go()
+    })
+
     let __tag
     this.observe('tag', (tag) => {
       this.set('query.tag', this.query.tag = tag)
