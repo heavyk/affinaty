@@ -2,8 +2,8 @@
 <link rel='ractive' href='../partials/spinner.html'>
 
 <div class="popular">
-  <span class="title">Populares</span>
-  <div class="list-container popular">
+  <div class="title">Populares</div>
+  <div class="list-container">
     {{#if loading}}
       <spinner scale="0.2" />
     {{else}}
@@ -24,14 +24,12 @@
       {{/list}}
     {{/if loading}}
   </div>
-  <span class="view_plus">Ver más</span>
-  <div class="clear"></div>
+  <div class="view-more"><a href="/home">Ver más</a></div>
 </div>
 
 
 <style>
 .list-container {
-  float: left;
   overflow-y: scroll;
   width: 100%;
   min-height: 100px;
@@ -68,6 +66,7 @@ div.opin {
 }
 .popular {
   max-height: 260px;
+  margin-top: 20px;
 }
 img {
   float: left;
