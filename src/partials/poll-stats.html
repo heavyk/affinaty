@@ -18,10 +18,12 @@
             </button>
           {{/if}}
           <span class="num_votes">{{.}}</span>
-          <!-- <button class="bar" style="width: {{ percent(i, bar_width) }}px;{{#if this !== limits.max}}margin-left: 35px;{{/if}}{{#if percent(i, bar_width) > 20}}color: #fff;{{/if}}"> -->
-          <button class="bar" style="width:{{ percent(i, bar_width) }}px{{#if percent(i, bar_width) > 20}};color: #fff{{/if}};background:#{{#if this === limits.max}}fd270d{{else}}FB7868;margin-left:35px{{/if}}">
-            {{percent_total(i)}}%
-          </button>
+          <div style="position: relative">
+            <button class="bar shadow" style="width: {{bar_width}}px"></button>
+            <button class="bar" style="width:{{ percent_total(i, bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === limits.max}}fd270d{{else}}FB7868{{/if}}">
+              {{percent_total(i)}}%
+            </button>
+          </div>
         </div>
       {{/totals}}
     </div>
@@ -44,15 +46,18 @@ h6.total {
   border-bottom: solid 1px #dadada;
 }
 span.total {
-  float: right;
-  margin-right: 20px;
+  position: absolute;
+  text-align: center;
+  right: 10px;
+  padding: 0 5px;
 }
-
 .num_votes {
-  float: right;
-  /*margin-right: 20px;*/
+  padding: 3px 0;
+  position: absolute;
+  right: 10px;
+  width: 33px;
+  text-align: center;
 }
-
 .title {
   text-align: center;
   color: #747474;
@@ -68,6 +73,9 @@ div.bar {
 }
 button {
   padding: 4px 10px;
+}
+button.bar.shadow {
+  background: #f6f6f6;
 }
 .poll-stats {
   float: left;
@@ -95,13 +103,12 @@ button {
 }
 button.bar {
   margin: 5px 0;
-  /*padding: 10px;*/
   padding: 0;
   transition: .3s width;
-  position: relative;
-  bottom: 0;
+  position: absolute;
   display: inline;
   height: 18px;
+  left: 35px;
   background: #fd270d;
 }
 

@@ -14,10 +14,10 @@
           <i class="fa fa-check"></i>
         </button>
         <span class="num_votes">{{totals[3]}}</span>
-          <button class="bar mas-mas" style="{{#if totals[3]}}color: #fff;{{/if}}width:{{Math.round(muyDeAcuerdo * bar_width)}}px">{{Math.round(totals[3] / total * 100)}}%</button>
-        <!-- <div>
-          <button class="bar shadow"></button>
-        </div> -->
+        <div style="position: relative">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar mas-mas" style="{{#if totals[3]}}color:#fff;width:{{muyDeAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.3}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">De acuerdo</div>
@@ -25,7 +25,10 @@
           <i class="fa fa-check"></i>
         </button>
         <span class="num_votes">{{totals[2]}}</span>
-        <button class="bar mas" style="{{#if totals[2]}}color: #fff;{{/if}}width:{{Math.round(deAcuerdo * bar_width)}}px">{{Math.round(totals[2] / total * 100)}}%</button>
+        <div style="position: relative">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar mas" style="{{#if totals[2]}}color:#fff;width:{{deAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.2}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">En desacuerdo</div>
@@ -33,7 +36,10 @@
           <i class="fa fa-times"></i>
         </button>
         <span class="num_votes">{{totals[1]}}</span>
-        <button class="bar woa" style="{{#if totals[1]}}color: #fff;{{/if}}width:{{Math.round(desAcuerdo * bar_width)}}px">{{Math.round(totals[1] / total * 100)}}%</button>
+        <div style="position: relative">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar woa" style="{{#if totals[1]}}color:#fff;width:{{desAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.1}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">Muy en desacuerdo</div>
@@ -42,7 +48,10 @@
           <i class="fa fa-times"></i>
         </button>
         <span class="num_votes">{{totals[0]}}</span>
-        <button class="bar woa-woa" style="{{#if totals[0]}}color: #fff;{{/if}}width:{{Math.round(muyDesAcuerdo * bar_width)}}px">{{Math.round(totals[0] / total * 100)}}%</button>
+        <div style="position: relative">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar woa-woa" style="{{#if totals[0]}}color:#fff;width:{{muyDesAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.0}}%</button>
+        </div>
       </div>
     </div>
   {{/if totals}}
@@ -65,11 +74,17 @@ h6.total {
   border-bottom: solid 1px #dadada;
 }
 span.total {
-  float: right;
-  margin-right: 20px;
+  position: absolute;
+  text-align: center;
+  right: 10px;
+  padding: 0 5px;
 }
 .num_votes {
-  float: right;
+  padding: 3px 0;
+  position: absolute;
+  right: 10px;
+  width: 33px;
+  text-align: center;
 }
 .title {
   text-align: center;
@@ -114,9 +129,10 @@ button.bar {
   margin: 5px 0;
   padding: 0;
   transition: .3s width;
-  bottom: 0;
   display: inline;
+  position: absolute;
   height: 20px;
+  left: 35px;
 }
 .stats-box .mas-mas {
   background: #2e8034;
@@ -131,7 +147,7 @@ button.bar {
   background: #bb0217;
 }
 button.shadow {
-  background: #dadada;
+  background: #f6f6f6;
 }
 
 button {
@@ -166,6 +182,7 @@ component.exports = {
       let d = api.my.opinion.debate(id)
       let calc = this.calc(stats)
       this.set('totals', calc.totals)
+      this.set('totals_p', calc.totals_p)
       this.set('total', calc.total)
       this.set('percents', calc.percents)
       this.set('planets', calc.planets)
@@ -182,6 +199,7 @@ component.exports = {
         ageStats.add(api.me, stats, d)
         let calc = this.calc(stats)
         this.set('totals', calc.totals)
+        this.set('totals_p', calc.totals_p)
         this.set('total', calc.total)
         this.set('percents', calc.percents)
         this.set('planets', calc.planets)
@@ -248,6 +266,7 @@ component.exports = {
     let num_planets = 2
     let total = 0
     let totals = [0, 0, 0, 0]
+    let totals_p = [0, 0, 0, 0]
     let planets = [0, 0, 0, 0]
     let percents = [0, 0, 0, 0]
     let ranges = new Array(api.my.opinion.ages.length + 1)
@@ -276,12 +295,17 @@ component.exports = {
     for (gender = 0; gender < num_planets; gender++)
       percents[gender] = planets[gender] / total * 100
 
+    for (i = 0; i < 4; i++) {
+      totals_p[i] = Math.round(totals[i] / total * 100)
+    }
+
     return {
       planets: planets,
       percents: percents,
       ranges: ranges,
       total: total,
       totals: totals,
+      totals_p: totals_p,
       stats: data,
     }
   },
@@ -299,26 +323,26 @@ component.exports = {
     muyDeAcuerdo () {
       let v = this.get('totals.3')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     deAcuerdo () {
       let v = this.get('totals.2')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     desAcuerdo () {
       let v = this.get('totals.1')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     muyDesAcuerdo () {
       let v = this.get('totals.0')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     }
   },
   // data: {
