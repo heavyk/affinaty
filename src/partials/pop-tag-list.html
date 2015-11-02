@@ -1,7 +1,7 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/spinner.html'>
 
-<div class="popular">
+<div class="pop-tag-list">
   <div class="title">Populares</div>
   <div class="list-container">
     {{#if loading}}
@@ -16,7 +16,7 @@
             <a class="tag" href="/tag/{{d._id}}">{{d.title}}</a>
           </div>
           <div class="stats">
-            <div class="opin">{{score}} opin</div>
+            <div class="opin">{{score}} opins</div>
             <div class="opin">{{posts}} posts</div>
           </div>
           <div class="clearfix"></div>
@@ -29,6 +29,12 @@
 
 
 <style>
+.pop-tag-list {
+  /*max-height: 260px;*/
+  margin-top: 20px;
+  border-radius: 30px 9px;
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
+}
 .list-container {
   overflow-y: scroll;
   width: 100%;
@@ -45,6 +51,7 @@
 }
 .stats {
   float: right;
+  margin-right: 10px;
 }
 div.tag {
   float: left;
@@ -64,13 +71,11 @@ div.opin {
   clear: right;
   margin: 2px 4px;
 }
-.popular {
-  max-height: 260px;
-  margin-top: 20px;
-}
 img {
   float: left;
-  margin: 2px;
+  width: 49px;
+  height: 49px;
+  margin: 2px 15px 2px 15px;
 }
 a.tag {
   margin: 14px 4px;
