@@ -150,43 +150,20 @@
           </select>
         </div>
         <form on-submit="change-networks">
-          <!-- {{#each me.networks}} -->
-
           {{#if network_count === 0}}
-          <span class="not_network"> No tienes ninguna red añadida. </span>
+            <span>No tienes ninguna red añadida.</span>
           {{/if}}
           {{#each network_list}}
-            <!-- | {{.id}} -->
             {{#if me.networks[.id] !== undefined}}
               <div>
                 <div><h5>{{.title}}:</h5></div>
                 <div style="position: relative">
                   <input type="text" maxlength="200" value="{{me.networks[.id]}}" placeholder="{{.text}}" />
-                  <span class="remove" on-click="remove-network" decorator="tip:'Eliminar', 16"><i class="fa fa-times" /></span>
+                  <span class="remove" on-click="remove-network" decorator="tip:'Eliminar',16"><i class="fa fa-times" /></span>
                 </div>
               </div>
             {{/if}}
           {{/each}}
-          <!-- <div>
-            <div><h5>Blog:</h5></div>
-            <input type="text" maxlength="200" value="{{net.blog}}" placeholder="{{.text}}" class="{{errors.net[.id] ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Facebook:</h5></div>
-            <input type="text" maxlength="200" value="{{net.facebook}}" placeholder="(ej. https://facebook.com/pepelotero)" class="{{errors.net.facebook ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Twitter:</h5></div>
-            <input type="text" maxlength="200" value="{{net.twitter}}" placeholder="(ej. https://twitter.com/pepelotero)" class="{{errors.net.twitter ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>GitHub:</h5></div>
-            <input type="text" maxlength="200" value="{{net.github}}" placeholder="(ej. http://github.com/PepeLotero)" class="{{errors.net.github ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Canal de Youtube:</h5></div>
-            <input type="text" maxlength="200" value="{{net.youtube}}" placeholder="(ej. http://youtube.com/user/PepeLotero)" class="{{errors.net.youtube ? 'invalid' : ''}}" />
-          </div> -->
           <div style="margin-top: 60px">
             <button class="button-sign-up" on-click="change-networks">Guardar</button> {{save_success}}
             {{#if saving}}

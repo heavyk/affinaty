@@ -18,9 +18,9 @@
 <div class="debates row">
   {{#each list}}
     {{#if .options}}
-    <poll-sm id="{{._id}}" d={{.}} list="true" />
+    <poll-sm id="{{._id}}" d={{.}} view="list" />
     {{else}}
-    <debate-sm id="{{._id}}" d={{.}} list="true" />
+    <debate-sm id="{{._id}}" d={{.}} view="list" />
     {{/if}}
   {{/each}}
 </div>

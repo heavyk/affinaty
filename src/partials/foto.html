@@ -7,7 +7,6 @@ let repeat = require('../lib/utils').repeat
 let dpr = Math.round(window.devicePixelRatio || 1)
 component.exports = {
   onconfig () {
-    this.get('src') || this.set('src', null)
     this.get('shape') || this.set('shape', 'rd')
     this.get('default') || this.set('default', '/img/default.svg')
   },

@@ -49,7 +49,8 @@
     </p>
   </div>
   {{/if d.tag}}
-  {{#if list}}
+
+  {{#if view === 'list'}}
     <div class="text">
       <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
     </div>
@@ -197,8 +198,8 @@ component.exports = {
   },
   oncomplete () {
     let n
-    if (this.get('list')) {
-      n = this.find('a.text')
+    if (this.get('view') === 'list') {
+      n = this.find('div.text')
       this.set('read_more', n.scrollHeight > n.clientHeight)
     }
     if (n = this.find('.foto img')) {

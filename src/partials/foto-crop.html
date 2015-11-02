@@ -77,7 +77,8 @@ component.exports = {
         }
       }
     })
-    this.parent.on('finish-cropping', (cb) => {
+
+    this.parent.on('finish-cropping', this.onfinishCropping = (cb) => {
       if (this.get('cropped')) cb()
       else this.fire('done', cb)
     })
@@ -150,6 +151,7 @@ component.exports = {
   },
   onteardown () {
     this.cropHost.destroy()
+    this.parent.off('finish-cropping', this.onfinishCropping)
   }
 }
 </script>

@@ -185,6 +185,10 @@ component.exports = {
       })
     })
 
+    this.observe('mbox', (mbox) => {
+      this.set_members(mbox)
+    })
+
     this.on('add', (event) => {
       event.original.preventDefault()
       let text = this.get('text').trim()

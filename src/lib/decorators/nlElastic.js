@@ -31,7 +31,7 @@ function nlElastic (node, keypath, padding) {
   ta.value = text
 
   var win = window,
-    ractive = node._ractive.root,
+    ractive = Ractive.getNodeInfo(node).ractive,
     mirrorInitStyle = 'position: absolute; top: -999px; right: auto; bottom: auto;' +
       'left: 0; overflow: hidden; -webkit-box-sizing: content-box;' +
       '-moz-box-sizing: content-box; box-sizing: content-box;' +
