@@ -167,7 +167,7 @@ component.exports = {
       }
     })
     this.set('loading', true)
-    api.my.notifier.until('/', () => {
+    api.my.notifier.until('/', () => { api.category.until('/', () => {
       let vote = []
       let post = []
       for (var i = 0; i < api.my.notifier.post.length; i++) {
@@ -186,7 +186,7 @@ component.exports = {
         loading: false,
         post, vote
       })
-    })
+    }) })
     this.observe('tab', (tab) => {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
