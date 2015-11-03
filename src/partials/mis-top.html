@@ -21,8 +21,12 @@
             </a>
             <div class="vote">
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
+              <!-- {{.t}}:  -->
               {{VERB[.t]}} <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
             </div>
+            <span class="remove" on-click="remove(this)">
+              <i class="fa fa-close" />
+            </span>
           </div>
         {{/each}}
       {{else}}
@@ -32,13 +36,17 @@
               <foto src="{{b.foto}}" size="z" />
             </a>
             <div class="action ellipsis">
+              <!-- {{.t}}:  -->
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
               {{VERB[.t]}} en
-              <a href="/category/{{a.category._id}}">{{a.category.title}}</a>
+              <a href="/category/{{a.category._id}}">{{.c.category.title}}</a>
             </div>
             <div class="text ellipsis">
-              <a href="{{ link(this) }}" on-click="remove(this)">“{{a.text}}”</a>
+              <a href="{{ link(this) }}" on-click="remove(this)">“{{.c.text}}”</a>
             </div>
+            <span class="remove" on-click="remove(this)">
+              <i class="fa fa-close" />
+            </span>
           </div>
         {{/post}}
       {{/if}}
@@ -58,6 +66,19 @@
   max-height: 360px;
   background: #fff;
   position: relative;
+}
+
+.remove {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  font-size: 12px;
+  font-weight: 300;
+  color: #c3c3c3;
+}
+.remove:hover {
+  color: #f00;
+  cursor: pointer;
 }
 
 .vote {
@@ -89,6 +110,7 @@
 .list {
   height: 55px;
   padding-left: 5px;
+  position: relative;
 }
 .text {
   color: #c3c3c3;
@@ -168,19 +190,16 @@ component.exports = {
     })
     this.set('loading', true)
     api.my.notifier.until('/', () => { api.category.until('/', () => {
-      let vote = []
-      let post = []
-      for (var i = 0; i < api.my.notifier.post.length; i++) {
-        let p = api.my.notifier.post[i]
-        if (p.c) {
-          p.a.category = api.category.get(p.a.category)
-          post.push(p)
-        } else api.my.notifier._remove(p)
+      let vote = api.my.notifier.post
+      let post = api.my.notifier.vote
+      for (var i = 0; i < post.length; i++) {
+        let p = post[i]
+        if (!p.c) api.my.notifier._remove(p)
+        else if (typeof p.c.category === 'string') p.c.category = api.category.get(p.c.category)
       }
-      for (var i = 0; i < api.my.notifier.vote.length; i++) {
-        let v = api.my.notifier.vote[i]
-        if (v.c) vote.push(v)
-        else api.my.notifier._remove(v)
+      for (var i = 0; i < vote.length; i++) {
+        let v = vote[i]
+        if (!v.c) api.my.notifier._remove(v)
       }
       this.set({
         loading: false,
