@@ -22,10 +22,6 @@
             <div class="vote">
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
               {{VERB[.t]}} <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
-              <!-- <a href="/category/{{a.category._id}}">{{a.category.title}}</a> -->
-              <!-- <div class="text ellipsis">
-                <a href="{{ link(this) }}" on-click="remove(this)">“{{a.text}}”</a>
-              </div> -->
             </div>
           </div>
         {{/each}}
@@ -35,15 +31,13 @@
             <a href="/profile/{{b._id}}">
               <foto src="{{b.foto}}" size="z" />
             </a>
-            <div class="item ellipsis">
+            <div class="action ellipsis">
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
-              {{VERB[.t]}}
-              <!-- {{TYPE[.t]}} -->
-              en
+              {{VERB[.t]}} en
               <a href="/category/{{a.category._id}}">{{a.category.title}}</a>
-              <div class="text ellipsis">
-                <a href="{{ link(this) }}" on-click="remove(this)">“{{a.text}}”</a>
-              </div>
+            </div>
+            <div class="text ellipsis">
+              <a href="{{ link(this) }}" on-click="remove(this)">“{{a.text}}”</a>
             </div>
           </div>
         {{/post}}
@@ -63,9 +57,6 @@
   min-height: 100px;
   max-height: 360px;
   background: #fff;
-  position: relative;
-}
-.item {
   position: relative;
 }
 
@@ -106,6 +97,7 @@
 }
 .text a {
   color: #939393;
+  padding-left: 5px;
 }
 .text a:hover {
   color: #fd270d;
@@ -128,9 +120,6 @@ a.tag {
 
 
 <script>
-// let each = require('../lib/lodash/collection/each')
-// let trunc = require('../lib/lodash/string/trunc')
-
 component.exports = {
   onconfig () {
     let list = []
@@ -168,8 +157,8 @@ component.exports = {
         // case 'd': return `/debate/${d.b._id}/comments` // debate-comment
         // case 'p': return `/poll/${d.b._id}/comments` // poll-comment
         // case 'u': return `/debate/${d.b._id}` // debate-opinion
-        case 'j': return `/poll/${d.b._id}` // poll-selection
-        case 'm': return `/inbox/thread/${d.c.mbox}` // mbox-msg
+        // case 'j': return `/poll/${d.b._id}` // poll-selection
+        // case 'm': return `/inbox/thread/${d.c.mbox}` // mbox-msg
         case 'D': return `/debate/${d.c._id}` // new-debate
         case 'P': return `/poll/${d.c._id}` // new-poll
         case 'O': return `/debate/${d.c._id}` // new-opinion
@@ -179,8 +168,6 @@ component.exports = {
     })
     this.set('loading', true)
     api.my.notifier.until('/', () => {
-      // let post = api.my.notifier.post
-      // let vote = api.my.notifier.vote
       let vote = []
       let post = []
       for (var i = 0; i < api.my.notifier.post.length; i++) {
@@ -188,11 +175,12 @@ component.exports = {
         if (p.c) {
           p.a.category = api.category.get(p.a.category)
           post.push(p)
-        }
+        } else api.my.notifier._remove(p)
       }
       for (var i = 0; i < api.my.notifier.vote.length; i++) {
         let v = api.my.notifier.vote[i]
         if (v.c) vote.push(v)
+        else api.my.notifier._remove(v)
       }
       this.set({
         loading: false,
@@ -203,21 +191,8 @@ component.exports = {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
   },
-  go () {
-    this.set('loading', true)
-    api.action('pop:tag*', this.get('query'), (data) => {
-      this.set('loading', false)
-
-      each(data.score, (v, id) => {
-        let d = data[id]
-        this.list.push({d: d, score: v, posts: data.posts[id]})
-      })
-
-      this.list.sort((a, b) => a.score > b.score ? -1 : 1)
-    })
-  },
   remove (d) {
-    // api.my.notifier._remove(d)
+    api.my.notifier._remove(d)
   },
 }
 </script>
