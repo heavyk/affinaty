@@ -14,7 +14,7 @@
       <spinner scale="0.2" />
     {{else}}
       {{#if tab === 'vote'}}
-        {{#each vote}}
+        {{#vote}}
           <div class="list">
             <a href="/profile/{{b._id}}">
               <foto src="{{b.foto}}" size="z" />
@@ -28,7 +28,12 @@
               <i class="fa fa-close" />
             </span>
           </div>
-        {{/each}}
+        {{else}}
+          <div class="empty-text ellipsis">
+            <div>no hay nuevas opiniones.</div>
+            <div>tienes q esperar un poco</div>
+          </div>
+        {{/vote}}
       {{else}}
         {{#post}}
           <div class="list">
@@ -47,6 +52,11 @@
             <span class="remove" on-click="remove(this)">
               <i class="fa fa-close" />
             </span>
+          </div>
+        {{else}}
+          <div class="empty-text ellipsis">
+            <div>no hay nuevas publicaciones.</div>
+            <div>tienes q esperar un poco</div>
           </div>
         {{/post}}
       {{/if}}
@@ -71,7 +81,7 @@
 .remove {
   position: absolute;
   right: 8px;
-  top: 2px;
+  top: 18px;
   font-size: 12px;
   font-weight: 300;
   color: #c3c3c3;
@@ -112,6 +122,12 @@
   padding-left: 5px;
   position: relative;
 }
+.empty-text {
+  text-align: center;
+  padding: 20px;
+  font-size: 150%;
+}
+.empty-text,
 .text {
   color: #c3c3c3;
   margin: 0 25px 0 5px;
