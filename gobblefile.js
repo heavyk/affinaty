@@ -16,6 +16,7 @@ if (gobble.env() === 'production') {
 
 var affinaty = gobble([
 	gobble('src')
+		.transform(require('./gobble-translator.js'), {lang: 'en', local: 'us'})
 		.transform(require('./gobble-ractive.js'), {
 			type: 'es6',
 			postcss: [
