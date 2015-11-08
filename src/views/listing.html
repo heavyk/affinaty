@@ -1,24 +1,42 @@
 <link rel='ractive' href='../partials/debate-list.html'>
 <link rel='ractive' href='../partials/affinaties.html'>
 <link rel='ractive' href='../partials/pop-tag-carousel.html'>
+<link rel='ractive' href='../partials/pop-tag-list.html'>
+<link rel='ractive' href='../partials/mis-top.html'>
 
 <div class="left-column" style="width: {{leftWidth}}px">
-  <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
-    <div class="pop-tag-container"> 
-      <div class="pop-tag-container-inner" style="width: {{leftWidth - 16 - 10}}px">
-        <pop-tag-carousel category="{{category}}" />
+
+  {{#if panel !== 'mis-top'}}
+    <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
+      <div class="title section-title">Populares</div>
+      <div class="pop-tag-container">
+        <div class="pop-tag-container-inner" style="width: {{leftWidth - 16 - 10}}px">
+          <pop-tag-carousel category="{{category}}" />
+        </div>
       </div>
     </div>
-  </div>
+  {{else}}
+    <h2>Mis Top</h2>
+  {{/if}}
   <div class="debates-list" style="width: {{leftWidth}}px">
-    <debate-list category="{{category}}" tag="{{tag}}" />
+    {{#if panel}}
+      <debate-list category="{{category}}" tag="{{tag}}" top="{{ panel === 'mis-top' ? true : false }}" />
+    {{/if}}
   </div>
 </div>
 <div class="right-column" style="width: {{rightWidth}}px">
   <affinaties />
+  {{#if panel === 'mis-top'}}
+    <pop-tag-list />
+  {{else}}
+    <mis-top />
+  {{/if}}
 </div>
 
 <style>
+h2 {
+  text-align: center;
+}
 .right-column {
   margin-left: 30px;
   margin-top: 10px;
@@ -31,19 +49,6 @@
 .pop-tag-container-outer {
   box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
   border-radius: 30px 9px 9px 9px;
-}
-
-.pop-tag-title {
-  border: solid 1px #E6E6E6;
-  font-family: 'Pacifico';
-  color: #fd270d;
-  font-size: 17px;
-  padding: 0 0 10px 10px;
-  background-color: #fff;
-  border-radius: 30px 9px 0px 0px;
-  text-align: center;
-  width: 100%;
-  height: 30px;
 }
 
 .left-column {
@@ -76,6 +81,13 @@ let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   onconfig () {
+    this.on('dispatch', () => {
+      let p = router.uri.path
+      let i = p.indexOf('/', 1)
+      let panel = p.substring(1, ~i ? i : p.length)
+      this.set('panel', panel)
+      console.info('panel', panel)
+    })
     let layout = () => {
       let inner = window.innerWidth - 60
       let right = inner > 600 ? 250 : 0
@@ -86,12 +98,11 @@ component.exports = {
     let resizer = debounce(() => {
       setTimeout(layout, 1)
     }, 500, true)
-    let teardown = () => {
-      window.removeEventListener('resize', resizer)
-    }
     layout()
     window.addEventListener('resize', resizer)
-    this.once('teardown', teardown)
+    this.once('teardown', () => {
+      window.removeEventListener('resize', resizer)
+    })
   },
 }
 </script>

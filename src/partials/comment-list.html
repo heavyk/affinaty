@@ -185,7 +185,6 @@ let assign = require('../lib/lodash/object/assign')
 let onresize = require('../lib/dom/element-onresize')
 let findIndex = require('../lib/lodash/array/findIndex')
 component.exports = {
-  // adapt: ['promise-alt'],
   isolated: true,
   modal: require('../modal'),
   onconfig () {
@@ -234,7 +233,7 @@ component.exports = {
     })
     this.on('remove', (event) => {
       let id = event.context._id
-      let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
+      let modal = this.modal('are-you-sure', {title: `¿Eliminar?`, what: 'este comentario'})
       // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
       api.my.opinion.on('answer', (v) => {
         if (v !== void 0) {
