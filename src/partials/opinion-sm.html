@@ -171,10 +171,13 @@ component.exports = {
   pos (pos, skip) {
     let p = api.my.opinion.debate_pos(this.get('d._id'))
     if (pos !== p && !skip) {
-      if (!api.me.birthdate || api.me.planet == null) {
+      if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
         this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
-            this.pos(pos, !api.me.birthdate || api.me.planet == null ? true : false)
+            this.pos(pos, !api.me.birthdate
+              || !api.me.c
+              || !api.me.p
+              || api.me.planet == null ? true : false)
           }, 200)
         })
       } else {

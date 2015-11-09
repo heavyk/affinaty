@@ -12,9 +12,9 @@
 
     <div class="{{prevote ? '' : 'left-column'}}">
 
-      <div class="field localization" style="display: {{prevote ? 'none' : 'block'}}">
+      <div class="field localization">
         <div class="left-column">
-          <select value="{{d.country}}" class="{{errors.d.country ? 'invalid' : ''}}">
+          <select value="{{me.c}}" class="{{errors.me.c ? 'invalid' : ''}}">
             <option value="">País</option>
             {{#each countries}}
             <option value="{{short}}">{{name}}</option>
@@ -23,7 +23,7 @@
         </div>
         {{#if provinces}}
         <div class="col-right">
-          <select value="{{d.province}}" class="{{errors.d.province ? 'invalid' : ''}}">
+          <select value="{{me.p}}" class="{{errors.me.p ? 'invalid' : ''}}">
             <option value="">Provincia</option>
             {{#each provinces}}
             <option value="{{short}}">{{name}}</option>
@@ -34,17 +34,16 @@
       </div>
 
       <div class="field planet">
-        <div class="left-column {{errors.d.planet ? 'invalid' : ''}}" on-click="set('d.planet', 0)">
-          <input type="radio" name="{{d.planet}}" value="0"> Mujer
+        <div class="left-column {{errors.me.planet ? 'invalid' : ''}}" on-click="set('me.planet', 0)">
+          <input type="radio" name="{{me.planet}}" value="0"> Mujer
         </div>
-        <div class="col-right {{errors.d.planet ? 'invalid' : ''}}" on-click="set('d.planet', 1)">
-          <input type="radio" name="{{d.planet}}" value="1"> Hombre
+        <div class="col-right {{errors.me.planet ? 'invalid' : ''}}" on-click="set('me.planet', 1)">
+          <input type="radio" name="{{me.planet}}" value="1"> Hombre
         </div>
       </div>
 
-      <div class="field birthdate {{errors.d.birthdate ? 'invalid' : ''}}">
-        <!-- <input type="text" class="birthdate {{errors.d.birthdate ? 'invalid' : ''}}" placeholder="fecha de cumpleaños" decorator="pikaday:d.birthdate"> -->
-        <date-select value="{{d.birthdate}}" />
+      <div class="field birthdate {{errors.me.birthdate ? 'invalid' : ''}}">
+        <date-select value="{{me.birthdate}}" />
       </div>
 
       <button on-click="change-appearance" class="button-sign-up">
@@ -59,7 +58,7 @@
 
     <!-- right column -->
     <div class="col-right" style="display: {{prevote ? 'none' : 'block'}}">
-      <div class="foto {{errors.d.foto ? 'invalid' : ''}}">
+      <div class="foto {{errors.me.foto ? 'invalid' : ''}}">
         <!-- Sí, quiero esta foto -->
         {{#if change_foto}}
         <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{cropped}}" />
@@ -186,82 +185,84 @@ button.button-sign-up {
 
 <script>
 let moment = require('moment')
-let _provinces = require('provinces')
 let Validator = require('../validator')
 component.exports = {
   // isolated: true,
   onconfig () {
-    this.get('d.country') || this.set('d.country', null)
-  },
-  oninit () {
-    let pika
     let me = api.get('me')
     this.set('active', 'appearance')
     api.observe('me', (_me) => {
       this.set('me', _me)
-      this.set('d', _me)
       me = _me
     })
     this.set('change_foto', true)
-    this.set('d.country', '')
-    this.set('d.birthdate', me.birthdate)
-    let countries = [
-      {name: 'United States', short: 'US'},
-      {name: 'United Kingdom', short: 'GB'},
-      {name: 'Canada', short: 'CA'},
-      {name: 'Mexico', short: 'MX'},
-      {name: 'España', short: 'ES'},
-      {name: 'Australia', short: 'AU'},
-      {name: 'China', short: 'CN'},
-      {name: 'Germany', short: 'DE'},
-      {name: 'Belgium', short: 'BE'},
-      {name: 'Netherlands', short: 'NL'},
-      {name: 'Denmark', short: 'DK'},
-      {name: 'Turkey', short: 'TR'},
-      {name: 'Indonesia', short: 'ID'},
-      {name: 'Jordan', short: 'JO'},
-      {name: 'India', short: 'IN'},
-      {name: 'Cambodia', short: 'KH'},
-      {name: 'Ethiopia', short: 'ET'},
-      {name: 'Peru', short: 'PE'},
-      {name: 'Cuba', short: 'CU'},
-      {name: 'Argentina', short: 'AR'},
-      {name: 'Chile', short: 'CL'},
-      {name: 'Bolivia', short: 'BO'},
-      {name: 'Bangladesh', short: 'BD'},
-      {name: 'Pakistan', short: 'PK'},
-      {name: 'Nigeria', short: 'NG'},
-      {name: 'Japan', short: 'JP'},
-      {name: 'Austria', short: 'AT'},
-      {name: 'Brazil', short: 'BR'},
-      {name: 'Philippines', short: 'PH'},
-      {name: 'Vietnam', short: 'VN'},
-    ]
-    countries.sort((a, b) => {
-      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-    })
-    this.set('countries', countries)
     this.observe('cropped', (v) => {
-      if (v && v.length) this.set('d.foto', v[0])
+      if (v && v.length) this.set('me.foto', v[0])
     })
 
-    this.d = new Validator('d', {
+    let set_countries = (data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem('country-list', list)
+      }
+      this.set('countries', list)
+    }
+
+    local.getItem('country-list', (err, data) => {
+      if (!data || true) {
+        api.action('country-list', {}, (data) => {
+          set_countries(data)
+        })
+      } else {
+        set_countries(data)
+      }
+    })
+
+    let set_provinces = (code, data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem(`provinces-${code}`, list)
+      }
+      this.set('provinces', list)
+    }
+
+    this.observe('me.c', (code) => {
+      if (code) {
+        local.getItem(`provinces-${code}`, (err, data) => {
+          if (!data || true) {
+            api.action('province-list', {code}, (data) => {
+              set_provinces(code, data)
+            })
+          } else {
+            set_provinces(code, data)
+          }
+        })
+      }
+    }, {initial: false})
+
+    this.v = new Validator('me', {
       'foto': {required: false, type: 'id'},
       'planet': {required: true, type: 'integer', min: 0, max: 1},
-      'country': {required: false, type: 'string'},
-      'province': {required: false, type: 'string'},
+      'c': {required: true, type: 'string', min: 1, max: 2},
+      'p': {required: true, type: 'string', min: 1, max: 3},
       'birthdate': {required: true, type: 'integer'}, // TODO min / max - eg. min: new Date(...).valueOf()
     })
-    this.observe('d', () => {
-      if (this.d.submitted)
-        this.set('errors', this.d.validate(this).errors)
+    this.observe('me', () => {
+      if (this.v.submitted)
+        this.set('errors', this.v.validate(this).errors)
     })
     this.on('submit', (e) => {
       e.original.preventDefault()
       e.original.stopImmediatePropagation()
-      this.d.submitted = true
+      this.v.submitted = true
       this.fire('submitting', () => {
-        let form = this.d.validate(this)
+        let form = this.v.validate(this)
         console.log('form', form)
         this.set('errors', form.errors)
         // need to do like in the settings panel.
@@ -276,23 +277,9 @@ component.exports = {
     })
     if (this.get('prevote')) {
       this.set('d', api.me)
-      this.d.submitted = true
-      let form = this.d.validate(this)
+      this.v.submitted = true
+      let form = this.v.validate(this)
       this.set('errors', form.errors)
-    }
-  },
-  computed: {
-    provinces () {
-      let country = this.get('d.country')
-      let provinces = []
-      for (let p of _provinces) {
-        if (p.country === country)
-          provinces.push({name: p.name, short: p.short})
-      }
-      provinces.sort((a, b) => {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-      })
-      return provinces
     }
   },
 }

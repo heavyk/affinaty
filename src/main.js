@@ -81,7 +81,8 @@ import local from './local'
 window.local = local
 
 // error handler
-window.onerror = function () {
+window.onerror = function (err) {
+  console.error(err)
   debugger
 }
 
