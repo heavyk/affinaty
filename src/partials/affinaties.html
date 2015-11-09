@@ -39,8 +39,9 @@
               <a href="/profile/{{._id}}" title="{{.name}}">
                 <foto src="{{foto}}" size="y" />
               </a>
-              <div>
-                <h4><a href="/profile/{{._id}}" title="{{.name}}"> {{name}}</a></h4>
+              <div class="ellipsis">
+                <!-- <h4><a href="/profile/{{._id}}" title="{{.name}}"> {{name}}</a></h4> -->
+                <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{name}}</a>
                 <h5>{{title}}</h5>
               </div>
             </div>
@@ -134,9 +135,9 @@
   color: #fd270d;
 }
 .user h5 {
-  color: #c2c2c2;
+  color: #939393;
   font-size: 12px;
-  font-weight: 300;
+  /*font-weight: 300;*/
 }
 
 .view_plus {

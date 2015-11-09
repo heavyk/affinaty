@@ -10,6 +10,13 @@
     <span class="tab{{#if tab !== 'post'}} active{{/if}}" on-click="set('tab', 'vote')">Opiniones</span>
   </div>
   <div class="list-container">
+    <div class="gm-scrollbar -vertical">
+      <div class="thumb"></div>
+    </div>
+    <div class="gm-scrollbar -horizontal">
+      <div class="thumb"></div>
+    </div>
+    <div class="gm-scroll-view">
     {{#if loading}}
       <spinner scale="0.2" />
     {{else}}
@@ -22,7 +29,9 @@
             <div class="vote">
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
               <!-- {{.t}}:  -->
-              {{VERB[.t]}} <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
+              {{VERB[.t]}}
+              en
+              <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
             </div>
             <span class="remove" on-click="remove(this)">
               <i class="fa fa-close" />
@@ -41,12 +50,15 @@
               <foto src="{{b.foto}}" size="z" />
             </a>
             <div class="action ellipsis">
+
               <!-- {{.t}}:  -->
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
-              {{VERB[.t]}} en
-              <a href="/category/{{a.category._id}}">{{.c.category.title}}</a>
+              {{VERB[.t]}}
+              <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
             </div>
             <div class="text ellipsis">
+              <!-- en -->
+              <a href="/category/{{a.category._id}}" class="category">{{.c.category.title}}</a>
               <a href="{{ link(this) }}" on-click="remove(this)">“{{.c.text}}”</a>
             </div>
             <span class="remove" on-click="remove(this)">
@@ -61,6 +73,7 @@
         {{/post}}
       {{/if}}
     {{/if loading}}
+    </div>
   </div>
   <div class="view-more">
     <a href="/mis-top">Ver mis top</a>
@@ -133,6 +146,9 @@
   margin: 0 25px 0 5px;
   font-weight: 300;
 }
+.category {
+  font-weight: 600;
+}
 .text a {
   color: #939393;
   padding-left: 5px;
@@ -171,8 +187,8 @@ component.exports = {
       // 'm': 'un mensaje', // mbox-msg
       'D': 'una opinión', // new-debate
       'P': 'una encuesta', // new-poll
-      'O': 'en esta opinión', // new-opinion
-      'S': 'en esta encuesta', // new-selection
+      'O': 'una opinión', // new-opinion
+      'S': 'una encuesta', // new-selection
       // 'F': 'siguiendo', // new-follower
     })
     this.set('VERB', {
@@ -184,10 +200,10 @@ component.exports = {
       // 'm': 'te ha enviado', // mbox-msg
       // 'D': 'ha creado', // new-debate
       // 'P': 'ha creado', // new-poll
-      'D': 'ha opinado', // new-debate
-      'P': 'pide opinión', // new-poll
-      'O': 'ha votado', // new-opinion
-      'S': 'ha participado', // new-selection
+      'D': 'ha votado', // new-debate
+      'P': 'ha participado', // new-poll
+      'O': 'ha publicado', // new-opinion
+      'S': 'ha creado', // new-selection
       // 'F': 'te está', // new-follower
     })
     this.set('link', (d) => {
@@ -226,8 +242,29 @@ component.exports = {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
   },
+  oncomplete () {
+    let container = this.find('.list-container')
+    let gemini = new (require('gemini-scrollbar'))({
+      element: container,
+      autoshow: true,
+      createElements: false,
+    }).create()
+
+    let updater = (v) => {
+      gemini.update()
+      // resizer()
+    }
+
+    this.observe('vote', updater, {initial: false})
+    this.observe('post', updater, {initial: false})
+
+    this.once('teardown', () => {
+      gemini.destroy()
+      onresize.removeResizeListener(container, resizer)
+    })
+  },
   remove (d) {
-    api.my.notifier._remove(d)
+    //api.my.notifier._remove(d)
   },
 }
 </script>
