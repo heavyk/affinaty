@@ -54,16 +54,16 @@
           <div><h5>Cambia tu localización</h5></div>
           <div class="row">
             <div class="col-xs-6">
-              <select value="{{country}}">
+              <select value="{{me.c}}">
                 <option value="">País</option>
                 {{#each countries}}
-                <option value="{{short}}">{{name}}</option>
+                <option value="{{.short}}">{{.name}}</option>
                 {{/each}}
               </select>
             </div>
             {{#if provinces}}
             <div class="col-xs-6">
-              <select value="{{province}}">
+              <select value="{{me.p}}">
                 <option value="">Provincia</option>
                 {{#each provinces}}
                 <option value="{{short}}">{{name}}</option>
@@ -325,7 +325,6 @@ button.button-sign-up {
 
 <script>
 let moment = require('moment')
-let _provinces = require('provinces')
 let assign = require('../lib/lodash/object/assign')
 let find = require('../lib/lodash/collection/find')
 let isEqual = require('../lib/lodash/lang/isEqual')
@@ -346,43 +345,52 @@ component.exports = {
     ]
     this.set('network_list', network_list)
 
-    // TODO - this should exist somewhere else - perhaps on the server?
-    let countries = [
-      {name: 'United States', short: 'US'},
-      {name: 'United Kingdom', short: 'GB'},
-      {name: 'Canada', short: 'CA'},
-      {name: 'Mexico', short: 'MX'},
-      {name: 'España', short: 'ES'},
-      {name: 'Australia', short: 'AU'},
-      {name: 'China', short: 'CN'},
-      {name: 'Germany', short: 'DE'},
-      {name: 'Belgium', short: 'BE'},
-      {name: 'Netherlands', short: 'NL'},
-      {name: 'Denmark', short: 'DK'},
-      {name: 'Turkey', short: 'TR'},
-      {name: 'Indonesia', short: 'ID'},
-      {name: 'Jordan', short: 'JO'},
-      {name: 'India', short: 'IN'},
-      {name: 'Cambodia', short: 'KH'},
-      {name: 'Ethiopia', short: 'ET'},
-      {name: 'Peru', short: 'PE'},
-      {name: 'Cuba', short: 'CU'},
-      {name: 'Argentina', short: 'AR'},
-      {name: 'Chile', short: 'CL'},
-      {name: 'Bolivia', short: 'BO'},
-      {name: 'Bangladesh', short: 'BD'},
-      {name: 'Pakistan', short: 'PK'},
-      {name: 'Nigeria', short: 'NG'},
-      {name: 'Japan', short: 'JP'},
-      {name: 'Austria', short: 'AT'},
-      {name: 'Brazil', short: 'BR'},
-      {name: 'Philippines', short: 'PH'},
-      {name: 'Vietnam', short: 'VN'},
-    ]
-    countries.sort((a, b) => {
-      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
+    let set_countries = (data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem('country-list', list)
+      }
+      this.set('countries', list)
+    }
+
+    local.getItem('country-list', (err, data) => {
+      if (!data || true) {
+        api.action('country-list', {}, (data) => {
+          set_countries(data)
+        })
+      } else {
+        set_countries(data)
+      }
     })
-    this.set('countries', countries)
+
+    let set_provinces = (code, data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem(`provinces-${code}`, list)
+      }
+      this.set('provinces', list)
+    }
+
+    this.observe('me.c', (code) => {
+      if (code) {
+        local.getItem(`provinces-${code}`, (err, data) => {
+          if (!data || true) {
+            api.action('province-list', {code}, (data) => {
+              set_provinces(code, data)
+            })
+          } else {
+            set_provinces(code, data)
+          }
+        })
+      }
+    }, {initial: false})
+
     api.observe('me', (_me) => {
       if (!_me.networks) _me.networks = {}
       this.set('me', _me)
@@ -421,9 +429,6 @@ component.exports = {
       console.log('n', n)
       this.set(`me.networks.${n}`, '')
       this.set('new_network', '')
-      // if (!me.networks)
-      // me.networks[n] = ''
-      // debugger
     })
     this.on('remove-network', (event) => {
       console.log('romoving', event.context.id)
@@ -512,18 +517,6 @@ component.exports = {
     this.fire('change-appearance')
   },
   computed: {
-    provinces () {
-      let country = this.get('country')
-      let provinces = []
-      for (let p of _provinces) {
-        if (p.country === country)
-          provinces.push({name: p.name, short: p.short})
-      }
-      provinces.sort((a, b) => {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-      })
-      return provinces
-    },
     network_count () {
       return Object.keys(this.get('me.networks')).length
     },
