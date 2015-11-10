@@ -213,7 +213,7 @@ component.exports = {
     }
 
     local.getItem('country-list', (err, data) => {
-      if (!data || true) {
+      if (!data) {
         api.action('country-list', {}, (data) => {
           set_countries(data)
         })
@@ -231,12 +231,13 @@ component.exports = {
         local.setItem(`provinces-${code}`, list)
       }
       this.set('provinces', list)
+      if (list.length === 0) this.set('me.p', '*')
     }
 
     this.observe('me.c', (code) => {
       if (code) {
         local.getItem(`provinces-${code}`, (err, data) => {
-          if (!data || true) {
+          if (!data) {
             api.action('province-list', {code}, (data) => {
               set_provinces(code, data)
             })
