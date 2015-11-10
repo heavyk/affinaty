@@ -252,7 +252,6 @@ component.exports = {
 
     let updater = (v) => {
       gemini.update()
-      // resizer()
     }
 
     this.observe('vote', updater, {initial: false})
@@ -260,11 +259,10 @@ component.exports = {
 
     this.once('teardown', () => {
       gemini.destroy()
-      onresize.removeResizeListener(container, resizer)
     })
   },
   remove (d) {
-    //api.my.notifier._remove(d)
+    api.my.notifier._remove(d)
   },
 }
 </script>

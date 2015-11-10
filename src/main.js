@@ -81,10 +81,11 @@ import local from './local'
 window.local = local
 
 // error handler
-window.onerror = function (err) {
-  console.error(err)
-  debugger
-}
+// TODO: only enable this if in release mode, that way we can log the error
+// window.onerror = function (err) {
+//   console.error(err)
+//   debugger
+// }
 
 // router init
 router
