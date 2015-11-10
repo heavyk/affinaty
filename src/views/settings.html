@@ -357,7 +357,11 @@ component.exports = {
     }
 
     local.getItem('country-list', (err, data) => {
-      if (!data || true) {
+      if (!data) {
+        // TODO: when we localize, we can also fetch the localized version using lang: 'en'
+        //  - then, we should combine the two, and if they're different, we should put it in parens
+        //   - España (Spain)
+        //   - Deutschland (Germany)
         api.action('country-list', {}, (data) => {
           set_countries(data)
         })
@@ -375,12 +379,13 @@ component.exports = {
         local.setItem(`provinces-${code}`, list)
       }
       this.set('provinces', list)
+      if (list.length === 0) this.set('me.p', '*')
     }
 
     this.observe('me.c', (code) => {
       if (code) {
         local.getItem(`provinces-${code}`, (err, data) => {
-          if (!data || true) {
+          if (!data) {
             api.action('province-list', {code}, (data) => {
               set_provinces(code, data)
             })
