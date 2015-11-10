@@ -30,12 +30,12 @@
     </li>
     <li class="button">
       <a class="home" href="/home">
-        <img src="/img/home.svg" width="30" height="30" />
+        <img src="/img/home.svg" width="25" height="25" />
       </a>
     </li>
     <li class="button">
       <a class="notifications" href="/inbox">
-        <img src="/img/inbox.svg" width="30" height="30" />
+        <img src="/img/inbox.svg" width="25" height="25" />
         {{#if new_msgs}}
           <span class="count">{{new_msgs}}</span>
         {{/if}}
@@ -43,7 +43,7 @@
     </li>
     <li class="button {{show_n ? 'selected' : ''}}">
       <a class="notifications" on-click="toggle('show_n')"><!-- href="/notifications" -->
-        <img src="/img/notifications.svg" width="30" height="30" />
+        <img src="/img/notifications.svg" width="25" height="25" />
         {{#if notifications}}
           <span class="count">{{notifications}}</span>
         {{/if}}
@@ -249,8 +249,10 @@ a.dropdown-toggle.moar-toggle {
   border-radius: 20px;
   background: #fff;
   left: -35px;
-  margin-top: 5px;
+  margin-top: 0px;
   top: 42px;
+  background: #fff;
+  border-radius: 30px 9px;
 }
 
 .moar-toggle,
