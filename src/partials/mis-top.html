@@ -58,7 +58,7 @@
             </div>
             <div class="text ellipsis">
               <!-- en -->
-              <a href="/category/{{a.category._id}}" class="category">{{.c.category.title}}</a>
+              <a href="/category/{{.c.category._id}}" class="category">{{.c.category.title}}</a>
               <a href="{{ link(this) }}" on-click="remove(this)">“{{.c.text}}”</a>
             </div>
             <span class="remove" on-click="remove(this)">
@@ -144,7 +144,7 @@
 .text {
   color: #c3c3c3;
   margin: 0 25px 0 5px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .category {
   font-weight: 600;
@@ -200,10 +200,10 @@ component.exports = {
       // 'm': 'te ha enviado', // mbox-msg
       // 'D': 'ha creado', // new-debate
       // 'P': 'ha creado', // new-poll
-      'D': 'ha votado', // new-debate
-      'P': 'ha participado', // new-poll
-      'O': 'ha publicado', // new-opinion
-      'S': 'ha creado', // new-selection
+      'D': 'ha publicado', // new-debate
+      'P': 'ha creado', // new-poll
+      'O': 'ha votado', // new-opinion
+      'S': 'ha participado', // new-selection
       // 'F': 'te está', // new-follower
     })
     this.set('link', (d) => {
@@ -222,8 +222,8 @@ component.exports = {
     })
     this.set('loading', true)
     api.my.notifier.until('/', () => { api.category.until('/', () => {
-      let vote = api.my.notifier.post
-      let post = api.my.notifier.vote
+      let vote = api.my.notifier.vote
+      let post = api.my.notifier.post
       for (var i = 0; i < post.length; i++) {
         let p = post[i]
         if (!p.c) api.my.notifier._remove(p)
