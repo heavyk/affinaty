@@ -40,8 +40,9 @@ var affinaty = gobble([
 				'dropzone', // this needs to be replaced by generic code
 				'easy-pie-chart',
 				'chart.js',
+				'es6-map',
 			],
-			strict: true
+			// strict: true
 		})
 		.transform('derequire')
 		.transform('browserify', {

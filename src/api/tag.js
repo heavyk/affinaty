@@ -42,7 +42,6 @@ class tag_ extends Ambition {
   }
 
   pregage () {
-    this.dd = new Map
     this['+created'] = this['-created'] = 0
     this.list = []
     this.exists = {}
