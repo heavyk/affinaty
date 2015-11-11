@@ -125,9 +125,10 @@ let Api = Ractive.extend({
       }
     }
     console.log('action:', action, _params)
-    if (!(_params.token = this.token))
+    if (!this.token)
       // TODO - instead of redirecting to the login page, we should just show a login modal
       this.signOut(true)
+    else _params.token = this.token
 
     return new Ractive.Promise((_resolve, _reject) => {
       let respond = (res) => {

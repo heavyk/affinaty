@@ -265,7 +265,6 @@ component.exports = {
       this.v.submitted = true
       this.fire('submitting', () => {
         let form = this.v.validate(this)
-        console.log('form', form)
         this.set('errors', form.errors)
         // need to do like in the settings panel.
         //
