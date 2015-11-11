@@ -242,25 +242,25 @@ component.exports = {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
   },
-  oncomplete () {
-    let container = this.find('.list-container')
-    let gemini = new (require('gemini-scrollbar'))({
-      element: container,
-      autoshow: true,
-      createElements: false,
-    }).create()
-
-    let updater = (v) => {
-      gemini.update()
-    }
-
-    this.observe('vote', updater, {initial: false})
-    this.observe('post', updater, {initial: false})
-
-    this.once('teardown', () => {
-      gemini.destroy()
-    })
-  },
+  // oncomplete () {
+  //   let container = this.find('.list-container')
+  //   let gemini = new (require('gemini-scrollbar'))({
+  //     element: container,
+  //     autoshow: true,
+  //     createElements: false,
+  //   }).create()
+  //
+  //   let updater = (v) => {
+  //     gemini.update()
+  //   }
+  //
+  //   this.observe('vote', updater, {initial: false})
+  //   this.observe('post', updater, {initial: false})
+  //
+  //   this.once('teardown', () => {
+  //     gemini.destroy()
+  //   })
+  // },
   remove (d) {
     api.my.notifier._remove(d)
   },

@@ -190,19 +190,19 @@ component.exports = {
     }, true)
     onresize.addResizeListener(container, resizer)
     resizer()
-    let gemini = new (require('gemini-scrollbar'))({
-      element: container,
-      autoshow: true,
-      createElements: false,
-    }).create()
+    // let gemini = new (require('gemini-scrollbar'))({
+    //   element: container,
+    //   autoshow: true,
+    //   createElements: false,
+    // }).create()
 
     this.observe('list', (v) => {
-      gemini.update()
+      // gemini.update()
       resizer()
     }, {initial: false})
 
     this.once('teardown', () => {
-      gemini.destroy()
+      // gemini.destroy()
       onresize.removeResizeListener(container, resizer)
     })
   }
