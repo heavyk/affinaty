@@ -2,6 +2,11 @@
 
 let Ractive = require('ractive')
 
+// polyfill map
+// TODO delete me when doing koa polyfills
+if (typeof Map === 'undefined')
+  window.Map = require('es6-map')
+
 Ractive.nexus = {
   dd: new Map,
   debate: new Ractive({

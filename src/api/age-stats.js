@@ -95,6 +95,4 @@ class Stats extends Ambition {
   }
 }
 
-// Stats.dd = new Map
-
 export default Stats

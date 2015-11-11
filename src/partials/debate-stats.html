@@ -164,6 +164,10 @@ button {
 </style>
 
 <script>
+// polyfill map
+// TODO delete me when doing koa polyfills
+if (typeof Map === 'undefined')
+  window.Map = require('es6-map')
 let pie = require('easy-pie-chart')
 let Chart = require('chart.js')
 let assign = require('../lib/lodash/object/assign')
