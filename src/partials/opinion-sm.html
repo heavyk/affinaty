@@ -2,27 +2,27 @@
 
 <div class="voting clearfix">
   <div class="right">
-    <button class="button-mas {{d.pos === 1 ? 'active' : ''}}" on-click="+1" decorator="tip:'De acuerdo',35">
+    <button class="button-mas {{d.pos === 1 ? 'active-mas' : ''}}" on-click="+1" decorator="tip:'De acuerdo',35">
       <i class="fa fa-check"></i>
     </button>
-    <button class="button-mas-mas {{d.pos === 2 ? 'active' : ''}}" on-click="+2" decorator="tip:'Muy de acuerdo',35">
+    <button class="button-mas-mas {{d.pos === 2 ? 'active-mas-mas' : ''}}" on-click="+2" decorator="tip:'Muy de acuerdo',35">
       <i class="fa fa-check"></i>
       <i class="fa fa-check"></i>
     </button>
   </div>
   <div class="left">
-    <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}" on-click="-2" decorator="tip:'Muy en desacuerdo',35">
+    <button class="button-woa-woa {{d.pos === -2 ? 'active-woa-woa' : ''}}" on-click="-2" decorator="tip:'Muy en desacuerdo',35">
       <i class="fa fa-times"></i>
       <i class="fa fa-times"></i>
     </button>
-    <button class="button-woa {{d.pos === -1 ? 'active' : ''}}" on-click="-1" decorator="tip:'En desacuerdo',35">
+    <button class="button-woa {{d.pos === -1 ? 'active-woa' : ''}}" on-click="-1" decorator="tip:'En desacuerdo',35">
       <i class="fa fa-times"></i>
     </button>
   </div>
   <div class="cancel">
     {{#d.pos}}
-      <button class="cancel" on-click="cancel" decorator="tip:'Cancelar',35">
-        <i class="fa fa-ban"></i>
+      <button class="cancel" style="background-color:{{params_vote.color}}" on-click="cancel" decorator="tip:'Cancelar',35">
+        {{params_vote.text}}
       </button>
     {{/d.pos}}
   </div>
@@ -45,10 +45,18 @@
   border-radius: 0px 0px 30px 9px;
 }
 button.cancel {
-  padding: 4px 8px;
-  border: solid 1px #ddd;
-  color: #aaa;
+  padding: 6px 6px 8px 8px;
+  color: #fff;
   position: relative;
+  border: 1px solid #222;
+  border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.15);
+  border-radius: 7px;
+  text-decoration: none;
+  margin: 2px 0 3px -3px;
+  font-size: 14px;
+  line-height: .8;
+  outline: 0;
+  font-family: Pacifico;
 }
 button {
   cursor: pointer;
@@ -60,12 +68,27 @@ button.cancel .fa-ban {
 }
 button:hover {
   /*color: #333;*/
-  background-color: #444;
+  /*background-color: #444;*/
 }
 .active {
   background-color: #333;
 }
-
+.active-woa-woa{
+  background-color: #bb0217;
+  color:#fff;
+}
+.active-woa{
+  background-color: #cc4d41;
+  color:#fff;
+}
+.active-mas{
+  background-color: #5a9727;
+  color:#fff;
+}
+.active-mas-mas{
+  background-color: #2e8034;
+  color:#fff;
+}
 .fa-ban {
   margin: 0;
   margin-left: 1px;
@@ -73,63 +96,14 @@ button:hover {
 div.cancel {
   text-align: center;
 }
-
 .left {
   float: left;
-  margin-left: 20px;
+  margin-left: 10px;
 }
 .right {
   float: right;
-  margin-right: 20px;
+  margin-right: 10px;
 }
-
-/*.left button {
-  color:#f00;
-}
-.right button:hover,
-.left button:hover {
-  background-color: #333;
-}
-
-.left button:first-child {
-  position: relative;
-  margin-right: 5px;
-}*/
-
-/*.fa-times {
-  position: relative;
-  top: -5px;
-  right: 0;
-}
-.fa-times:nth-child(2) {
-  position: absolute;
-  top: 13px;
-  left: 0;
-}*/
-/*.fa-check {
-  position: relative;
-  top: -5px;
-}
-
-.fa-check:nth-child(2) {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-}
-
-.single .fa-check {
-  top: 0;
-}
-
-.right button:last-child {
-  position: relative;
-  margin-left: 5px;
-}
-
-.right button {
-  color:#329841;
-}*/
-
 .status {
   padding: 0px 0;
   text-align: center;
@@ -158,15 +132,52 @@ div.cancel {
 </style>
 
 <script>
+
 component.exports = {
   isolated: true,
   modal: require('../modal'),
+
+  onconfig () {
+
+  },
+
   oninit () {
     this.on('+2', (e) => { this.pos(2) })
     this.on('+1', (e) => { this.pos(1) })
     this.on('-1', (e) => { this.pos(-1) })
     this.on('-2', (e) => { this.pos(-2) })
     this.on('cancel', (e) => { this.pos(0) })
+
+    let params={}
+    let params_buttoms = []
+    params_buttoms.push(
+      { text: 'Muy en desacuerdo',
+        color: '#bb0217'
+      },
+      {
+        text: 'En desacuerdo',
+        color: '#cc4d41'
+      },
+      {
+        text: 'De acuerdo',
+        color: '#5a9727'
+      },
+      {
+        text: 'Muy deacuerdo',
+        color: '#2e8034'
+      }
+    )
+    switch (this.get('d.pos')){
+      case -2:  this.set('params_vote', params_buttoms[0])
+                break
+      case -1:  this.set('params_vote', params_buttoms[1])
+                break
+      case  +1: this.set('params_vote', params_buttoms[2])
+                break
+      case  +2: this.set('params_vote', params_buttoms[3])
+                break
+    }
+
   },
   pos (pos, skip) {
     let p = api.my.opinion.debate_pos(this.get('d._id'))
@@ -183,6 +194,35 @@ component.exports = {
       } else {
         this.set('d.pos', pos)
         api.my.opinion.create({debate: this.get('d._id')}, pos)
+        let params={}
+        let params_buttoms = []
+        params_buttoms.push(
+          { text: 'Muy en desacuerdo',
+            color: '#bb0217'
+          },
+          {
+            text: 'En desacuerdo',
+            color: '#cc4d41'
+          },
+          {
+            text: 'De acuerdo',
+            color: '#5a9727'
+          },
+          {
+            text: 'Muy deacuerdo',
+            color: '#2e8034'
+          }
+        )
+        switch (pos){
+          case -2:  this.set('params_vote', params_buttoms[0])
+                    break
+          case -1:  this.set('params_vote', params_buttoms[1])
+                    break
+          case  +1: this.set('params_vote', params_buttoms[2])
+                    break
+          case  +2: this.set('params_vote', params_buttoms[3])
+                    break
+        }
       }
     }
   },

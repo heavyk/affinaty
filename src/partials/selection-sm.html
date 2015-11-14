@@ -55,13 +55,16 @@ component.exports = {
   },
   idx (iidx, idx, skip) {
     if (idx !== iidx && !skip) {
-      if (!api.me.birthdate || api.me.planet == null) {
+      if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
         this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
-            this.idx(iidx, idx, !api.me.birthdate || api.me.planet == null ? true : false)
+            this.idx(iidx, idx, !api.me.birthdate
+              || !api.me.c
+              || !api.me.p
+              || api.me.planet == null ? true : false)
           }, 200)
         })
-      } else {
+      }else {
         this.set('d.idx', iidx)
         // api.my.opinion.create({poll: this.get('d._id')}, idx)
         api.action('selection!', {poll: this.get('d._id'), idx: iidx}, (d) => {
