@@ -3,7 +3,7 @@
 
 <div class="pop-tag-list">
   <div class="title section-title">Populares</div>
-  <div class="list-container">
+  <div class="list-container" style="max-height: {{rightHeight}}px">
     {{#if loading}}
       <spinner scale="0.2" />
     {{else}}
@@ -85,11 +85,26 @@ a.tag {
 
 <script>
 let each = require('../lib/lodash/collection/each')
+let assign = require('../lib/lodash/object/assign')
+let debounce = require('../lib/lodash/function/debounce')
+let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   onconfig () {
     let list = []
     this.set('list', this.list = list)
+    let layout = () => {
+      let height = Math.floor((window.innerHeight - 30) / (2)) - (150)
+      this.set('rightHeight', height)
+    }
+    let resizer = debounce(() => {
+      setTimeout(layout, 1)
+    }, 500, true)
+    layout()
+    window.addEventListener('resize', resizer)
+    this.once('teardown', () => {
+      window.removeEventListener('resize', resizer)
+    })
   },
   oninit () {
     this.observe('category', (category) => {
