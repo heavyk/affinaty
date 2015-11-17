@@ -145,7 +145,7 @@
 }
 .debate .text {
   color: #414141;
-  margin: -3px 9px 0;
+  margin: 0 15px;
   text-decoration: none;
   display: block;
 }
@@ -162,7 +162,7 @@
   display: block;
 }
 .tags {
-  margin: 5px 10px;
+  margin: 0 10px;
 }
 </style>
 
@@ -203,8 +203,8 @@ component.exports = {
   oncomplete () {
     let n
     if (this.get('view') === 'list') {
-      n = this.find('div.text')
-      this.set('read_more', n.scrollHeight > n.clientHeight)
+      n = this.find('a.text')
+      this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
     if (n = this.find('.foto img')) {
       n.style.height = n.clientWidth + 'px'
