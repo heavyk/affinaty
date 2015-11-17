@@ -9,7 +9,7 @@
     <span class="tab{{#if tab === 'post'}} active{{/if}}" on-click="set('tab', 'post')">Publicaciones</span>
     <span class="tab{{#if tab !== 'post'}} active{{/if}}" on-click="set('tab', 'vote')">Opiniones</span>
   </div>
-  <div class="list-container">
+  <div class="list-container" style="max-height: {{rightHeight}}px">
     <div class="gm-scrollbar -vertical">
       <div class="thumb"></div>
     </div>
@@ -86,7 +86,7 @@
   overflow-y: scroll;
   width: 100%;
   min-height: 100px;
-  max-height: 360px;
+  /*max-height: 360px; */
   background: #fff;
   position: relative;
 }
@@ -174,9 +174,24 @@ a.tag {
 
 
 <script>
+let assign = require('../lib/lodash/object/assign')
+let debounce = require('../lib/lodash/function/debounce')
+let onresize = require('../lib/dom/element-onresize')
 component.exports = {
   onconfig () {
     let list = []
+    let layout = () => {
+      let height = Math.floor((window.innerHeight - 30) / (2)) - (150)
+      this.set('rightHeight', height)
+    }
+    let resizer = debounce(() => {
+      setTimeout(layout, 1)
+    }, 500, true)
+    layout()
+    window.addEventListener('resize', resizer)
+    this.once('teardown', () => {
+      window.removeEventListener('resize', resizer)
+    })
     this.set('tab', window.localStorage.getItem('mis-top:tab') || 'post')
     this.set('list', this.list = list)
     this.set('TYPE', {

@@ -41,7 +41,7 @@ let Api = Ractive.extend({
         // kenny's local dev
         if (host === 'localhost:1111') {
           switch(window.localStorage.host) {
-            case 'action-terminal': return 'http://5.9.94.75:1158' // action-terminal
+            case 'term': return 'http://5.9.94.75:1158' // action-terminal
             case 'local': return 'http://localhost:1155' // local
             default:
             case 'mothership': return 'http://5.9.94.75:1155' // normal
@@ -125,9 +125,10 @@ let Api = Ractive.extend({
       }
     }
     console.log('action:', action, _params)
-    if (!(_params.token = this.token))
+    if (!this.token)
       // TODO - instead of redirecting to the login page, we should just show a login modal
       this.signOut(true)
+    else _params.token = this.token
 
     return new Ractive.Promise((_resolve, _reject) => {
       let respond = (res) => {

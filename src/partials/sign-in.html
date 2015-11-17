@@ -1,24 +1,27 @@
 <link rel='ractive' href='../partials/sign-up.html'>
+<link rel='ractive' href='../partials/remember-password.html'>
+<link rel='ractive' href='../partials/change-password.html'>
 <div class="sign-in">
   <form on-submit="submit">
     <div class="form">
       <input type="email" value="{{email}}" placeholder="Correo Electrónico">
       <input type="password" value="{{password}}" placeholder="Contraseña">
       <div class="remember-container">
-        <!-- <input type="checkbox" value="{{remember}}" id="remember"> <label for="remember"> Recuerdame</label> -->
         <span class="remember-check" on-click="toggle('remember')">
           <i class="fa {{remember ? 'fa-check' : ''}}" />
         </span>
         <span class="remember-text" on-click="toggle('remember')">
           Recuérdame
         </span>
-        <a href="/remember-password">¿Olvidaste la contraseña?</a>
+        <div class="button-remember" on-click="modal('remember-password', {title: 'Recordar contraseña'})">
+          Recordar contraseña
+        </div>
       </div>
       <div class="submit">
         {{#error}}
           <span class="error">{{error}}</span>
         {{/error}}
-        <button type="submit" class="enter" on-click="">
+        <button type="submit" class="enter">
           Entrar
         </button>
       </div>
@@ -76,7 +79,7 @@
   cursor: pointer;
 }
 .remember-container a {
-  color: #FF3300;
+  color: #F30;
   float: right;
   text-decoration: none;
   letter-spacing: -0.02em;
@@ -89,8 +92,18 @@
   margin-left: 10px;
 }
 .button-register:hover {
-  background: #FFF;
-  color:#FF3300;
+  background: #FF4314;
+  color:#FFF;
+}
+.button-remember {
+  color: #F30;
+  float: right;
+  letter-spacing: -.02em;
+  font-size: 120%;
+}
+.button-remember:hover {
+  color: #F30;
+  background-color: #fff;
 }
 
 .access-prompt {
@@ -177,8 +190,8 @@ button[disabled]:hover,
 }
 button:hover,
 .btn:hover {
-  background: #FFF;
-  color: #ff3300;
+  background: #FF4314;
+  color: #fff;
 }
 button[disabled],
 .btn[disabled] {
@@ -195,6 +208,15 @@ button.danger[disabled]:hover,
 button.danger:hover,
 .btn.danger:hover {
   background: #bd362f;
+}
+@media (max-width: 768px) {
+  .access-prompt {
+    margin-top: 0px;
+  }
+  .access{
+    height: 56px;
+    padding: 0px 0;
+  }
 }
 
 </style>
@@ -218,9 +240,13 @@ component.exports = {
       let opts = { ident: email, password: password }
       if (remember) opts.ttl = 365 * 24 * 3600
       api.action('sign-in', opts, (data) => {
-        api.signIn(data).then(function () {
+        api.signIn(data).then(() => {
           setTimeout(() => {
-            router.dispatch('/home')
+            if (data.tmp) {
+              this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
+            } else {
+              router.dispatch('/home')
+            }
           }, 1)
         })
       }, (error) => {

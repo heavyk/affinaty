@@ -37,10 +37,9 @@ let router = new Router({ el: 'view' }, function (request) {
   this.redirect(api.me ? '/home' : '/')
 }, function (path, options) {
   if (path === '/' && api.me)
-    return router.redirect('/home')
+    return router.dispatch('/home')
   if (path !== '/' && !api.me)
-    return router.redirect('/')
-
+    return router.dispatch('/')
 })
 
 // implement enter / leave

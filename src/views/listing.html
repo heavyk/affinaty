@@ -5,9 +5,9 @@
 <link rel='ractive' href='../partials/mis-top.html'>
 
 <div class="left-column" style="width: {{leftWidth}}px">
+
   {{#if panel !== 'mis-top'}}
     <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
-      <div class="title section-title">Populares</div>
       <div class="pop-tag-container">
         <div class="pop-tag-container-inner" style="width: {{leftWidth - 16 - 10}}px">
           <pop-tag-carousel category="{{category}}" />
@@ -15,7 +15,7 @@
       </div>
     </div>
   {{else}}
-    <h2>Mis Top</h2>
+    <h2>Mis Top</h2>,
   {{/if}}
   <div class="debates-list" style="width: {{leftWidth}}px">
     {{#if panel}}
@@ -45,10 +45,10 @@ h2 {
   right: 20px;
 }
 
-.pop-tag-container-outer {
+/*.pop-tag-container-outer {
   box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
   border-radius: 30px 9px 9px 9px;
-}
+}*/
 
 .left-column {
   margin-right: 30px;
@@ -57,15 +57,15 @@ h2 {
 }
 
 .pop-tag-container {
-  border: solid 1px #E6E6E6;
-  border-radius: 0 0 9px 9px;
+  /*border: solid 1px #E6E6E6;
+  border-radius: 0 0 9px 9px;*/
   border-top: 0;
   padding: 8px;
-  background: #fff;
+  background: #F0F0F0;
 }
 .pop-tag-container-inner {
   overflow: hidden;
-  height: 208px;
+  height: 160px;
 }
 
 .debates-list {

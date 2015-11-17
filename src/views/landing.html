@@ -5,7 +5,7 @@
   <div class="row1 row">
     <div class="central col-md-8">
       <div class="lead">
-        <h1><img src="/img/landing.svg" /></h1>
+        <h1><img class="logo" src="/img/landing.svg" /></h1>
         <h2 id="yin">{{slogan_yin}}</h2>
         <h2 id="yang">{{slogan_yang}}</h2>
         <!-- <h2>¡Súmate a opinar y a debatir con nosotros!</h2> -->
@@ -33,9 +33,10 @@
 
 <style>
 .cover {
-  margin: -20px 64px 0 0;
+  margin: -20px 64px 0 42px;
   position: absolute;
-  top: 196px;
+  top: 170px;
+  width: 80%;
 }
 .app-buttons {
   position: absolute;
@@ -83,15 +84,7 @@ h1 {
   margin-left: 80px;
 }
 
-@media (max-width: 768px) {
-  h1 {
-    font-size: 28px;
-    margin-left: 0;
-  }
-  .cover {
-    display: none;
-  }
-}
+
 @media (max-width: 960px) {
   .cover {
     display: none;
@@ -111,7 +104,14 @@ h5 {
 }
 @media (max-width: 768px) {
   .central {
-    display: none;
+    /*display: none;*/
+  }
+  .logo{
+    width:100%;
+  }
+  .sign-in{
+    margin-top: 60px;
+    margin-left: 40px;
   }
   .opin {
     display: none;
@@ -119,6 +119,7 @@ h5 {
 }
 .enter {
   padding: 0px 30px;
+  font-size: 16px;
 }
 .sign-in {
   width: 367px;
@@ -127,7 +128,16 @@ h5 {
   color: #000;
   text-align: center;
   border-radius: 30px 11px;
-  margin-top: 220px;
+  margin-top: 150px;
+}
+@media (max-width: 768px) {
+  .sign-in{
+    width: 96%;
+    margin: 43px auto;
+  }
+  .row1 {
+    padding-top: 0px;
+  }
 }
 .buttons {
   margin: 60px auto;
@@ -151,6 +161,20 @@ h2 {
 h2.slogan {
   /*transition: 2s all ease-in-out;*/
   /*text-shadow: 1px 1px 1px #fff,3px 3px 5px #ff7600;*/
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+    height: 55px;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  h2 {
+    font-size: 150%;
+  }
+  .cover {
+    /*display: none;*/
+  }
 }
 </style>
 
