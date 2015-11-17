@@ -155,7 +155,7 @@ let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   oninit () {
-    api.action('mbox*', {limit: 20, sort: '+active'}, (data) => {
+    api.action('mbox*', {limit: 100, sort: '+active'}, (data) => {
       let threads = {}
       for (let i = 0; i < data.length; i++) {
         let t = data[i]

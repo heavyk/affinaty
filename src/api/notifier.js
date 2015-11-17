@@ -172,7 +172,7 @@ class notifier extends Ambition {
 
   go (next) {
     // console.info('GO', this.gt, this.lt)
-    api.action('n*', {gt: this.gt, lt: this.lt}, (data) => {
+    api.action('n*', {gt: this.gt, lt: this.lt, limit: 500}, (data) => {
       let silent = this.situation !== '/'
       each(data, (d, id) => {
         d._id = d.t + d._a + ':' + d._b + ':' + d._c

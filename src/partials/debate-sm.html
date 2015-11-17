@@ -204,7 +204,7 @@ component.exports = {
     let n
     if (this.get('view') === 'list') {
       n = this.find('a.text')
-      this.set('read_more', n.scrollHeight > n.clientHeight)
+      this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
     if (n = this.find('.foto img')) {
       n.style.height = n.clientWidth + 'px'
