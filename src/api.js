@@ -41,7 +41,7 @@ let Api = Ractive.extend({
         // kenny's local dev
         if (host === 'localhost:1111') {
           switch(window.localStorage.host) {
-            case 'action-terminal': return 'http://5.9.94.75:1158' // action-terminal
+            case 'term': return 'http://5.9.94.75:1158' // action-terminal
             case 'local': return 'http://localhost:1155' // local
             default:
             case 'mothership': return 'http://5.9.94.75:1155' // normal
