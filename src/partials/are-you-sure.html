@@ -28,9 +28,7 @@
 component.exports = {
   oninit () {
     this.observe('answer', (v) => {
-      if (v !== void 0) {
-        api.my.opinion.emit('answer', v)
-      }
+      if (v !== void 0) this.parent.fire('answer', v)
     })
     window.addEventListener('keyup', this.onkeypress = (event) => {
       if (event.which === 27) api.my.opinion.emit('answer', false)

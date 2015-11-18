@@ -182,28 +182,33 @@ textarea.animate {
 
 <script>
 let assign = require('../lib/lodash/object/assign')
+let isEqual = require('../lib/lodash/lang/isEqual')
 let onresize = require('../lib/dom/element-onresize')
 let findIndex = require('../lib/lodash/array/findIndex')
 component.exports = {
   isolated: true,
   modal: require('../modal'),
   onconfig () {
+    let query
     this.get('text') || this.set('text', '')
-  },
-  oninit () {
-    let query = assign({}, {
-      debate: this.get('debate'),
-      poll: this.get('poll'),
-    })
-    // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
-    this.set('loading', true)
-    api.action('comment*', assign({sort: '+created'}, query), (data) => {
-      for (var i = 0; i < data.length; i++) {
-        data[i]._canDelete = data[i].creator._id === api.me._id
-      }
-      this.set({
-        loading: false,
-        list: data
+    router.on('dispatch', () => {
+      console.info('dispatch')
+      let _query = assign({}, {
+        debate: this.get('debate'),
+        poll: this.get('poll'),
+      })
+      if (isEqual(query, _query)) return
+      else query = _query
+      // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
+      this.set('loading', true)
+      api.action('comment*', assign({sort: '+created'}, query), (data) => {
+        for (var i = 0; i < data.length; i++) {
+          data[i]._canDelete = data[i].creator._id === api.me._id
+        }
+        this.set({
+          loading: false,
+          list: data
+        })
       })
     })
     this.on('add', (event) => {
@@ -234,17 +239,14 @@ component.exports = {
     this.on('remove', (event) => {
       let id = event.context._id
       let modal = this.modal('are-you-sure', {title: `¿Eliminar?`, what: 'este comentario'})
-      // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
-      api.my.opinion.on('answer', (v) => {
+      modal.once('answer', (v) => {
         if (v !== void 0) {
           modal.teardown()
           if (v) {
             api.action('comment-', {_id: id}, (res) => {
-              // if (res) api.comment.fire('-', id)
               if (res) {
                 let list = this.get('list')
                 let idx = findIndex(list, (r) => r._id === id)
-                console.log('idx', idx)
                 list.splice(idx, 1)
               }
             })

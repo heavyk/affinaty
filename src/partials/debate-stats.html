@@ -177,30 +177,15 @@ let Stats = require('../api/age-stats')
 component.exports = {
   isolated: true,
   dd: new Map,
-  oninit () {
-    let id = this.get('debate')
-    this.stats = new Stats('debate', id)
-    // really I should do this in stats ... for now, this is fine
-    let onloaded = after(2, () => {
-      let stats = this.stats.data
-      let d = api.my.opinion.debate(id)
-      let calc = this.calc(stats)
-      this.set('totals', calc.totals)
-      this.set('totals_p', calc.totals_p)
-      this.set('total', calc.total)
-      this.set('percents', calc.percents)
-      this.set('planets', calc.planets)
-      this.set('ranges', calc.ranges)
-    })
-    this.stats.until('/', onloaded)
-    api.my.opinion.until('/', onloaded)
+  onconfig () {
+    this.observe('debate', (id, __id) => {
+      if (!id) return
 
-    let key = id + '.' + api.me._id
-    api.my.opinion.on(key, this.on_opinion = (d, _d) => {
-      let stats = this.stats.data
-      if (stats) {
-        if (_d) ageStats.subtract(api.me, stats, _d)
-        ageStats.add(api.me, stats, d)
+      this.stats = new Stats('debate', id)
+      // really I should do this in stats ... for now, this is fine
+      let onloaded = after(2, () => {
+        let stats = this.stats.data
+        let d = api.my.opinion.debate(id)
         let calc = this.calc(stats)
         this.set('totals', calc.totals)
         this.set('totals_p', calc.totals_p)
@@ -208,8 +193,27 @@ component.exports = {
         this.set('percents', calc.percents)
         this.set('planets', calc.planets)
         this.set('ranges', calc.ranges)
-      }
-    })
+      })
+      this.stats.until('/', onloaded)
+      api.my.opinion.until('/', onloaded)
+
+      let key = id + '.' + api.me._id
+      if (this.on_opinion) api.my.opinion.off(__id + '.' + api.me._id, this.on_opinion)
+      api.my.opinion.on(key, this.on_opinion = (d, _d) => {
+        let stats = this.stats.data
+        if (stats) {
+          if (_d) ageStats.subtract(api.me, stats, _d)
+          ageStats.add(api.me, stats, d)
+          let calc = this.calc(stats)
+          this.set('totals', calc.totals)
+          this.set('totals_p', calc.totals_p)
+          this.set('total', calc.total)
+          this.set('percents', calc.percents)
+          this.set('planets', calc.planets)
+          this.set('ranges', calc.ranges)
+        }
+      })
+    }, {initial: false})
   },
   oncomplete () {
     let stats_el = this.find('.debate-stats')
@@ -349,12 +353,5 @@ component.exports = {
       return (v / c.max * px).toFixed(2)
     }
   },
-  // data: {
-  //   percent_total (i, px) {
-  //     let v = this.get('totals.'+i)
-  //     let c = this.get('total')
-  //     return Math.round(v / c * (px || 100))
-  //   },
-  // }
 }
 </script>

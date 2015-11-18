@@ -84,6 +84,7 @@ export default class Router extends EventEmitter {
       this.uri = uri
       this.route.update(uri, data)
       this.route.view.fire('dispatch')
+      this.emit('dispatch')
     } else if (options.reload || shouldDispatch(this.uri, uri, route)) {
       // destroy existing route
       if (this.route) {
@@ -101,6 +102,7 @@ export default class Router extends EventEmitter {
 
       // emit `route` event
       this.emit('route', route)
+      this.emit('dispatch')
     }
 
     // will scroll to the top if there is no matching element
