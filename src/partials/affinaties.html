@@ -81,15 +81,19 @@
   border-radius: 0px 0px 30px 9px;
 }
 .list {
+  position: relative;
   width: 100%;
+  height: 50px;
   background-color: #ffffff;
   transition: background-color 333ms ease-in-out;
+  border-bottom: 1px solid #dadada;
+  clear: both;
 }
 .rank {
   color: #333;
-  float: left;
-  width: 8%;
-  margin-left: 8px;
+  position: absolute;
+  width: 20px;
+  left: 8px;
   text-align: center;
   padding: 0 4px;
 }
@@ -114,9 +118,9 @@
 
 .user {
   padding-bottom: 10px;
-  border-bottom: 1px solid #dadada;
+  position: absolute;
+  left: 50px;
   width: 80%;
-  float: left;
 }
 .user img {
   float: left;
@@ -161,12 +165,25 @@
   border-top: solid 1px #e6e6e6;
   font-weight: bold;
 }
-.message{
-  float: left;
-  width: 8%;
-  padding-top: 8px;
+.message {
+  position: absolute;
+  top: 4px;
+  /*padding: 4px;*/
+  right: 12px;
+  width: 32px;
+  height: 32px;
   font-size: 20px;
   color: #fd270d;
+  cursor: pointer;
+}
+.message-inner {
+  margin: auto;
+  width: 20px;
+}
+.message:hover {
+  background: rgba(253, 39, 13, 0.08);
+  border: solid 1px #FD270D;
+  border-radius: 4px;
 }
 
 </style>
