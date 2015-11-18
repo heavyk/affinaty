@@ -1,5 +1,6 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/spinner.html'>
+<link rel='ractive' href='../partials/chat.html'>
 
 <div class="affinaties-container" style="max-height: {{height}}px">
   <div class="title section-title">Affines</div>
@@ -45,6 +46,11 @@
                 <h5>{{title}}</h5>
               </div>
             </div>
+            <div class="message" on-click="send-message">
+              <div class="message-inner">
+                <i class="fa fa-envelope" />
+              </div>
+            </div>
           </div>
         {{else}}
           Aquí verás tu afinidad con usuarios a los que sigues
@@ -60,6 +66,9 @@
   border-radius: 30px 9px 30px 9px;
   overflow: hidden;
 }
+.message{
+  float: left;
+}
 
 
 .list-container {
@@ -72,15 +81,19 @@
   border-radius: 0px 0px 30px 9px;
 }
 .list {
+  position: relative;
   width: 100%;
+  height: 50px;
   background-color: #ffffff;
   transition: background-color 333ms ease-in-out;
+  border-bottom: 1px solid #dadada;
+  clear: both;
 }
 .rank {
   color: #333;
-  float: left;
-  width: 32px;
-  margin-left: 8px;
+  position: absolute;
+  width: 20px;
+  left: 8px;
   text-align: center;
   padding: 0 4px;
 }
@@ -105,7 +118,9 @@
 
 .user {
   padding-bottom: 10px;
-  border-bottom: 1px solid #dadada;
+  position: absolute;
+  left: 50px;
+  width: 80%;
 }
 .user img {
   float: left;
@@ -150,16 +165,38 @@
   border-top: solid 1px #e6e6e6;
   font-weight: bold;
 }
+.message {
+  position: absolute;
+  top: 4px;
+  /*padding: 4px;*/
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  color: #fd270d;
+  cursor: pointer;
+}
+.message-inner {
+  margin: auto;
+  width: 20px;
+}
+.message:hover {
+  background: rgba(253, 39, 13, 0.08);
+  border: solid 1px #FD270D;
+  border-radius: 4px;
+}
 
 </style>
 
 <script>
 component.exports = {
+  modal: require('../modal'),
   onconfig () {
     this.set('list', this.list = [])
   },
   oninit () {
     this.set('loading', true)
+
     api.my.affinaties.until('/', () => {
       this.set('loading', false)
       this.set('list', api.my.affinaties.list)
@@ -176,6 +213,11 @@ component.exports = {
         }
       }, 2000)
       // TODO set them a different color or something
+    })
+    this.on('send-message', (event) => {
+      let _id = event.context._id
+      let name = event.context.name
+      this.modal('chat', {title: name, minimize: true, id: _id})
     })
   },
   oncomplete () {
