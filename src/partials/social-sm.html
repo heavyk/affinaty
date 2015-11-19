@@ -85,17 +85,12 @@ component.exports = {
     }
     this.on('remove', () => {
       let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
-      // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
-      api.my.opinion.on('answer', (v) => {
+      modal.once('answer', (v) => {
         if (v !== void 0) {
           modal.teardown()
           if (v) {
             api.action(type + '-', {_id: id}, (res) => {
               if (res) Ractive.nexus.debate.fire('-', id)
-              // if (res) {
-              //   if(type === poll) api.poll.fire('-', id)
-              //   else api.debate.fire('-', id)
-              // }
             })
           }
         }
