@@ -10,7 +10,7 @@
       </div>
       <div class="message">
         <time time="{{.created}}" class="since" />
-        <span class="text" decorator="markdown:'text'">{{.text}}</span>
+        <span class="text" decorator="markdown:{{text}}">{{.text}}</span>
       </div>
     </div>
     {{/each}}

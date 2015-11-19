@@ -52,7 +52,7 @@
 
   {{#if view === 'list'}}
     <div class="text">
-      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
     </div>
     {{#if read_more}}
       <a href="/poll/{{d._id}}" class="read-more">leer más</a>

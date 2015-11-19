@@ -48,13 +48,13 @@
 
   {{#if view === 'list'}}
     <div class="text">
-      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
     </div>
     {{#if read_more}}
       <a href="/debate/{{d._id}}" class="read-more">leer más</a>
     {{/if read_more}}
   {{else}}
-    <div class="text" decorator="markdown:d.text"></div>
+    <div class="text" decorator="markdown:{{d.text}}"></div>
   {{/if}}
 
   {{#if d.foto}}

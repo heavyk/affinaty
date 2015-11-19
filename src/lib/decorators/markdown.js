@@ -24,24 +24,15 @@ let md = _markdown({
   }
 })
 
-function markdown (node, keypath) {
-  let info = Ractive.getNodeInfo(node)
-  let transform = (text) => {
-    text = text ? md.render(text) : ''
-    node.innerHTML = text.replace(/<a href=/g, '<a target="blank" href=')
-    let width = node.clientWidth
-    if (~text.indexOf('embed-responsive')) {
-      let n = node.querySelectorAll('.embed-responsive')
-      for (var i = 0; i < n.length; i++) {
-        n[i].style.height = (n[i].childNodes[0].id.indexOf('vine') === 0 ? width : Math.round(width * 9 / 16)) + 'px'
-      }
+function markdown (node, text) {
+  text = text ? md.render(text) : ''
+  node.innerHTML = text.replace(/<a href=/g, '<a target="blank" href=')
+  let width = node.clientWidth
+  if (~text.indexOf('embed-responsive')) {
+    let n = node.querySelectorAll('.embed-responsive')
+    for (var i = 0; i < n.length; i++) {
+      n[i].style.height = (n[i].childNodes[0].id.indexOf('vine') === 0 ? width : Math.round(width * 9 / 16)) + 'px'
     }
-  }
-
-  if (info.keypath) {
-    transform(this.get(info.keypath + '.' + keypath))
-  } else {
-    this.observe(keypath, transform, {defer: true})
   }
 
   return {
