@@ -112,12 +112,19 @@ view {
   display: block;
   margin-top: 20px;
 }
+@media(max-width: @mediaTablet) {
+  view {
+    display: block;
+    margin-top: 0px;
+  }
+}
 
 @media(max-width: @mediaTablet) {
   .moar-debate{
     left: 88%;
   }
 }
+
 header {
   position: fixed;
   top: 0;
@@ -228,7 +235,7 @@ header {
     top: 5px;
     right: 5px;
   }
-  .home, .debate, .notifications {
+  .debate {
     display: none;
   }
   .debate {
@@ -408,6 +415,9 @@ form .submit {
     }
     .debates{
       width: 100%;
+      .debate{
+        width:100%
+      }
     }
     .right-column{
       display:none;
@@ -488,6 +498,9 @@ button.button-sign-up {
 @media(max-width: @mediaTablet) {
   .debates{
     width: 100%;
+    .debate{
+      width: 100%
+    }
   }
 }
 
@@ -917,6 +930,7 @@ button.button-mas-mas .fa-check:nth-child(2) {
   top: 11px;
   left: 8px;
 }
+
 
 /*.fa-check {
   position: relative;

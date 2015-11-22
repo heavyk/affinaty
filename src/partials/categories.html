@@ -1,45 +1,75 @@
 <link rel='ractive' href='../partials/spinner.html'>
-
-<a class="categories-button {{class}}" on-click="toggle('menu')">
-  {{#if selected}}
-    [[#if typeof L.selected === 'string']]
-      [[L.selected]]
-    [[else]]
-      Categoría:&nbsp;
-    [[/if]]
-    {{selected.title}}
-  {{else}}
-    {{L.selector || 'Categories'}}
-  {{/if}}
-</a>
-<div class="categories" style="display: {{menu ? 'block' : 'none'}}">
-  {{#if loading}}
-    <spinner scale="0.2" />
-  {{/if loading}}
-
-  {{#if error}}
-    ERROR: {{error}}
-  {{/if error}}
-
-  {{#if categories}}
-    {{#if L.unselect && selected}}
-      <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
+{{#if ! L.movil}}
+  <a class="categories-button {{class}}" on-click="toggle('menu')">
+    {{#if selected}}
+      [[#if typeof L.selected === 'string']]
+        [[L.selected]]
+      [[else]]
+        Categoría:&nbsp;
+      [[/if]]
+      {{selected.title}}
+    {{else}}
+      {{L.selector || 'Categories'}}
     {{/if}}
-    <!-- {{#each categories}}
-      <div class="category" on-click="activate(event)">{{.title}}</div>
-    {{/each categories}} -->
-    <div class="categories-left">
-      {{#each l1}}
+  </a>
+  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
+    {{#if loading}}
+      <spinner scale="0.2" />
+    {{/if loading}}
+
+    {{#if error}}
+      ERROR: {{error}}
+    {{/if error}}
+
+    {{#if categories}}
+      {{#if L.unselect && selected}}
+        <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
+      {{/if}}
+      <!-- {{#each categories}}
         <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each l1}}
-    </div>
-    <div class="categories-right">
-      {{#each l2}}
+      {{/each categories}} -->
+      <div class="categories-left">
+        {{#each l1}}
+          <div class="category" on-click="activate(event)">{{.title}}</div>
+        {{/each l1}}
+      </div>
+      <div class="categories-right">
+        {{#each l2}}
+          <div class="category" on-click="activate(event)">{{.title}}</div>
+        {{/each l2}}
+      </div>
+    {{/if categories}}
+  </div>
+{{else}}
+  <div class="categories" style="display: block">
+    {{#if loading}}
+      <spinner scale="0.2" />
+    {{/if loading}}
+
+    {{#if error}}
+      ERROR: {{error}}
+    {{/if error}}
+
+    {{#if categories}}
+      {{#if L.unselect && selected}}
+        <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
+      {{/if}}
+      <!-- {{#each categories}}
         <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each l2}}
-    </div>
-  {{/if categories}}
-</div>
+      {{/each categories}} -->
+      <div class="categories-left">
+        {{#each l1}}
+          <div class="category" on-click="activate(event)">{{.title}}</div>
+        {{/each l1}}
+      </div>
+      <div class="categories-right">
+        {{#each l2}}
+          <div class="category" on-click="activate(event)">{{.title}}</div>
+        {{/each l2}}
+      </div>
+    {{/if categories}}
+  </div>
+{{/if}}
 
 
 <style>
@@ -70,6 +100,11 @@
   width: 500px;
   box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
 }
+@media (min-width: 768px) {
+  .categories {
+    width:350px;
+  }
+}
 div.category {
   cursor: pointer;
   font-size: 18px;
@@ -88,13 +123,19 @@ div.category:hover {
   width: 50%;
   float: left;
 }
+@media (min-width: 768px) {
+  div.category {
+    font-size: 14px;
+    padding-left: 20px;
+  }
+}
 </style>
-
 
 <script>
 component.exports = {
   isolated: true,
   oninit () {
+
     this.set('loading', true)
     // TODO this can be a decorator
     let onclick = (e) => {
