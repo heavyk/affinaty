@@ -1,18 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
-{{#if ! L.movil}}
-  <a class="categories-button {{class}}" on-click="toggle('menu')">
-    {{#if selected}}
-      [[#if typeof L.selected === 'string']]
-        [[L.selected]]
-      [[else]]
-        Categoría:&nbsp;
-      [[/if]]
-      {{selected.title}}
-    {{else}}
-      {{L.selector || 'Categories'}}
-    {{/if}}
-  </a>
-  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
+{{#if movil}}
+  <div class="categories" style="display: block">
     {{#if loading}}
       <spinner scale="0.2" />
     {{/if loading}}
@@ -41,7 +29,19 @@
     {{/if categories}}
   </div>
 {{else}}
-  <div class="categories" style="display: block">
+  <a class="categories-button {{class}}" on-click="toggle('menu')">
+    {{#if selected}}
+      [[#if typeof L.selected === 'string']]
+        [[L.selected]]
+      [[else]]
+        Categoría:&nbsp;
+      [[/if]]
+      {{selected.title}}
+    {{else}}
+      {{L.selector || 'Categories'}}
+    {{/if}}
+  </a>
+  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
     {{#if loading}}
       <spinner scale="0.2" />
     {{/if loading}}

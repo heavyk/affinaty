@@ -109,7 +109,7 @@
                       &nbsp;<i class="fa fa-arrow-right"></i>
                     </button>
                   </div>
-                  <categories L="{selector: 'Categorías', unselect: 'Todas', movil:true}" on-select="category" />
+                  <categories L="{selector: 'Categorías', unselect: 'Todas'}, movil:true" on-select="category" />
             </li>
           </ul>
         </li>
@@ -543,13 +543,7 @@ component.exports = {
         this.toggle('focused')
       }, 200)
     })
-    let size = window. innerWidth
-    let movil = false
-    let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (size < 768 || isMobile){
-      movil = true
-    }
-    this.set('movil', movil)
+    this.set('movil', window.isMobile)
   },
   oninit () {
     this.on('send_text', (event) => {

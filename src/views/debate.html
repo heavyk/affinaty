@@ -18,16 +18,17 @@
           </div>
         </button>
         {{#if showDetail}}
-            <div class='detail' intro-outro='slide'>
-              <div class="col-xs-10 col-lg-5">
-                <debate-stats debate="{{id}}"></debate-stats>
-              </div>
-                <button on-click='set("showDetail",false)'>x</button>
-            </div>
+          <!-- <div class='detail' intro-outro='slide'> -->
+          <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
+            <!-- <div class="col-xs-10 col-lg-5"> -->
+              <debate-stats debate="{{id}}"></debate-stats>
+            <!-- </div> -->
+            <!-- <button on-click='set("showDetail",false)'>x</button> -->
+          </div>
         {{/if}}
     </div>
 
-    <div class="col-xs-10 col-lg-7">
+    <div class="{{movil ? '' : 'col-xs-10 col-lg-7'}}">
       {{#if loading}}
         <spinner />
       {{/if loading}}
@@ -42,7 +43,7 @@
       <comment-list debate="{{id}}"></comment-list>
     </div>
     <div class="col-lg-5 stats-big" >
-        <debate-stats debate="{{id}}"></debate-stats>
+      <debate-stats debate="{{id}}"></debate-stats>
     </div>
   </div>
   <!-- testing out git flow -->
@@ -140,6 +141,7 @@ component.exports = {
         this.set('error', err)
       })
     }, { defer: true })
+    this.set('movil', window.isMobile)
   },
   onrender () {
     this.observe('active', (v) => {

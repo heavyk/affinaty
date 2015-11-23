@@ -35,37 +35,40 @@
   </div>
 {{else}}
   <div class="tabs-movil">
-    <span class="tab-movil{{#if tab === 'popu'}} active{{/if}}" on-click="set('tab', 'popu')">Populares</span>
+    <span class="tab-movil{{#if tab === 'populares'}} active{{/if}}" on-click="set('tab', 'populares')">Populares</span>
     <span class="tab-movil{{#if tab === 'mis-top-mov'}} active{{/if}}" on-click="set('tab', 'mis-top-mov')">Mis Top</span>
     <span class="tab-movil{{#if tab === 'affin'}} active{{/if}}" on-click="set('tab', 'affin')">Affines</span>
-    {{#if tab === 'popu'}}
-        <div class="debates-list" style="width: 100%; margin-top: 10px">
-          {{#if panel}}
-            <div class="pop-tag-container-outer" style="width: 100%">
-              <div class="pop-tag-container">
-                <div class="pop-tag-container-inner" style="width: 100%">
-                  <pop-tag-carousel category="{{category}}" />
-                </div>
-              </div>
+
+    {{#if tab === 'populares'}}
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      {{#if panel}}
+        <div class="pop-tag-container-outer" style="width: 100%">
+          <div class="pop-tag-container">
+            <div class="pop-tag-container-inner" style="width: 100%">
+              <pop-tag-carousel category="{{category}}" />
             </div>
-            <debate-list category="{{category}}" tag="{{tag}}" top="false" />
-          {{/if}}
+          </div>
         </div>
+        <debate-list category="{{category}}" tag="{{tag}}" top="false" />
+      {{/if}}
+    </div>
     {{/if}}
+
     {{#if tab === 'mis-top-mov'}}
-        <div class="debates-list" style="width: 100%; margin-top: 10px">
-          {{#if panel}}
-          <div class="clearfix"></div>
-            <debate-list category="{{category}}" tag="{{tag}}" top="true" />
-          {{/if}}
-        </div>
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      {{#if panel}}
+      <div class="clearfix"></div>
+        <debate-list category="{{category}}" tag="{{tag}}" top="true" />
+      {{/if}}
+    </div>
     {{/if}}
+
     {{#if tab === 'affin'}}
-        <div class="debates-list" style="width: 100%; margin-top: 10px">
-          <div class="clearfix"></div>
-          <affinaties />
-        </div>
-        {{/if}}
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      <div class="clearfix"></div>
+      <affinaties />
+    </div>
+    {{/if}}
   </div>
 {{/if}}
 
@@ -205,7 +208,6 @@ component.exports = {
       let i = p.indexOf('/', 1)
       let panel = p.substring(1, ~i ? i : p.length)
       this.set('panel', panel)
-      console.info('panel', panel)
     })
     let layout = () => {
       let inner = window.innerWidth - 60
@@ -213,15 +215,9 @@ component.exports = {
       let left = Math.floor((inner - right - 32) / (289+20)) * (289+20)
       this.set('rightWidth', right + (inner - left - right))
       this.set('leftWidth', left)
-      let size = window. innerWidth
-      let movil = false
-      let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if (size < 768 || isMobile){
-        movil = true
-      }
-      this.set('movil', movil)
+      this.set('movil', window.isMobile)
     }
-    this.set('tab', window.localStorage.getItem('mis-top:tab') || 'post')
+    this.set('tab', window.localStorage.getItem('mis-top:tab') || 'populares')
     let resizer = debounce(() => {
       setTimeout(layout, 1)
     }, 500, true)

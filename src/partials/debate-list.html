@@ -207,12 +207,7 @@ component.exports = {
   oncomplete () {
     let el = this.find('.debates')
     this.els = this.findAll('.debate', {live: true})
-    let size = window. innerWidth
-    let movil = false
-    let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (size < 768 || isMobile){
-      movil = true
-    }
+    let movil = window.isMobile
     if (!movil) {
       this.m = new masonry(el, {
         itemSelector: '.debate',
