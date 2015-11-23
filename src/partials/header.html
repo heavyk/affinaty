@@ -103,13 +103,13 @@
           </a>
           <ul>
             <li class="search-text">
-                  <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
-                  <div class="submit">
-                    <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
-                      &nbsp;<i class="fa fa-arrow-right"></i>
-                    </button>
-                  </div>
-                  <categories L="{selector: 'Categorías', unselect: 'Todas'}, movil:true" on-select="category" />
+              <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
+              <div class="submit">
+                <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
+                  &nbsp;<i class="fa fa-arrow-right"></i>
+                </button>
+              </div>
+              <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
             </li>
           </ul>
         </li>

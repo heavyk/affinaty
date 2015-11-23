@@ -1,34 +1,5 @@
 <link rel='ractive' href='../partials/spinner.html'>
-{{#if movil}}
-  <div class="categories" style="display: block">
-    {{#if loading}}
-      <spinner scale="0.2" />
-    {{/if loading}}
-
-    {{#if error}}
-      ERROR: {{error}}
-    {{/if error}}
-
-    {{#if categories}}
-      {{#if L.unselect && selected}}
-        <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
-      {{/if}}
-      <!-- {{#each categories}}
-        <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each categories}} -->
-      <div class="categories-left">
-        {{#each l1}}
-          <div class="category" on-click="activate(event)">{{.title}}</div>
-        {{/each l1}}
-      </div>
-      <div class="categories-right">
-        {{#each l2}}
-          <div class="category" on-click="activate(event)">{{.title}}</div>
-        {{/each l2}}
-      </div>
-    {{/if categories}}
-  </div>
-{{else}}
+{{#if !movil}}
   <a class="categories-button {{class}}" on-click="toggle('menu')">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
@@ -41,7 +12,8 @@
       {{L.selector || 'Categories'}}
     {{/if}}
   </a>
-  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
+{{/if}}
+  <div class="categories" style="display: {{menu || movil ? 'block' : 'none'}}">
     {{#if loading}}
       <spinner scale="0.2" />
     {{/if loading}}
@@ -54,9 +26,6 @@
       {{#if L.unselect && selected}}
         <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
       {{/if}}
-      <!-- {{#each categories}}
-        <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each categories}} -->
       <div class="categories-left">
         {{#each l1}}
           <div class="category" on-click="activate(event)">{{.title}}</div>
@@ -69,7 +38,6 @@
       </div>
     {{/if categories}}
   </div>
-{{/if}}
 
 
 <style>
@@ -135,18 +103,25 @@ div.category:hover {
 component.exports = {
   isolated: true,
   oninit () {
-
-    this.set('loading', true)
-    // TODO this can be a decorator
+    let movil = window.isMobile
+    this.set({
+      movil: movil,
+      loading: true
+    })
+    // TODO make this a decorator
     let onclick = (e) => {
       let status = this.get('menu')
-      if (!status) return
+      if (!status && !movil) return
       let target = e.target
       let pEl = target
       do {
         if (pEl.className && pEl.className.indexOf('categories') === 0) return
       } while (pEl = pEl.parentNode)
       this.set('menu', false)
+      if (status || movil) {
+        e.preventDefault()
+        e.stopImmediatePropagation()
+      }
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
