@@ -58,7 +58,7 @@
       <a href="/poll/{{d._id}}" class="read-more">leer más</a>
     {{/if read_more}}
   {{else}}
-    <div class="text" decorator="markdown:'d.text'">lala</div>
+    <div class="text" decorator="markdown:{{d.text}}" />
   {{/if}}
 
   <h6>¿Qué opinas?</h6>
