@@ -6,26 +6,12 @@
 <div class="container">
   <div class="row">
     <div class='expandable'>
-        <button on-click='toggle("showDetail")'>
-          <div class="stats">
-            <div class="stats-box">
-              <button class="woa-woa" style="height: {{Math.round(0.4 * 36)}}px" />
-              <button class="woa" style="height: {{Math.round(0.6 * 36)}}px" />
-              <button class="mas" style="height: {{Math.round(0.8 * 36)}}px" />
-              <button class="mas-mas" style="height: {{Math.round(1 * 36)}}px" />
-            </div>
-            <i class="fa fa-chevron-right"></i>
-          </div>
-        </button>
-        {{#if showDetail}}
-          <!-- <div class='detail' intro-outro='slide'> -->
-          <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
-            <!-- <div class="col-xs-10 col-lg-5"> -->
-              <debate-stats debate="{{id}}"></debate-stats>
-            <!-- </div> -->
-            <!-- <button on-click='set("showDetail",false)'>x</button> -->
-          </div>
-        {{/if}}
+      {{#if showDetail}}
+        <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
+          <debate-stats debate="{{id}}"></debate-stats>
+          <button class="detail-close" on-click="set('showDetail',false)">Cerrar</button>
+        </div>
+      {{/if}}
     </div>
 
     <div class="{{movil ? '' : 'col-xs-10 col-lg-7'}}">
@@ -38,23 +24,31 @@
       {{/if error}}
 
       {{#if debate}}
-        <debate-sm id="{{id}}" d={{debate}} />
+        <debate-sm id="{{id}}" d="{{debate}}" />
       {{/if debate}}
       <comment-list debate="{{id}}"></comment-list>
     </div>
-    <div class="col-lg-5 stats-big" >
+    {{#if !movil}}
+    <div class="col-lg-5">
       <debate-stats debate="{{id}}"></debate-stats>
     </div>
+    {{/if}}
   </div>
-  <!-- testing out git flow -->
 </div>
 
 <style>
 .detail{
   position: absolute;
-  right: 4%;
-  top: 67px;
+  right: 4px;
+  top: 50px;
   z-index: 99;
+}
+.detail-close {
+  position: absolute;
+  font-size: 24px;
+  top: 0px;
+  height: 64px;
+  right: 2px;
 }
 .expandable {
   float: right;
@@ -115,17 +109,9 @@
 .stats-box .woa-woa {
   background: #bb0217;
 }
-@media (min-width: 1200px) {
-  .expandable {
-    display: none;
-  }
-}
-@media (max-width: 1200px) {
-  .stats-big {
-    visibility:hidden;
-  }
-}
 </style>
+
+
 <script>
 component.exports = {
   oninit: function () {

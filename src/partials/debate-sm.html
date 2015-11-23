@@ -5,7 +5,7 @@
 
 <div class="debate">
   <div class="user clearfix">
-    <a class="stats" href="/debate/{{d._id}}">
+    <a class="stats" href="/debate/{{d._id}}" on-click="show-stats">
       <div class="stats">
         <div class="stats-box">
           <span class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
@@ -202,6 +202,11 @@ component.exports = {
         if (pos = d.pos)
           totals[pos > 0 ? pos + 1 : pos + 2]++
         this.set('d.totals', totals)
+      }
+    })
+    this.on('show-stats', () => {
+      if (window.isMobile && this.parent) {
+        this.parent.toggle('showDetail')
       }
     })
   },
