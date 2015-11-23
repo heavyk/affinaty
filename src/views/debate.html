@@ -5,7 +5,29 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-6 col-lg-7">
+    <div class='expandable'>
+        <button on-click='toggle("showDetail")'>
+          <div class="stats">
+            <div class="stats-box">
+              <button class="woa-woa" style="height: {{Math.round(0.4 * 36)}}px" />
+              <button class="woa" style="height: {{Math.round(0.6 * 36)}}px" />
+              <button class="mas" style="height: {{Math.round(0.8 * 36)}}px" />
+              <button class="mas-mas" style="height: {{Math.round(1 * 36)}}px" />
+            </div>
+            <i class="fa fa-chevron-right"></i>
+          </div>
+        </button>
+        {{#if showDetail}}
+            <div class='detail' intro-outro='slide'>
+              <div class="col-xs-10 col-lg-5">
+                <debate-stats debate="{{id}}"></debate-stats>
+              </div>
+                <button on-click='set("showDetail",false)'>x</button>
+            </div>
+        {{/if}}
+    </div>
+
+    <div class="col-xs-10 col-lg-7">
       {{#if loading}}
         <spinner />
       {{/if loading}}
@@ -19,13 +41,90 @@
       {{/if debate}}
       <comment-list debate="{{id}}"></comment-list>
     </div>
-    <div class="col-xs-6 col-lg-5">
-      <debate-stats debate="{{id}}"></debate-stats>
+    <div class="col-lg-5 stats-big" >
+        <debate-stats debate="{{id}}"></debate-stats>
     </div>
   </div>
   <!-- testing out git flow -->
 </div>
 
+<style>
+.detail{
+  position: absolute;
+  right: 4%;
+  top: 67px;
+  z-index: 99;
+}
+.expandable {
+  float: right;
+  z-index: 99;
+}
+.stats {
+  float: right;
+  text-align: center;
+  cursor: pointer;
+  margin: 0 10px 15px 0;
+  height: 36px;
+  text-decoration: none;
+  color: #b9b9b9;
+}
+.stats .fa {
+  font-size: 10px;
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+  position: absolute;
+  top: 24px;
+  right: 5px;
+  color: #aaa;
+  float: right;
+}
+.stats .fa:hover {
+  color: #fd270d;
+}
+.stats div.total {
+  font-size: 12px;
+  white-space: nowrap;
+  position: relative;
+  top: 38px;
+}
+.stats:hover {
+  color: #fd270d;
+}
+.stats-box {
+  margin: 0 2px;
+}
+.stats-box button {
+  margin: 0;
+  padding: 2px;
+  transition: 0.3s height;
+  bottom: 0;
+  display: inline;
+  vertical-align: bottom;
+}
+.stats-box .mas-mas {
+  background: #2e8034;
+}
+.stats-box .mas {
+  background: #5a9727;
+}
+.stats-box .woa {
+  background: #cc4d41;
+}
+.stats-box .woa-woa {
+  background: #bb0217;
+}
+@media (min-width: 1200px) {
+  .expandable {
+    display: none;
+  }
+}
+@media (max-width: 1200px) {
+  .stats-big {
+    visibility:hidden;
+  }
+}
+</style>
 <script>
 component.exports = {
   oninit: function () {

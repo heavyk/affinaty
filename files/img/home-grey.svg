@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="34.292"
+   height="31.277"
+   viewBox="0 0 34.291748 31.277499"
+   id="svg4181"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="home-grey.svg">
+  <metadata
+     id="metadata4189">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs4187" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1366"
+     inkscape:window-height="744"
+     id="namedview4185"
+     showgrid="false"
+     inkscape:zoom="19.407232"
+     inkscape:cx="17.146"
+     inkscape:cy="15.6385"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4181" />
+  <path
+     d="M4.21 18.19v6.456c0 3.594 3.175 6.63 6.93 6.63h2.59c.988 0 1.785-.802 1.785-1.786v-11.3h4.175l.085 11.314c.015.982.808 1.773 1.786 1.773h2.148c3.682 0 6.674-2.976 6.674-6.63v-6.458h2.125c.725 0 1.37-.438 1.653-1.103.27-.67.117-1.432-.392-1.943l-14.093-14.1C18.998.37 18.1 0 17.148 0c-.952 0-1.846.37-2.525 1.045L8.957 6.71c-.09-1.23-1.106-2.2-2.356-2.2h-.017c-1.305 0-2.372 1.06-2.372 2.367v4.18c0 .132.023.247.04.362L.522 15.143c-.51.51-.664 1.273-.384 1.943.277.665.925 1.102 1.652 1.102h2.42z"
+     fill="#fff"
+     id="path4183"
+     style="fill:#808080" />
+</svg>
