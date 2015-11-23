@@ -120,7 +120,7 @@ function getItemsIndexedDB (keys, callback) {
 function getItemsWebsql (keys, callback) {
   var localforageInstance = this
   var promise = new Promise(function (resolve, reject) {
-    localforageInstance.ready().then(function (serializer) {
+    localforageInstance.ready().then(function () {
       var dbInfo = localforageInstance._dbInfo
       dbInfo.db.transaction(function (t) {
         var queryParts = new Array(keys.length)
