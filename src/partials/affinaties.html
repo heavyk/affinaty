@@ -5,10 +5,10 @@
 <div class="affinaties-container" style="max-height: {{height}}px">
   <div class="title section-title">Affines</div>
   <div class="list-container">
-    <div class="gm-scrollbar -vertical">
+    <div class="gm-scrollbar-vertical">
       <div class="thumb"></div>
     </div>
-    <div class="gm-scrollbar -horizontal">
+    <div class="gm-scrollbar-horizontal">
       <div class="thumb"></div>
     </div>
     <div class="gm-scroll-view">
@@ -41,7 +41,6 @@
                 <foto src="{{foto}}" size="y" />
               </a>
               <div class="ellipsis">
-                <!-- <h4><a href="/profile/{{._id}}" title="{{.name}}"> {{name}}</a></h4> -->
                 <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{name}}</a>
                 <h5>{{title}}</h5>
               </div>
@@ -65,9 +64,6 @@
   box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
   border-radius: 30px 9px 30px 9px;
   overflow: hidden;
-}
-.message{
-  float: left;
 }
 
 
@@ -167,18 +163,22 @@
 }
 .message {
   position: absolute;
-  top: 4px;
-  /*padding: 4px;*/
-  right: 12px;
+  top: 7px;
+  right: 7px;
   width: 32px;
-  height: 32px;
+  height: 35px;
   font-size: 20px;
   color: #fd270d;
+  border: solid 1px #dadada;
+  border-radius: 4px;
   cursor: pointer;
 }
 .message-inner {
   margin: auto;
-  width: 20px;
+  width: 30px;
+  border-radius: 4px;
+  background: #fff;
+  padding-left: 5px;
 }
 .message:hover {
   background: rgba(253, 39, 13, 0.08);
