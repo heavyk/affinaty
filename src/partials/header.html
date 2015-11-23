@@ -106,7 +106,7 @@
               <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
               <div class="submit">
                 <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
-                  &nbsp;<i class="fa fa-arrow-right"></i>
+                  <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
               <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
@@ -225,9 +225,9 @@
 }
 .search-text {
   position: absolute;
-  width: 200px;
+  /*width: 200px;*/
   left: 10px;
-  padding-top: 13px;
+  margin-top: 13px;
   z-index: 9;
 }
 .search-input-mov {
@@ -382,6 +382,7 @@ img {
 .categories {
   position: fixed;
   top: 50px;
+  margin-left: -30px;
 }
 
 .moar-dropdown {
@@ -466,10 +467,10 @@ a.dropdown-toggle.moar-toggle {
   position: absolute;
   right: 2px;
   top: 1px;
-  /*margin: 5px;*/
 }
 .submit .fa {
-  left: 7px;
+  right: 2px;
+  position: relative;
 }
 .submit button {
   padding: 1px 8px;
@@ -478,6 +479,10 @@ a.dropdown-toggle.moar-toggle {
   border-radius: 15px;
   width: 24px;
   height: 24px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #fd270d;
 }
 
 /* responsive layout */
@@ -548,6 +553,8 @@ component.exports = {
   oninit () {
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
+      this.set('menu', false)
+
     })
     this.on('text', (event) => {
       if (event && event.original) {
