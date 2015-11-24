@@ -5,11 +5,11 @@
   </div>
 
   <div>
-    <button on-click="set('answer', true)">
+    <button on-click-tap="set('answer', true)">
       <i class="fa fa-check" /> Sí
     </button>
 
-    <button on-click="set('answer', false)">
+    <button on-click-tap="set('answer', false)">
       <i class="fa fa-cancel" /> No
     </button>
   </div>
@@ -37,6 +37,9 @@ component.exports = {
     this.once('teardown', () => {
       window.removeEventListener('keyup', this.onkeypress)
     })
-  }
+  },
+  events: {
+    tap: require('ractive-events-tap'),
+  },
 }
 </script>

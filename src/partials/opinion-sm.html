@@ -2,26 +2,26 @@
 
 <div class="voting clearfix">
   <div class="right">
-    <button class="button-mas {{d.pos === 1 ? 'active-mas' : ''}}" on-click="+1" decorator="tip:'De acuerdo',35">
+    <button class="button-mas {{d.pos === 1 ? 'active-mas' : ''}}" on-click-tap="+1" decorator="tip:'De acuerdo',35">
       <i class="fa fa-check"></i>
     </button>
-    <button class="button-mas-mas {{d.pos === 2 ? 'active-mas-mas' : ''}}" on-click="+2" decorator="tip:'Muy de acuerdo',35">
+    <button class="button-mas-mas {{d.pos === 2 ? 'active-mas-mas' : ''}}" on-click-tap="+2" decorator="tip:'Muy de acuerdo',35">
       <i class="fa fa-check"></i>
       <i class="fa fa-check"></i>
     </button>
   </div>
   <div class="left">
-    <button class="button-woa-woa {{d.pos === -2 ? 'active-woa-woa' : ''}}" on-click="-2" decorator="tip:'Muy en desacuerdo',35">
+    <button class="button-woa-woa {{d.pos === -2 ? 'active-woa-woa' : ''}}" on-click-tap="-2" decorator="tip:'Muy en desacuerdo',35">
       <i class="fa fa-times"></i>
       <i class="fa fa-times"></i>
     </button>
-    <button class="button-woa {{d.pos === -1 ? 'active-woa' : ''}}" on-click="-1" decorator="tip:'En desacuerdo',35">
+    <button class="button-woa {{d.pos === -1 ? 'active-woa' : ''}}" on-click-tap="-1" decorator="tip:'En desacuerdo',35">
       <i class="fa fa-times"></i>
     </button>
   </div>
   <div class="cancel">
     {{#d.pos}}
-      <button class="cancel" style="background-color:{{params_vote.color}}" on-click="cancel" decorator="tip:'Cancelar',35">
+      <button class="cancel" style="background-color:{{params_vote.color}}" on-click-tap="cancel" decorator="tip:'Cancelar',35">
         {{params_vote.text}}
       </button>
     {{/d.pos}}
@@ -228,6 +228,9 @@ component.exports = {
   },
   decorators: {
     tip: require('../lib/decorators/tip')
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

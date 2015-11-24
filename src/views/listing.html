@@ -35,9 +35,9 @@
   </div>
 {{else}}
   <div class="tabs-movil">
-    <span class="tab-movil{{#if tab === 'populares'}} active{{/if}}" on-click="set('tab', 'populares')">Populares</span>
-    <span class="tab-movil{{#if tab === 'mis-top-mov'}} active{{/if}}" on-click="set('tab', 'mis-top-mov')">Mis Top</span>
-    <span class="tab-movil{{#if tab === 'affin'}} active{{/if}}" on-click="set('tab', 'affin')">Affines</span>
+    <span class="tab-movil{{#if tab === 'populares'}} active{{/if}}" on-click-tap="set('tab', 'populares')">Populares</span>
+    <span class="tab-movil{{#if tab === 'mis-top'}} active{{/if}}" on-click-tap="set('tab', 'mis-top')">Mis Top</span>
+    <span class="tab-movil{{#if tab === 'affin'}} active{{/if}}" on-click-tap="set('tab', 'affin')">Affines {{tab}}</span>
 
     {{#if tab === 'populares'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
@@ -54,7 +54,7 @@
     </div>
     {{/if}}
 
-    {{#if tab === 'mis-top-mov'}}
+    {{#if tab === 'mis-top'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
       {{#if panel}}
       <div class="clearfix"></div>
@@ -114,7 +114,8 @@
   background: #dadada;
   margin-top: -10px;
 }
-.tab-movil:hover, .active {
+/*.tab-movil:hover,*/
+.active {
   color: #fff;
   /*background: #fd270d;*/
   background: #ADADAD;
@@ -217,7 +218,7 @@ component.exports = {
       this.set('leftWidth', left)
       this.set('movil', window.isMobile)
     }
-    this.set('tab', window.localStorage.getItem('mis-top:tab') || 'populares')
+    this.set('tab', window.localStorage.getItem('listing:tab') || 'populares')
     let resizer = debounce(() => {
       setTimeout(layout, 1)
     }, 500, true)
@@ -227,9 +228,12 @@ component.exports = {
       window.removeEventListener('resize', resizer)
     })
     this.observe('tab', (tab) => {
-      if (tab) window.localStorage.setItem('mis-top:tab', tab)
-    })
+      if (tab) window.localStorage.setItem('listing:tab', tab)
+    }, {deferred: true})
   },
-  modal: require('../modal')
+  modal: require('../modal'),
+  events: {
+    tap: require('ractive-events-tap')
+  },
 }
 </script>

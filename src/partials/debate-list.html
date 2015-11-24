@@ -11,7 +11,7 @@
     {{else}}
       loading...
     {{/if}}
-    <span class="clear-search" on-click="clear-search"><i class="fa fa-times" /> clear</span>
+    <span class="clear-search" on-click-tap="clear-search"><i class="fa fa-times" /> clear</span>
   </div>
 {{/txt}}
 
@@ -319,6 +319,9 @@ component.exports = {
       this.polls += data.length
       // if (next) next()
     })
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

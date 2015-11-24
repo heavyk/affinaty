@@ -1,6 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
 {{#if !movil}}
-  <a class="categories-button {{class}}" on-click="toggle('menu')">
+  <a class="categories-button {{class}}" on-click-tap="toggle('menu')">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
         [[L.selected]]
@@ -24,16 +24,16 @@
 
     {{#if categories}}
       {{#if L.unselect && selected}}
-        <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
+        <div class="category" on-click-tap="clear" style="color: #f55">{{L.unselect}}</div>
       {{/if}}
       <div class="categories-left">
         {{#each l1}}
-          <div class="category" on-click="activate(event)">{{.title}}</div>
+          <div class="category" on-click-tap="activate(event)">{{.title}}</div>
         {{/each l1}}
       </div>
       <div class="categories-right">
         {{#each l2}}
-          <div class="category" on-click="activate(event)">{{.title}}</div>
+          <div class="category" on-click-tap="activate(event)">{{.title}}</div>
         {{/each l2}}
       </div>
     {{/if categories}}
@@ -151,6 +151,9 @@ component.exports = {
   },
   onteardown () {
     this.parent.off('set-category', this.onsetCategory)
-  }
+  },
+  events: {
+    tap: require('ractive-events-tap'),
+  },
 }
 </script>

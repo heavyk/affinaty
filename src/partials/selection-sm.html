@@ -2,7 +2,7 @@
 
 <div class="options">
   {{#each d.options : i}}
-  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-click="selection">
+  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-click-tap="selection">
     {{.text}}
   </button>
   {{/each}}
@@ -75,6 +75,9 @@ component.exports = {
         })
       }
     }
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

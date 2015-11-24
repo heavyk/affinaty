@@ -20,7 +20,7 @@
           class="{{errors.d.text ? 'invalid' : ''}}">
         </textarea>
       </div>
-      <button on-click="submit" class="row button-sign-up">
+      <button on-click-tap="submit" class="row button-sign-up">
         Opinar
       </button>
     </div>
@@ -141,6 +141,9 @@ component.exports = {
         }
       })
     })
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

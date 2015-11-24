@@ -12,13 +12,13 @@
       <div class="menu">
         <h4>Settings</h4>
         <nav>
-          <li on-click="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
+          <li on-click-tap="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
             Editar perfil
           </li>
-          <li on-click="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
+          <li on-click-tap="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
             Configuración
           </li>
-          <li on-click="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
+          <li on-click-tap="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
             Redes Sociales
           </li>
         </nav>
@@ -30,7 +30,7 @@
       {{#if active === 'appearance' }}
       <div class="settings">
         <div class="profile-foto">
-          <span class="change-foto" on-click="toggle('change_foto')">
+          <span class="change-foto" on-click-tap="toggle('change_foto')">
             {{#if change_foto}}
             <i class="fa fa-close"></i> Cancelar
             {{else}}
@@ -80,17 +80,17 @@
           <div style="text-align: center">
             <div class="planet row">
               <div class="col-xs-6">
-                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-click="set('me.planet', 0)"></i>
+                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-click-tap="set('me.planet', 0)"></i>
                 <div>Mujer</div>
               </div>
               <div class="col-xs-6">
-                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-click="set('me.planet', 1)"></i>
+                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-click-tap="set('me.planet', 1)"></i>
                 <div>Hombre</div>
               </div>
             </div>
 
             <div style="margin-top: 60px">
-              <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+              <button class="button-sign-up" on-click-tap="appearance">Guardar</button> {{save_success}}
               {{#if saving}}
                 <spinner />
               {{/if}}
@@ -122,7 +122,7 @@
             <input type="password" maxlength="100" value="{{pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
           </div>
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+            <button class="button-sign-up" on-click-tap="appearance">Guardar</button> {{save_success}}
             {{#if saving}}
               <spinner />
             {{/if saving}}
@@ -159,13 +159,13 @@
                 <div><h5>{{.title}}:</h5></div>
                 <div style="position: relative">
                   <input type="text" maxlength="200" value="{{me.networks[.id]}}" placeholder="{{.text}}" />
-                  <span class="remove" on-click="remove-network" decorator="tip:'Eliminar',16"><i class="fa fa-times" /></span>
+                  <span class="remove" on-click-tap="remove-network" decorator="tip:'Eliminar',16"><i class="fa fa-times" /></span>
                 </div>
               </div>
             {{/if}}
           {{/each}}
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-click="change-networks">Guardar</button> {{save_success}}
+            <button class="button-sign-up" on-click-tap="change-networks">Guardar</button> {{save_success}}
             {{#if saving}}
               <spinner />
             {{/if saving}}
@@ -532,6 +532,9 @@ component.exports = {
   },
   decorators: {
     tip: require('../lib/decorators/tip')
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

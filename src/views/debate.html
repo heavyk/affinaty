@@ -9,7 +9,7 @@
       {{#if showDetail}}
         <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
           <debate-stats debate="{{id}}"></debate-stats>
-          <button class="detail-close" on-click="set('showDetail',false)">Cerrar</button>
+          <button class="detail-close" on-click-tap="set('showDetail',false)">Cerrar</button>
         </div>
       {{/if}}
     </div>
@@ -142,6 +142,9 @@ component.exports = {
         })
       }
     }, { defer: true })
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

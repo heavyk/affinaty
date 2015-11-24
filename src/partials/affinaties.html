@@ -45,7 +45,7 @@
                 <h5>{{title}}</h5>
               </div>
             </div>
-            <div class="message" on-click="send-message">
+            <div class="message" on-click-tap="send-message">
               <div class="message-inner">
                 <i class="fa fa-envelope" />
               </div>
@@ -247,6 +247,9 @@ component.exports = {
       // gemini.destroy()
       onresize.removeResizeListener(container, resizer)
     })
-  }
+  },
+  events: {
+    tap: require('ractive-events-tap'),
+  },
 }
 </script>

@@ -6,8 +6,8 @@
     Mis Top
   </div>
   <div class="tabs">
-    <span class="tab{{#if tab === 'post'}} active{{/if}}" on-click="set('tab', 'post')">Publicaciones</span>
-    <span class="tab{{#if tab !== 'post'}} active{{/if}}" on-click="set('tab', 'vote')">Opiniones</span>
+    <span class="tab{{#if tab === 'post'}} active{{/if}}" on-click-tap="set('tab', 'post')">Publicaciones</span>
+    <span class="tab{{#if tab !== 'post'}} active{{/if}}" on-click-tap="set('tab', 'vote')">Opiniones</span>
   </div>
   <div class="list-container" style="max-height: {{rightHeight}}px">
     <div class="gm-scrollbar -vertical">
@@ -31,9 +31,9 @@
               <!-- {{.t}}:  -->
               {{VERB[.t]}}
               en
-              <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
+              <a href="{{ link(this) }}" on-click-tap="remove(this)">{{TYPE[.t]}}</a>
             </div>
-            <span class="remove" on-click="remove(this)">
+            <span class="remove" on-click-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           </div>
@@ -54,14 +54,14 @@
               <!-- {{.t}}:  -->
               <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
               {{VERB[.t]}}
-              <a href="{{ link(this) }}" on-click="remove(this)">{{TYPE[.t]}}</a>
+              <a href="{{ link(this) }}" on-click-tap="remove(this)">{{TYPE[.t]}}</a>
             </div>
             <div class="text ellipsis">
               <!-- en -->
               <a href="/category/{{.c.category._id}}" class="category">{{.c.category.title}}</a>
-              <a href="{{ link(this) }}" on-click="remove(this)">“{{.c.text}}”</a>
+              <a href="{{ link(this) }}" on-click-tap="remove(this)">“{{.c.text}}”</a>
             </div>
-            <span class="remove" on-click="remove(this)">
+            <span class="remove" on-click-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           </div>
@@ -257,27 +257,8 @@ component.exports = {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
   },
-  // oncomplete () {
-  //   let container = this.find('.list-container')
-  //   let gemini = new (require('gemini-scrollbar'))({
-  //     element: container,
-  //     autoshow: true,
-  //     createElements: false,
-  //   }).create()
-  //
-  //   let updater = (v) => {
-  //     gemini.update()
-  //   }
-  //
-  //   this.observe('vote', updater, {initial: false})
-  //   this.observe('post', updater, {initial: false})
-  //
-  //   this.once('teardown', () => {
-  //     gemini.destroy()
-  //   })
-  // },
-  remove (d) {
-    api.my.notifier._remove(d)
+  events: {
+    tap: require('ractive-events-tap'),
   },
 }
 </script>

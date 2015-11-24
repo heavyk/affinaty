@@ -7,13 +7,13 @@
       <input type="email" value="{{email}}" placeholder="Correo Electrónico">
       <input type="password" value="{{password}}" placeholder="Contraseña">
       <div class="remember-container">
-        <span class="remember-check" on-click="toggle('remember')">
+        <span class="remember-check" on-click-tap="toggle('remember')">
           <i class="fa {{remember ? 'fa-check' : ''}}" />
         </span>
-        <span class="remember-text" on-click="toggle('remember')">
+        <span class="remember-text" on-click-tap="toggle('remember')">
           Recuérdame
         </span>
-        <div class="button-remember" on-click="modal('remember-password', {title: 'Recordar contraseña'})">
+        <div class="button-remember" on-click-tap="modal('remember-password', {title: 'Recordar contraseña'})">
           Recordar contraseña
         </div>
       </div>
@@ -44,7 +44,7 @@
   </form>
   <div class="register row">
     ¿No tienes cuenta?
-    <button class="button-register" on-click="modal('sign-up', {title: 'Regístrate'})">
+    <button class="button-register" on-click-tap="modal('sign-up', {title: 'Regístrate'})">
       Vente y opina!
     </button>
   </div>
@@ -263,6 +263,9 @@ component.exports = {
         ls.removeItem('remember')
       }
     })
+  },
+  events: {
+    tap: require('ractive-events-tap'),
   },
   decorators: {
     tip: require('../lib/decorators/tip')

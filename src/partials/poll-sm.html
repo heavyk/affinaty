@@ -65,7 +65,7 @@
   <selection-sm d="{{d}}" />
 
   {{#if d.foto}}
-    <p class="foto" on-click="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+    <p class="foto" on-click-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{d.foto}}" size="t" shape="sq" class="lala" />
     </p>
   {{/if d.foto}}
@@ -240,6 +240,9 @@ component.exports = {
   },
   decorators: {
     markdown: require('../lib/decorators/markdown')
-  }
+  },
+  events: {
+    tap: require('ractive-events-tap'),
+  },
 }
 </script>

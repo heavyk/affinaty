@@ -27,7 +27,7 @@
         decorator="nlElastic" />
     </div>
     <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
-      <button type="submit" on-click="add">
+      <button type="submit" on-click-tap="add">
         <i class="fa fa-comment-o"></i> send
       </button>
     </div>
@@ -226,6 +226,7 @@ component.exports = {
     markdown: require('../lib/decorators/markdown'),
   },
   events: {
+    tap: require('ractive-events-tap'),
     nlSubmit: require('../lib/events/nlSubmit')
   },
 }

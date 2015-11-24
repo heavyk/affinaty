@@ -15,13 +15,13 @@
         </a>
         <ul class="action-down">
           <li class="moar moar-debate">
-            <a on-click="modal('debate-create', {title: 'da tu opinión'})">
+            <a on-click-tap="modal('debate-create', {title: 'da tu opinión'})">
               <img src="/img/opinion.svg" width="26" height="26" class="opin" />
               <span class="txt_moar">Da tu opinión</span>
             </a>
           </li>
           <li class="moar moar-poll">
-            <a on-click="modal('poll-create', {title: 'pide opinión'})">
+            <a on-click-tap="modal('poll-create', {title: 'pide opinión'})">
               <img src="/img/poll.svg" width="26" height="26" class="opin" />
               <span class="txt_moar">Pide opinión</span>
             </a>
@@ -42,7 +42,7 @@
         </a>
       </li>
       <li class="button {{show_n ? 'selected' : ''}}">
-        <a class="notifications" on-click="toggle('show_n')"><!-- href="/notifications" -->
+        <a class="notifications" on-click-tap="toggle('show_n')"><!-- href="/notifications" -->
           <img src="/img/notifications.svg" width="25" height="25" />
           {{#if notifications}}
             <span class="count">{{notifications}}</span>
@@ -63,7 +63,7 @@
             <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
           </li>
           <li>
-            <a on-click="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+            <a on-click-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
           </li>
         </ul>
       </li>
@@ -75,7 +75,7 @@
       <input type="text" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: {{search_width}}px">
       <i class="fa fa-search"></i>
       <div class="submit">
-        <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
+        <button type="submit" on-click-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
           &nbsp;<i class="fa fa-arrow-right"></i>
         </button>
       </div>
@@ -105,7 +105,7 @@
             <li class="search-text">
               <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
               <div class="submit">
-                <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
+                <button type="submit" on-click-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
                   <i class="fa fa-arrow-right"></i>
                 </button>
               </div>
@@ -129,7 +129,7 @@
                 <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
               </li>
               <li>
-                <a on-click="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+                <a on-click-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
               </li>
             </ul>
           </li>
@@ -151,7 +151,7 @@
       <!-- NOTIFICACIONES -->
       <div class="footer-item">
         <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
-          <a class="notifications" on-click="toggle('show_n')"><!-- href="/notifications" -->
+          <a class="notifications" on-click-tap="toggle('show_n')"><!-- href="/notifications" -->
             <img src="/img/notifications-grey.svg" width="42" height="42" />
             {{#if notifications}}
               <span class="count">{{notifications}}</span>
@@ -170,13 +170,13 @@
           </a>
           <ul class="action-down-mov">
             <li class="moar moar-debate">
-              <a on-click="modal('debate-create', {title: 'da tu opinión'})">
+              <a on-click-tap="modal('debate-create', {title: 'da tu opinión'})">
                 <img src="/img/opinion.svg" width="32" height="32" class="opin" />
                 <span class="txt_moar">Da tu opinión</span>
               </a>
             </li>
             <li class="moar moar-poll">
-              <a on-click="modal('poll-create', {title: 'pide opinión'})">
+              <a on-click-tap="modal('poll-create', {title: 'pide opinión'})">
                 <img src="/img/poll.svg" width="32" height="32" class="opin" />
                 <span class="txt_moar">Pide opinión</span>
               </a>
@@ -577,7 +577,6 @@ component.exports = {
         this.fire('set-category', null)
       }
     })
-
   },
   oncomplete () {
     let onclick = (e) => {
@@ -598,6 +597,9 @@ component.exports = {
   signOut () {
     api.signOut(true)
   },
-  modal: require('../modal')
+  modal: require('../modal'),
+  events: {
+    tap: require('ractive-events-tap'),
+  },
 }
 </script>
