@@ -1,5 +1,5 @@
 <link rel='ractive' href='../partials/sign-in.html'>
-<link rel='ractive' href='../partials/footer.html'>
+<!-- <link rel='ractive' href='../partials/footer.html'> -->
 
 <div class="container">
   <div class="row1 row">
@@ -29,7 +29,39 @@
     </div>
   </div>
 </div>
-<footer />
+<ul class="footer">
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    <a href="mailto:soporte@affinaty.es">Asistencia</a>
+  </li>
+  <li class="link">
+    <a href="/blog">Blog</a>
+  </li>
+  <li class="link">
+    <a href="/news">Prensa</a>
+  </li>
+  <li class="link">
+    <a href="/terms">Términos y condiciones</a>
+  </li>
+  <li class="link">
+    <a href="/careers">Tecnología</a>
+  </li>
+  <li class="link">
+    <a href="/privacy">Privacidad</a>
+  </li>
+
+  <li class="link">
+    <a href="mailto:sugerencias@affinaty.es">Affinaty © 2015</a>
+  </li>
+</ul>
 
 <style>
 .cover {
@@ -176,6 +208,52 @@ h2.slogan {
     /*display: none;*/
   }
 }
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  padding-top: 20px;
+  text-align: center;
+  float: right;
+  color: #fff;
+  background: rgba(255, 255, 255, 0);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+  z-index: -1000;
+}
+.footer:hover {
+  /*z-index: 1000;*/
+  /*background: #fff;*/
+  /*color: #000;*/
+}
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+}
+li { display: inline; }
+.link {
+  margin: 0 20px;
+}
+a:hover {
+  font-weight: 800;
+  /*text-decoration: none;*/
+}
+a {
+  color: #fff;
+}
+.footer:hover a {
+  /*color: #fd270d;*/
+}
+@media (max-width: 768px) {
+  .link {
+    margin: 0 0px;
+    font-size: 10px
+  }
+}
+
 </style>
 
 

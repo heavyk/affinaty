@@ -100,7 +100,9 @@ router
   .watchLinks()
   .watchState()
 
-import footer from './partials/footer'
-Ractive.footer = new footer({ el: 'footer' })
 import header from './partials/header'
 Ractive.header = new header({ el: 'header' })
+import footer from './partials/footer'
+if (window.isMobile) {
+  Ractive.footer = new footer({ el: 'footer' })
+}

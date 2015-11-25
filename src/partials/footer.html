@@ -1,82 +1,221 @@
-<ul class="footer">
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    <a href="mailto:soporte@affinaty.es">Asistencia</a>
-  </li>
-  <li class="link">
-    <a href="/blog">Blog</a>
-  </li>
-  <li class="link">
-    <a href="/news">Prensa</a>
-  </li>
-  <li class="link">
-    <a href="/terms">Términos y condiciones</a>
-  </li>
-  <li class="link">
-    <a href="/careers">Tecnología</a>
-  </li>
-  <li class="link">
-    <a href="/privacy">Privacidad</a>
-  </li>
+<link rel='ractive' href='../partials/debate-create.html'>
+<link rel='ractive' href='../partials/poll-create.html'>
 
-  <li class="link">
-    <a href="mailto:sugerencias@affinaty.es">Affinaty © 2015</a>
-  </li>
-</ul>
+<div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
+  <!-- HOME -->
+  <div class="footer-item {{active === 'home' && 'active'}}">
+    <a class="home" href="/home">
+      <img src="/img/home-grey.svg" width="42" height="42" />
+    </a>
+  </div>
+  <!-- NOTIFICACIONES -->
+  <div class="footer-item {{active === 'notifications' && 'active'}}">
+    <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
+      <!-- <a class="notifications" on-click-tap="toggle('show_n')"> -->
+      <a class="notifications" href="/notifications">
+        <img src="/img/notifications-grey.svg" width="42" height="42" />
+        {{#if notifications}}
+          <span class="count">{{notifications}}</span>
+        {{/if}}
+      </a>
+    </li>
+    <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+      <notification-list />
+    </div>
+  </div>
+  <!-- OPINA  -->
+  <div class="footer-item">
+    <li class="dropdown moar-dropdown-mov">
+      <a class="dropdown-toggle moar-toggle">
+        <img src="/img/opin.svg" width="50" height="50" class="opin" />
+      </a>
+      <ul class="action-down-mov">
+        <li class="moar moar-debate">
+          <a on-click-tap="modal('debate-create', {title: 'da tu opinión'})">
+            <img src="/img/opinion.svg" width="32" height="32" class="opin" />
+            <span class="txt_moar">Da tu opinión</span>
+          </a>
+        </li>
+        <li class="moar moar-poll">
+          <a on-click-tap="modal('poll-create', {title: 'pide opinión'})">
+            <img src="/img/poll.svg" width="32" height="32" class="opin" />
+            <span class="txt_moar">Pide opinión</span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </div>
+  <!-- MENSAJES -->
+  <div class="footer-item {{active === 'inbox' && 'active'}}">
+      <a class="notifications" href="/inbox">
+        <img src="/img/inbox-grey.svg" width="42" height="42" />
+        {{#if new_msgs}}
+          <span class="count">{{new_msgs}}</span>
+        {{/if}}
+      </a>
+  </div>
+  <!-- PERFIL -->
+  <div class="footer-item {{active === 'profile' && 'active'}}">
+      <a href="/profile/{{me._id}}">
+        <img src="/img/profile-grey.svg" width="42" height="42" />
+      </a>
+  </div>
+</div>
 
 <style>
-.footer {
-  position: absolute;
+.footer-bar {
   bottom: 0;
-  width: 100%;
-  height: 60px;
-  padding-top: 20px;
-  text-align: center;
+  position: fixed;
+  z-index: 999999999;
   float: right;
-  color: #fff;
-  background: rgba(255, 255, 255, 0);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
-  z-index: -1000;
-}
-.footer:hover {
-  /*z-index: 1000;*/
-  /*background: #fff;*/
-  /*color: #000;*/
-}
-ul {
-  list-style: none;
   margin: 0;
-  padding: 0;
+  /*margin-top: 0;*/
+  /*margin-bottom: 5px;*/
+  /*margin-left: -30px;*/
+  background-color: #D4D4D4;
+  width: 100%;
+  height: 50px;
+}
+.footer-item {
+  cursor: pointer;
+  width: 20%;
+  display: inline-block;
+  float: left;
+  height: 50px;
   list-style-type: none;
   text-align: center;
+  padding-top: 5px;
 }
-li { display: inline; }
-.link {
-  margin: 0 20px;
+.footer-item.active {
+  background: #DDB0AA;
 }
-a:hover {
-  font-weight: 800;
-  /*text-decoration: none;*/
+.action-down-mov {
+  border: 1px solid #eee;
+  margin-top: -116px;
+  top: 0;
+  border-radius: 30px 9px;
+  width: 300px;
+  text-align: left;
+  width: 252px;
+  font-size: 30px;
 }
-a {
+.profile-mov {
+  font-size: 41px;
+  bottom: 10px;
+  position: relative;
   color: #fff;
 }
-.footer:hover a {
-  /*color: #fd270d;*/
+
+.moar-dropdown {
+  background-color: #fff;
+  color: #fd270d;
+  font-size: 20px;
+  border: solid 2px #fff;
+  border-radius: 6px 6px 6px 6px;
+  border: 0px solid #000;
+  font-weight: bold;
+  height: 32px;
+  margin: 8px 8px 0 0;
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
 }
-@media (max-width: 768px) {
-  .link {
-    margin: 0 0px;
-    font-size: 10px
-  }
+.moar-dropdown-mov {
+  height: 36px;
+  min-width: 0;
+  bottom: 14px;
 }
 
 </style>
+
+<script>
+let assign = require('../lib/lodash/object/assign')
+
+component.exports = {
+  isolated: true,
+  onconfig () {
+    this.set('movil', window.isMobile)
+    router.on('dispatch', () => {
+      let path = router.uri.path
+      let active = null
+      if (path === '/') active = 'landing'
+      else if (path === '/home') active = 'home'
+      else if (path === '/notifications') active = 'notifications'
+      else if (/^\/inbox/.test(path)) active = 'inbox'
+      else if (/^\/profile/.test(path)) active = 'profile'
+      this.set('active', active)
+    })
+    // this.set('show_n', true)
+    // this.set('show_m', true)
+    // this.set('notifications', 3)
+    // this.set('new_msgs', 3)
+    api.my.notifier.on('msg*', (c) => {
+      this.set('new_msgs', c)
+    })
+    api.my.notifier.on('list*', (c) => {
+      this.set('notifications', c)
+    })
+    api.observe('me', (me) => {
+      this.set('me', me)
+    })
+    this.set('search_width', 200)
+    this.on('toggle-focus', (event) => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.set('search_width', event.context.focused ? 200 : 300)
+        this.toggle('focused')
+      }, 200)
+    })
+  },
+  oninit () {
+    this.on('send_text', (event) => {
+      this.fire('search', event.context.text)
+      this.set('menu', false)
+
+    })
+    this.on('text', (event) => {
+      if (event && event.original) {
+        event.original.stopImmediatePropagation()
+        let key = event.original.which
+        if (key === 13 || key === void 9) {
+          this.fire('search', event.context.text)
+        }
+      }
+    })
+    this.on('category', (category) => {
+      if (category) {
+        let uri = '/category/'+category._id
+        if (uri !== router.getUri())
+          router.dispatch(uri, {history: false})
+        this.fire('set-category', category._id)
+      } else {
+        if (router.getUri().substr(0, 9) === '/category')
+          router.dispatch('/home')
+        this.fire('set-category', null)
+      }
+    })
+  },
+  oncomplete () {
+    let onclick = (e) => {
+      let status = this.get('show_n') || this.get('show_m')
+      if (!status) return
+      let target = e.target
+      let pEl = target
+      // debugger
+      do {
+        if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list')))  return
+      } while (pEl = pEl.parentNode)
+      // debugger
+      this.set({show_n: false, show_m: false})
+    }
+    window.addEventListener('click', onclick, true)
+    this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+  },
+  signOut () {
+    api.signOut(true)
+  },
+  modal: require('../modal'),
+  events: {
+    tap: require('ractive-events-tap'),
+  },
+}
+</script>

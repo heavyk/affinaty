@@ -2,8 +2,10 @@
 <link rel='ractive' href='../partials/spinner.html'>
 <link rel='ractive' href='../partials/chat.html'>
 
-<div class="affinaties-container" style="max-height: {{height}}px">
-  <div class="title section-title">Affines</div>
+<div class="affinaties-container" style="max-height: {{height}}">
+  {{#if !movil}}
+    <div class="title section-title">Affines</div>
+  {{/if}}
   <div class="list-container">
     <div class="gm-scrollbar-vertical">
       <div class="thumb"></div>
@@ -192,6 +194,7 @@
 component.exports = {
   modal: require('../modal'),
   onconfig () {
+    this.set('movil', window.isMobile)
     this.set('list', this.list = [])
   },
   oninit () {
@@ -221,17 +224,23 @@ component.exports = {
     })
   },
   oncomplete () {
+    let resizer, _resizer
     let title = this.find('.title')
+    let movil = window.isMobile
     let container = this.find('.list-container')
-    let onresize = require('../lib/dom/element-onresize')
-    let _resizer, resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
-      let ih = window.innerHeight
-      let th = title.scrollHeight
-      let h = ih - 65 - th
-      this.set('height', Math.min((ih / 2) - th, h))
-    }, true)
-    onresize.addResizeListener(container, resizer)
-    resizer()
+    let ih = window.innerHeight
+    if (!movil) {
+      let onresize = require('../lib/dom/element-onresize')
+      resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+        let th = title.scrollHeight
+        let h = ih - 65 - th
+        this.set('height', Math.min((ih / 2) - th, h) + 'px')
+      }, true)
+      onresize.addResizeListener(container, resizer)
+      resizer()
+    } else {
+      this.set('height', (ih - 60 - 65) + 'px')
+    }
     // let gemini = new (require('gemini-scrollbar'))({
     //   element: container,
     //   autoshow: true,
@@ -240,12 +249,12 @@ component.exports = {
 
     this.observe('list', (v) => {
       // gemini.update()
-      resizer()
+      if (!movil) resizer()
     }, {initial: false})
 
     this.once('teardown', () => {
       // gemini.destroy()
-      onresize.removeResizeListener(container, resizer)
+      if (!movil) onresize.removeResizeListener(container, resizer)
     })
   },
   events: {
