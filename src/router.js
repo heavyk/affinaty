@@ -84,6 +84,8 @@ router.on('route', (route) => {
       cls = k
   }
 
+  if (window.isMobile) cls += ' movil'
+
   body.className = cls
   route.view.el.className = 'view-' + cls
 })
