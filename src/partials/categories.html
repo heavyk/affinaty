@@ -1,6 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
 {{#if !movil}}
-  <a class="categories-button {{class}}" on-click-tap="toggle('menu')">
+  <a class="categories-button {{class}}" on-click="toggle('menu')">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
         [[L.selected]]
@@ -13,7 +13,7 @@
     {{/if}}
   </a>
 {{/if}}
-  <div class="categories" style="display: {{menu || movil ? 'block' : 'none'}}">
+  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
     {{#if loading}}
       <spinner scale="0.2" />
     {{/if loading}}
@@ -108,17 +108,18 @@ component.exports = {
       movil: movil,
       loading: true
     })
+    if (movil) this.set('menu', true)
     // TODO make this a decorator
     let onclick = (e) => {
-      let status = this.get('menu')
-      if (!status && !movil) return
+      let menu = this.get('menu')
+      if (!menu && !movil || menu && movil) return
       let target = e.target
       let pEl = target
       do {
         if (pEl.className && pEl.className.indexOf('categories') === 0) return
       } while (pEl = pEl.parentNode)
       this.set('menu', false)
-      if (status || movil) {
+      if (menu || movil) {
         e.preventDefault()
         e.stopImmediatePropagation()
       }
