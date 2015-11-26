@@ -3,13 +3,13 @@
 
 <div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
   <!-- HOME -->
-  <div class="footer-item {{active === 'home' && 'active'}}">
+  <div class="footer-item {{active === 'home' ? 'active' : ''}}">
     <a class="home" href="/home">
       <img src="/img/home-grey.svg" width="42" height="42" />
     </a>
   </div>
   <!-- NOTIFICACIONES -->
-  <div class="footer-item {{active === 'notifications' && 'active'}}">
+  <div class="footer-item {{active === 'notifications' ? 'active' : ''}}">
     <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
       <!-- <a class="notifications" on-click-tap="toggle('show_n')"> -->
       <a class="notifications" href="/notifications">
@@ -46,7 +46,7 @@
     </li>
   </div>
   <!-- MENSAJES -->
-  <div class="footer-item {{active === 'inbox' && 'active'}}">
+  <div class="footer-item {{active === 'inbox' ? 'active' : ''}}">
       <a class="notifications" href="/inbox">
         <img src="/img/inbox-grey.svg" width="42" height="42" />
         {{#if new_msgs}}
@@ -55,7 +55,7 @@
       </a>
   </div>
   <!-- PERFIL -->
-  <div class="footer-item {{active === 'profile' && 'active'}}">
+  <div class="footer-item {{active === 'profile' ? 'active' : ''}}">
       <a href="/profile/{{me._id}}">
         <img src="/img/profile-grey.svg" width="42" height="42" />
       </a>
@@ -84,10 +84,13 @@
   height: 50px;
   list-style-type: none;
   text-align: center;
-  padding-top: 5px;
+  padding: 5px 0;
 }
 .footer-item.active {
   background: #DDB0AA;
+  border: solid 3px #D2210B;
+  padding: 2px 0;
+  border-radius: 8px;
 }
 .action-down-mov {
   border: 1px solid #eee;

@@ -11,7 +11,7 @@
     {{#if panel !== 'mis-top'}}
       <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
         <div class="pop-tag-container">
-          <div class="pop-tag-container-inner" style="width: {{leftWidth - 16 - 10}}px">
+          <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
             <pop-tag-carousel category="{{category}}" />
           </div>
         </div>
@@ -44,7 +44,7 @@
       {{#if panel}}
         <div class="pop-tag-container-outer" style="width: 100%">
           <div class="pop-tag-container">
-            <div class="pop-tag-container-inner" style="width: 100%">
+            <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
               <pop-tag-carousel category="{{category}}" />
             </div>
           </div>
@@ -95,15 +95,14 @@
   margin-left: 20px;
 }
 .pop-tag-container {
-  /*border: solid 1px #E6E6E6;
-  border-radius: 0 0 9px 9px;*/
   border-top: 0;
-  padding: 8px;
   background: #F0F0F0;
+  margin-bottom: 10px;
 }
 .pop-tag-container-inner {
   overflow: hidden;
   height: 160px;
+  margin: 0 auto;
 }
 .debates-list {
   margin-top: 10px;
@@ -204,6 +203,7 @@ let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   onconfig () {
+    this.set('movil', window.isMobile)
     this.on('dispatch', () => {
       let p = router.uri.path
       let i = p.indexOf('/', 1)
@@ -212,11 +212,11 @@ component.exports = {
     })
     let layout = () => {
       let inner = window.innerWidth - 60
-      let right = inner > 600 ? 250 : 0
+      let right = inner > 578 ? 250 : 0
       let left = Math.floor((inner - right - 32) / (289+20)) * (289+20)
       this.set('rightWidth', right + (inner - left - right))
       this.set('leftWidth', left)
-      this.set('movil', window.isMobile)
+      this.set('popTagWidth', Math.floor((window.isMobile ? window.innerWidth : left - 10) / 128) * 128 + 4)
     }
     this.set('tab', window.localStorage.getItem('listing:tab') || 'populares')
     let resizer = debounce(() => {
