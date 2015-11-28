@@ -47,13 +47,13 @@
   </div>
 </div>
 <div class="opina" style="display: {{show_opina ? 'block' : 'none'}}">
-  <div class="opin-left">
+  <div class="opin-left" on-click-tap="toggle('show_opina')">
       <a on-click-tap="modal('debate-create', {title: 'da tu opinión'})">
         <img src="/img/opinion.svg" width="150" height="150" class="opin" />
         <span class="txt_moar">Da tu opinión</span>
       </a>
   </div>
-  <div class="opin-right">
+  <div class="opin-right" on-click-tap="toggle('show_opina')">
       <a on-click-tap="modal('poll-create', {title: 'pide opinión'})">
         <img src="/img/poll.svg" width="150" height="150" class="opin" />
         <span class="txt_moar">Pide opinión</span>

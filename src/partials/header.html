@@ -481,15 +481,21 @@ component.exports = {
   },
   oncomplete () {
     let onclick = (e) => {
+
       let status = this.get('show_n') || this.get('show_m') || this.get('show_settings')
       if (!status) return
       let target = e.target
       let pEl = target
-      // debugger
-      do {
-        if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('settings')))  return
-      } while (pEl = pEl.parentNode)
-      // debugger
+      if (pEl.nodeName == 'A') {
+        this.set({show_settings: false})
+        return
+      }
+      else{
+        do {
+          if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('settings')))  return
+        } while (pEl = pEl.parentNode)
+      }
+      //debugger
       this.set({show_n: false, show_m: false, show_settings: false})
     }
     window.addEventListener('click', onclick, true)
