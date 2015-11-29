@@ -98,11 +98,10 @@
   <!-- movil -->
   <div class="header-container-mov">
     {{#if me}}
-      <li class="dropdown">
-        <a class="dropdown-toggle search-mov-icon">
-            <i class="fa fa-search"></i>
-        </a>
-        <ul>
+      <div class="search-mov-icon" on-click-tap="toggle('show_search')">
+                  <i class="fa fa-search"></i>
+      </div>
+      <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
           <li class="search-text">
             <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
             <div class="submit">
@@ -112,8 +111,8 @@
             </div>
             <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
           </li>
-        </ul>
-      </li>
+      </div>
+
       <div class="logo">
         <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
       </div>
@@ -454,7 +453,7 @@ component.exports = {
   oninit () {
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
-      this.set('menu', false)
+
 
     })
     this.on('text', (event) => {
@@ -482,7 +481,7 @@ component.exports = {
   oncomplete () {
     let onclick = (e) => {
 
-      let status = this.get('show_n') || this.get('show_m') || this.get('show_settings')
+      let status = this.get('show_n') || this.get('show_m') || this.get('show_settings') || this.get('show_search')
       if (!status) return
       let target = e.target
       let pEl = target
@@ -492,11 +491,12 @@ component.exports = {
       }
       else{
         do {
-          if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('settings')))  return
+          if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('search') || ~pEl.className.indexOf('settings')))  return
         } while (pEl = pEl.parentNode)
       }
       //debugger
-      this.set({show_n: false, show_m: false, show_settings: false})
+      this.set({show_n: false, show_m: false, show_settings: false, show_search: false})
+      //this.set('menu', false)
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
