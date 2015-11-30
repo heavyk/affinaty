@@ -1,6 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
-{{#if !movil}}
-  <a class="categories-button {{class}}" on-click="toggle('menu')">
+{{#if !movil || L.show_button}}
+  <a class="categories-button {{class}}" on-click-tap="toggle('menu')">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
         [[L.selected]]
@@ -108,11 +108,22 @@ component.exports = {
       movil: movil,
       loading: true
     })
-    if (movil) this.set('menu', true)
+
+    let show_button = this.get('L.show_button')
+    if (show_button){
+       this.set ('menu', false)
+    }
+    else{
+      if (movil) this.set('menu', true)
+    }
     // TODO make this a decorator
     let onclick = (e) => {
       let menu = this.get('menu')
-      if (!menu && !movil || menu && movil) return
+      debugger
+      if ( menu && movil) return
+      if ( !menu && !movil){
+        this.set('menu', true)
+      }
       let target = e.target
       let pEl = target
       do {
