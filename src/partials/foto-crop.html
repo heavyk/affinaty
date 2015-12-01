@@ -11,7 +11,7 @@
       <img src="{{image}}" width="{{width}}" height="{{height}}" />
     {{/if}}
   {{/if}}
-  <button on-click-tap="done" class="{{cropped ? 'done' : ''}}">
+  <button on-tap="done" class="{{cropped ? 'done' : ''}}">
     {{#if cropped}}
       modify
     {{else}}
@@ -154,7 +154,7 @@ component.exports = {
     this.parent.off('finish-cropping', this.onfinishCropping)
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

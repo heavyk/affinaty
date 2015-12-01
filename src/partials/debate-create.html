@@ -6,7 +6,7 @@
   <div class="row">
     <div class="col-xs-6">
       <div class="row">
-        <categories L="{selector:'Seleccione una categoría', selected: ''}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" />
+        <categories L="{selector:'Seleccione una categoría', selected: '', show_button: true}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" />
       </div>
       <div class="row">
         <tag-completer selected="{{tags}}" />
@@ -20,7 +20,7 @@
           class="{{errors.d.text ? 'invalid' : ''}}">
         </textarea>
       </div>
-      <button on-click-tap="submit" class="row button-sign-up">
+      <button on-tap="submit" class="row button-sign-up">
         Opinar
       </button>
     </div>
@@ -100,6 +100,7 @@ let Validator = require('../validator')
 component.exports = {
   isolated: true,
   oninit () {
+    this.set ('menu', false)
     this.set('d.pos', 2)
     this.validator = new Validator('d', {
       'text': {required: true, min: 2, max: 2048},
@@ -143,7 +144,7 @@ component.exports = {
     })
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

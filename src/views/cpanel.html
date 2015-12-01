@@ -100,7 +100,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -120,7 +120,7 @@
           <td>{{.title}}</td>
           <td>
             {{#if .foto}}
-            <a on-click-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <!-- <td>
@@ -130,7 +130,7 @@
           </td> -->
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -146,12 +146,12 @@
           <td>{{.title}}</td>
           <!-- <td>
             {{#if .foto}}
-            <a on-click-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td> -->
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -174,7 +174,7 @@
           <td>{{.text}}</td>
           <td>
             {{#if .foto}}
-            <a on-click-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <td>
@@ -185,7 +185,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -203,7 +203,7 @@
           <td>{{.text}}</td>
           <td>
             {{#if .foto}}
-            <a on-click-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <td>
@@ -219,7 +219,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -234,7 +234,7 @@
           <td>{{.text}}</td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -405,7 +405,7 @@ component.exports = {
     router.dispatch(`/cpanel/${sub}/${this.get('id') || ''}`, { history: false })
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

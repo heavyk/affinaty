@@ -9,7 +9,7 @@
 
   <div class="profile">
     <div class="cover"></div>
-    <div class="center-foto" on-click-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
+    <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
       {{#if loading}}
         <spinner />
       {{else}}
@@ -75,7 +75,7 @@
         </div>
       </a>
     {{else}}
-      <div class="follow" on-click-tap="follow">
+      <div class="follow" on-tap="follow">
         <div class="follow-inner">
           {{#if !following}}
             <img src="/img/follow.svg" title="follow" width="40" height="40" />
@@ -91,7 +91,7 @@
           </div>
         </div>
       </div>
-      <div class="message" on-click-tap="send-message">
+      <div class="message" on-tap="send-message">
         <div class="message-inner">
           <i class="fa fa-envelope" />
           <div class="follow-text">
@@ -122,7 +122,7 @@
           <foto src="{{foto}}" size="z" class="you" />
         </div>
         <div class="affinaty-right">
-          <div class="follow floating" on-click-tap="follow">
+          <div class="follow floating" on-tap="follow">
             <div class="follow-inner">
               {{#if !following}}
                 <img src="/img/follow.svg" title="follow" width="30" height="30" />
@@ -131,7 +131,7 @@
               {{/if}}
             </div>
           </div>
-          <div class="message floating" on-click-tap="send-message">
+          <div class="message floating" on-tap="send-message">
             <div class="message-inner">
               <i class="fa fa-envelope" />
             </div>
@@ -668,7 +668,7 @@ component.exports = {
     router.dispatch(`/profile/${this.get('id')}/${sub}`, { history: false })
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

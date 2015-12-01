@@ -34,10 +34,10 @@
       </div>
 
       <div class="field planet">
-        <div class="left-column {{errors.me.planet ? 'invalid' : ''}}" on-click-tap="set('me.planet', 0)">
+        <div class="left-column {{errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 0)">
           <input type="radio" name="{{me.planet}}" value="0"> Mujer
         </div>
-        <div class="col-right {{errors.me.planet ? 'invalid' : ''}}" on-click-tap="set('me.planet', 1)">
+        <div class="col-right {{errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 1)">
           <input type="radio" name="{{me.planet}}" value="1"> Hombre
         </div>
       </div>
@@ -46,7 +46,7 @@
         <date-select value="{{me.birthdate}}" />
       </div>
 
-      <button on-click-tap="change-appearance" class="button-sign-up">
+      <button on-tap="change-appearance" class="button-sign-up">
         {{#if prevote}}
         Votar
         {{else}}
@@ -284,7 +284,7 @@ component.exports = {
     }
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

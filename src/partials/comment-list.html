@@ -21,7 +21,7 @@
           </textarea>
         </div>
         <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
-          <button type="submit" on-click-tap="add">
+          <button type="submit" on-tap="add">
             <i class="fa fa-comment-o"></i> send
           </button>
         </div>
@@ -49,7 +49,7 @@
                   <time time="{{.created}}" class="since" />
                 </span>
                 {{#if ._canDelete}}
-                  <div class="others" on-click-tap="remove">
+                  <div class="others" on-tap="remove">
                     <!-- <i class="fa fa-ellipsis-h"></i> -->
                     <i class="fa fa-close"></i>
                   </div>
@@ -286,7 +286,7 @@ component.exports = {
     markdown: require('../lib/decorators/markdown')
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
     nlSubmit: require('../lib/events/nlSubmit')
   },
 }

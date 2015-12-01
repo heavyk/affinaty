@@ -98,48 +98,42 @@
   <!-- movil -->
   <div class="header-container-mov">
     {{#if me}}
-      <li class="dropdown">
-        <a class="dropdown-toggle search-mov-icon">
-            <i class="fa fa-search"></i>
-        </a>
-        <ul>
+      <div class="search-mov-icon" on-tap="toggle('show_search')">
+                  <i class="fa fa-search"></i>
+      </div>
+      <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
           <li class="search-text">
             <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
             <div class="submit">
-              <button type="submit" on-click-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
+              <button type="submit" on-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
                 <i class="fa fa-arrow-right"></i>
               </button>
             </div>
             <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
           </li>
-        </ul>
-      </li>
+      </div>
+
       <div class="logo">
         <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
       </div>
-      <div class="conf-mov">
-        <li class="dropdown button-head-conf-mov">
-          <a class="dropdown-toggle conf">
+      <div class="conf-mov conf" on-tap="toggle('show_settings')">
             <i class="fa fa-cog"></i>
-          </a>
-          <ul class="action-down-conf">
-            <li>
-              <a href="/profile/{{me._id}}"><i class="fa fa-fw fa-user"></i>Perfil</a>
-            </li>
-            <li>
-              <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
-            </li>
-            <li>
-              <a on-click-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
-            </li>
-          </ul>
-        </li>
       </div>
     {{else}}
       <div class="logo">
         <h1><a href="/">Affinaty</a></h1>
       </div>
     {{/if}}
+  </div>
+  <div class="settings" style="display: {{show_settings ? 'block' : 'none'}}">
+    <ul>
+      <li>
+        <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
+      </li>
+      <li>
+        <a on-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+      </li>
+    </ul>
   </div>
 {{/if}}
 
@@ -158,7 +152,7 @@
 .search-mov-icon {
   position: absolute;
   width: 40px;
-  padding-top: 0px;
+  padding-top: 10px;
   font-size: 20px;
   font-weight: bold;
   color: #fff;
@@ -167,7 +161,7 @@
 .search-text {
   position: absolute;
   /*width: 200px;*/
-  left: 10px;
+  left: 0px;
   margin-top: 13px;
   z-index: 9;
 }
@@ -196,12 +190,15 @@
 .conf{
   color:#fff;
 }
-.action-down-conf{
-  border: 1px solid #eee;
-  left: -55px;
-  margin-top: 0;
-  top: 37px;
+.settings{
+  top: 50px;
+  position: absolute;
+  width: 229px;
+  right: 3%;
+  background: #fff;
   border-radius: 30px 9px;
+  box-shadow: 5px 7px 10px -5px rgba(41,41,41,.53);
+  font-size: 26px;
 }
 .button-head-conf-mov {
   left: 60px;
@@ -285,7 +282,7 @@ img {
 .categories {
   position: fixed;
   top: 50px;
-  margin-left: -30px;
+  /*margin-left: -30px;*/
 }
 
 .moar-dropdown {
@@ -456,7 +453,7 @@ component.exports = {
   oninit () {
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
-      this.set('menu', false)
+
 
     })
     this.on('text', (event) => {
@@ -483,16 +480,23 @@ component.exports = {
   },
   oncomplete () {
     let onclick = (e) => {
-      let status = this.get('show_n') || this.get('show_m')
+
+      let status = this.get('show_n') || this.get('show_m') || this.get('show_settings') || this.get('show_search')
       if (!status) return
       let target = e.target
       let pEl = target
-      // debugger
-      do {
-        if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list')))  return
-      } while (pEl = pEl.parentNode)
-      // debugger
-      this.set({show_n: false, show_m: false})
+      if (pEl.nodeName == 'A') {
+        this.set({show_settings: false})
+        return
+      }
+      else{
+        do {
+          if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('search') || ~pEl.className.indexOf('settings')))  return
+        } while (pEl = pEl.parentNode)
+      }
+      //debugger
+      this.set({show_n: false, show_m: false, show_settings: false, show_search: false})
+      //this.set('menu', false)
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
@@ -502,7 +506,7 @@ component.exports = {
   },
   modal: require('../modal'),
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

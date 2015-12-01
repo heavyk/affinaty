@@ -1,6 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
-{{#if !movil}}
-  <a class="categories-button {{class}}" on-click="toggle('menu')">
+{{#if !movil || L.show_button}}
+<a class="categories-button {{class}}" on-tap="toggle_menu">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
         [[L.selected]]
@@ -24,16 +24,16 @@
 
     {{#if categories}}
       {{#if L.unselect && selected}}
-        <div class="category" on-click-tap="clear" style="color: #f55">{{L.unselect}}</div>
+        <div class="category" on-tap="clear" style="color: #f55">{{L.unselect}}</div>
       {{/if}}
       <div class="categories-left">
         {{#each l1}}
-          <div class="category" on-click-tap="activate(event)">{{.title}}</div>
+          <div class="category" on-tap="activate(event)">{{.title}}</div>
         {{/each l1}}
       </div>
       <div class="categories-right">
         {{#each l2}}
-          <div class="category" on-click-tap="activate(event)">{{.title}}</div>
+          <div class="category" on-tap="activate(event)">{{.title}}</div>
         {{/each l2}}
       </div>
     {{/if categories}}
@@ -108,15 +108,32 @@ component.exports = {
       movil: movil,
       loading: true
     })
-    if (movil) this.set('menu', true)
+
+    this.on('toggle_menu', (event) => {
+      // debugger
+      console.log('toggle!', this.get('menu'))
+      this.toggle('menu')
+    })
+
+    if (this.get('L.show_button')) {
+       this.set ('menu', false)
+    } else if (movil) {
+      this.set('menu', true)
+    }
     // TODO make this a decorator
+    // debugger
     let onclick = (e) => {
+      console.log('::', this.el)
       let menu = this.get('menu')
-      if (!menu && !movil || menu && movil) return
+      if (menu && movil || !this.el) return
+      // if (!menu && !movil) {
+      //   this.toggle('menu')
+      //   // this.set('menu', true)
+      // }
       let target = e.target
       let pEl = target
       do {
-        if (pEl.className && pEl.className.indexOf('categories') === 0) return
+        if (pEl.className && pEl === this.el) return
       } while (pEl = pEl.parentNode)
       this.set('menu', false)
       if (menu || movil) {
@@ -154,7 +171,7 @@ component.exports = {
     this.parent.off('set-category', this.onsetCategory)
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

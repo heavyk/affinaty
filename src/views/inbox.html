@@ -9,16 +9,16 @@
       <h4>Mensajería</h4>
       <div>
         <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
-        <div on-click-tap="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
+        <div on-tap="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
           <i class="fa fa-toggle-on"></i>
           Preferencias
         </div>
-        <div on-click-tap="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
+        <div on-tap="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
           <i class="fa fa-users"></i>
           Buscador
         </div>
         {{#each threads}}
-        <div on-click-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
+        <div on-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
           <foto src="{{members.0.foto}}" size="y" />
           <span class="name">{{members.0.name}}</span>
           {{#if .nm}}
@@ -255,7 +255,7 @@ component.exports = {
     this.set('members', members)
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

@@ -19,14 +19,14 @@
       <div class="content">
         <h4>
           <a href="/profile/{{.a.creator._id}}" title="{{.a.creator.name}}"> {{.a.creator.name}}</a>
-            <span class="remove" on-click-tap="remove(this)">
+            <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           <time time="{{.a.created}}" class="since" />
         </h4>
         <div class="action">
           {{VERB[.t]}}
-          <a href="{{ link(this) }}" on-click-tap="remove(this)">
+          <a href="{{ link(this) }}" on-tap="remove(this)">
           {{TYPE[.t]}}
           </a>
         </div>
@@ -170,7 +170,7 @@ component.exports = {
     api.my.notifier._remove(d)
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>
