@@ -99,18 +99,19 @@
   <div class="header-container-mov">
     {{#if me}}
       <div class="search-mov-icon" on-tap="toggle('show_search')">
-                  <i class="fa fa-search"></i>
+        <i class="fa fa-search"></i>
+        <!-- {{category}} -->
       </div>
       <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
-          <li class="search-text">
-            <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
-            <div class="submit">
-              <button type="submit" on-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
-                <i class="fa fa-arrow-right"></i>
-              </button>
-            </div>
-            <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
-          </li>
+        <li class="search-text">
+          <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
+          <div class="submit">
+            <button type="submit" on-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
+              <i class="fa fa-arrow-right"></i>
+            </button>
+          </div>
+          <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
+        </li>
       </div>
 
       <div class="logo">
@@ -151,8 +152,8 @@
 }
 .search-mov-icon {
   position: absolute;
+  top: 10px;
   width: 40px;
-  padding-top: 10px;
   font-size: 20px;
   font-weight: bold;
   color: #fff;
@@ -471,10 +472,13 @@ component.exports = {
         if (uri !== router.getUri())
           router.dispatch(uri, {history: false})
         this.fire('set-category', category._id)
+        if (!category.title) category = api.category.get(category._id)
+        if (category) this.set('category', category.title)
       } else {
         if (router.getUri().substr(0, 9) === '/category')
           router.dispatch('/home')
         this.fire('set-category', null)
+        this.set('category', null)
       }
     })
   },

@@ -157,6 +157,7 @@ component.exports = {
       this.activate({context: null})
     })
     this.parent.on('set-category', this.onsetCategory = (id) => {
+      // if (id) this.set('menu', false)
       api.category.until('/', () => {
         this.set('selected', id ? api.category.get(id) : null)
       })

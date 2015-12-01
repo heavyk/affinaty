@@ -147,7 +147,7 @@ component.exports = {
       if (_outer !== outer) this.parent.fire('resize')
       _outer = outer
     }
-    let _resizer = throttle(resizer, 500, true)
+    let _resizer = throttle(resizer, 500, true, true)
     this.parent.on('resize', _resizer)
     window.addEventListener('resize', _resizer)
     this.on('elastic:resize', _resizer)

@@ -88,6 +88,13 @@ window.api = api
 import local from './local'
 window.local = local
 
+import Resizer from './resizer.js'
+
+let resizer = new Resizer
+window.resizer = resizer
+
+
+
 // error handler
 // TODO: only enable this if in release mode, that way we can log the error
 // window.onerror = function (err) {
