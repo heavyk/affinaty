@@ -10,14 +10,14 @@
   <div class="tags" style="display: {{taglist ? 'block' : 'none'}}">
     <div class="wrapper">
       {{#list:i}}
-      <div class="tag" on-click-tap="add">
+      <div class="tag" on-tap="add">
         {{title}}
       </div>
       {{/}}
       {{#if recent}}
         <div class="recent">recent</div>
         {{#recent:i}}
-        <div class="tag" on-click-tap="add">
+        <div class="tag" on-tap="add">
           {{title}}
         </div>
         {{/recent}}
@@ -26,7 +26,7 @@
   </div>
   <ul class="selected-tags">
     {{#selected:i}}
-    <li class="tag" on-click-tap="remove">
+    <li class="tag" on-tap="remove">
       {{title}}
     </li>
     {{/}}
@@ -174,7 +174,7 @@ component.exports = {
     })
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
     nlSubmit: require('../lib/events/nlSubmit')
   },
 }

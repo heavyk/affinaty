@@ -8,7 +8,7 @@
         <foto src="{{d.foto}}" size="a" />
       </a>
     </div>
-    <div class="follow-sm" on-click-tap="follow">
+    <div class="follow-sm" on-tap="follow">
       {{#if !d.following}}
         <img src="/img/follow.svg" title="follow" width="20" height="20" />
       {{else}}
@@ -96,7 +96,7 @@ component.exports = {
     })
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

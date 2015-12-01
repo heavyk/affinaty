@@ -98,14 +98,14 @@
   <!-- movil -->
   <div class="header-container-mov">
     {{#if me}}
-      <div class="search-mov-icon" on-click-tap="toggle('show_search')">
+      <div class="search-mov-icon" on-tap="toggle('show_search')">
                   <i class="fa fa-search"></i>
       </div>
       <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
           <li class="search-text">
             <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
             <div class="submit">
-              <button type="submit" on-click-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
+              <button type="submit" on-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
                 <i class="fa fa-arrow-right"></i>
               </button>
             </div>
@@ -116,7 +116,7 @@
       <div class="logo">
         <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
       </div>
-      <div class="conf-mov conf" on-click-tap="toggle('show_settings')">
+      <div class="conf-mov conf" on-tap="toggle('show_settings')">
             <i class="fa fa-cog"></i>
       </div>
     {{else}}
@@ -131,7 +131,7 @@
         <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
       </li>
       <li>
-        <a on-click-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+        <a on-tap="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
       </li>
     </ul>
   </div>
@@ -506,7 +506,7 @@ component.exports = {
   },
   modal: require('../modal'),
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

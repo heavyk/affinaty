@@ -5,7 +5,7 @@
   {{#if uploaded && cropping}}
     {{#each uploaded : i}}
       <foto-crop src="{{.}}" area-type="{{shape}}" rect="{{rect[i]}}" foto="{{cropped[i]}}" />
-      <div class="cancel" on-click-tap="delete-foto" decorator="tip:'Eliminar',28">
+      <div class="cancel" on-tap="delete-foto" decorator="tip:'Eliminar',28">
         <!-- <i class="fa fa-ellipsis-h"></i> -->
         <i class="fa fa-close" ></i>
       </div>
@@ -151,7 +151,7 @@ component.exports = {
     this.parent.off('submitting', this.onsubmitting)
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

@@ -15,7 +15,7 @@
       <time time="{{d.created}}" class="since" />
     </div>
 
-    <a class="stats" href="/debate/{{d._id}}" on-click-tap="show-stats">
+    <a class="stats" href="/debate/{{d._id}}" on-tap="show-stats">
       <div class="stats">
         <div class="stats-box">
           <span class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
@@ -58,7 +58,7 @@
   {{/if}}
 
   {{#if d.foto}}
-    <p class="foto" on-click-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+    <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{d.foto}}" size="t" shape="sq" />
     </p>
   {{/if d.foto}}
@@ -269,7 +269,7 @@ component.exports = {
     markdown: require('../lib/decorators/markdown')
   },
   events: {
-    tap: require('ractive-events-tap'),
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>
