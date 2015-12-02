@@ -115,8 +115,6 @@ class notifier extends Ambition {
         break
 
       // vote
-      // case 'u':
-      // case 'j':
       case 'O':
       case 'S':
         ns = 'vote'
@@ -124,7 +122,13 @@ class notifier extends Ambition {
         exists = this.vote_exists
         break
 
+      // the rest
       default:
+      // case 'd':
+      // case 'p':
+      // case 'u':
+      // case 'j':
+      // case 'F':
         ns = 'list'
         list = this.list
         exists = this.exists

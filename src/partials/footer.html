@@ -112,6 +112,9 @@
   text-align: center;
   top: 50px;
 }
+.button-opina {
+  margin-bottom: 10px;
+}
 .opin-right{
   width: 50%;
   position: absolute;
@@ -162,34 +165,6 @@ component.exports = {
         this.set('search_width', event.context.focused ? 200 : 300)
         this.toggle('focused')
       }, 200)
-    })
-  },
-  oninit () {
-    this.on('send_text', (event) => {
-      this.fire('search', event.context.text)
-      this.set('menu', false)
-
-    })
-    this.on('text', (event) => {
-      if (event && event.original) {
-        event.original.stopImmediatePropagation()
-        let key = event.original.which
-        if (key === 13 || key === void 9) {
-          this.fire('search', event.context.text)
-        }
-      }
-    })
-    this.on('category', (category) => {
-      if (category) {
-        let uri = '/category/'+category._id
-        if (uri !== router.getUri())
-          router.dispatch(uri, {history: false})
-        this.fire('set-category', category._id)
-      } else {
-        if (router.getUri().substr(0, 9) === '/category')
-          router.dispatch('/home')
-        this.fire('set-category', null)
-      }
     })
   },
   oncomplete () {

@@ -234,12 +234,9 @@ component.exports = {
       let h = window.innerHeight
       let th = movil ? 0 : title.scrollHeight
       let ih = h - 65 - th
-      // this.set('height',  + 'px')
-      container.style.height = (h - 60 - 65) + 'px'
+      if (movil) container.style.height = (h - 60 - 65) + 'px'
       list_container.style.maxHeight = Math.min(movil ? ih :(ih / 2) - th, ih) + 'px'
     }, true)
-    // window.resizer.on('resize', this.resize = (w, h) => {
-    // })
     this.resize()
     if (!movil) {
       let onresize = require('../lib/dom/element-onresize')
