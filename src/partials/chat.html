@@ -1,7 +1,7 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
 
-<div class="messages" style="height: {{outerHeight}}px">
+<div class="messages" style="height: {{outerHeight}}px; width: {{outerWidth}}px">
   <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{innerHeight}}px">
     {{#each msgs:i}}
     <div class="{{.creator === members.me._id ? 'left' : 'right'}}">
@@ -136,15 +136,19 @@ component.exports = {
   isolated: true,
   oncomplete () {
     let tbox = this.find('textarea')
+    let messages_el = this.find('.messages')
+    let movil = window.isMobile
     setTimeout(() => {
       tbox.focus()
     }, 200)
     let _outer
     let resizer = () => {
-      let outer = window.innerHeight - 100
+      let outer = window.innerHeight - (movil ? 200 : 100)
+      let iw = window.innerWidth - 100
       this.set('outerHeight', outer)
       this.set('innerHeight', outer - tbox.clientHeight - 25)
       if (_outer !== outer) this.parent.fire('resize')
+      this.set('outerWidth', Math.floor(iw, 600))
       _outer = outer
     }
     let _resizer = throttle(resizer, 500, true, true)
