@@ -227,6 +227,10 @@ component.exports = {
     this.once('teardown', () => {
       window.removeEventListener('resize', resizer)
     })
+    Ractive.header.on('category', (category) => {
+      // this.set('category', (this.category = category ? category._id : null))
+      if (category) this.set('tab', 'populares')
+    })
     this.observe('tab', (tab) => {
       if (tab) window.localStorage.setItem('listing:tab', tab)
     }, {deferred: true})

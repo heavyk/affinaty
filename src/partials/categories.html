@@ -28,12 +28,12 @@
       {{/if}}
       <div class="categories-left">
         {{#each l1}}
-          <div class="category" on-tap="activate(event)">{{.title}}</div>
+          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
         {{/each l1}}
       </div>
       <div class="categories-right">
         {{#each l2}}
-          <div class="category" on-tap="activate(event)">{{.title}}</div>
+          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
         {{/each l2}}
       </div>
     {{/if categories}}
@@ -80,8 +80,6 @@ div.category {
   padding-left: 50px;
   box-sizing: border-box;
   color: #000;
-  /*width: 50%;*/
-  /*float:left;*/
   text-align: left;
 }
 div.category:hover {
@@ -110,9 +108,8 @@ component.exports = {
     })
 
     this.on('toggle_menu', (event) => {
-      // debugger
-      console.log('toggle!', this.get('menu'))
       this.toggle('menu')
+      console.log('toggle!', this.get('menu'))
     })
 
     if (this.get('L.show_button')) {
@@ -123,13 +120,8 @@ component.exports = {
     // TODO make this a decorator
     // debugger
     let onclick = (e) => {
-      console.log('::', this.el)
       let menu = this.get('menu')
       if (menu && movil || !this.el) return
-      // if (!menu && !movil) {
-      //   this.toggle('menu')
-      //   // this.set('menu', true)
-      // }
       let target = e.target
       let pEl = target
       do {
@@ -154,10 +146,9 @@ component.exports = {
       this.set('loading', false)
     })
     this.on('clear', () => {
-      this.activate({context: null})
+      this.activate({context: null}, this.get('alwaysShow'))
     })
     this.parent.on('set-category', this.onsetCategory = (id) => {
-      // if (id) this.set('menu', false)
       api.category.until('/', () => {
         this.set('selected', id ? api.category.get(id) : null)
       })

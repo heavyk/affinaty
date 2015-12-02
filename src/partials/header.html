@@ -76,7 +76,7 @@
       <i class="fa fa-search"></i>
       <div class="submit">
         <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
-          &nbsp;<i class="fa fa-arrow-right"></i>
+          <i class="fa fa-arrow-right"></i>
         </button>
       </div>
     </div>
@@ -99,8 +99,7 @@
   <div class="header-container-mov">
     {{#if me}}
       <div class="search-mov-icon" on-tap="toggle('show_search')">
-        <i class="fa fa-search"></i>
-        <!-- {{category}} -->
+        <i class="fa fa-search"></i>&nbsp; {{category}}
       </div>
       <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
         <li class="search-text">
@@ -110,7 +109,7 @@
               <i class="fa fa-arrow-right"></i>
             </button>
           </div>
-          <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
+          <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
         </li>
       </div>
 
@@ -153,7 +152,7 @@
 .search-mov-icon {
   position: absolute;
   top: 10px;
-  width: 40px;
+  left: 30px;
   font-size: 20px;
   font-weight: bold;
   color: #fff;
@@ -161,8 +160,7 @@
 }
 .search-text {
   position: absolute;
-  /*width: 200px;*/
-  left: 0px;
+  left: 30px;
   margin-top: 13px;
   z-index: 9;
 }
@@ -186,7 +184,7 @@
   font-size: 25px;
   font-weight: 700;
   position: absolute;
-  right: 15px;
+  right: 30px;
 }
 .conf{
   color:#fff;
@@ -205,10 +203,10 @@
   left: 60px;
 }
 .add-oppin {
-    list-style-type: none;
-    left: 80%;
-    position: relative;
-    top: 43px;
+  list-style-type: none;
+  left: 80%;
+  position: relative;
+  top: 43px;
 }
 
 h1 {
@@ -314,7 +312,7 @@ img {
   position: relative;
   vertical-align: middle;
 }
-.search .fa {
+.search .fa-search {
   position: absolute;
   left: 10px;
   top: 5px;
@@ -366,8 +364,8 @@ a.dropdown-toggle.moar-toggle {
 
 .submit {
   position: absolute;
-  right: 2px;
-  top: 1px;
+  right: -2px;
+  top: -3px;
 }
 .submit .fa {
   right: 2px;
@@ -454,8 +452,6 @@ component.exports = {
   oninit () {
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
-
-
     })
     this.on('text', (event) => {
       if (event && event.original) {
@@ -472,6 +468,7 @@ component.exports = {
         if (uri !== router.getUri())
           router.dispatch(uri, {history: false})
         this.fire('set-category', category._id)
+        if (window.isMobile) this.set('show_search', false)
         if (!category.title) category = api.category.get(category._id)
         if (category) this.set('category', category.title)
       } else {
