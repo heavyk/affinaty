@@ -36,20 +36,17 @@ let Api = Ractive.extend({
   },
     url: (function() {
       try {
-        let host = window.location.host
-
-        // kenny's local dev
-        if (host === 'localhost:1111') {
-          switch(window.localStorage.host) {
-            case 'term': return 'http://5.9.94.75:1158' // action-terminal
-            case 'local': return 'http://localhost:1155' // local
-            default:
-            case 'mothership': return 'http://5.9.94.75:1155' // normal
-          }
+        // forced host override
+        switch (window.localStorage.host) {
+          case 'term': return 'http://5.9.94.75:1158' // action-terminal
+          case 'local': return 'http://localhost:1155' // local
+          case 'mothership': return 'http://5.9.94.75:1155' // normal
         }
 
         // rest of the world
+        let host = window.location.host
         return ( host === '127.0.0.1'
+          || host.substr(-10) === 'c9users.io'
           || host.indexOf('localhost') === 0
           || host.indexOf('192.168') === 0
         ) ? 'http://5.9.94.75:1155'
