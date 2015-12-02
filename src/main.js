@@ -88,10 +88,10 @@ window.api = api
 import local from './local'
 window.local = local
 
-import Resizer from './resizer.js'
-
-let resizer = new Resizer
-window.resizer = resizer
+// import Resizer from './resizer.js'
+//
+// let resizer = new Resizer
+// window.resizer = resizer
 
 
 
