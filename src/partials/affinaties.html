@@ -192,6 +192,7 @@
 </style>
 
 <script>
+let onresize = require('../lib/dom/element-onresize')
 component.exports = {
   modal: require('../modal'),
   onconfig () {
@@ -239,7 +240,6 @@ component.exports = {
     }, true)
     this.resize()
     if (!movil) {
-      let onresize = require('../lib/dom/element-onresize')
       onresize.addResizeListener(list_container, this.resize)
     }
     // let gemini = new (require('gemini-scrollbar'))({

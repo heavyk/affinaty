@@ -1,6 +1,6 @@
 <link rel='ractive' href='../partials/spinner.html'>
 {{#if !movil || L.show_button}}
-<a class="categories-button {{class}}" on-tap="toggle_menu">
+<a class="categories-button {{class}}" on-tap="toggle('menu')">
     {{#if selected}}
       [[#if typeof L.selected === 'string']]
         [[L.selected]]
@@ -107,13 +107,8 @@ component.exports = {
       loading: true
     })
 
-    this.on('toggle_menu', (event) => {
-      this.toggle('menu')
-      console.log('toggle!', this.get('menu'))
-    })
-
     if (this.get('L.show_button')) {
-       this.set ('menu', false)
+      this.set ('menu', false)
     } else if (movil) {
       this.set('menu', true)
     }
