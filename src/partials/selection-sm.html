@@ -2,7 +2,7 @@
 
 <div class="options">
   {{#each d.options : i}}
-  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-tap="selection">
+  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-tap="selection(i)">
     {{.text}}
   </button>
   {{/each}}
@@ -44,14 +44,11 @@
 component.exports = {
   isolated: true,
   modal: require('../modal'),
-  oninit () {
-    this.on('selection', (event) => {
-      let idx = this.get('d.idx')
-      let iidx = event.index.i
-      if (idx !== iidx) {
-        this.idx(iidx, idx)
-      }
-    })
+  selection (iidx) {
+    let idx = this.get('d.idx')
+    if (idx !== iidx) {
+      this.idx(iidx, idx)
+    }
   },
   idx (iidx, idx, skip) {
     if (idx !== iidx && !skip) {
@@ -64,7 +61,7 @@ component.exports = {
               || api.me.planet == null ? true : false)
           }, 200)
         })
-      }else {
+      } else {
         this.set('d.idx', iidx)
         // api.my.opinion.create({poll: this.get('d._id')}, idx)
         api.action('selection!', {poll: this.get('d._id'), idx: iidx}, (d) => {
