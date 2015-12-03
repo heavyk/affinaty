@@ -105,7 +105,7 @@
         {{#if floating}}
         <div class="affinaty-left">
           <foto src="{{me.foto}}" size="z" class="me" />
-          <span class="affin-neg">- affin</span>
+          <span class="affin-neg" style="display: {{movil ? 'none' : ''}}">- affin</span>
           <span class="affin-gradient-left"></span>
           <span class="affin-gradient">
             <div class="gradient-pos" style="">
@@ -118,10 +118,10 @@
             </div>
           </span>
           <span class="affin-gradient-right"></span>
-          <span class="affin-pos">+ affin</span>
+          <span class="affin-pos" style="display: {{movil ? 'none' : ''}}">+ affin</span>
           <foto src="{{foto}}" size="z" class="you" />
         </div>
-        <div class="affinaty-right">
+        <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
           <div class="follow floating" on-tap="follow">
             <div class="follow-inner">
               {{#if !following}}
@@ -555,6 +555,7 @@ a.active {
 }
 
 
+
 </style>
 
 <script>
@@ -566,6 +567,7 @@ let opinion_ = require('../api/opinion')
 component.exports = {
   modal: require('../modal'),
   oninit () {
+    this.set('movil', window.isMobile)
     let __id
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
