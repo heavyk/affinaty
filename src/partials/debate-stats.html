@@ -2,7 +2,8 @@
 <link rel='ractive' href='../partials/age-stats.html'>
 
 <div class="debate-stats">
-  <h6 class="title">Estadísticas</h6>
+  <h4 class="title">Estadísticas</h4>
+  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
 
   {{#if totals}}
     <div class="stats-box">
@@ -13,11 +14,10 @@
           <i class="fa fa-check"></i>
         </button>
         <span class="num_votes">{{totals[3]}}</span>
-          <button class="bar mas-mas" style="width: {{Math.round(muyDeAcuerdo * bar_width)}}px" />
-        <!-- <div>
-          <button class="bar shadow" />
-
-        </div> -->
+        <div style="position: relative; padding-top: 24px;">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar mas-mas" style="{{#if totals[3]}}color:#fff;width:{{muyDeAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.3}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">De acuerdo</div>
@@ -25,7 +25,10 @@
           <i class="fa fa-check"></i>
         </button>
         <span class="num_votes">{{totals[2]}}</span>
-        <button class="bar mas" style="width: {{Math.round(deAcuerdo * bar_width)}}px" />
+        <div style="position: relative; padding-top: 24px;">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar mas" style="{{#if totals[2]}}color:#fff;width:{{deAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.2}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">En desacuerdo</div>
@@ -33,7 +36,10 @@
           <i class="fa fa-times"></i>
         </button>
         <span class="num_votes">{{totals[1]}}</span>
-        <button class="bar woa" style="width: {{Math.round(desAcuerdo * bar_width)}}px" />
+        <div style="position: relative; padding-top: 24px;">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar woa" style="{{#if totals[1]}}color:#fff;width:{{desAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.1}}%</button>
+        </div>
       </div>
       <div class="bar">
         <div class="stat-text">Muy en desacuerdo</div>
@@ -42,7 +48,10 @@
           <i class="fa fa-times"></i>
         </button>
         <span class="num_votes">{{totals[0]}}</span>
-        <button class="bar woa-woa" style="width: {{Math.round(muyDesAcuerdo * bar_width)}}px" />
+        <div style="position: relative; padding-top: 24px;">
+          <button class="bar shadow" style="width: {{bar_width}}px"></button>
+          <button class="bar woa-woa" style="{{#if totals[0]}}color:#fff;width:{{muyDesAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.0}}%</button>
+        </div>
       </div>
     </div>
   {{/if totals}}
@@ -54,26 +63,37 @@
 
 <style>
 h6 {
-  font-family: 'Pacifico';
   text-align: center;
   font-size: 160%;
   margin: 20px 0 0 0;
+  padding: 0 0 5px;
+  font-weight: 300;
 }
-h6.title {
+h6.total {
   color: #fd270d;
+  border-bottom: solid 1px #dadada;
+}
+span.total {
+  position: absolute;
+  text-align: center;
+  right: 10px;
+  padding: 0 5px;
 }
 .num_votes {
-  float: right;
-  margin-right: 20px;
+  padding: 3px 0;
+  position: absolute;
+  right: 18px;
 }
 .title {
   text-align: center;
   color: #747474;
-  font-size: 16px;
+  font-size: 24px;
+  font-weight: 400;
   margin-bottom: 10px;
 }
 div.bar {
   height: 55px;
+  margin-left: 8px;
 }
 
 .stat-text {
@@ -106,11 +126,12 @@ div.bar {
 }
 button.bar {
   margin: 5px 0;
-  padding: 10px;
+  padding: 0;
   transition: .3s width;
-  bottom: 0;
   display: inline;
+  position: absolute;
   height: 20px;
+  left: 35px;
 }
 .stats-box .mas-mas {
   background: #2e8034;
@@ -125,7 +146,7 @@ button.bar {
   background: #bb0217;
 }
 button.shadow {
-  background: #dadada;
+  background: #f6f6f6;
 }
 
 button {
@@ -139,87 +160,13 @@ button {
 }
 
 
-button.button-mas:hover,
-button.button-mas-mas:hover,
-button.button-woa:hover,
-button.button-woa-woa:hover {
-  background: #f9f9f9;
-}
-button.button-mas,
-button.button-mas-mas,
-button.button-woa,
-button.button-woa-woa {
-  color:#f00;
-  float: left;
-  padding: 4px 10px;
-  border: solid 1px #ddd;
-  margin-right: 5px;
-  width: 30px;
-  height: 30px;
-  padding: 5px;
-  position: relative;
-  background: #f9f9f9;
-}
-
-button.button-mas-mas {
-  color: #2e8034;
-  border-bottom: solid 1px #2e8034;
-}
-button.button-mas {
-  color: #5a9727;
-  border-bottom: solid 1px #5a9727;
-}
-button.button-woa {
-  color: #cc4d41;
-  border-bottom: solid 1px #cc4d41;
-}
-button.button-woa-woa {
-  color: #bb0217;
-  border-bottom: solid 1px #bb0217;
-}
-
-button.button-mas:first-child {
-  position: relative;
-}
-
-button.button-woa:last-child {
-  position: relative;
-}
-
-
-.fa-times {
-  position: relative;
-  top: -5px;
-  right: 0;
-}
-.fa-times:nth-child(2) {
-  position: absolute;
-  top: 13px;
-  left: 0;
-}
-.single .fa-times {
-  top: 0;
-}
-
-.fa-check {
-  position: relative;
-  top: -5px;
-}
-
-.fa-check:nth-child(2) {
-  position: absolute;
-  top: 10px;
-  left: 7px;
-}
-
-.single .fa-check {
-  top: 0;
-}
-
-
 </style>
 
 <script>
+// polyfill map
+// TODO delete me when doing koa polyfills
+if (typeof Map === 'undefined')
+  window.Map = require('es6-map')
 let pie = require('easy-pie-chart')
 let Chart = require('chart.js')
 let assign = require('../lib/lodash/object/assign')
@@ -229,40 +176,48 @@ let Stats = require('../api/age-stats')
 component.exports = {
   isolated: true,
   dd: new Map,
-  oninit () {
-    let id = this.get('debate')
-    this.stats = new Stats('debate', id)
-    // really I should do this in stats ... for now, this is fine
-    let onloaded = after(2, () => {
-      let stats = this.stats.data
-      let d = api.my.opinion.debate(id)
-      let calc = this.calc(stats)
-      this.set('totals', calc.totals)
-      this.set('percents', calc.percents)
-      this.set('planets', calc.planets)
-      this.set('ranges', calc.ranges)
-    })
-    this.stats.until('/', onloaded)
-    api.my.opinion.until('/', onloaded)
+  onconfig () {
+    this.observe('debate', (id, __id) => {
+      if (!id) return
 
-    let key = id + '.' + api.me._id
-    api.my.opinion.on(key, this.on_opinion = (d, _d) => {
-      let stats = this.stats.data
-      if (stats) {
-        if (_d) ageStats.subtract(api.me, stats, _d)
-        ageStats.add(api.me, stats, d)
+      this.stats = new Stats('debate', id)
+      // really I should do this in stats ... for now, this is fine
+      let onloaded = after(2, () => {
+        let stats = this.stats.data
+        let d = api.my.opinion.debate(id)
         let calc = this.calc(stats)
         this.set('totals', calc.totals)
+        this.set('totals_p', calc.totals_p)
+        this.set('total', calc.total)
         this.set('percents', calc.percents)
         this.set('planets', calc.planets)
         this.set('ranges', calc.ranges)
-      }
-    })
+      })
+      this.stats.until('/', onloaded)
+      api.my.opinion.until('/', onloaded)
+
+      let key = id + '.' + api.me._id
+      if (this.on_opinion) api.my.opinion.off(__id + '.' + api.me._id, this.on_opinion)
+      api.my.opinion.on(key, this.on_opinion = (d, _d) => {
+        let stats = this.stats.data
+        if (stats) {
+          if (_d) ageStats.subtract(api.me, stats, _d)
+          ageStats.add(api.me, stats, d)
+          let calc = this.calc(stats)
+          this.set('totals', calc.totals)
+          this.set('totals_p', calc.totals_p)
+          this.set('total', calc.total)
+          this.set('percents', calc.percents)
+          this.set('planets', calc.planets)
+          this.set('ranges', calc.ranges)
+        }
+      })
+    }, {initial: false})
   },
   oncomplete () {
     let stats_el = this.find('.debate-stats')
     // TODO: resize me
-    this.set('bar_width', stats_el.clientWidth - 120)
+    this.set('bar_width', stats_el.clientWidth - 100)
     let num_planets = this.get('S.moarPlanets') ? 4 : 2
     let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
     let barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
@@ -318,6 +273,7 @@ component.exports = {
     let num_planets = 2
     let total = 0
     let totals = [0, 0, 0, 0]
+    let totals_p = [0, 0, 0, 0]
     let planets = [0, 0, 0, 0]
     let percents = [0, 0, 0, 0]
     let ranges = new Array(api.my.opinion.ages.length + 1)
@@ -346,11 +302,17 @@ component.exports = {
     for (gender = 0; gender < num_planets; gender++)
       percents[gender] = planets[gender] / total * 100
 
+    for (i = 0; i < 4; i++) {
+      totals_p[i] = Math.round(totals[i] / total * 100)
+    }
+
     return {
       planets: planets,
       percents: percents,
       ranges: ranges,
+      total: total,
       totals: totals,
+      totals_p: totals_p,
       stats: data,
     }
   },
@@ -368,27 +330,27 @@ component.exports = {
     muyDeAcuerdo () {
       let v = this.get('totals.3')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     deAcuerdo () {
       let v = this.get('totals.2')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     desAcuerdo () {
       let v = this.get('totals.1')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     },
     muyDesAcuerdo () {
       let v = this.get('totals.0')
       let c = this.get('limits')
-      let px = this.get('px')
-      return v / c.max
+      let px = this.get('bar_width')
+      return (v / c.max * px).toFixed(2)
     }
-  }
+  },
 }
 </script>

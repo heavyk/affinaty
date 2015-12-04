@@ -50,7 +50,7 @@ class Stats extends Ambition {
         this.now('update')
       }
 
-		})
+    })
   }
 
   go (next) {
@@ -94,7 +94,5 @@ class Stats extends Ambition {
     return 0
   }
 }
-
-// Stats.dd = new Map
 
 export default Stats

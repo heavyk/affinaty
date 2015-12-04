@@ -1,5 +1,5 @@
 
-<img src="{{url}}" class="{{cls}}" style="{{style}}" />
+<img src="[[url]]" width="[[px]]" height="[[px]]" class="[[cls]]" style="[[style]]" />
 
 
 <script>
@@ -7,7 +7,6 @@ let repeat = require('../lib/utils').repeat
 let dpr = Math.round(window.devicePixelRatio || 1)
 component.exports = {
   onconfig () {
-    this.get('src') || this.set('src', null)
     this.get('shape') || this.set('shape', 'rd')
     this.get('default') || this.set('default', '/img/default.svg')
   },
@@ -18,6 +17,20 @@ component.exports = {
       let cls = this.get('class')
       if (cls) str += ' ' + cls
       return str
+    },
+    px () {
+      switch (this.get('size')) {
+        case 'x': return 1920
+        case 'l': return 1440
+        case 'm': return 720
+        case 's': return 360
+        case 't': return 240
+        case 'a': return 120
+        case 'k': return 28
+        case 'y': return 36
+        case 'z': return 49
+      }
+      return 0
     },
     url () {
       let id = this.get('src')

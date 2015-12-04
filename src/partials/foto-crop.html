@@ -11,7 +11,7 @@
       <img src="{{image}}" width="{{width}}" height="{{height}}" />
     {{/if}}
   {{/if}}
-  <button on-click="done" class="{{cropped ? 'done' : ''}}">
+  <button on-tap="done" class="{{cropped ? 'done' : ''}}">
     {{#if cropped}}
       modify
     {{else}}
@@ -77,7 +77,8 @@ component.exports = {
         }
       }
     })
-    this.parent.on('finish-cropping', (cb) => {
+
+    this.parent.on('finish-cropping', this.onfinishCropping = (cb) => {
       if (this.get('cropped')) cb()
       else this.fire('done', cb)
     })
@@ -150,6 +151,10 @@ component.exports = {
   },
   onteardown () {
     this.cropHost.destroy()
-  }
+    this.parent.off('finish-cropping', this.onfinishCropping)
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

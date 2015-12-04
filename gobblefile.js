@@ -40,8 +40,9 @@ var affinaty = gobble([
 				'dropzone', // this needs to be replaced by generic code
 				'easy-pie-chart',
 				'chart.js',
+				'es6-map',
 			],
-			strict: true
+			// strict: true
 		})
 		.transform('derequire')
 		.transform('browserify', {
@@ -51,7 +52,9 @@ var affinaty = gobble([
 			debug: false
 		})
 		.transformIf(gobble.env() !== 'production', function (source, options) {
-			return source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
+			return typeof source === 'string'
+				? source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
+				: source
 		})
 		.transformIf(gobble.env() === 'production', 'uglifyjs')
 		// .transform('uglifyjs')

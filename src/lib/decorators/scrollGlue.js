@@ -55,7 +55,8 @@ function scrollGlue (node, keypath, direction) {
   }
 
   onresize.addResizeListener(node, glue)
-  let observer = node._ractive.root.observe(keypath, glue)
+  let info = Ractive.getNodeInfo(node)
+  let observer = info.ractive.observe(keypath, glue)
   return {
     teardown () {
       onresize.removeResizeListener(node, glue)

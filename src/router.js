@@ -16,6 +16,7 @@ import poll from './views/poll'
 import notifications from './views/notifications'
 import cpanel from './views/cpanel'
 import api_docs from './views/action-docs'
+import blog from './views/blog'
 
 // these are the views which will change the body's class to view-### otherwise view-default
 let classView = {
@@ -27,6 +28,7 @@ let classView = {
   category,
   debate,
   poll,
+  blog,
 }
 
 let router = new Router({ el: 'view' }, function (request) {
@@ -35,9 +37,9 @@ let router = new Router({ el: 'view' }, function (request) {
   this.redirect(api.me ? '/home' : '/')
 }, function (path, options) {
   if (path === '/' && api.me)
-    return router.redirect('/home')
+    return router.dispatch('/home')
   if (path !== '/' && !api.me)
-    return router.redirect('/')
+    return router.dispatch('/')
 })
 
 // implement enter / leave
@@ -48,6 +50,7 @@ let router = new Router({ el: 'view' }, function (request) {
 router.addRoute('/', landing)
 // listing (of posts)
 router.addRoute('/home', listing)
+router.addRoute('/mis-top', listing)
 router.addRoute('/tag/:id', listing)
 router.addRoute('/category/:category', listing)
 router.addRoute('/search/:query', listing)
@@ -70,17 +73,21 @@ router.addRoute('/notifications/:id?', notifications)
 router.addRoute('/cpanel/:active?/:id?', cpanel)
 // api-docs (remove me)
 router.addRoute('/action-docs/:active?/:id?', api_docs)
+//blog
+router.addRoute('/blog', blog)
 
 // TODO remove me when the styles are fixed
 router.on('route', (route) => {
-	let cls = 'default'
+  let cls = 'default'
   for (let k in classView) {
     if (route.view instanceof classView[k])
       cls = k
   }
 
-	body.className = cls
-	route.view.el.className = 'view-' + cls
+  if (window.isMobile) cls += ' movil'
+
+  body.className = cls
+  route.view.el.className = 'view-' + cls
 })
 
 export default router

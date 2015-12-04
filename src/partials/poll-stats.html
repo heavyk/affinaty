@@ -2,17 +2,29 @@
 <link rel='ractive' href='../partials/age-stats.html'>
 
 <div class="poll-stats">
-  <h6 class="title">Estadística</h6>
+  <h4 class="title">Estadísticas</h4>
+  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
 
   {{#if totals}}
     <div class="stats-box">
       {{#totals : i}}
-      <div class="bar">
-        <div class="bar-desc">{{ options[i].text }}</div>
-        <button class="button-votes {{idx === i ? 'selected' : ''}}">{{.}}</button>
-        <!-- <span class="num_votes">{{.}}</span> -->
-        <button class="bar" style="width: {{ bar(i, 200) }}px" />
-      </div>
+        <div class="bar">
+          <div class="bar-desc">{{ options[i].text }}</div>
+          {{#if this === limits.max}}
+            <button class="button-votes {{idx === i ? 'selected' : ''}}">
+              <img src="/img/star.svg" width="18" height="18" />
+          <!-- {{else}} -->
+              <!-- <img src="/img/check.svg" width="18" height="18" /> -->
+            </button>
+          {{/if}}
+          <span class="num_votes">{{.}}</span>
+          <div style="position: relative">
+            <button class="bar shadow" style="width: {{bar_width}}px"></button>
+            <button class="bar" style="width:{{ percent_total(i, bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === limits.max}}fd270d{{else}}FB7868{{/if}}">
+              {{percent_total(i)}}%
+            </button>
+          </div>
+        </div>
       {{/totals}}
     </div>
   {{/if totals}}
@@ -23,24 +35,34 @@
 
 <style>
 h6 {
-  font-family: 'Pacifico';
   text-align: center;
   font-size: 160%;
   margin: 20px 0 0 0;
+  padding: 0 0 5px;
+  font-weight: 300;
 }
-h6.title {
+h6.total {
   color: #fd270d;
+  border-bottom: solid 1px #dadada;
 }
-
+span.total {
+  position: absolute;
+  text-align: center;
+  right: 10px;
+  padding: 0 5px;
+}
 .num_votes {
-  float: right;
-  margin-right: 20px;
+  padding: 3px 0;
+  position: absolute;
+  right: 10px;
+  width: 33px;
+  text-align: center;
 }
-
 .title {
   text-align: center;
   color: #747474;
-  font-size: 16px;
+  font-size: 24px;
+  font-weight: 400;
   margin-bottom: 10px;
 }
 div.bar {
@@ -51,6 +73,9 @@ div.bar {
 }
 button {
   padding: 4px 10px;
+}
+button.bar.shadow {
+  background: #f6f6f6;
 }
 .poll-stats {
   float: left;
@@ -78,12 +103,12 @@ button {
 }
 button.bar {
   margin: 5px 0;
-  padding: 10px;
+  padding: 0;
   transition: .3s width;
-  position: relative;
-  bottom: 0;
+  position: absolute;
   display: inline;
   height: 18px;
+  left: 35px;
   background: #fd270d;
 }
 
@@ -99,6 +124,7 @@ button.button-votes {
   padding: 5px;
   position: relative;
   background: #f9f9f9;
+  border-bottom: solid 1px #fd270d;
 }
 button.selected {
   color: #fd270d;
@@ -154,6 +180,7 @@ component.exports = {
       for (gender = 0; gender < num_planets; gender++)
         percents[gender] = planets[gender] / total * 100
 
+      this.set('total', total)
       this.set('totals', totals)
       this.set('percents', percents)
       this.set('planets', planets)
@@ -161,7 +188,7 @@ component.exports = {
     })
     let stats_el = this.find('.poll-stats')
     // TODO: resize me
-    this.set('bar_width', stats_el.clientWidth - 120)
+    this.set('bar_width', stats_el.clientWidth - 100)
   },
   computed: {
     limits () {
@@ -176,10 +203,15 @@ component.exports = {
     },
   },
   data: {
-    bar (i, px) {
+    percent (i, px) {
       let v = this.get('totals.'+i)
       let c = this.get('limits')
-      return Math.round(v / c.max * px)
+      return Math.round(v / c.max * (px || 100))
+    },
+    percent_total (i, px) {
+      let v = this.get('totals.'+i)
+      let c = this.get('total')
+      return Math.round(v / c * (px || 100))
     },
     text (i) {
       return this.get('options.'+i+'.text')

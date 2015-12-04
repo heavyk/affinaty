@@ -39,7 +39,6 @@ class opinion_ extends Ambition {
       }
     }
     this.ages = [18, 25, 35, 45]
-    this.dd = new Map
     this.exists = {}
     this.creator = creator
     this.list = []
@@ -68,14 +67,14 @@ class opinion_ extends Ambition {
       }
 
       this.go()
-		})
+    })
     // api.local.getItem('opinion*:' + creator, (err, data) => {
     //   if (data) {
     //     for (var i = 0; i < data.length; i++)
     //       this.insert(data[i])
     //     this.skip += data.length
     //   }
-		// })
+    // })
 
     // this.go()
   }

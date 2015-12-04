@@ -1,25 +1,86 @@
 <link rel='ractive' href='../partials/debate-list.html'>
 <link rel='ractive' href='../partials/affinaties.html'>
 <link rel='ractive' href='../partials/pop-tag-carousel.html'>
+<link rel='ractive' href='../partials/pop-tag-list.html'>
+<link rel='ractive' href='../partials/mis-top.html'>
+<link rel='ractive' href='../partials/debate-create.html'>
+<link rel='ractive' href='../partials/poll-create.html'>
 
-<div class="left-column" style="width: {{leftWidth}}px">
-  <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
-    <div class="pop-tag-title">Populares</div>
-    <div class="pop-tag-container">
-      <div class="pop-tag-container-inner" style="width: {{leftWidth - 16 - 10}}px">
-        <pop-tag-carousel category="{{category}}" />
+{{#if !movil}}
+  <div class="left-column" style="width: {{leftWidth}}px">
+    {{#if panel !== 'mis-top'}}
+      <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
+        <div class="pop-tag-container">
+          <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
+            <pop-tag-carousel category="{{category}}" />
+          </div>
+        </div>
       </div>
+    {{else}}
+      <div class="title-mis-top">Mis Top</div>,
+    {{/if}}
+    <div class="debates-list" style="width: {{leftWidth}}px">
+      {{#if panel}}
+        <debate-list category="{{category}}" tag="{{tag}}" top="{{ panel === 'mis-top' ? true : false }}" />
+      {{/if}}
     </div>
   </div>
-  <div class="debates-list" style="width: {{leftWidth}}px">
-    <debate-list category="{{category}}" tag="{{tag}}" />
+  <div class="right-column" style="width: {{rightWidth}}px">
+    <affinaties />
+    {{#if panel === 'mis-top'}}
+      <pop-tag-list />
+    {{else}}
+      <mis-top />
+    {{/if}}
   </div>
-</div>
-<div class="right-column" style="width: {{rightWidth}}px">
-  <affinaties />
-</div>
+{{else}}
+  <div class="tabs-movil">
+    <span class="tab-movil{{#if tab === 'populares'}} active{{/if}}" on-tap="set('tab', 'populares')">Populares</span>
+    <span class="tab-movil{{#if tab === 'mis-top'}} active{{/if}}" on-tap="set('tab', 'mis-top')">Mis Top</span>
+    <span class="tab-movil{{#if tab === 'affin'}} active{{/if}}" on-tap="set('tab', 'affin')">Affines</span>
+
+    {{#if tab === 'populares'}}
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      {{#if panel}}
+        <div class="pop-tag-container-outer" style="width: 100%">
+          <div class="pop-tag-container">
+            <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
+              <pop-tag-carousel category="{{category}}" />
+            </div>
+          </div>
+        </div>
+        <debate-list category="{{category}}" tag="{{tag}}" top="false" />
+      {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if tab === 'mis-top'}}
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      {{#if panel}}
+      <div class="clearfix"></div>
+        <debate-list category="{{category}}" tag="{{tag}}" top="true" />
+      {{/if}}
+    </div>
+    {{/if}}
+
+    {{#if tab === 'affin'}}
+    <div class="debates-list" style="width: 100%; margin-top: 10px">
+      <div class="clearfix"></div>
+      <affinaties />
+    </div>
+    {{/if}}
+  </div>
+{{/if}}
 
 <style>
+.title-mis-top {
+  text-align: center;
+  font-size: 30px;
+  font-family: inherit;
+  font-weight: 700;
+  line-height: 1.1;
+  color: inherit;
+}
 .right-column {
   margin-left: 30px;
   margin-top: 10px;
@@ -28,46 +89,111 @@
   top: 60px;
   right: 20px;
 }
-
-.pop-tag-container-outer {
-  box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
-  border-radius: 30px 9px 9px 9px;
-}
-
-.pop-tag-title {
-  border: solid 1px #E6E6E6;
-  font-family: 'Pacifico';
-  color: #fd270d;
-  font-size: 17px;
-  padding: 0 0 10px 10px;
-  background-color: #fff;
-  border-radius: 30px 9px 0px 0px;
-  text-align: center;
-  width: 100%;
-  height: 30px;
-}
-
 .left-column {
   margin-right: 30px;
   margin-top: 10px;
   margin-left: 20px;
 }
-
 .pop-tag-container {
-  border: solid 1px #E6E6E6;
-  border-radius: 0 0 9px 9px;
   border-top: 0;
-  padding: 8px;
-  background: #fff;
+  background: #F0F0F0;
+  margin-bottom: 10px;
 }
 .pop-tag-container-inner {
   overflow: hidden;
-  height: 208px;
+  height: 160px;
+  margin: 0 auto;
 }
-
 .debates-list {
   margin-top: 10px;
+  text-align: left;
 }
+.tabs-movil {
+  text-align: center;
+  background: #dadada;
+  margin-top: -10px;
+}
+/*.tab-movil:hover,*/
+.active {
+  color: #fff;
+  /*background: #fd270d;*/
+  background: #ADADAD;
+  border-bottom: solid 1px #fff;
+}
+.tab-movil {
+  cursor: pointer;
+  width: 33.3%;
+  display: inline-block;
+  float: left;
+  height: 40px;
+  font-size: 23px;
+  border-right: solid 1px #dadada;
+  border-top: solid 1px #dadada;
+  margin-bottom: 10px;
+}
+.tabs-movil,
+.list1{
+  width: 100%;
+  background-color: #F0F0F0;
+  border-bottom: solid 1px #dadada;
+
+}
+.dropdown img.opin {
+  vertical-align: top;
+  margin: 4px;
+}
+
+/* don't want this to get background */
+.moar-dropdown a:hover {
+  background: initial;
+}
+.moar-dropdown {
+  background-color: #fff;
+  color: #fd270d;
+  font-size: 20px;
+  border: solid 2px #fff;
+  border-radius: 6px 6px 6px 6px;
+  border: 0px solid #000;
+  font-weight: bold;
+  height: 32px;
+  margin: 8px 8px 0 0;
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
+}
+li.moar {
+  background: #fff;
+  border-radius: 20px;
+}
+
+li.moar a,
+.moar-toggle {
+  color: #414141;
+}
+a.dropdown-toggle.moar-toggle {
+  padding: 0;
+}
+
+.action-down {
+  border: solid 1px #eee;
+  border-radius: 20px;
+  background: #fff;
+  left: -35px;
+  margin-top: 0px;
+  top: 42px;
+  background: #fff;
+  border-radius: 30px 9px;
+}
+
+.moar-toggle,
+.action-down a:hover {
+  background: initial;
+  color: #fd270d;
+  text-decoration: none;
+}
+.add-oppin {
+    width: 200px;
+    list-style-type: none;
+}
+
 
 </style>
 <script>
@@ -77,22 +203,41 @@ let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   onconfig () {
+    this.set('movil', window.isMobile)
+    this.on('dispatch', () => {
+      let p = router.uri.path
+      let i = p.indexOf('/', 1)
+      let panel = p.substring(1, ~i ? i : p.length)
+      this.set('panel', panel)
+    })
     let layout = () => {
       let inner = window.innerWidth - 60
-      let right = inner > 600 ? 250 : 0
+      let right = inner > 578 ? 250 : 0
       let left = Math.floor((inner - right - 32) / (289+20)) * (289+20)
       this.set('rightWidth', right + (inner - left - right))
       this.set('leftWidth', left)
+      this.set('popTagWidth', Math.floor((window.isMobile ? window.innerWidth : left - 10) / 128) * 128 + 4)
     }
+    this.set('tab', window.localStorage.getItem('listing:tab') || 'populares')
     let resizer = debounce(() => {
       setTimeout(layout, 1)
     }, 500, true)
-    let teardown = () => {
-      window.removeEventListener('resize', resizer)
-    }
     layout()
     window.addEventListener('resize', resizer)
-    this.once('teardown', teardown)
+    this.once('teardown', () => {
+      window.removeEventListener('resize', resizer)
+    })
+    Ractive.header.on('category', (category) => {
+      // this.set('category', (this.category = category ? category._id : null))
+      if (category) this.set('tab', 'populares')
+    })
+    this.observe('tab', (tab) => {
+      if (tab) window.localStorage.setItem('listing:tab', tab)
+    }, {deferred: true})
+  },
+  modal: require('../modal'),
+  events: {
+    tap: require('../lib/events/tap.js')
   },
 }
 </script>

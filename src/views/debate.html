@@ -5,7 +5,16 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-6 col-lg-7">
+    <div class='expandable'>
+      {{#if showDetail}}
+        <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
+          <debate-stats debate="{{id}}"></debate-stats>
+          <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
+        </div>
+      {{/if}}
+    </div>
+
+    <div class="{{movil ? '' : 'col-xs-10 col-lg-7'}}">
       {{#if loading}}
         <spinner />
       {{/if loading}}
@@ -15,16 +24,61 @@
       {{/if error}}
 
       {{#if debate}}
-        <debate-sm id="{{id}}" d={{debate}} />
+        <debate-sm id="{{id}}" d="{{debate}}" />
       {{/if debate}}
       <comment-list debate="{{id}}"></comment-list>
     </div>
-    <div class="col-xs-6 col-lg-5">
+    {{#if !movil}}
+    <div class="col-lg-5">
       <debate-stats debate="{{id}}"></debate-stats>
     </div>
+    {{/if}}
   </div>
-  <!-- testing out git flow -->
 </div>
+
+<style>
+.detail{
+  position: absolute;
+  right: 4px;
+  top: 50px;
+  z-index: 99;
+}
+.detail-close {
+  position: absolute;
+  font-size: 24px;
+  top: 0px;
+  height: 64px;
+  right: 2px;
+}
+.expandable {
+  float: right;
+  z-index: 99;
+}
+.stats-box {
+  margin: 0 2px;
+}
+.stats-box button {
+  margin: 0;
+  padding: 2px;
+  transition: 0.3s height;
+  bottom: 0;
+  display: inline;
+  vertical-align: bottom;
+}
+.stats-box .mas-mas {
+  background: #2e8034;
+}
+.stats-box .mas {
+  background: #5a9727;
+}
+.stats-box .woa {
+  background: #cc4d41;
+}
+.stats-box .woa-woa {
+  background: #bb0217;
+}
+</style>
+
 
 <script>
 component.exports = {
@@ -41,6 +95,7 @@ component.exports = {
         this.set('error', err)
       })
     }, { defer: true })
+    this.set('movil', window.isMobile)
   },
   onrender () {
     this.observe('active', (v) => {
@@ -55,6 +110,9 @@ component.exports = {
         })
       }
     }, { defer: true })
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

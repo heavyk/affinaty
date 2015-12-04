@@ -19,14 +19,14 @@
       <div class="content">
         <h4>
           <a href="/profile/{{.a.creator._id}}" title="{{.a.creator.name}}"> {{.a.creator.name}}</a>
-            <span class="remove" on-click="remove(this)">
+            <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           <time time="{{.a.created}}" class="since" />
         </h4>
         <div class="action">
           {{VERB[.t]}}
-          <a href="{{ link(this) }}" on-click="remove(this)">
+          <a href="{{ link(this) }}" on-tap="remove(this)">
           {{TYPE[.t]}}
           </a>
         </div>
@@ -50,10 +50,14 @@
   width: 300px;
 }
 .since, .remove {
-  float: right;
   font-size: 12px;
   margin: 0 8px;
   font-weight: 300;
+  position: absolute;
+  right: 12px;
+}
+.since {
+  bottom: 14px;
 }
 .remove:hover {
   color: #f00;
@@ -63,6 +67,7 @@
   background: #fff;
   border-top: solid 1px #dadada;
   padding: 8px 0;
+  position: relative;
 }
 .no-content {
   font-size: 14px;
@@ -121,11 +126,11 @@ component.exports = {
       'p': 'un comentario en esta encuesta', // poll-comment
       'u': 'en esta opinión', // debate-opinion
       'j': 'en esta encuesta', // poll-selection
-      'm': 'un mensaje', // mbox-msg
-      'D': 'una opinión', // new-debate
-      'P': 'una encuesta', // new-poll
-      'O': 'esta opinión', // new-opinion
-      'S': 'en esta encuesta', // new-selection
+      // 'm': 'un mensaje', // mbox-msg
+      // 'D': 'una opinión', // new-debate
+      // 'P': 'una encuesta', // new-poll
+      // 'O': 'esta opinión', // new-opinion
+      // 'S': 'en esta encuesta', // new-selection
       'F': 'siguiendo', // new-follower
     })
     this.set('VERB', {
@@ -134,11 +139,11 @@ component.exports = {
       'u': 'ha votado', // debate-opinion
       'j': 'ha participado', // poll-selection
       // 'j': 'ha cambiado su participación', // poll-selection
-      'm': 'te ha enviado', // mbox-msg
-      'D': 'ha creado', // new-debate
-      'P': 'ha creado', // new-poll
-      'O': 'ha votado', // new-opinion
-      'S': 'ha participado', // new-selection
+      // 'm': 'te ha enviado', // mbox-msg
+      // 'D': 'ha creado', // new-debate
+      // 'P': 'ha creado', // new-poll
+      // 'O': 'ha votado', // new-opinion
+      // 'S': 'ha participado', // new-selection
       'F': 'te está', // new-follower
     })
     this.set('link', (d) => {
@@ -146,12 +151,12 @@ component.exports = {
         case 'd': return `/debate/${d.b._id}/comments` // debate-comment
         case 'p': return `/poll/${d.b._id}/comments` // poll-comment
         case 'u': return `/debate/${d.b._id}` // debate-opinion
-        case 'j': return `/poll/${d.b._id}` // poll-selection
-        case 'm': return `/inbox/thread/${d.c.mbox}` // mbox-msg
-        case 'D': return `/debate/${d.c._id}` // new-debate
-        case 'P': return `/poll/${d.c._id}` // new-poll
-        case 'O': return `/debate/${d.c._id}` // new-opinion
-        case 'S': return `/poll/${d.c._id}` // new-selection
+        // case 'j': return `/poll/${d.b._id}` // poll-selection
+        // case 'm': return `/inbox/thread/${d.c.mbox}` // mbox-msg
+        // case 'D': return `/debate/${d.c._id}` // new-debate
+        // case 'P': return `/poll/${d.c._id}` // new-poll
+        // case 'O': return `/debate/${d.c._id}` // new-opinion
+        // case 'S': return `/poll/${d.c._id}` // new-selection
         case 'F': return `/profile/${d.c._id}` // new-follower
       }
     })
@@ -163,6 +168,9 @@ component.exports = {
   },
   remove (d) {
     api.my.notifier._remove(d)
-  }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

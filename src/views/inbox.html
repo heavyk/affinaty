@@ -1,76 +1,74 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/chat.html'>
 
-<div class="container">
-  <div class="row">
+<div>
 
-    <!-- left column -->
-    <div class="col-sm-4 col-md-3 col-threads">
-      <div class="threads">
-        <h4>Mensajería</h4>
-        <nav>
-          <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
-          <li on-click="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
-            <i class="fa fa-toggle-on"></i>
-            Preferencias
-          </li>
-          <li on-click="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
-            <i class="fa fa-users"></i>
-            Buscador
-          </li>
-          {{#each threads}}
-          <li on-click="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
-            <foto src="{{members.0.foto}}" size="y" />
-            <span class="name">{{members.0.name}}</span>
-            {{#if .nm}}
-              <span class="new-msg">{{.nm}}</span>
-            {{/if}}
-          </li>
-          {{else}}
-          no threads
-          {{/each threads}}
-        </nav>
+  <!-- left column -->
+  <div style="width: {{leftWidth}}" class="col-left">
+    <div class="threads">
+      <h4>Mensajería</h4>
+      <div>
+        <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
+        <div on-tap="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
+          <i class="fa fa-toggle-on"></i>
+          Preferencias
+        </div>
+        <div on-tap="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
+          <i class="fa fa-users"></i>
+          Buscador
+        </div>
+        {{#each threads}}
+        <div on-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
+          <foto src="{{members.0.foto}}" size="y" />
+          <span class="name">{{members.0.name}}</span>
+          {{#if .nm}}
+            <span class="new-msg">{{.nm}}</span>
+          {{/if}}
+        </div>
+        {{else}}
+        no threads
+        {{/each threads}}
       </div>
     </div>
+  </div>
 
-    <!-- right column -->
-    <div class="col-sm-8 col-md-9 col-content">
-      <!-- settings page -->
-      {{#if panel === 'settings'}}
-      <div class="messages summary">
-        <h3>Preferencias <span class="not-yet">(Función aún no activa)</span></h3>
-        <div>Con los filtros de control podrás:</div>
-        <ul>
-          <li>Bloquear usuarios</li>
-          <li>Denunciar</li>
-          <li>Formatear la visualización de tus conversaciones</li>
-          <li>Borrar historal</li>
-        </ul>
-      </div>
-      {{/if}}
-
-      <!-- thread view -->
-      {{#if panel === 'thread'}}
-      <chat members={{members}} />
-      {{/if}}
-
-      {{#if !panel || panel === 'encounter'}}
-      <div class="messages summary">
-        <h3>Buscador <span class="not-yet">(Función aún no activa)</span></h3>
-        <!-- <div>some status updates</div> -->
-        <!-- <div>maybe some suggesgions too</div> -->
-      </div>
-      {{/if}}
+  <!-- right column -->
+  <div style="width: {{rightWidth}}" class="col-right">
+    <!-- settings page -->
+    {{#if panel === 'settings'}}
+    <div class="messages summary">
+      <h3>Preferencias <span class="not-yet">(Función aún no activa)</span></h3>
+      <div>Con los filtros de control podrás:</div>
+      <ul>
+        <li>Bloquear usuarios</li>
+        <li>Denunciar</li>
+        <li>Formatear la visualización de tus conversaciones</li>
+        <li>Borrar historal</li>
+      </ul>
     </div>
+    {{/if}}
+
+    <!-- thread view -->
+    {{#if panel === 'thread'}}
+    <chat members={{members}} />
+    {{/if}}
+
+    {{#if !panel || panel === 'encounter'}}
+    <div class="messages summary">
+      <h3>Buscador <span class="not-yet">(Función aún no activa)</span></h3>
+      <!-- <div>some status updates</div> -->
+      <!-- <div>maybe some suggesgions too</div> -->
+    </div>
+    {{/if}}
   </div>
 </div>
 
 <style>
 
 .threads {
-  position: fixed;
-  max-height: 90%;
-  min-width: 266px;
+  /*position: fixed;*/
+  /*max-height: 90%;*/
+  /*min-width: 266px;*/
 }
 
 .threads, .messages {
@@ -134,8 +132,15 @@ nav .fa {
   border: solid 2px;
   color: #414141;
 }
-.col-threads, .col-content {
+.col-left, .col-right {
+  position: absolute;
   height: 100%;
+}
+.col-left {
+  left: 10px;
+}
+.col-right {
+  right: 10px;
 }
 .settings, .encounter {
   border-top: solid 1px #A0A0A0;
@@ -155,7 +160,7 @@ let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
   oninit () {
-    api.action('mbox*', {limit: 20, sort: '+active'}, (data) => {
+    api.action('mbox*', {limit: 100, sort: '+active'}, (data) => {
       let threads = {}
       for (let i = 0; i < data.length; i++) {
         let t = data[i]
@@ -183,6 +188,10 @@ component.exports = {
           this.set(`threads.${id}.nm`, c)
         }
       })
+    })
+
+    this.observe('mbox', (mbox) => {
+      this.set_members(mbox)
     })
 
     this.on('add', (event) => {
@@ -215,6 +224,21 @@ component.exports = {
       }, 200)
     })
   },
+  oncomplete () {
+    let resizer, _resizer
+    let title = this.find('.title')
+    let movil = window.isMobile
+    let container = this.find('div')
+    resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+      let iw = window.innerWidth
+      let left = Math.min((iw / 3), 200)
+      let right = iw - left - 40
+      this.set('leftWidth', left + 'px')
+      this.set('rightWidth', right + 'px')
+    }, true)
+    onresize.addResizeListener(container, resizer)
+    resizer()
+  },
   activate (sub, mbox) {
     if (mbox) this.set('msgs', [])
     router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
@@ -229,6 +253,9 @@ component.exports = {
       members[m._id] = m
     }
     this.set('members', members)
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

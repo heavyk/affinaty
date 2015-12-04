@@ -4,14 +4,24 @@
 <link rel='ractive' href='../partials/time.html'>
 
 <div class="debate">
-  <div class="user clearfix">
-    <a class="stats" href="/debate/{{d._id}}">
+  <div class="header">
+    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}" class="header-foto">
+      <foto src="{{d.creator.foto}}" size="z" />
+    </a>
+
+    <div class="header-text">
+      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
+      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
+      <time time="{{d.created}}" class="since" />
+    </div>
+
+    <a class="stats" href="/debate/{{d._id}}" on-tap="show-stats">
       <div class="stats">
         <div class="stats-box">
-          <button class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
-          <button class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
-          <button class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
-          <button class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
+          <span class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
+          <span class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
+          <span class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
+          <span class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
         </div>
         <i class="fa fa-chevron-right"></i>
       </div>
@@ -24,41 +34,31 @@
         {{/if}}
       </div>
     </a>
-
-    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}">
-      <foto src="{{d.creator.foto}}" size="z" />
-    </a>
-
-    <div>
-      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
-      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
-      <time time="{{d.created}}" class="since" />
-    </div>
   </div>
 
   {{#if d.tag}}
   <div class="heading">
     <p class="tags">
       {{#d.tag}}
-        <a class="tag" href="/tag/{{_id}}">{{title}}</a>[[' ']]
+        <a class="tag" href="/tag/{{_id}}">#{{title}}</a>[[' ']]
       {{/d.tag}}
     </p>
   </div>
   {{/if d.tag}}
 
-  {{#if list}}
+  {{#if view === 'list'}}
     <div class="text">
-      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
     </div>
     {{#if read_more}}
       <a href="/debate/{{d._id}}" class="read-more">leer más</a>
     {{/if read_more}}
   {{else}}
-    <div class="text" decorator="markdown:d.text"></div>
+    <div class="text" decorator="markdown:{{d.text}}"></div>
   {{/if}}
 
   {{#if d.foto}}
-    <p class="foto" on-click="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+    <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{d.foto}}" size="t" shape="sq" />
     </p>
   {{/if d.foto}}
@@ -69,13 +69,12 @@
 
 <style>
 .stats {
-  float: right;
-  text-align: center;
   cursor: pointer;
-  margin: 0 10px 15px 0;
   height: 36px;
   text-decoration: none;
   color: #b9b9b9;
+  position: absolute;
+  right: 10px;
 }
 .stats .fa {
   font-size: 10px;
@@ -83,19 +82,20 @@
   height: 10px;
   display: inline-block;
   position: absolute;
-  top: 24px;
-  right: 5px;
+  top: 14px;
+  right: -2px;
   color: #aaa;
-  float: right;
 }
 .stats .fa:hover {
   color: #fd270d;
 }
 .stats div.total {
-  font-size: 12px;
+  font-size: 11px;
   white-space: nowrap;
-  position: relative;
+  position: absolute;
   top: 38px;
+  color: #828282;
+  right: 10px;
 }
 .stats:hover {
   color: #fd270d;
@@ -108,15 +108,17 @@
 
 .stats-box {
   width: 34px;
+  height: 38px;
   margin: 0 2px;
 }
-.stats-box button {
+.stats-box span {
   margin: 0;
   padding: 2px;
   transition: 0.3s height;
   position: relative;
   bottom: 0;
-  display: inline;
+  display: inline-block;
+  border-radius: 4px;
   vertical-align: bottom;
 }
 .stats-box .mas-mas {
@@ -132,19 +134,34 @@
   background: #bb0217;
 }
 
+.header-foto {
+  position: absolute;
+  left: 0;
+}
+
+.header-text {
+  position: absolute;
+  left: 72px;
+}
+
 .foto {
   width: 100%;
-  margin-bottom: 15px;
+  margin: 0 0 15px;
 }
 .foto img {
   width: 100%;
-  height: 289px;
 }
+
 .debate .text {
   color: #414141;
-  margin: 10px 15px 0;
+  margin: 0 15px;
   text-decoration: none;
   display: block;
+}
+@media (max-width: 768px) {
+  .debate .text {
+    font-size: 18px;
+  }
 }
 .list-text {
   max-height: 200px;
@@ -159,7 +176,7 @@
   display: block;
 }
 .tags {
-  margin: 5px 10px;
+  margin: 0 10px;
 }
 </style>
 
@@ -196,12 +213,17 @@ component.exports = {
         this.set('d.totals', totals)
       }
     })
+    this.on('show-stats', () => {
+      if (window.isMobile && this.parent) {
+        this.parent.toggle('showDetail')
+      }
+    })
   },
-  oncomplete () {
+  onrender () {
     let n
-    if (this.get('list')) {
+    if (this.get('view') === 'list') {
       n = this.find('a.text')
-      this.set('read_more', n.scrollHeight > n.clientHeight)
+      this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
     if (n = this.find('.foto img')) {
       n.style.height = n.clientWidth + 'px'
@@ -219,28 +241,35 @@ component.exports = {
       return r
     },
     muyDeAcuerdo () {
-      let v = this.get('d.totals.3')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.3')
       return v / c.max
     },
     deAcuerdo () {
-      let v = this.get('d.totals.2')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.2')
       return v / c.max
     },
     desAcuerdo () {
-      let v = this.get('d.totals.1')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.1')
       return v / c.max
     },
     muyDesAcuerdo () {
-      let v = this.get('d.totals.0')
       let c = this.get('limits')
+      if (!c.max) return 0
+      let v = this.get('d.totals.0')
       return v / c.max
     },
   },
   decorators: {
     markdown: require('../lib/decorators/markdown')
-  }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

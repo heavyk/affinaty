@@ -1,6 +1,6 @@
 
 import api from '../api'
-import local from '../local'
+// import local from '../local'
 
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
@@ -43,7 +43,6 @@ class category_ extends Ambition {
   }
 
   pregage () {
-    this.dd = new Map
     this['+created'] = this['-created'] = 0
     this.list = []
     this.exists = {}
@@ -64,7 +63,7 @@ class category_ extends Ambition {
       }
 
       this.go()
-		})
+    })
   }
 
   insert (d, silent) {
@@ -112,7 +111,7 @@ class category_ extends Ambition {
       if (data.length === this.query.limit) setTimeout(() => this.go(), 100)
       else this.now('/')
 
-      local.setItems({
+      api.local.setItems({
         'category': this.list,
         'category:+created': this['+created'],
         'category:-created': this['-created'],

@@ -121,9 +121,7 @@ textarea, select {
   background-image: none;
   border: 1px solid #eee;
   border-radius: 10px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+
   // .boxShadow(inset 0 1px 1px rgba(0, 0, 0, .075));
   @transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
   .transition(@transition);
@@ -155,6 +153,9 @@ textarea {
 
 .select {
   position: relative;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  appearance: menulist;
   &:after {
     position: absolute;
     content: '<>';
@@ -193,11 +194,6 @@ button, .btn {
     margin-right: 5px;
   }
 }
-
-/* Responsive containers */
-@mediaTablet: 768px;
-@mediaDesktop: 992px;
-@mediaWideDesktop: 1200px;
 
 .container {
   padding-left: 15px;

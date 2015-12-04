@@ -12,7 +12,9 @@
     "README.md"
   ],
   "scripts": {
-    "start": "node gobbler/gobbler.js"
+    "start": "node gobbler/gobbler.js",
+    "use-edge": "mv node_modules/ractive node_modules/ractive-normal && npm link ractive",
+    "use-normal": "rm -f node_modules/ractive && mv node_modules/ractive-normal node_modules/ractive"
   },
   "devDependencies": {
     "autoprefixer-core": "^5.2.1",
@@ -29,10 +31,9 @@
     "dropzone": "^4.0.1",
     "eases": "^1.0.6",
     "easy-pie-chart": "^2.1.7",
-    "esperanto": "^0.7.4",
     "gemini-scrollbar": "^1.2.9",
     "genny": "^0.5.6",
-    "gobble": "^0.10.2",
+    "gobble": "heavyk/gobble#stable-pathwatcher",
     "gobble-babel": "^5.5.8",
     "gobble-browserify": "^0.6.1",
     "gobble-cli": "^0.4.2",
@@ -44,14 +45,12 @@
     "gobble-rollup-babel": "^0.6.1",
     "gobble-uglifyjs": "^0.2.1",
     "http-proxy": "^1.11.3",
-    "koa": "^1.1.0",
     "localforage": "1.2.8",
     "markdown-it": "^5.0.0",
     "markdown-it-emoji": "^1.1.0",
     "markdown-it-video": "heavyk/markdown-it-video#vine-parser",
     "masonry-layout": "^3.3.2",
     "moment": "^2.10.6",
-    "pikaday": "^1.3.3",
     "postcss": "^5.0.10",
     "postcss-color-function": "^1.3.2",
     "postcss-import": "^6.2.0",
@@ -62,7 +61,6 @@
     "ractive": "heavyk/ractive#stable",
     "ractive-component-iscroll": "0.0.3",
     "ractive-events-tap": "^0.2.0",
-    "ractive-promise-alt": "^0.5.3",
     "ractive-ractive": "^1.1.1",
     "ractive-transitions-fade": "^0.2.0",
     "ractive-transitions-slide": "^0.2.1",

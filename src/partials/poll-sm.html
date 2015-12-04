@@ -5,7 +5,17 @@
 <link rel='ractive' href='../partials/time.html'>
 
 <div class="debate">
-  <div class="user clearfix">
+  <div class="header">
+    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}" class="header-foto">
+      <foto src="{{d.creator.foto}}" size="z" />
+    </a>
+
+    <div class="header-text">
+      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
+      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
+      <time time="{{d.created}}" class="since" />
+    </div>
+
     <a class="stats" href="/poll/{{d._id}}">
       <div class="stats">
         <i class="fa fa-chevron-right"></i>
@@ -28,43 +38,34 @@
         {{/if}}
       </div>
     </a>
-
-    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}">
-      <foto src="{{d.creator.foto}}" size="z" />
-    </a>
-
-    <div>
-      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
-      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
-      <time time="{{d.created}}" class="since" />
-    </div>
   </div>
 
   {{#if d.tag}}
   <div class="heading">
     <p class="tags">
       {{#d.tag}}
-        <a class="tag" href="/tag/{{_id}}">{{title}}</a>[[' ']]
+        <a class="tag" href="/tag/{{_id}}">#{{title}}</a>[[' ']]
       {{/d.tag}}
     </p>
   </div>
   {{/if d.tag}}
-  {{#if list}}
+
+  {{#if view === 'list'}}
     <div class="text">
-      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:'d.text'"></a>
+      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
     </div>
     {{#if read_more}}
       <a href="/poll/{{d._id}}" class="read-more">leer más</a>
     {{/if read_more}}
   {{else}}
-    <div class="text" decorator="markdown:'d.text'">lala</div>
+    <div class="text" decorator="markdown:{{d.text}}" />
   {{/if}}
 
   <h6>¿Qué opinas?</h6>
   <selection-sm d="{{d}}" />
 
   {{#if d.foto}}
-    <p class="foto" on-click="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+    <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{d.foto}}" size="t" shape="sq" class="lala" />
     </p>
   {{/if d.foto}}
@@ -85,12 +86,12 @@ h6 {
   margin: 20px 0 0 0;
 }
 .stats {
-  float: right;
   cursor: pointer;
-  margin: 0 18px 15px 0;
   height: 36px;
   text-decoration: none;
-  color: #ccc;
+  color: #aaa;
+  position: absolute;
+  right: 10px;
 }
 .stats .fa {
   font-size: 10px;
@@ -98,28 +99,38 @@ h6 {
   height: 10px;
   display: inline-block;
   position: absolute;
-  top: 24px;
-  right: 5px;
+  top: 16px;
+  right: -9px;
   color: #aaa;
-  float: right;
 }
 .stats .fa:hover {
   color: #fd270d;
 }
 .stats div.total {
-  font-size: 12px;
+  font-size: 13px;
   white-space: nowrap;
-  position: relative;
+  position: absolute;
   top: 38px;
+  color: #828282;
+  right: 10px;
 }
 .stats:hover {
   color: #fd270d;
 }
 
+.header-foto {
+  position: absolute;
+  left: 0;
+}
+
+.header-text {
+  position: absolute;
+  left: 72px;
+}
+
 
 .stats-box {
-  width: 34px;
-  margin: 2px;
+  width: 55px;
 }
 .stats-box button {
   margin: 0;
@@ -132,20 +143,24 @@ h6 {
   margin-bottom: 10px;
 }
 
-.foto img {
-  width: 100%;
-  height: 289px;
-}
 .foto {
   width: 100%;
-  margin-bottom: 15px;
+  margin: 0 0 15px;
+}
+.foto img {
+  width: 100%;
 }
 
 .debate .text {
   color: #414141;
-  margin: 10px 15px 0;
+  margin: 0 15px;
   text-decoration: none;
   display: block;
+}
+@media (max-width: 768px) {
+  .debate .text {
+    font-size: 18px;
+  }
 }
 .list-text {
   max-height: 200px;
@@ -161,7 +176,7 @@ h6 {
 }
 
 .tags {
-  margin: 5px 10px;
+  margin: 0 10px;
 }
 
 .bar-bg {
@@ -194,11 +209,11 @@ component.exports = {
       ])
     }
   },
-  oncomplete () {
+  onrender () {
     let n
-    if (this.get('list')) {
+    if (this.get('view') === 'list') {
       n = this.find('a.text')
-      this.set('read_more', n.scrollHeight > n.clientHeight)
+      this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
     if (n = this.find('.foto img')) {
       n.style.height = n.clientWidth + 'px'
@@ -233,6 +248,9 @@ component.exports = {
   },
   decorators: {
     markdown: require('../lib/decorators/markdown')
-  }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

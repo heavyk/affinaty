@@ -1,24 +1,27 @@
 <link rel='ractive' href='../partials/sign-up.html'>
+<link rel='ractive' href='../partials/remember-password.html'>
+<link rel='ractive' href='../partials/change-password.html'>
 <div class="sign-in">
   <form on-submit="submit">
     <div class="form">
       <input type="email" value="{{email}}" placeholder="Correo Electrónico">
       <input type="password" value="{{password}}" placeholder="Contraseña">
       <div class="remember-container">
-        <!-- <input type="checkbox" value="{{remember}}" id="remember"> <label for="remember"> Recuerdame</label> -->
-        <span class="remember-check" on-click="toggle('remember')">
+        <span class="remember-check" on-tap="toggle('remember')">
           <i class="fa {{remember ? 'fa-check' : ''}}" />
         </span>
-        <span class="remember-text" on-click="toggle('remember')">
+        <span class="remember-text" on-tap="toggle('remember')">
           Recuérdame
         </span>
-        <a href="/remember-password">¿Olvidaste la contraseña?</a>
+        <div class="button-remember" on-tap="modal('remember-password', {title: 'Recordar contraseña'})">
+          Recordar contraseña
+        </div>
       </div>
       <div class="submit">
         {{#error}}
           <span class="error">{{error}}</span>
         {{/error}}
-        <button type="submit" class="enter" on-click="">
+        <button type="submit" class="enter">
           Entrar
         </button>
       </div>
@@ -41,7 +44,7 @@
   </form>
   <div class="register row">
     ¿No tienes cuenta?
-    <button class="button-register" on-click="modal('sign-up', {title: 'Regístrate'})">
+    <button class="button-register" on-tap="modal('sign-up', {title: 'Regístrate'})">
       Vente y opina!
     </button>
   </div>
@@ -72,11 +75,11 @@
 .remember-container {
   margin-top: 17px;
   text-align: left;
-  color: #bbb;
+  color: #888;
   cursor: pointer;
 }
 .remember-container a {
-  color: #FF3300;
+  color: #F30;
   float: right;
   text-decoration: none;
   letter-spacing: -0.02em;
@@ -89,12 +92,22 @@
   margin-left: 10px;
 }
 .button-register:hover {
-  background: #FFF;
-  color:#FF3300;
+  background: #FF4314;
+  color:#FFF;
+}
+.button-remember {
+  color: #F30;
+  float: right;
+  letter-spacing: -.02em;
+  font-size: 120%;
+}
+.button-remember:hover {
+  color: #F30;
+  background-color: #fff;
 }
 
 .access-prompt {
-  color: #bbb;
+  color: #888;
   font-size: 130%;
   margin-top: 8px;
 }
@@ -107,7 +120,7 @@
   height: 50px;
   padding-top: 5px;
   /*border-top: solid 1px #ddd;*/
-  color: #aaa;
+  color: #888;
 }
 .form {
   padding: 28px 28px 0;
@@ -177,8 +190,8 @@ button[disabled]:hover,
 }
 button:hover,
 .btn:hover {
-  background: #FFF;
-  color: #ff3300;
+  background: #FF4314;
+  color: #fff;
 }
 button[disabled],
 .btn[disabled] {
@@ -195,6 +208,15 @@ button.danger[disabled]:hover,
 button.danger:hover,
 .btn.danger:hover {
   background: #bd362f;
+}
+@media (max-width: 768px) {
+  .access-prompt {
+    margin-top: 0px;
+  }
+  .access{
+    height: 56px;
+    padding: 0px 0;
+  }
 }
 
 </style>
@@ -218,9 +240,13 @@ component.exports = {
       let opts = { ident: email, password: password }
       if (remember) opts.ttl = 365 * 24 * 3600
       api.action('sign-in', opts, (data) => {
-        api.signIn(data).then(function () {
+        api.signIn(data).then(() => {
           setTimeout(() => {
-            router.dispatch('/home')
+            if (data.tmp) {
+              this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
+            } else {
+              router.dispatch('/home')
+            }
           }, 1)
         })
       }, (error) => {
@@ -237,6 +263,9 @@ component.exports = {
         ls.removeItem('remember')
       }
     })
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
   decorators: {
     tip: require('../lib/decorators/tip')

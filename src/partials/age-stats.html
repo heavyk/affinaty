@@ -57,7 +57,7 @@ component.exports = {
       if (a) pr = r
       r = rr
       ranges.push({
-        label: (r === '<' ? '< ' + pr : (pr ? pr + '-' : '> ') + r) + ' years',
+        label: (r === '<' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' years',
         value: 0, // s
         color: colors[a]
       })

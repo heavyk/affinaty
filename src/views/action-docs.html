@@ -139,7 +139,7 @@
           {{/each .}}
           <!-- <td><time time="{{.created}}" class="since" /></td> -->
           <!-- <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td> -->
         </tr>
         {{/each fns}}
@@ -323,6 +323,9 @@ component.exports = {
   activate (sub) {
     this.set('active', sub)
     router.dispatch(`/action-docs/${sub}/${this.get('id') || ''}`, { history: false })
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

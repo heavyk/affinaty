@@ -53,10 +53,16 @@
           Comments{{#if stats.comments}} ({{stats.comments}}){{/if}}
         </a>
       </div>
-      <div class="col-xs-2">
+      <!-- <div class="col-xs-2">
         <a href="/cpanel/relations" class="{{active === 'relations' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-bullseye"></i></div>
           Relations{{#if stats.relations}} ({{stats.relations}}){{/if}}
+        </a>
+      </div> -->
+      <div class="col-xs-2">
+        <a href="/cpanel/stats" class="{{active === 'stats' ? 'active' : '' }}">
+          <div class="symbol"><i class="fa fa-line-chart"></i></div>
+          Stats
         </a>
       </div>
     </div>
@@ -94,7 +100,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -114,7 +120,7 @@
           <td>{{.title}}</td>
           <td>
             {{#if .foto}}
-            <a on-click="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <!-- <td>
@@ -124,7 +130,7 @@
           </td> -->
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -140,12 +146,12 @@
           <td>{{.title}}</td>
           <!-- <td>
             {{#if .foto}}
-            <a on-click="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td> -->
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -168,7 +174,7 @@
           <td>{{.text}}</td>
           <td>
             {{#if .foto}}
-            <a on-click="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <td>
@@ -179,7 +185,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -197,7 +203,7 @@
           <td>{{.text}}</td>
           <td>
             {{#if .foto}}
-            <a on-click="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
+            <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
             {{/if}}
           </td>
           <td>
@@ -213,7 +219,7 @@
           </td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -228,10 +234,21 @@
           <td>{{.text}}</td>
           <td><time time="{{.created}}" class="since" /></td>
           <td>
-            <span on-click="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
         {{/each list}}
+      {{/if}}
+
+      {{#if active === 'stats'}}
+        <th>type</th>
+        <th>count</th>
+        {{#each stats:i}}
+        <tr>
+          <td>{{i}}</td>
+          <td>{{.}}</td>
+        </tr>
+        {{/each stats}}
       {{/if}}
 
       {{#if active === 'relations'}}
@@ -364,6 +381,12 @@ component.exports = {
             this.set('list', data)
           })
           break
+        case 'stats': break
+          // api.action('admin:timequest', {t: 'relation', limit: 1000}, (data) => {
+          //   this.set('list', data)
+          // })
+          // break
+        // add graph stats
         default: this.set('active', active = 'debates')
       }
       router.dispatch(`/cpanel/${active || ''}/${this.get('id') || ''}`, {history: false})
@@ -380,6 +403,9 @@ component.exports = {
   activate (sub) {
     this.set('active', sub)
     router.dispatch(`/cpanel/${sub}/${this.get('id') || ''}`, { history: false })
-  }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

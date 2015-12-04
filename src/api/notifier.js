@@ -52,6 +52,8 @@ class notifier extends Ambition {
           this.vote = []
           this.vote_exists = {}
 
+          this.gt = this.lt = 0
+
           this.go()
         }
       },
@@ -113,8 +115,6 @@ class notifier extends Ambition {
         break
 
       // vote
-      // case 'u':
-      // case 'j':
       case 'O':
       case 'S':
         ns = 'vote'
@@ -122,7 +122,13 @@ class notifier extends Ambition {
         exists = this.vote_exists
         break
 
+      // the rest
       default:
+      // case 'd':
+      // case 'p':
+      // case 'u':
+      // case 'j':
+      // case 'F':
         ns = 'list'
         list = this.list
         exists = this.exists
@@ -140,6 +146,8 @@ class notifier extends Ambition {
     let loc = exists[d._id]
     if (loc === void 0) {
       exists[d._id] = insert(d, list, (a, b) => b.T > a.T ? 1 : b.T < a.T ? -1 : 0)
+      if (d.T > this.gt) this.gt = d.T
+      if (d.T < this.lt) this.lt = d.T
       if (!silent) {
         this.emit(d._id, d)
       }
@@ -167,16 +175,20 @@ class notifier extends Ambition {
   }
 
   go (next) {
-    api.action('n*', {gt: 0, lt: 0}, (data) => {
+    // console.info('GO', this.gt, this.lt)
+    api.action('n*', {gt: this.gt, lt: this.lt, limit: 500}, (data) => {
       let silent = this.situation !== '/'
       each(data, (d, id) => {
         d._id = d.t + d._a + ':' + d._b + ':' + d._c
         if (d.b) this.insert(d, silent)
         else {
-          // debugger
           this._remove(d)
         }
       })
+
+      // if (data.length === 100) {
+      //   this.go()
+      // }
 
       this.now('/')
       this.emit('msg*', this.msg.length)
@@ -207,7 +219,7 @@ class notifier extends Ambition {
     // remove it anyway
     api.action('n-', {t: d.t, k: d._id}, () => {
       // good
-		}, () => {
+    }, () => {
       // some sort of error
       // this.insert(d)
     })

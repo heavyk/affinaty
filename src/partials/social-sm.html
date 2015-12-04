@@ -1,19 +1,19 @@
 <link rel='ractive' href='../partials/are-you-sure.html'>
 
 <div class="social">
-  <div class="comm" on-click="dispatch('comments')">
-    <i class="fa fa-comment"></i>
+  <div class="comm" on-tap="dispatch('comments')" decorator="tip:'Comentar',39">
+    <img src="/img/icon-coment.svg" width="18" height="18"/>
     {{#if d.numComments}}
       <span class="num-comments">{{d.numComments}}</span>
     {{/if}}
   </div>
-  <div class="share">
+  <!-- <div class="share" decorator="tip:'función aún no activa',39">
     <i class="fa fa-share"></i>
-  </div>
+  </div> -->
   {{#if mine}}
-  <div class="others" on-click="remove">
+  <div class="others" on-tap="remove" decorator="tip:'Eliminar',39">
     <!-- <i class="fa fa-ellipsis-h"></i> -->
-    <i class="fa fa-close"></i>
+    <i class="fa fa-close" ></i>
   </div>
   {{/if mine}}
 </div>
@@ -39,8 +39,8 @@
 .comm:hover,
 .share:hover,
 .others:hover {
-  color: #f5a;
-  background-color: #eee;
+  color: #007CFF;
+  background-color: #B5D7FB;
   border: solid 1px #ddd;
   margin: 0;
 }
@@ -54,12 +54,16 @@
 .social {
   font-size: 19px;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 9px;
   display: inline-block;
 }
 
 .num-comments {
   font-size: 11px;
+  color:#ADADAD;
+}
+.num-comments:hover {
+  color: #007CFF;
 }
 
 </style>
@@ -68,7 +72,11 @@
 <script>
 component.exports = {
   isolated: true,
+  decorators: {
+    tip: require('../lib/decorators/tip')
+  },
   modal: require('../modal'),
+
   oninit () {
     let type = this.get('d.options') ? 'poll' : 'debate'
     let id = this.get('d._id')
@@ -77,17 +85,12 @@ component.exports = {
     }
     this.on('remove', () => {
       let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
-      // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
-      api.my.opinion.on('answer', (v) => {
+      modal.once('answer', (v) => {
         if (v !== void 0) {
           modal.teardown()
           if (v) {
             api.action(type + '-', {_id: id}, (res) => {
               if (res) Ractive.nexus.debate.fire('-', id)
-              // if (res) {
-              //   if(type === poll) api.poll.fire('-', id)
-              //   else api.debate.fire('-', id)
-              // }
             })
           }
         }
@@ -99,6 +102,9 @@ component.exports = {
       // TODO clean this
       return this.get('d._creator') === api.me._id || this.get('d.creator._id') === api.me._id
     }
-  }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
 }
 </script>

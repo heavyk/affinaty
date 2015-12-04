@@ -27,7 +27,7 @@
             <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{text}}" />
           </div>
 
-          <div class="remove-option col-xs-2 {{#if d.options.length <= 2}}disabled{{/if}}" on-click="remove-option">
+          <div class="remove-option col-xs-2 {{#if d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
             <i class="fa fa-minus"></i>
           </div>
 
@@ -49,7 +49,7 @@
              />
           </div>
 
-          <div class="add-option col-xs-2 {{highlight ? 'highlight' : ''}}" on-click="add-option">
+          <div class="add-option col-xs-2 {{highlight ? 'highlight' : ''}}" on-tap="add-option">
             <a><i class="fa fa-plus"></i></a>
           </div>
 
@@ -57,7 +57,7 @@
       </div>
       {{/if options.length >= 5}}
 
-      <button on-click="submit" class="row button-sign-up">
+      <button on-tap="submit" class="row button-sign-up">
         Pide opinión
       </button>
     </div>
@@ -116,6 +116,7 @@
 
 .foto-crop {
   margin-left: 10px;
+  width: 240px;
 }
 
 .foto-upload {
@@ -154,6 +155,7 @@
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
+  position: relative;
   outline: none;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -247,6 +249,7 @@ component.exports = {
     focusSelect: require('../lib/decorators/focusSelect'),
   },
   events: {
+    tap: require('../lib/events/tap.js'),
     nlSubmit: require('../lib/events/nlSubmit')
   },
 }

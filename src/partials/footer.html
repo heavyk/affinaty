@@ -1,75 +1,192 @@
-<ul class="footer">
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    &nbsp;
-  </li>
-  <li class="link">
-    <a href="/information">INFORMACIÓN</a>
-  </li>
-  <li class="link">
-    <a href="/help">ASISTENCIA</a>
-  </li>
-  <li class="link">
-    <a href="/blog">BLOG</a>
-  </li>
-  <li class="link">
-    <a href="/news">PRENSA</a>
-  </li>
-  <li class="link">
-    <a href="/careers">EMPLEO</a>
-  </li>
-  <li class="link">
-    <a href="/privacy">PRIVACIDAD</a>
-  </li>
-  <li class="link">
-    <a href="/conditions">CONDICIONES</a>
-  </li>
-  <li class="link">
-    <a href="/">AFFINATY © 2015</a>
-  </li>
-</ul>
+<link rel='ractive' href='../partials/debate-create.html'>
+<link rel='ractive' href='../partials/poll-create.html'>
+
+<div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
+  <!-- HOME -->
+  <div class="footer-item {{active === 'home' ? 'active' : ''}}">
+    <a class="home" href="/home">
+      <img src="/img/home-grey.svg" width="42" height="42" />
+    </a>
+  </div>
+  <!-- NOTIFICACIONES -->
+  <div class="footer-item {{active === 'notifications' ? 'active' : ''}}">
+    <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
+      <!-- <a class="notifications" on-tap="toggle('show_n')"> -->
+      <a class="notifications" href="/notifications">
+        <img src="/img/notifications-grey.svg" width="42" height="42" />
+        {{#if notifications}}
+          <span class="count">{{notifications}}</span>
+        {{/if}}
+      </a>
+    </li>
+    <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+      <notification-list />
+    </div>
+  </div>
+  <!-- OPINA  -->
+  <div class="footer-item moar-dropdown-mov">
+    <div class="button-opina" on-tap="toggle('show_opina')">
+      <img src="/img/opin.svg" width="50" height="50" class="opin" />
+    </div>
+  </div>
+  <!-- MENSAJES -->
+  <div class="footer-item {{active === 'inbox' ? 'active' : ''}}">
+      <a class="notifications" href="/inbox">
+        <img src="/img/inbox-grey.svg" width="42" height="42" />
+        {{#if new_msgs}}
+          <span class="count">{{new_msgs}}</span>
+        {{/if}}
+      </a>
+  </div>
+  <!-- PERFIL -->
+  <div class="footer-item {{active === 'profile' ? 'active' : ''}}">
+    <a href="/profile/{{me._id}}">
+      <img src="/img/profile-grey.svg" width="42" height="42" />
+    </a>
+  </div>
+</div>
+<div class="opina" style="display: {{show_opina ? 'block' : 'none'}}">
+  <div class="opin-left" on-tap="toggle('show_opina')">
+    <a on-tap="modal('debate-create', {title: 'da tu opinión'})">
+      <img src="/img/opinion.svg" width="150" height="150" class="opin" />
+      <span class="txt_moar">Da tu opinión</span>
+    </a>
+  </div>
+  <div class="opin-right" on-tap="toggle('show_opina')">
+      <a on-tap="modal('poll-create', {title: 'pide opinión'})">
+        <img src="/img/poll.svg" width="150" height="150" class="opin" />
+        <span class="txt_moar">Pide opinión</span>
+      </a>
+  </div>
+</div>
+
 
 <style>
-.footer {
-  position: absolute;
+.footer-bar {
   bottom: 0;
-  width: 100%;
-  height: 60px;
-  padding-top: 20px;
-  text-align: center;
+  position: fixed;
+  z-index: 999999999;
   float: right;
-  color: #fff;
-  background: rgba(255, 255, 255, 0);
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
-  z-index: -1000;
-}
-.footer:hover {
-  z-index: 1000;
-  background: #fff;
-  color: #000;
-}
-ul {
-  list-style: none;
   margin: 0;
-  padding: 0;
+  background-color: #D4D4D4;
+  width: 100%;
+  height: 50px;
+}
+.footer-item {
+  cursor: pointer;
+  width: 20%;
+  display: inline-block;
+  float: left;
+  height: 50px;
   list-style-type: none;
   text-align: center;
+  padding: 5px 0;
 }
-li { display: inline; }
-.link {
-  margin: 0 20px;
+.footer-item.active {
+  background: #DDB0AA;
+  border: solid 3px #D2210B;
+  padding: 2px 0;
+  border-radius: 8px;
 }
-a {
+.profile-mov {
+  font-size: 41px;
+  bottom: 10px;
+  position: relative;
   color: #fff;
 }
-.footer:hover a {
-  color: #fd270d;
-  /*text-decoration: none;*/
+.opina{
+  bottom: 110px;
+  position: fixed;
+  z-index: 999999999;
+  margin: 0;
+  width: 80%;
+  height: 300px;
+  left: 10%;
+  background: #fff;
+  border-radius: 30px 9px 30px 9px;
+  box-shadow: 5px 7px 10px -5px rgba(41, 41, 41, 0.53);
+}
+.opin-left {
+  width: 50%;
+  position: absolute;
+  text-align: center;
+  top: 50px;
+}
+.button-opina {
+  margin-top: -15px;
+}
+.opin-right{
+  width: 50%;
+  position: absolute;
+  right: 0%;
+  text-align: center;
+  top: 50px;
+}
+.txt_moar{
+  cursor: pointer;
+  width: 100%;
+  display: inline-block;
+  font-size: 29px;
 }
 
 </style>
+
+<script>
+let assign = require('../lib/lodash/object/assign')
+
+component.exports = {
+  isolated: true,
+  onconfig () {
+    this.set('movil', window.isMobile)
+    router.on('dispatch', () => {
+      let path = router.uri.path
+      let active = null
+      if (path === '/') active = 'landing'
+      else if (path === '/home') active = 'home'
+      else if (path === '/notifications') active = 'notifications'
+      else if (/^\/inbox/.test(path)) active = 'inbox'
+      else if (/^\/profile/.test(path)) active = 'profile'
+      this.set('active', active)
+    })
+    api.my.notifier.on('msg*', (c) => {
+      this.set('new_msgs', c)
+    })
+    api.my.notifier.on('list*', (c) => {
+      this.set('notifications', c)
+    })
+    api.observe('me', (me) => {
+      this.set('me', me)
+    })
+    this.set('search_width', 200)
+    this.on('toggle-focus', (event) => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.set('search_width', event.context.focused ? 200 : 300)
+        this.toggle('focused')
+      }, 200)
+    })
+  },
+  oncomplete () {
+    let onclick = (e) => {
+      let status = this.get('show_opina')
+      if (!status) return
+      let target = e.target
+      let pEl = target
+      do {
+        if (pEl.className && ~pEl.className.indexOf('opina'))  return
+      } while (pEl = pEl.parentNode)
+      this.set({show_opina: false})
+    }
+    window.addEventListener('click', onclick, true)
+    this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+  },
+  signOut () {
+    api.signOut(true)
+  },
+  modal: require('../modal'),
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
+}
+</script>

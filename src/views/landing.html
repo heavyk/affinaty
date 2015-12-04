@@ -1,18 +1,20 @@
 <link rel='ractive' href='../partials/sign-in.html'>
-<link rel='ractive' href='../partials/footer.html'>
+<!-- <link rel='ractive' href='../partials/footer.html'> -->
 
 <div class="container">
   <div class="row1 row">
     <div class="central col-md-8">
       <div class="lead">
-        <h1><img src="/img/landing.svg" /></h1>
-        <h2>¡Súmate a opinar y a debatir con nosotros!</h2>
-        <h2>Da tu opinión y encuentra personas affines a ti</h2>
+        <h1><img class="logo" src="/img/landing.svg" /></h1>
+        <h2 id="yin">{{slogan_yin}}</h2>
+        <h2 id="yang">{{slogan_yang}}</h2>
+        <!-- <h2>¡Súmate a opinar y a debatir con nosotros!</h2> -->
+        <!-- <h2>Da tu opinión y encuentra personas affines a ti</h2> -->
         <img class="cover" src="/img/cover-0.0.2.png">
       </div>
     </div>
     <div class="col-md-4">
-      <div class="app-buttons">
+      <!-- <div class="app-buttons">
         <div class="app-buttons-header">
           Descarga la app en:
         </div>
@@ -22,16 +24,51 @@
         <div class="col-md-6">
           <a href="/download/android" class="btn-app btn-google-play" decorator="tip:'función aún no disponible'">Descarga la app para android</a>
         </div>
-      </div>
+      </div> -->
       <sign-in />
     </div>
   </div>
 </div>
-<footer />
+<ul class="footer">
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    &nbsp;
+  </li>
+  <li class="link">
+    <a href="mailto:soporte@affinaty.es">Asistencia</a>
+  </li>
+  <li class="link">
+    <a href="/blog">Blog</a>
+  </li>
+  <li class="link">
+    <a href="/news">Prensa</a>
+  </li>
+  <li class="link">
+    <a href="/terms">Términos y condiciones</a>
+  </li>
+  <li class="link">
+    <a href="/careers">Tecnología</a>
+  </li>
+  <li class="link">
+    <a href="/privacy">Privacidad</a>
+  </li>
+
+  <li class="link">
+    <a href="mailto:sugerencias@affinaty.es">Affinaty © 2015</a>
+  </li>
+</ul>
 
 <style>
 .cover {
-  margin: -20px 64px 0 0;
+  margin: -20px 64px 0 42px;
+  position: absolute;
+  top: 170px;
+  width: 80%;
 }
 .app-buttons {
   position: absolute;
@@ -70,24 +107,23 @@
   background-image: url('/img/btn-google-play.png');
 }
 .lead {
-  float: left;
   float: right;
 }
 h1 {
   font-size: 72px;
   font-family: 'Pacifico';
   height: 80px;
+  margin-left: 80px;
 }
 
-@media (max-width: 768px) {
-  h1 {
-    font-size: 28px;
+
+@media (max-width: 960px) {
+  .cover {
+    display: none;
   }
 }
 h2 {
-  font-weight: 300;
-  margin: 15px;
-  font-size: 160%;
+  margin-left: 111px;
 }
 h5 {
   margin-top: 30px;
@@ -100,7 +136,14 @@ h5 {
 }
 @media (max-width: 768px) {
   .central {
-    display: none;
+    /*display: none;*/
+  }
+  .logo{
+    width:100%;
+  }
+  .sign-in{
+    margin-top: 60px;
+    margin-left: 40px;
   }
   .opin {
     display: none;
@@ -108,6 +151,7 @@ h5 {
 }
 .enter {
   padding: 0px 30px;
+  font-size: 16px;
 }
 .sign-in {
   width: 367px;
@@ -116,7 +160,16 @@ h5 {
   color: #000;
   text-align: center;
   border-radius: 30px 11px;
-  margin-top: 220px;
+  margin-top: 150px;
+}
+@media (max-width: 768px) {
+  .sign-in{
+    width: 96%;
+    margin: 43px auto;
+  }
+  .row1 {
+    padding-top: 0px;
+  }
 }
 .buttons {
   margin: 60px auto;
@@ -126,11 +179,135 @@ h5 {
   font-size: 24px;
   padding: 12px 24px;
 }
+h2 {
+  font-weight: 100;
+  /*margin: 15px;*/
+  font-size: 190%;
+  transition: 3s all ease-in-out;
+  /*transition: 1s opacity ease-in-out;*/
+  opacity: 0;
+  /*text-shadow: 1px 1px 1px #FF7600,3px 3px 5px #FFF;*/
+  position: absolute;
+  margin-top: -9px;
+}
+h2.slogan {
+  /*transition: 2s all ease-in-out;*/
+  /*text-shadow: 1px 1px 1px #fff,3px 3px 5px #ff7600;*/
+}
+@media (max-width: 768px) {
+  h1 {
+    font-size: 28px;
+    height: 55px;
+    margin-left: 0;
+    margin-top: 8px;
+  }
+  h2 {
+    font-size: 150%;
+  }
+  .cover {
+    /*display: none;*/
+  }
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
+  padding-top: 20px;
+  text-align: center;
+  float: right;
+  color: #fff;
+  background: rgba(255, 255, 255, 0);
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
+  z-index: -1000;
+}
+.footer:hover {
+  /*z-index: 1000;*/
+  /*background: #fff;*/
+  /*color: #000;*/
+}
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  text-align: center;
+}
+li { display: inline; }
+.link {
+  margin: 0 20px;
+}
+a:hover {
+  font-weight: 800;
+  /*text-decoration: none;*/
+}
+a {
+  color: #fff;
+}
+.footer:hover a {
+  /*color: #fd270d;*/
+}
+@media (max-width: 768px) {
+  .link {
+    margin: 0 0px;
+    font-size: 10px
+  }
+}
+
 </style>
+
+
 <script>
+let rand = require('../lib/lodash/number/random')
 component.exports = {
   isolated: true,
   modal: require('../modal'),
+  onconfig () {
+    this.set('is_yang', !!rand(1))
+  },
+  oncomplete () {
+    // let els = this.findAll('h2')
+    let yin = this.find('#yin')
+    let yang = this.find('#yang')
+    let els = [ yin, yang ]
+    let slogans = [
+      // `Una red para explicarte`,
+      // `Un sito para expresarte`,
+      `Una red para expresarte`,
+      // `Un sito donde te puedes expresar`,
+      // `Donde te puedes expresar`,
+    ]
+    // this.set('slogans')
+    let len = slogans.length
+    let is_yang = rand(1)
+    this.change_slogan = () => {
+      let idx = 0 // rand(len - 1)
+      this.set({
+        idx,
+        is_yang: is_yang = !is_yang,
+        slogan_yang: slogans[idx],
+        slogan_yin: slogans[idx]
+      })
+      // this.set('idx', idx)
+      // this.toggle('is_yang')
+      // this.set('slogan_yin', slogans[idx++ % len])
+      // this.set('slogan_yang', slogans[idx++ % len])
+      els.forEach((el, i) => {
+        // el.style.paddingLeft = rand(3, 11) + 'px'
+        el.style.transform = `translate(${rand(9, 11)}px, ${rand(-1, 1)}px)`
+        // el.style.transform = `translate(${rand(3, 11)}px, 0)`
+
+        // el.style.fontSize = rand(80, 130) + '%'
+        // el.style.fontWeight = rand(1, 9) * 100
+        // el.style.textShadow = `${rand(3)}px ${rand(3)}px ${rand(3)}px #${i && is_yang ? 'FFF' : 'FF7600'}`
+        el.style.opacity = i
+          ? (is_yang ? rand(.7, .9) : rand(.8, 1))
+          : (is_yang ? rand(.8, 1) : rand(.7, .9))
+      })
+      setTimeout(this.change_slogan, rand(2222, 5555))
+    }
+    this.change_slogan()
+  },
   decorators: {
     tip: require('../lib/decorators/tip')
   }

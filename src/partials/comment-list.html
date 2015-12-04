@@ -21,7 +21,7 @@
           </textarea>
         </div>
         <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
-          <button type="submit" on-click="add">
+          <button type="submit" on-tap="add">
             <i class="fa fa-comment-o"></i> send
           </button>
         </div>
@@ -49,13 +49,13 @@
                   <time time="{{.created}}" class="since" />
                 </span>
                 {{#if ._canDelete}}
-                  <div class="others" on-click="remove">
+                  <div class="others" on-tap="remove">
                     <!-- <i class="fa fa-ellipsis-h"></i> -->
                     <i class="fa fa-close"></i>
                   </div>
                 {{/if}}
               </div>
-              <div class="comment-body" decorator="markdown:'text'">
+              <div class="comment-body" decorator="markdown:{{text}}">
               </div>
             </div>
           {{/list}}
@@ -167,13 +167,13 @@ textarea.animate {
   padding: 1px 20px;
   z-index: 10;
   border: 1px solid #d5d5d5;
-	opacity: .7;
-	transition: all .3s ease-in-out;
+  opacity: .7;
+  transition: all .3s ease-in-out;
 }
 .submit button:hover {
-	opacity: 1;
-	background-color: #fff;
-	border-color: #ccc;
+  opacity: 1;
+  background-color: #fff;
+  border-color: #ccc;
 }
 .submit .fa {
   color: #fd270d;
@@ -182,29 +182,33 @@ textarea.animate {
 
 <script>
 let assign = require('../lib/lodash/object/assign')
+let isEqual = require('../lib/lodash/lang/isEqual')
 let onresize = require('../lib/dom/element-onresize')
 let findIndex = require('../lib/lodash/array/findIndex')
 component.exports = {
-  // adapt: ['promise-alt'],
   isolated: true,
   modal: require('../modal'),
   onconfig () {
+    let query
     this.get('text') || this.set('text', '')
-  },
-  oninit () {
-    let query = assign({}, {
-      debate: this.get('debate'),
-      poll: this.get('poll'),
-    })
-    // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
-    this.set('loading', true)
-    api.action('comment*', assign({sort: '+created'}, query), (data) => {
-      for (var i = 0; i < data.length; i++) {
-        data[i]._canDelete = data[i].creator._id === api.me._id
-      }
-      this.set({
-        loading: false,
-        list: data
+    router.on('dispatch', () => {
+      console.info('dispatch')
+      let _query = assign({}, {
+        debate: this.get('debate'),
+        poll: this.get('poll'),
+      })
+      if (isEqual(query, _query)) return
+      else query = _query
+      // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
+      this.set('loading', true)
+      api.action('comment*', assign({sort: '+created'}, query), (data) => {
+        for (var i = 0; i < data.length; i++) {
+          data[i]._canDelete = data[i].creator._id === api.me._id
+        }
+        this.set({
+          loading: false,
+          list: data
+        })
       })
     })
     this.on('add', (event) => {
@@ -234,18 +238,15 @@ component.exports = {
     })
     this.on('remove', (event) => {
       let id = event.context._id
-      let modal = this.modal('are-you-sure', {title: `¿Eliminar?`})
-      // THIS IS REALLY HORRIBLE - TODO make a proper dialog object
-      api.my.opinion.on('answer', (v) => {
+      let modal = this.modal('are-you-sure', {title: `¿Eliminar?`, what: 'este comentario'})
+      modal.once('answer', (v) => {
         if (v !== void 0) {
           modal.teardown()
           if (v) {
             api.action('comment-', {_id: id}, (res) => {
-              // if (res) api.comment.fire('-', id)
               if (res) {
                 let list = this.get('list')
                 let idx = findIndex(list, (r) => r._id === id)
-                console.log('idx', idx)
                 list.splice(idx, 1)
               }
             })
@@ -285,6 +286,7 @@ component.exports = {
     markdown: require('../lib/decorators/markdown')
   },
   events: {
+    tap: require('../lib/events/tap.js'),
     nlSubmit: require('../lib/events/nlSubmit')
   },
 }

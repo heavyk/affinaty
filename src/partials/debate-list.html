@@ -11,16 +11,16 @@
     {{else}}
       loading...
     {{/if}}
-    <span class="clear-search" on-click="clear-search"><i class="fa fa-times" /> clear</span>
+    <span class="clear-search" on-tap="clear-search"><i class="fa fa-times" /> clear</span>
   </div>
 {{/txt}}
 
-<div class="debates row">
+<div class="debates">
   {{#each list}}
     {{#if .options}}
-    <poll-sm id="{{._id}}" d={{.}} list="true" />
+    <poll-sm id="{{._id}}" d={{.}} view="list" />
     {{else}}
-    <debate-sm id="{{._id}}" d={{.}} list="true" />
+    <debate-sm id="{{._id}}" d={{.}} view="list" />
     {{/if}}
   {{/each}}
 </div>
@@ -104,6 +104,12 @@ component.exports = {
       this.go()
       __creator = creator
     }})
+
+    this.observe('top', (top) => {
+      this.set('query.top', this.query.top = top || null)
+      this.clear()
+      this.go()
+    })
 
     let __tag
     this.observe('tag', (tag) => {
@@ -201,12 +207,14 @@ component.exports = {
   oncomplete () {
     let el = this.find('.debates')
     this.els = this.findAll('.debate', {live: true})
-
-    this.m = new masonry(el, {
-      itemSelector: '.debate',
-      columnWidth: 289,
-      gutter: 20,
-    })
+    let movil = window.isMobile
+    if (!movil || window.screen.width > 578) {
+      this.m = new masonry(el, {
+        itemSelector: '.debate',
+        columnWidth: 289,
+        gutter: 20,
+      })
+    }
 
     let s = scroll(null, 1.3, (cb) => {
       this.go(cb)
@@ -224,13 +232,14 @@ component.exports = {
           if (idx === this.els.length - 1) append.push(this.els[idx])
           else add.push(this.els[idx])
         }
-
-        if (add.length) {
-          this.m.addItems(add)
-          this.layout()
-        } else if (append.length) {
-          this.m.appended(append)
-          this.layout()
+        if (!movil) {
+          if (add.length) {
+            this.m.addItems(add)
+            this.layout()
+          } else if (append.length) {
+            this.m.appended(append)
+            this.layout()
+          }
         }
       }, 1)
     })
@@ -310,6 +319,9 @@ component.exports = {
       this.polls += data.length
       // if (next) next()
     })
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

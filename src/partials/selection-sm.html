@@ -2,7 +2,7 @@
 
 <div class="options">
   {{#each d.options : i}}
-  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-click="selection">
+  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-tap="selection(i)">
     {{.text}}
   </button>
   {{/each}}
@@ -44,21 +44,21 @@
 component.exports = {
   isolated: true,
   modal: require('../modal'),
-  oninit () {
-    this.on('selection', (event) => {
-      let idx = this.get('d.idx')
-      let iidx = event.index.i
-      if (idx !== iidx) {
-        this.idx(iidx, idx)
-      }
-    })
+  selection (iidx) {
+    let idx = this.get('d.idx')
+    if (idx !== iidx) {
+      this.idx(iidx, idx)
+    }
   },
   idx (iidx, idx, skip) {
     if (idx !== iidx && !skip) {
-      if (!api.me.birthdate || api.me.planet == null) {
+      if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
         this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
-            this.idx(iidx, idx, !api.me.birthdate || api.me.planet == null ? true : false)
+            this.idx(iidx, idx, !api.me.birthdate
+              || !api.me.c
+              || !api.me.p
+              || api.me.planet == null ? true : false)
           }, 200)
         })
       } else {
@@ -72,6 +72,9 @@ component.exports = {
         })
       }
     }
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

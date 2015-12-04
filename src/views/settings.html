@@ -12,13 +12,13 @@
       <div class="menu">
         <h4>Settings</h4>
         <nav>
-          <li on-click="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
+          <li on-tap="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
             Editar perfil
           </li>
-          <li on-click="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
+          <li on-tap="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
             Configuración
           </li>
-          <li on-click="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
+          <li on-tap="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
             Redes Sociales
           </li>
         </nav>
@@ -30,7 +30,7 @@
       {{#if active === 'appearance' }}
       <div class="settings">
         <div class="profile-foto">
-          <span class="change-foto" on-click="toggle('change_foto')">
+          <span class="change-foto" on-tap="toggle('change_foto')">
             {{#if change_foto}}
             <i class="fa fa-close"></i> Cancelar
             {{else}}
@@ -54,16 +54,16 @@
           <div><h5>Cambia tu localización</h5></div>
           <div class="row">
             <div class="col-xs-6">
-              <select value="{{country}}">
+              <select value="{{me.c}}">
                 <option value="">País</option>
                 {{#each countries}}
-                <option value="{{short}}">{{name}}</option>
+                <option value="{{.short}}">{{.name}}</option>
                 {{/each}}
               </select>
             </div>
             {{#if provinces}}
             <div class="col-xs-6">
-              <select value="{{province}}">
+              <select value="{{me.p}}">
                 <option value="">Provincia</option>
                 {{#each provinces}}
                 <option value="{{short}}">{{name}}</option>
@@ -80,17 +80,17 @@
           <div style="text-align: center">
             <div class="planet row">
               <div class="col-xs-6">
-                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-click="set('me.planet', 0)"></i>
+                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-tap="set('me.planet', 0)"></i>
                 <div>Mujer</div>
               </div>
               <div class="col-xs-6">
-                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-click="set('me.planet', 1)"></i>
+                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-tap="set('me.planet', 1)"></i>
                 <div>Hombre</div>
               </div>
             </div>
 
             <div style="margin-top: 60px">
-              <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+              <button class="button-sign-up" on-tap="appearance">Guardar</button> {{save_success}}
               {{#if saving}}
                 <spinner />
               {{/if}}
@@ -122,7 +122,7 @@
             <input type="password" maxlength="100" value="{{pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
           </div>
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-click="appearance">Guardar</button> {{save_success}}
+            <button class="button-sign-up" on-tap="appearance">Guardar</button> {{save_success}}
             {{#if saving}}
               <spinner />
             {{/if saving}}
@@ -139,29 +139,33 @@
         <div class="heading">
           Estos datos aparecen en tu perfil
         </div>
+        <div class="row">
+          <select class="network-list" value="{{new_network}}" on-change="add-network">
+            <option value="">Añadir una nueva red</option>
+            {{#each network_list}}
+              {{#if me.networks[.id] === undefined}}
+                <option value="{{.id}}">{{.title}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </div>
         <form on-submit="change-networks">
-          <div>
-            <div><h5>Blog:</h5></div>
-            <input type="text" maxlength="200" value="{{net.blog}}" placeholder="(ej. http://wordpress.com/pepelotero)" class="{{errors.net.blog ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Facebook:</h5></div>
-            <input type="text" maxlength="200" value="{{net.facebook}}" placeholder="(ej. https://facebook.com/pepelotero)" class="{{errors.net.facebook ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Twitter:</h5></div>
-            <input type="text" maxlength="200" value="{{net.twitter}}" placeholder="(ej. https://twitter.com/pepelotero)" class="{{errors.net.twitter ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>GitHub:</h5></div>
-            <input type="text" maxlength="200" value="{{net.github}}" placeholder="(ej. http://github.com/PepeLotero)" class="{{errors.net.github ? 'invalid' : ''}}" />
-          </div>
-          <div>
-            <div><h5>Canal de Youtube:</h5></div>
-            <input type="text" maxlength="200" value="{{net.youtube}}" placeholder="(ej. http://youtube.com/user/PepeLotero)" class="{{errors.net.youtube ? 'invalid' : ''}}" />
-          </div>
+          {{#if network_count === 0}}
+            <span>No tienes ninguna red añadida.</span>
+          {{/if}}
+          {{#each network_list}}
+            {{#if me.networks[.id] !== undefined}}
+              <div>
+                <div><h5>{{.title}}:</h5></div>
+                <div style="position: relative">
+                  <input type="text" maxlength="200" value="{{me.networks[.id]}}" placeholder="{{.text}}" />
+                  <span class="remove" on-tap="remove-network" decorator="tip:'Eliminar',16"><i class="fa fa-times" /></span>
+                </div>
+              </div>
+            {{/if}}
+          {{/each}}
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-click="change-networks">Guardar</button> {{save_success}}
+            <button class="button-sign-up" on-tap="change-networks">Guardar</button> {{save_success}}
             {{#if saving}}
               <spinner />
             {{/if saving}}
@@ -200,6 +204,11 @@ h4, h5, .change-foto {
   padding: 30px;
   border-radius: 15px;
   box-shadow: 5px 11px 20px -3px rgba(41, 41, 41, 0.53);
+}
+
+.network-list {
+  width: auto;
+  float: right;
 }
 
 .profile-foto {
@@ -300,12 +309,24 @@ button.button-sign-up {
   color: #00f;
 }
 
+.remove {
+  /*float: right;*/
+  position: absolute;
+  top: 12px;
+  right: 20px;
+}
+.remove:hover {
+  /*border: solid 1px #dada*/
+  color: #f00;
+  cursor: pointer;
+}
+
 </style>
 
 <script>
 let moment = require('moment')
-let _provinces = require('provinces')
 let assign = require('../lib/lodash/object/assign')
+let find = require('../lib/lodash/collection/find')
 let isEqual = require('../lib/lodash/lang/isEqual')
 let Validator = require('../validator')
 component.exports = {
@@ -314,55 +335,111 @@ component.exports = {
     // my existing data
     this.get('active') || this.set('active', 'appearance')
 
-    // TODO - this should exist somewhere else - perhaps on the server?
-    let countries = [
-      {name: 'United States', short: 'US'},
-      {name: 'United Kingdom', short: 'GB'},
-      {name: 'Canada', short: 'CA'},
-      {name: 'Mexico', short: 'MX'},
-      {name: 'España', short: 'ES'},
-      {name: 'Australia', short: 'AU'},
-      {name: 'China', short: 'CN'},
-      {name: 'Germany', short: 'DE'},
-      {name: 'Belgium', short: 'BE'},
-      {name: 'Netherlands', short: 'NL'},
-      {name: 'Denmark', short: 'DK'},
-      {name: 'Turkey', short: 'TR'},
-      {name: 'Indonesia', short: 'ID'},
-      {name: 'Jordan', short: 'JO'},
-      {name: 'India', short: 'IN'},
-      {name: 'Cambodia', short: 'KH'},
-      {name: 'Ethiopia', short: 'ET'},
-      {name: 'Peru', short: 'PE'},
-      {name: 'Cuba', short: 'CU'},
-      {name: 'Argentina', short: 'AR'},
-      {name: 'Chile', short: 'CL'},
-      {name: 'Bolivia', short: 'BO'},
-      {name: 'Bangladesh', short: 'BD'},
-      {name: 'Pakistan', short: 'PK'},
-      {name: 'Nigeria', short: 'NG'},
-      {name: 'Japan', short: 'JP'},
-      {name: 'Austria', short: 'AT'},
-      {name: 'Brazil', short: 'BR'},
-      {name: 'Philippines', short: 'PH'},
-      {name: 'Vietnam', short: 'VN'},
+    let network_list = [
+      {id: 'facebook', text: '(ej. https://facebook.com/pepelotero)', title: 'Facebook' },
+      {id: 'twitter', text: '(ej. https://twitter.com/pepelotero)', title: 'Twitter' },
+      {id: 'youtube', text: '(ej. http://youtube.com/user/PepeLotero)', title: 'Youtube' },
+      {id: 'github', text: '(ej. http://github.com/PepeLotero)', title: 'Github' },
+      {id: 'blog', text: '(ej. http://wordpress.com/pepelotero)', title: 'Blog' },
+      {id: 'linkedin', text: '(ej. http://linkedin.com/pepelotero)', title: 'Linkedin' },
     ]
-    countries.sort((a, b) => {
-      return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-    })
-    this.set('countries', countries)
+    this.set('network_list', network_list)
 
-    let me = api.get('me')
-    this.old_me = assign({}, me)
+    let set_countries = (data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem('country-list', list)
+      }
+      this.set('countries', list)
+    }
+
+    local.getItem('country-list', (err, data) => {
+      if (!data) {
+        // TODO: when we localize, we can also fetch the localized version using lang: 'en'
+        //  - then, we should combine the two, and if they're different, we should put it in parens
+        //   - España (Spain)
+        //   - Deutschland (Germany)
+        api.action('country-list', {}, (data) => {
+          set_countries(data)
+        })
+      } else {
+        set_countries(data)
+      }
+    })
+
+    let set_provinces = (code, data) => {
+      let list = data
+      if (!Array.isArray(data)) {
+        list = []
+        for (var k in data) list.push({ name: data[k], short: k })
+        list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
+        local.setItem(`provinces-${code}`, list)
+      }
+      this.set('provinces', list)
+      if (list.length === 0) this.set('me.p', '*')
+    }
+
+    this.observe('me.c', (code) => {
+      if (code) {
+        local.getItem(`provinces-${code}`, (err, data) => {
+          if (!data) {
+            api.action('province-list', {code}, (data) => {
+              set_provinces(code, data)
+            })
+          } else {
+            set_provinces(code, data)
+          }
+        })
+      }
+    }, {initial: false})
+
     api.observe('me', (_me) => {
+      if (!_me) return
+      if (!_me.networks) _me.networks = {}
       this.set('me', _me)
       if (_me && _me.networks)
         this.set('net', _me.networks)
       me = _me
     })
 
-    this.observe('me', (me) => {
-      if (me) api.set('me', me)
+    let me = api.get('me')
+    this.old_me = assign({}, me)
+
+    this.observe('me', (_me) => {
+      if (_me) {
+        api.set('me', _me)
+        // if (_me.networks) {
+        //   let nets = Object.keys(_me.networks)
+        //   console.log('nets', nets)
+        //   // each(network_list, (n, i) => {
+        //   //   if (n.id)
+        //   // })
+        //   for (var i = 0; i < nets.length; i++) {
+        //     let idx, n = nets[i]
+        //     find(network_list, (_n) => _n.id === n)
+        //     if (~(idx = network_list.indexOf(n))) {
+        //       network_list.splice(idx, 1)
+        //     }
+        //   }
+        // }
+        me = _me
+        // if (!_me.networks) this.set('me.networks', {})
+      }
+    })
+
+    this.on('add-network', () => {
+      let n = this.get('new_network')
+      console.log('n', n)
+      this.set(`me.networks.${n}`, '')
+      this.set('new_network', '')
+    })
+    this.on('remove-network', (event) => {
+      console.log('romoving', event.context.id)
+      delete me.networks[event.context.id]
+      this.set('me.networks', me.networks)
     })
 
     // change-appearance
@@ -446,21 +523,18 @@ component.exports = {
     this.fire('change-appearance')
   },
   computed: {
-    provinces () {
-      let country = this.get('country')
-      let provinces = []
-      for (let p of _provinces) {
-        if (p.country === country)
-          provinces.push({name: p.name, short: p.short})
-      }
-      provinces.sort((a, b) => {
-        return a.name > b.name ? 1 : a.name < b.name ? -1 : 0
-      })
-      return provinces
-    }
+    network_count () {
+      return Object.keys(this.get('me.networks')).length
+    },
   },
   activate (sub, id) {
     router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
+  },
+  decorators: {
+    tip: require('../lib/decorators/tip')
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

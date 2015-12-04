@@ -1,45 +1,43 @@
 <link rel='ractive' href='../partials/spinner.html'>
-
-<a class="categories-button {{class}}" on-click="toggle('menu')">
-  {{#if selected}}
-    [[#if typeof L.selected === 'string']]
-      [[L.selected]]
-    [[else]]
-      Categoría:&nbsp;
-    [[/if]]
-    {{selected.title}}
-  {{else}}
-    {{L.selector || 'Categories'}}
-  {{/if}}
-</a>
-<div class="categories" style="display: {{menu ? 'block' : 'none'}}">
-  {{#if loading}}
-    <spinner scale="0.2" />
-  {{/if loading}}
-
-  {{#if error}}
-    ERROR: {{error}}
-  {{/if error}}
-
-  {{#if categories}}
-    {{#if L.unselect && selected}}
-      <div class="category" on-click="clear" style="color: #f55">{{L.unselect}}</div>
+{{#if !movil || L.show_button}}
+<a class="categories-button {{class}}" on-tap="toggle('menu')">
+    {{#if selected}}
+      [[#if typeof L.selected === 'string']]
+        [[L.selected]]
+      [[else]]
+        Categoría:&nbsp;
+      [[/if]]
+      {{selected.title}}
+    {{else}}
+      {{L.selector || 'Categories'}}
     {{/if}}
-    <!-- {{#each categories}}
-      <div class="category" on-click="activate(event)">{{.title}}</div>
-    {{/each categories}} -->
-    <div class="categories-left">
-      {{#each l1}}
-        <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each l1}}
-    </div>
-    <div class="categories-right">
-      {{#each l2}}
-        <div class="category" on-click="activate(event)">{{.title}}</div>
-      {{/each l2}}
-    </div>
-  {{/if categories}}
-</div>
+  </a>
+{{/if}}
+  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
+    {{#if loading}}
+      <spinner scale="0.2" />
+    {{/if loading}}
+
+    {{#if error}}
+      ERROR: {{error}}
+    {{/if error}}
+
+    {{#if categories}}
+      {{#if L.unselect && selected}}
+        <div class="category" on-tap="clear" style="color: #f55">{{L.unselect}}</div>
+      {{/if}}
+      <div class="categories-left">
+        {{#each l1}}
+          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
+        {{/each l1}}
+      </div>
+      <div class="categories-right">
+        {{#each l2}}
+          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
+        {{/each l2}}
+      </div>
+    {{/if categories}}
+  </div>
 
 
 <style>
@@ -70,6 +68,11 @@
   width: 500px;
   box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
 }
+@media (min-width: 768px) {
+  .categories {
+    width:350px;
+  }
+}
 div.category {
   cursor: pointer;
   font-size: 18px;
@@ -77,8 +80,6 @@ div.category {
   padding-left: 50px;
   box-sizing: border-box;
   color: #000;
-  /*width: 50%;*/
-  /*float:left;*/
   text-align: left;
 }
 div.category:hover {
@@ -88,24 +89,44 @@ div.category:hover {
   width: 50%;
   float: left;
 }
+@media (min-width: 768px) {
+  div.category {
+    font-size: 14px;
+    padding-left: 20px;
+  }
+}
 </style>
-
 
 <script>
 component.exports = {
   isolated: true,
   oninit () {
-    this.set('loading', true)
-    // TODO this can be a decorator
+    let movil = window.isMobile
+    this.set({
+      movil: movil,
+      loading: true
+    })
+
+    if (this.get('L.show_button')) {
+      this.set ('menu', false)
+    } else if (movil) {
+      this.set('menu', true)
+    }
+    // TODO make this a decorator
+    // debugger
     let onclick = (e) => {
-      let status = this.get('menu')
-      if (!status) return
+      let menu = this.get('menu')
+      if (menu && movil || !this.el) return
       let target = e.target
       let pEl = target
       do {
-        if (pEl.className && pEl.className.indexOf('categories') === 0) return
+        if (pEl.className && pEl === this.el) return
       } while (pEl = pEl.parentNode)
       this.set('menu', false)
+      if (menu || movil) {
+        e.preventDefault()
+        e.stopImmediatePropagation()
+      }
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
@@ -120,9 +141,9 @@ component.exports = {
       this.set('loading', false)
     })
     this.on('clear', () => {
-      this.activate({context: null})
+      this.activate({context: null}, this.get('alwaysShow'))
     })
-    this.parent.on('set-category', (id) => {
+    this.parent.on('set-category', this.onsetCategory = (id) => {
       api.category.until('/', () => {
         this.set('selected', id ? api.category.get(id) : null)
       })
@@ -132,6 +153,12 @@ component.exports = {
     this.set('selected', event.context)
     this.fire('select', event.context)
     this.set('menu', menu || false)
+  },
+  onteardown () {
+    this.parent.off('set-category', this.onsetCategory)
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>

@@ -69,6 +69,7 @@ export default class Router extends EventEmitter {
     // prepare data
     var defaults = typeof this.data === 'function' ? this.data() : this.data
     var data = assign(defaults, options.state, options.hash, options.qs)
+    // debugger
 
     if (route === this.route) {
       // don't save a back-button
@@ -82,6 +83,8 @@ export default class Router extends EventEmitter {
       // update the view's data frov the route (path/qs/hash variables)
       this.uri = uri
       this.route.update(uri, data)
+      this.route.view.fire('dispatch')
+      this.emit('dispatch')
     } else if (options.reload || shouldDispatch(this.uri, uri, route)) {
       // destroy existing route
       if (this.route) {
@@ -95,9 +98,11 @@ export default class Router extends EventEmitter {
       // init new route
       this.uri = uri
       this.route = route.init(uri, data)
+      this.route.view.fire('dispatch')
 
       // emit `route` event
       this.emit('route', route)
+      this.emit('dispatch')
     }
 
     // will scroll to the top if there is no matching element
