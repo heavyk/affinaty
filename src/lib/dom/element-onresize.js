@@ -47,6 +47,7 @@ function addResizeListener(element, fn) {
 }
 
 function removeResizeListener(element, fn) {
+  if (!element._listeners) return
   element._listeners.splice(element._listeners.indexOf(fn), 1)
   if (!element._listeners.length) {
     if (element._trigger.contentDocument)
