@@ -8,7 +8,7 @@
       <div style="float: {{.creator === members.me._id ? 'left' : 'right'}}">
         <foto src="{{members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
       </div>
-      <div class="message">
+      <div class="message" style="max-width: {{messageWidth}}">
         <time time="{{.created}}" class="since" />
         <span class="text" decorator="markdown:{{text}}">{{.text}}</span>
       </div>
@@ -57,7 +57,6 @@ span.text {
   padding: 10px 15px;
   border-radius: 30px 9px 30px 9px;
   background: #f3f3f3;
-  max-width: 80%;
   z-index: 1;
   color: #494949;
   word-break: break-all;
@@ -143,12 +142,17 @@ component.exports = {
     }, 200)
     let _outer
     let resizer = () => {
-      let outer = window.innerHeight - (movil ? 200 : 100)
-      let iw = window.innerWidth - 100
+      let iw = window.innerWidth
+      let left = Math.min((iw / 3), 200)
+      let right = iw - left - 40
+      
+      let outer = window.innerHeight - (movil ? 120 : 100)
+      let messageWidth = (movil ? '65%' : '65%')
+      this.set('messageWidth', messageWidth)
       this.set('outerHeight', outer)
       this.set('innerHeight', outer - tbox.clientHeight - 25)
       if (_outer !== outer) this.parent.fire('resize')
-      this.set('outerWidth', Math.floor(iw, 600))
+      this.set('outerWidth', right)
       _outer = outer
     }
     let _resizer = throttle(resizer, 500, true, true)

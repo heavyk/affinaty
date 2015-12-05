@@ -5,7 +5,7 @@
 
   <!-- left column -->
   <div style="width: {{leftWidth}}" class="col-left">
-    <div class="threads">
+    <div class="threads" style="height: {{outerHeight}}px;">
       <h4>Mensajería</h4>
       <div>
         <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
@@ -105,9 +105,9 @@
   text-align: center;
   display: inline-block;
 }
-li.thread,
-li.settings,
-li.encounter {
+.thread,
+.settings,
+.encounter {
   padding: 4px 8px;
   color: #ff3232;
   border-bottom: solid 1px #F1F1F1;
@@ -116,9 +116,9 @@ li.encounter {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-li.active {
-  background: #fd270d;
-  color: #fff;
+.active {
+  border-bottom: solid 1px #A0A0A0;
+  background-color: #e9f7ea;
 }
 nav .fa {
   /*font-size: 28px;*/
@@ -143,8 +143,13 @@ nav .fa {
   right: 10px;
 }
 .settings, .encounter {
-  border-top: solid 1px #A0A0A0;
-  background-color: #fff0f2;
+  padding: 4px 8px;
+  color: #ff3232;
+  border-bottom: solid 1px #F1F1F1;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 li.encounter {
   border-bottom: solid 1px #A0A0A0;
@@ -235,6 +240,9 @@ component.exports = {
       let right = iw - left - 40
       this.set('leftWidth', left + 'px')
       this.set('rightWidth', right + 'px')
+      let outer = window.innerHeight - (movil ? 120 : 100)
+      this.set('outerHeight', outer)
+
     }, true)
     onresize.addResizeListener(container, resizer)
     resizer()
