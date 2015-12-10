@@ -4,30 +4,30 @@
     value="{{title}}"
     placeholder="escribe los tags aquí"
     on-nlSubmit="add"
-    on-focus-blur="toggle-taglist"
+    on-focus="set('taglist', true)"
     style="display: {{selected.length < 3 ? 'block' : 'none'}}"
     on-keyup="keyup" />
   <div class="tags" style="display: {{taglist ? 'block' : 'none'}}">
     <div class="wrapper">
       {{#list:i}}
-      <div class="tag" on-tap="add">
+      <div class="tag" on-click="add">
         {{title}}
       </div>
       {{/}}
       {{#if recent}}
         <div class="recent">recent</div>
         {{#recent:i}}
-        <div class="tag" on-tap="add">
+        <div class="tag" on-click="add">
           {{title}}
         </div>
         {{/recent}}
       {{/if}}
     </div>
   </div>
-  <ul class="selected-tags">
+  <ul class="selected-tags wtf">
     {{#selected:i}}
-    <li class="tag" on-tap="remove">
-      {{title}}
+    <li class="tag" on-tap="removeTag(event, i)">
+      #{{title}}
     </li>
     {{/}}
   </ul>
@@ -76,12 +76,12 @@ div.tag {
 }
 li.tag {
   float: left;
-  padding: 4px 8px;
+  /*font-size: 13px;
+  font-style: italic;
+  padding: 0 4px;
   margin: 4px;
-  border: solid 1px #fd270d;
-  border-radius: 8px;
-  color: #fd270d;
-  cursor: pointer;
+  color: #014980;
+  display: inline-block;*/
 }
 </style>
 
@@ -132,20 +132,17 @@ component.exports = {
       })
 
       this.set('title', '')
-      this.find('input').blur()
+      this.set('taglist', false)
+      event.original.stopImmediatePropagation()
     })
-    this.on('remove', (event) => {
-      let i, t = selected.splice(event.index.i, 1)[0]
+    this.removeTag = (event, idx) => {
+      if (event) event.original.stopImmediatePropagation()
+      let i, t = selected.splice(idx, 1)[0]
       // remove previous occurances
       if (~(i = findIndex(recent, '_id', t._id)))
         recent.splice(i, 1)
       recent.splice(0, 0, t)
-    })
-    this.on('toggle-taglist', (event) => {
-      setTimeout(() => {
-        this.toggle('taglist')
-      }, 200)
-    })
+    }
     this.on('keyup', (event) => {
       console.log('TODO up, down, left, right')
       if (event.original.which === 0x20) {
@@ -165,6 +162,7 @@ component.exports = {
       }
     })
     this.once('teardown', () => {
+      // debugger
       api.local.getItem('tags:recent', (err, _recent) => {
         let save = compact(uniq(selected.concat(_recent).concat(recent), '_id'))
         api.local.setItem('tags:recent', save, (err) => {
