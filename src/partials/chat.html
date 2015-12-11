@@ -1,16 +1,16 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
 
-<div class="messages" style="height: {{outerHeight}}px; width: {{outerWidth}}px">
-  <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{innerHeight}}px">
-    {{#each msgs:i}}
-    <div class="{{.creator === members.me._id ? 'left' : 'right'}}">
-      <div style="float: {{.creator === members.me._id ? 'left' : 'right'}}">
-        <foto src="{{members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
+<div class="messages" style="height: {{~/outerHeight}}px; width: {{~/outerWidth}}px">
+  <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{~/innerHeight}}px">
+    {{#each ~/msgs : i}}
+    <div class="{{.creator === ~/members.me._id ? 'left' : 'right'}}">
+      <div style="float: {{.creator === ~/members.me._id ? 'left' : 'right'}}">
+        <foto src="{{~/members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
       </div>
-      <div class="message" style="max-width: {{messageWidth}}">
+      <div class="message" style="max-width: {{~/messageWidth}}">
         <time time="{{.created}}" class="since" />
-        <span class="text" decorator="markdown:{{text}}">{{.text}}</span>
+        <span class="text" decorator="markdown:{{.text}}">{{.text}}</span>
       </div>
     </div>
     {{/each}}
@@ -22,11 +22,11 @@
         on-blur-focus="toggle-focus"
         on-nlSubmit="add"
         maxlength="2048"
-        value="{{text}}"
+        value="{{~/text}}"
         placeholder="Escribe tu comentario"
         decorator="nlElastic" />
     </div>
-    <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
+    <div class="submit" style="display: {{~/focused && ~/text.length > 2 ? 'block' : 'none'}}">
       <button type="submit" on-tap="add">
         <i class="fa fa-comment-o"></i> send
       </button>
