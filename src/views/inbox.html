@@ -1,5 +1,6 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/chat.html'>
+<link rel='ractive' href='../partials/spinner.html'>
 
 <div>
 
@@ -55,9 +56,52 @@
 
     {{#if !panel || panel === 'encounter'}}
     <div class="messages summary">
-      <h3>Buscador <span class="not-yet">(Función aún no activa)</span></h3>
-      <!-- <div>some status updates</div> -->
-      <!-- <div>maybe some suggesgions too</div> -->
+      <h3>Buscador</h3>
+      <input
+        type="text"
+        value="{{search_name}}"
+        placeholder="busca una por su nombre"
+        on-nlSubmit="search"
+        on-keyup="keyup"
+        />
+      <div class="results">
+        {{#if search_results.length === 0}}
+        <div>no results</div>
+        {{/if}}
+
+        <div class="gm-scrollbar-vertical">
+          <div class="thumb"></div>
+        </div>
+        <div class="gm-scrollbar-horizontal">
+          <div class="thumb"></div>
+        </div>
+        <div class="gm-scroll-view">
+          {{#if loading}}
+            <spinner scale="0.2" />
+          {{else}}
+            {{#each ~/search_results}}
+              <div class="list">
+                <div class="user">
+                  <a href="/profile/{{._id}}" title="{{.name}}">
+                    <foto src="{{foto}}" size="y" />
+                  </a>
+                  <div class="ellipsis">
+                    <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{.name}}</a>
+                    <h5>{{.title}}</h5>
+                  </div>
+                </div>
+                <div class="message" on-tap="send-message">
+                  <div class="message-inner">
+                    <i class="fa fa-envelope" />
+                  </div>
+                </div>
+              </div>
+            {{else}}
+              no results
+            {{/each}}
+          {{/if loading}}
+        </div>
+      </div>
     </div>
     {{/if}}
   </div>
@@ -164,7 +208,36 @@ let each = require('../lib/lodash/collection/each')
 let onresize = require('../lib/dom/element-onresize')
 
 component.exports = {
+  // modal: require('../modal'),
   oninit () {
+    this.on('send-message', (event) => {
+      // this.modal('chat', {title: event.context.name, minimize: true, id: event.context._id})
+      api.action('mbox', {creator: event.context._id}, (data) => {
+        let members = {}
+        members[api.me._id] = members.me = api.me
+        for (let i = 0; i < data.members.length; i++) {
+          let m = data.members[i]
+          members[m._id] = m
+          if (m === api.me._id) {
+            data.members.splice(i, 1)
+          }
+        }
+        this.set('threads.'+data._id, data)
+        this.activate('thread', data._id)
+        this.set('members', members)
+      })
+    })
+    this.on('keyup', (event) => {
+      if (event.original.which === 13) {
+        this.fire('search', event)
+      }
+    })
+    this.on('search', (event) => {
+      api.action('mundial@', {name: event.context.search_name}, (res) => {
+        this.set({search_results: res})
+
+      })
+    })
     api.action('mbox*', {limit: 100, sort: '+active'}, (data) => {
       let threads = {}
       for (let i = 0; i < data.length; i++) {
@@ -248,7 +321,7 @@ component.exports = {
     resizer()
   },
   activate (sub, mbox) {
-    if (mbox) this.set('msgs', [])
+    if (mbox && mbox !== this.get('mbox')) this.set('msgs', [])
     router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
   },
   set_members (mbox) {

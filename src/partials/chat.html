@@ -206,7 +206,7 @@ component.exports = {
 
     this.on('add', (event) => {
       event.original.preventDefault()
-      let text = this.get('.text').trim()
+      let text = this.get('text').trim()
       if (text.length < 2 || !__mbox) return
       this.set('saving', true)
       this.set('text', '')
