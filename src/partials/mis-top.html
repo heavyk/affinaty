@@ -20,7 +20,7 @@
     {{#if ~/loading}}
       <spinner scale="0.2" />
     {{else}}
-      {{#if tab === 'vote'}}
+      {{#if ~/tab === 'vote'}}
         {{#each ~/vote}}
           <div class="list">
             <a href="/profile/{{.b._id}}">
@@ -31,9 +31,9 @@
               <!-- {{.t}}:  -->
               {{~/VERB[.t]}}
               en
-              <a href="{{ ~/href(this) }}" on-tap="remove">{{~/TYPE[.t]}}</a>
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">{{~/TYPE[.t]}}</a>
             </div>
-            <span class="remove" on-tap="remove">
+            <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           </div>
@@ -53,14 +53,14 @@
               <!-- {{.t}}:  -->
               <a class="profile-name" href="/profile/{{.b._id}}">{{.b.name}}</a>
               {{~/VERB[.t]}}
-              <a href="{{ ~/href(this) }}" on-tap="remove">{{~/TYPE[.t]}}</a>
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">{{~/TYPE[.t]}}</a>
             </div>
             <div class="text ellipsis">
               <!-- en -->
               <a href="/category/{{.c.category._id}}" class="category">{{.c.category.title}}</a>
-              <a href="{{ ~/href(this) }}" on-tap="remove">“{{.c.text}}”</a>
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">“{{.c.text}}”</a>
             </div>
-            <span class="remove" on-tap="remove">
+            <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
             </span>
           </div>
@@ -257,9 +257,9 @@ component.exports = {
     this.observe('tab', (tab) => {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)
     })
-    this.on('remove', (event) => {
-      api.my.notifier._remove(event.context)
-    })
+  },
+  remove (d) {
+    api.my.notifier._remove(event.context)
   },
   events: {
     tap: require('../lib/events/tap.js'),
