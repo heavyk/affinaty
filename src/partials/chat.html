@@ -145,7 +145,7 @@ component.exports = {
       let iw = window.innerWidth
       let left = Math.min((iw / 3), 200)
       let right = iw - left - 40
-      
+
       let outer = window.innerHeight - (movil ? 120 : 100)
       let messageWidth = (movil ? '65%' : '65%')
       this.set('messageWidth', messageWidth)
@@ -206,7 +206,7 @@ component.exports = {
 
     this.on('add', (event) => {
       event.original.preventDefault()
-      let text = this.get('text').trim()
+      let text = this.get('.text').trim()
       if (text.length < 2 || !__mbox) return
       this.set('saving', true)
       this.set('text', '')
@@ -217,7 +217,7 @@ component.exports = {
         created: Date.now(),
         saving: true
       }
-      this.get('msgs').push(msg)
+      this.get('.msgs').push(msg)
       api.action('msg+', {text: text, mbox: __mbox}, function (data) {
         msg.saving = false
         assign(msg, data)

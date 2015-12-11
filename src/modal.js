@@ -18,7 +18,7 @@ export default function modal(component, opts) {
     partials: {
       modalContent: `<${component} />`,
     },
-    data: assign({modalName: component}, opts),
+    data: assign({modalName: component, parent: this}, opts),
   })
   router.once('dispatch', () => {
     if (_modal) _modal.teardown()
