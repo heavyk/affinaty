@@ -6,10 +6,10 @@
     Mis Top
   </div>
   <div class="tabs">
-    <span class="tab{{#if tab === 'post'}} active{{/if}}" on-tap="set('tab', 'post')">Publicaciones</span>
-    <span class="tab{{#if tab !== 'post'}} active{{/if}}" on-tap="set('tab', 'vote')">Opiniones</span>
+    <span class="tab{{#if ~/tab === 'post'}} active{{/if}}" on-tap="set('tab', 'post')">Publicaciones</span>
+    <span class="tab{{#if ~/tab !== 'post'}} active{{/if}}" on-tap="set('tab', 'vote')">Opiniones</span>
   </div>
-  <div class="list-container" style="max-height: {{rightHeight}}px">
+  <div class="list-container" style="max-height: {{~/rightHeight}}px">
     <div class="gm-scrollbar -vertical">
       <div class="thumb"></div>
     </div>
@@ -17,21 +17,21 @@
       <div class="thumb"></div>
     </div>
     <div class="gm-scroll-view">
-    {{#if loading}}
+    {{#if ~/loading}}
       <spinner scale="0.2" />
     {{else}}
       {{#if tab === 'vote'}}
-        {{#vote}}
+        {{#each ~/vote}}
           <div class="list">
-            <a href="/profile/{{b._id}}">
-              <foto src="{{b.foto}}" size="z" />
+            <a href="/profile/{{.b._id}}">
+              <foto src="{{.b.foto}}" size="z" />
             </a>
             <div class="vote">
-              <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
+              <a class="profile-name" href="/profile/{{.b._id}}">{{.b.name}}</a>
               <!-- {{.t}}:  -->
-              {{VERB[.t]}}
+              {{~/VERB[.t]}}
               en
-              <a href="{{ link(this) }}" on-tap="remove(this)">{{TYPE[.t]}}</a>
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">{{~/TYPE[.t]}}</a>
             </div>
             <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
@@ -42,24 +42,23 @@
             <div>no hay nuevas opiniones.</div>
             <div>tienes q esperar un poco</div>
           </div>
-        {{/vote}}
+        {{/each ~/vote}}
       {{else}}
-        {{#post}}
+        {{#each ~/post}}
           <div class="list">
-            <a href="/profile/{{b._id}}">
-              <foto src="{{b.foto}}" size="z" />
+            <a href="/profile/{{.b._id}}">
+              <foto src="{{.b.foto}}" size="z" />
             </a>
             <div class="action ellipsis">
-
               <!-- {{.t}}:  -->
-              <a class="profile-name" href="/profile/{{b._id}}">{{b.name}}</a>
-              {{VERB[.t]}}
-              <a href="{{ link(this) }}" on-tap="remove(this)">{{TYPE[.t]}}</a>
+              <a class="profile-name" href="/profile/{{.b._id}}">{{.b.name}}</a>
+              {{~/VERB[.t]}}
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">{{~/TYPE[.t]}}</a>
             </div>
             <div class="text ellipsis">
               <!-- en -->
               <a href="/category/{{.c.category._id}}" class="category">{{.c.category.title}}</a>
-              <a href="{{ link(this) }}" on-tap="remove(this)">“{{.c.text}}”</a>
+              <a href="{{ ~/href(this) }}" on-tap="remove(this)">“{{.c.text}}”</a>
             </div>
             <span class="remove" on-tap="remove(this)">
               <i class="fa fa-close" />
@@ -70,9 +69,9 @@
             <div>no hay nuevas publicaciones.</div>
             <div>tienes q esperar un poco</div>
           </div>
-        {{/post}}
+        {{/each ~/post}}
       {{/if}}
-    {{/if loading}}
+    {{/if ~/loading}}
     </div>
   </div>
   <div class="view-more">
@@ -221,7 +220,7 @@ component.exports = {
       'S': 'ha participado', // new-selection
       // 'F': 'te está', // new-follower
     })
-    this.set('link', (d) => {
+    this.set('href', (d) => {
       switch (d.t) {
         // case 'd': return `/debate/${d.b._id}/comments` // debate-comment
         // case 'p': return `/poll/${d.b._id}/comments` // poll-comment
@@ -248,10 +247,12 @@ component.exports = {
         let v = vote[i]
         if (!v.c) api.my.notifier._remove(v)
       }
+      // console.profile('mis-top')
       this.set({
         loading: false,
         post, vote
       })
+      // console.profileEnd('mis-top')
     }) })
     this.observe('tab', (tab) => {
       if (tab) window.localStorage.setItem('mis-top:tab', tab)

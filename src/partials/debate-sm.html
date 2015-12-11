@@ -5,23 +5,23 @@
 
 <div class="debate">
   <div class="header">
-    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}" class="header-foto">
-      <foto src="{{d.creator.foto}}" size="z" />
+    <a href="/profile/{{~/d.creator._id}}" title="{{~/d.creator.name}}" class="header-foto">
+      <foto src="{{~/d.creator.foto}}" size="z" />
     </a>
 
     <div class="header-text">
-      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
-      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
-      <time time="{{d.created}}" class="since" />
+      <h4><a href="/profile/{{~/d.creator._id}}" title="{{~/d.creator.name}}"> {{~/d.creator.name}}</a></h4>
+      <h5><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
+      <time time="{{~/d.created}}" class="since" />
     </div>
 
-    <a class="stats" href="/debate/{{d._id}}" on-tap="show-stats">
+    <a class="stats" href="/debate/{{~/d._id}}" on-tap="show-stats">
       <div class="stats">
         <div class="stats-box">
-          <span class="woa-woa" style="height: {{Math.round(muyDesAcuerdo * 36)}}px" />
-          <span class="woa" style="height: {{Math.round(desAcuerdo * 36)}}px" />
-          <span class="mas" style="height: {{Math.round(deAcuerdo * 36)}}px" />
-          <span class="mas-mas" style="height: {{Math.round(muyDeAcuerdo * 36)}}px" />
+          <span class="woa-woa" style="height: {{Math.round(~/muyDesAcuerdo * 36)}}px" />
+          <span class="woa" style="height: {{Math.round(~/desAcuerdo * 36)}}px" />
+          <span class="mas" style="height: {{Math.round(~/deAcuerdo * 36)}}px" />
+          <span class="mas-mas" style="height: {{Math.round(~/muyDeAcuerdo * 36)}}px" />
         </div>
         <i class="fa fa-chevron-right"></i>
       </div>
@@ -36,30 +36,30 @@
     </a>
   </div>
 
-  {{#if d.tag}}
+  {{#if ~/d.tag}}
   <div class="heading">
     <p class="tags">
-      {{#d.tag}}
-        <a class="tag" href="/tag/{{_id}}">#{{title}}</a>[[' ']]
-      {{/d.tag}}
+      {{#each ~/d.tag}}
+        <a class="tag" href="/tag/{{._id}}">#{{.title}}</a>[[' ']]
+      {{/each ~/d.tag}}
     </p>
   </div>
-  {{/if d.tag}}
+  {{/if ~/d.tag}}
 
-  {{#if view === 'list'}}
+  {{#if ~/view === 'list'}}
     <div class="text">
-      <a href="/debate/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
+      <a href="/debate/{{~/d._id}}" class="text list-text" decorator="markdown:{{~/d.text}}"></a>
     </div>
-    {{#if read_more}}
-      <a href="/debate/{{d._id}}" class="read-more">leer más</a>
-    {{/if read_more}}
+    {{#if ~/read_more}}
+      <a href="/debate/{{~/d._id}}" class="read-more">leer más</a>
+    {{/if ~/read_more}}
   {{else}}
-    <div class="text" decorator="markdown:{{d.text}}"></div>
+    <div class="text" decorator="markdown:{{~/d.text}}"></div>
   {{/if}}
 
   {{#if d.foto}}
     <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
-      <foto src="{{d.foto}}" size="t" shape="sq" />
+      <foto src="{{~/d.foto}}" size="t" shape="sq" />
     </p>
   {{/if d.foto}}
 

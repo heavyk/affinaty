@@ -3,7 +3,7 @@
 <link rel='ractive' href='../partials/chat.html'>
 
 <div class="affinaties-container">
-  {{#if !movil}}
+  {{#if !~/movil}}
     <div class="title section-title">Affines</div>
   {{/if}}
   <div class="list-container">
@@ -14,21 +14,21 @@
       <div class="thumb"></div>
     </div>
     <div class="gm-scroll-view">
-      {{#if loading}}
+      {{#if ~/loading}}
         <spinner scale="0.2" />
       {{else}}
-        {{#list}}
+        {{#each ~/list}}
           <div class="list">
-            <div class="rank {{affinaty > 0 ? 'pos' : affinaty < 0 ? 'neg' : 'neutral' }}">
+            <div class="rank {{ .affinaty > 0 ? 'pos' : .affinaty < 0 ? 'neg' : 'neutral' }}">
               {{#if .affinaty > 0}}
                 <i class="fa fa-chevron-up"></i>
                 <div class="pos-text">
-                  {{Math.round(.affinaty * 100)}}%
+                  {{ Math.round(.affinaty * 100) }}%
                 </div>
               {{else}}
-                {{#if affinaty < 0}}
+                {{#if .affinaty < 0}}
                   <div class="pos-text">
-                    {{Math.round(.affinaty * 100)}}%
+                    {{ Math.round(.affinaty * 100) }}%
                   </div>
                   <i class="fa fa-chevron-down"></i>
                 {{else}}
@@ -40,11 +40,11 @@
             </div>
             <div class="user">
               <a href="/profile/{{._id}}" title="{{.name}}">
-                <foto src="{{foto}}" size="y" />
+                <foto src="{{.foto}}" size="y" />
               </a>
               <div class="ellipsis">
-                <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{name}}</a>
-                <h5>{{title}}</h5>
+                <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{.name}}</a>
+                <h5>{{.title}}</h5>
               </div>
             </div>
             <div class="message" on-tap="send-message">
@@ -55,8 +55,8 @@
           </div>
         {{else}}
           Aquí verás tu afinidad con usuarios a los que sigues
-        {{/list}}
-      {{/if loading}}
+        {{/each ~/list}}
+      {{/if ~/loading}}
     </div>
   </div>
 </div>
@@ -204,7 +204,9 @@ component.exports = {
 
     api.my.affinaties.until('/', () => {
       this.set('loading', false)
+      console.profile('set affinaties')
       this.set('list', api.my.affinaties.list)
+      console.profileEnd('set affinaties')
     })
     api.my.affinaties.on('updated', (updated) => {
       let els = this.findAll('.list')

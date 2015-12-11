@@ -3,10 +3,10 @@
 
 <div class="popular">
   <div class="list-container popular">
-    {{#if loading}}
+    {{#if ~/loading}}
       <spinner scale="0.2" />
     {{else}}
-      {{#list}}
+      {{#each ~/list}}
         <div class="list" on-mouseover-blur="toggle('engaged')">
           <div class="img">
             <a href="/tag/{{.d._id}}">
@@ -14,15 +14,15 @@
             </a>
           </div>
           <div class="tag">
-            <a class="tag_home" href="/tag/{{.d._id}}">#{{d.title}}</a>
+            <a class="tag_home" href="/tag/{{.d._id}}">#{{.d.title}}</a>
           </div>
           <!-- <div class="stats">
             <div class="opin">{{.score}} opins</div>
             <div class="opin">{{.posts}} posts</div>
           </div> -->
         </div>
-      {{/list}}
-    {{/if loading}}
+      {{/each}}
+    {{/if ~/loading}}
   </div>
 </div>
 
@@ -117,7 +117,7 @@ component.exports = {
       this.set('category', (category ? category._id : null))
     })
     this.doFade = (force) => {
-      if (!this.get('engaged') || force) {
+      if (!this.get('.engaged') || force) {
         this.list.unshift(this.list.pop())
         var els = this.findAll('.list')
         for (var i = 0; i < els.length; i++) {
@@ -138,7 +138,7 @@ component.exports = {
   },
   go () {
     this.set('loading', true)
-    api.action('pop:tag*', this.get('query'), (data) => {
+    api.action('pop:tag*', this.get('.query'), (data) => {
       this.set('loading', false)
 
       // each(data.score, (v, id) => {

@@ -1,5 +1,5 @@
 
-<img src="[[url]]" width="[[px]]" height="[[px]]" class="[[cls]]" style="[[style]]" />
+<img src="[[~/url]]" width="[[~/px]]" height="[[~/px]]" class="[[~/cls]]" style="[[~/style]]" />
 
 
 <script>
@@ -7,19 +7,20 @@ let repeat = require('../lib/utils').repeat
 let dpr = Math.round(window.devicePixelRatio || 1)
 component.exports = {
   onconfig () {
-    this.get('shape') || this.set('shape', 'rd')
-    this.get('default') || this.set('default', '/img/default.svg')
+    this._default = this.get('.default')
+    this._size = this.get('.size')
+    this._shape = this.get('.shape')
   },
   computed: {
     cls () {
-      let str = this.get('shape') + '-' + this.get('size')
+      let str = (this._shape || 'rd') + '-' + this._size
       if (!this.get('src')) str = 'n-' + str
-      let cls = this.get('class')
+      let cls = this.get('.class')
       if (cls) str += ' ' + cls
       return str
     },
     px () {
-      switch (this.get('size')) {
+      switch (this._size) {
         case 'x': return 1920
         case 'l': return 1440
         case 'm': return 720
@@ -34,7 +35,7 @@ component.exports = {
     },
     url () {
       let id = this.get('src')
-      return id ? api.url + '/i/' + repeat(this.get('size'), dpr) + '/' + id : this.get('default')
+      return id ? api.url + '/i/' + repeat(this._size, dpr) + '/' + id : (this._default || '/img/default.svg')
     }
   }
 }

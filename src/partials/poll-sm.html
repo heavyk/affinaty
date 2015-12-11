@@ -6,17 +6,17 @@
 
 <div class="debate">
   <div class="header">
-    <a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}" class="header-foto">
-      <foto src="{{d.creator.foto}}" size="z" />
+    <a href="/profile/{{~/d.creator._id}}" title="{{~/d.creator.name}}" class="header-foto">
+      <foto src="{{~/d.creator.foto}}" size="z" />
     </a>
 
     <div class="header-text">
-      <h4><a href="/profile/{{d.creator._id}}" title="{{d.creator.name}}"> {{d.creator.name}}</a></h4>
-      <h5><a href="/category/{{d.category._id}}">{{d.category.title}}</a></h5>
-      <time time="{{d.created}}" class="since" />
+      <h4><a href="/profile/{{~/d.creator._id}}" title="{{~/d.creator.name}}"> {{~/d.creator.name}}</a></h4>
+      <h5><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
+      <time time="{{~/d.created}}" class="since" />
     </div>
 
-    <a class="stats" href="/poll/{{d._id}}">
+    <a class="stats" href="/poll/{{~/d._id}}">
       <div class="stats">
         <i class="fa fa-chevron-right"></i>
         <div class="stats-box">
@@ -52,21 +52,21 @@
 
   {{#if view === 'list'}}
     <div class="text">
-      <a href="/poll/{{d._id}}" class="text list-text" decorator="markdown:{{d.text}}"></a>
+      <a href="/poll/{{~/d._id}}" class="text list-text" decorator="markdown:{{~/d.text}}"></a>
     </div>
     {{#if read_more}}
-      <a href="/poll/{{d._id}}" class="read-more">leer más</a>
+      <a href="/poll/{{~/d._id}}" class="read-more">leer más</a>
     {{/if read_more}}
   {{else}}
-    <div class="text" decorator="markdown:{{d.text}}" />
+    <div class="text" decorator="markdown:{{~/d.text}}" />
   {{/if}}
 
   <h6>¿Qué opinas?</h6>
   <selection-sm d="{{d}}" />
 
   {{#if d.foto}}
-    <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
-      <foto src="{{d.foto}}" size="t" shape="sq" class="lala" />
+    <p class="foto" on-tap="modal('foto', {title: ~/d.text, src: ~/d.foto, size: 'm', shape: 'sq'})">
+      <foto src="{{~/d.foto}}" size="t" shape="sq" />
     </p>
   {{/if d.foto}}
 
