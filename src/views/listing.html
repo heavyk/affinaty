@@ -214,7 +214,7 @@ component.exports = {
       let inner = window.innerWidth - 60
       let right = inner > 578 ? 250 : 0
       let left = Math.floor((inner - right - 32) / (289+20)) * (289+20)
-      this.set('rightWidth', right + (inner - left - right))
+      this.set('rightWidth', right + (inner - left - right)-20)
       this.set('leftWidth', left)
       this.set('popTagWidth', Math.floor((window.isMobile ? window.innerWidth : left - 10) / 128) * 128 + 4)
     }
