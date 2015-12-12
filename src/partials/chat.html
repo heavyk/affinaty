@@ -152,7 +152,7 @@ component.exports = {
       this.set('outerHeight', outer)
       this.set('innerHeight', outer - tbox.clientHeight - 25)
       if (_outer !== outer) this.parent.fire('resize')
-      this.set('outerWidth', right)
+      this.set('outerWidth', (movil ? right : right/2))
       _outer = outer
     }
     let _resizer = throttle(resizer, 500, true, true)
