@@ -57,16 +57,25 @@
     {{#if !panel || panel === 'encounter'}}
     <div class="messages summary">
       <h3>Buscador</h3>
-      <input
-        type="text"
-        value="{{search_name}}"
-        placeholder="busca una por su nombre"
-        on-nlSubmit="search"
-        on-keyup="keyup"
-        />
+      <div class="search">
+        <div class="txt_search">
+          <input
+            type="text"
+            value="{{search_name}}"
+            placeholder="busca una por su nombre"
+            on-nlSubmit="search"
+            on-keyup="keyup"
+            />
+        </div>
+        <div class="submit">
+          <button type="submit" on-tap="search">
+            <i class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
       <div class="results">
         {{#if search_results.length === 0}}
-        <div>no results</div>
+        <div>No hay resultados</div>
         {{/if}}
 
         <div class="gm-scrollbar-vertical">
@@ -97,7 +106,7 @@
                 </div>
               </div>
             {{else}}
-              no results
+
             {{/each}}
           {{/if loading}}
         </div>
@@ -199,6 +208,120 @@ li.encounter {
   border-bottom: solid 1px #A0A0A0;
   background-color: #e9f7ea;
 }
+.list {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background-color: #ffffff;
+  transition: background-color 333ms ease-in-out;
+  border-bottom: 1px solid #dadada;
+  clear: both;
+}
+
+
+.user {
+  padding-bottom: 10px;
+  position: absolute;
+  width: 80%;
+}
+.user img {
+  float: left;
+  margin-right: 12px;
+  margin-left: 16px;
+  vertical-align: middle;
+  margin-top: 5px;
+  width: 36px;
+  height: 36px;
+}
+.user h4,
+.user h5 {
+  margin: 0;
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.user h4 {
+  padding-top: 10px;
+}
+.user h4 a {
+  color: #414141;
+  text-decoration: none;
+}
+.user h4 a:hover {
+  color: #fd270d;
+}
+.user h5 {
+  color: #939393;
+  font-size: 12px;
+  /*font-weight: 300;*/
+}
+
+.view_plus {
+  background-color: #fff;
+  width: 100%;
+  height: 30px;
+  padding-left: 10px;
+  padding-top: 3px;
+  border-radius: 0px 0px 30px 9px;
+  border-top: solid 1px #e6e6e6;
+  font-weight: bold;
+}
+.message {
+  position: absolute;
+  top: 7px;
+  right: 12px;
+  width: 32px;
+  height: 35px;
+  font-size: 20px;
+  color: #fd270d;
+  border: solid 1px #dadada;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.message-inner {
+  margin: auto;
+  width: 30px;
+  border-radius: 4px;
+  background: #fff;
+  padding-left: 5px;
+}
+.message:hover {
+  background: rgba(253, 39, 13, 0.08);
+  border: solid 1px #FD270D;
+  border-radius: 4px;
+}
+.search{
+  position: relative;
+  height: 60px;
+}
+.txt_search{
+  position: absolute;
+  left: 0px;
+  width: 80%;
+}
+.submit {
+  position: absolute;
+  right: 13px;
+  top: 8px;
+}
+.submit .fa {
+  right: 2px;
+  position: relative;
+}
+.submit button {
+  padding: 1px 8px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+  border-radius: 15px;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #fd270d;
+}
+
 
 </style>
 
@@ -210,6 +333,9 @@ let onresize = require('../lib/dom/element-onresize')
 component.exports = {
   // modal: require('../modal'),
   oninit () {
+    this.on('send_text', (event) => {
+      this.fire('search', event.context.text)
+    })
     this.on('send-message', (event) => {
       // this.modal('chat', {title: event.context.name, minimize: true, id: event.context._id})
       api.action('mbox', {creator: event.context._id}, (data) => {
