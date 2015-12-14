@@ -6,8 +6,8 @@
     <div class="central col-md-8">
       <div class="lead">
         <h1><img class="logo" src="/img/landing.svg" /></h1>
-        <h2 id="yin">{{slogan_yin}}</h2>
-        <h2 id="yang">{{slogan_yang}}</h2>
+        <h2 id="yin">Una red para expresarte</h2>
+        <!-- <h2 id="yang">{{slogan_yang}}</h2> -->
         <!-- <h2>¡Súmate a opinar y a debatir con nosotros!</h2> -->
         <!-- <h2>Da tu opinión y encuentra personas affines a ti</h2> -->
         <img class="cover" src="/img/cover-0.0.2.png">
@@ -180,12 +180,12 @@ h5 {
   padding: 12px 24px;
 }
 h2 {
-  font-weight: 100;
+  font-weight: 300;
   /*margin: 15px;*/
   font-size: 190%;
-  transition: 3s all ease-in-out;
+  /*transition: 3s all ease-in-out;*/
   /*transition: 1s opacity ease-in-out;*/
-  opacity: 0;
+  /*opacity: 0;*/
   /*text-shadow: 1px 1px 1px #FF7600,3px 3px 5px #FFF;*/
   position: absolute;
   margin-top: -9px;
@@ -263,50 +263,50 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   onconfig () {
-    this.set('is_yang', !!rand(1))
+    // this.set('is_yang', !!rand(1))
   },
   oncomplete () {
     // let els = this.findAll('h2')
-    let yin = this.find('#yin')
-    let yang = this.find('#yang')
-    let els = [ yin, yang ]
-    let slogans = [
-      // `Una red para explicarte`,
-      // `Un sito para expresarte`,
-      `Una red para expresarte`,
-      // `Un sito donde te puedes expresar`,
-      // `Donde te puedes expresar`,
-    ]
+    // let yin = this.find('#yin')
+    // let yang = this.find('#yang')
+    // let els = [ yin, yang ]
+    // let slogans = [
+    //   // `Una red para explicarte`,
+    //   // `Un sito para expresarte`,
+    //   `Una red para expresarte`,
+    //   // `Un sito donde te puedes expresar`,
+    //   // `Donde te puedes expresar`,
+    // ]
     // this.set('slogans')
-    let len = slogans.length
-    let is_yang = rand(1)
-    this.change_slogan = () => {
-      let idx = 0 // rand(len - 1)
-      this.set({
-        idx,
-        is_yang: is_yang = !is_yang,
-        slogan_yang: slogans[idx],
-        slogan_yin: slogans[idx]
-      })
-      // this.set('idx', idx)
-      // this.toggle('is_yang')
-      // this.set('slogan_yin', slogans[idx++ % len])
-      // this.set('slogan_yang', slogans[idx++ % len])
-      els.forEach((el, i) => {
-        // el.style.paddingLeft = rand(3, 11) + 'px'
-        el.style.transform = `translate(${rand(9, 11)}px, ${rand(-1, 1)}px)`
-        // el.style.transform = `translate(${rand(3, 11)}px, 0)`
-
-        // el.style.fontSize = rand(80, 130) + '%'
-        // el.style.fontWeight = rand(1, 9) * 100
-        // el.style.textShadow = `${rand(3)}px ${rand(3)}px ${rand(3)}px #${i && is_yang ? 'FFF' : 'FF7600'}`
-        el.style.opacity = i
-          ? (is_yang ? rand(.7, .9) : rand(.8, 1))
-          : (is_yang ? rand(.8, 1) : rand(.7, .9))
-      })
-      setTimeout(this.change_slogan, rand(2222, 5555))
-    }
-    this.change_slogan()
+    // let len = slogans.length
+    // let is_yang = rand(1)
+    // this.change_slogan = () => {
+    //   let idx = 0 // rand(len - 1)
+    //   this.set({
+    //     idx,
+    //     is_yang: is_yang = !is_yang,
+    //     slogan_yang: slogans[idx],
+    //     slogan_yin: slogans[idx]
+    //   })
+    //   // this.set('idx', idx)
+    //   // this.toggle('is_yang')
+    //   // this.set('slogan_yin', slogans[idx++ % len])
+    //   // this.set('slogan_yang', slogans[idx++ % len])
+    //   els.forEach((el, i) => {
+    //     // el.style.paddingLeft = rand(3, 11) + 'px'
+    //     el.style.transform = `translate(${rand(9, 11)}px, ${rand(-1, 1)}px)`
+    //     // el.style.transform = `translate(${rand(3, 11)}px, 0)`
+    //
+    //     // el.style.fontSize = rand(80, 130) + '%'
+    //     // el.style.fontWeight = rand(1, 9) * 100
+    //     // el.style.textShadow = `${rand(3)}px ${rand(3)}px ${rand(3)}px #${i && is_yang ? 'FFF' : 'FF7600'}`
+    //     el.style.opacity = i
+    //       ? (is_yang ? rand(.7, .9) : rand(.8, 1))
+    //       : (is_yang ? rand(.8, 1) : rand(.7, .9))
+    //   })
+    //   setTimeout(this.change_slogan, rand(2222, 5555))
+    // }
+    // this.change_slogan()
   },
   decorators: {
     tip: require('../lib/decorators/tip')
