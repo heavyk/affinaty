@@ -14,7 +14,7 @@
       {{/if}}
     </div>
 
-    <div class="{{movil ? '' : 'col-xs-10 col-lg-7'}}">
+    <div class="{{movil ? '' : 'col-xs-6 col-md-7 col-sm-6'}}">
       {{#if loading}}
         <spinner />
       {{/if loading}}
@@ -29,7 +29,7 @@
       <comment-list debate="{{id}}"></comment-list>
     </div>
     {{#if !movil}}
-    <div class="col-lg-5">
+    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
       <debate-stats debate="{{id}}"></debate-stats>
     </div>
     {{/if}}
