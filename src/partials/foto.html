@@ -7,9 +7,9 @@ let repeat = require('../lib/utils').repeat
 let dpr = Math.round(window.devicePixelRatio || 1)
 component.exports = {
   onconfig () {
-    this._default = this.get('.default')
-    this._size = this.get('.size')
-    this._shape = this.get('.shape')
+    this._default = this.get('default')
+    this._size = this.get('size')
+    this._shape = this.get('shape')
   },
   computed: {
     cls () {
