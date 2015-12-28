@@ -1,5 +1,6 @@
 'use strict'
 
+document.domain = document.domain
 let Ractive = require('ractive')
 
 // polyfill map

@@ -31,7 +31,8 @@
     </div>
     <div class="access">
       <div class="access-button">
-        <div class="face" decorator="tip:'función aún no disponible'">
+        <!-- <div class="face" decorator="tip:'función aún no disponible'"> -->
+        <div class="face" on-click="facebook">
           <i class="fa fa-facebook-official"></i>
         </div>
       </div>
@@ -261,6 +262,9 @@ component.exports = {
         ls.removeItem('password')
         ls.removeItem('remember')
       }
+    })
+    this.on('facebook', () => {
+      window.open(`http://${localStorage.host === 'local' ? 'localhost' : 'affinaty.com'}:1155/auth/facebook`, '_blank', 'width=300,height=300,left=100,top=100')
     })
   },
   events: {
