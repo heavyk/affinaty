@@ -1,6 +1,10 @@
 'use strict'
 
-document.domain = document.domain
+// this is to allow any subdomain (or port) of affinaty to access this frame
+let domain = document.domain.split('.')
+while (domain.length > 2) domain.shift()
+document.domain = domain.join('.')
+
 let Ractive = require('ractive')
 
 // polyfill map
