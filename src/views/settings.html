@@ -406,38 +406,24 @@ component.exports = {
     })
 
     let me = api.get('me')
+    // stupid hack for when c = ''
+    // (this can happen because of a bug in ractive option boxes setting the value to '' when no option is selected)
+    if (me.c === '') delete me.c
     this.old_me = assign({}, me)
 
     this.observe('me', (_me) => {
       if (_me) {
         api.set('me', _me)
-        // if (_me.networks) {
-        //   let nets = Object.keys(_me.networks)
-        //   console.log('nets', nets)
-        //   // each(network_list, (n, i) => {
-        //   //   if (n.id)
-        //   // })
-        //   for (var i = 0; i < nets.length; i++) {
-        //     let idx, n = nets[i]
-        //     find(network_list, (_n) => _n.id === n)
-        //     if (~(idx = network_list.indexOf(n))) {
-        //       network_list.splice(idx, 1)
-        //     }
-        //   }
-        // }
         me = _me
-        // if (!_me.networks) this.set('me.networks', {})
       }
     })
 
     this.on('add-network', () => {
       let n = this.get('new_network')
-      console.log('n', n)
       this.set(`me.networks.${n}`, '')
       this.set('new_network', '')
     })
     this.on('remove-network', (event) => {
-      console.log('romoving', event.context.id)
       delete me.networks[event.context.id]
       this.set('me.networks', me.networks)
     })
@@ -451,6 +437,10 @@ component.exports = {
     this.on('change-appearance', (e) => {
       if (e) e.original.preventDefault()
       let me = this.get('me')
+      // stupid hack for when c = ''
+      // (this can happen because of a bug in ractive option boxes setting the value to '' when no option is selected)
+      if (me.c === '') delete me.c
+      // if current me is different to old_me, then we save the difference.
       if (!isEqual(me, this.old_me)) {
         let update = {}
         // save it
