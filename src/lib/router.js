@@ -102,7 +102,7 @@ export default class Router extends EventEmitter {
 
       // emit `route` event
       this.emit('route', route)
-      this.emit('dispatch')
+      this.emit('dispatch', route)
     }
 
     // will scroll to the top if there is no matching element
