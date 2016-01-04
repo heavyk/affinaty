@@ -15,7 +15,7 @@
       <div class="field localization">
         <div class="left-column">
           <select value="{{me.c}}" class="{{errors.me.c ? 'invalid' : ''}}">
-            <option value="">País</option>
+            <option value="ES">España</option>
             {{#each countries}}
             <option value="{{short}}">{{name}}</option>
             {{/each}}
@@ -209,6 +209,7 @@ component.exports = {
         list.sort((a, b) => { return a.name > b.name ? 1 : a.name < b.name ? -1 : 0 })
         local.setItem('country-list', list)
       }
+      // list.unshift({ name: 'España', short: 'ES' })
       this.set('countries', list)
     }
 
