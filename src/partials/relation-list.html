@@ -2,27 +2,46 @@
 <link rel='ractive' href='../partials/spinner.html'>
 
 
-<div class="relations">
-  {{#if loading}}
-    <spinner />
-    <!-- loading... -->
-  {{else}}
-    {{#list}}
-      <!-- d: {{JSON.stringify(this)}} -->
-      <relation-sm d="{{.}}" />
+
+
+<div class="list-container">
+  <div class="gm-scrollbar-vertical">
+    <div class="thumb"></div>
+  </div>
+  <div class="gm-scrollbar-horizontal">
+    <div class="thumb"></div>
+  </div>
+  <div class="gm-scroll-view">
+    {{#if ~/loading}}
+      <spinner scale="0.2" />
     {{else}}
-      no relations
-    {{/list}}
-  {{/if loading}}
+    <div class="relations">
+      {{#if loading}}
+        <spinner />
+        <!-- loading... -->
+      {{else}}
+        {{#list}}
+          <!-- d: {{JSON.stringify(this)}} -->
+          <relation-sm d="{{.}}" />
+        {{else}}
+          no relations
+        {{/list}}
+      {{/if loading}}
+    </div>
+    {{/if ~/loading}}
+  </div>
 </div>
-
-
 
 
 <script>
 let assign = require('../lib/lodash/object/assign')
+let onresize = require('../lib/dom/element-onresize')
 component.exports = {
   isolated: true,
+  onconfig () {
+    this.set('movil', window.isMobile)
+    this.set('list', this.list = [])
+  },
   oninit () {
     let sort = this.get('sort') || '+created'
     let creator = this.get('creator')
@@ -62,10 +81,62 @@ component.exports = {
       })
     }})
   },
+  oncomplete () {
+    // let title = this.find('.title')
+    let movil = window.isMobile
+    let container = this.find('.affinaties-container')
+    let list_container = this.find('.list-container')
+    let resizer = require('../lib/lodash/function/throttle')(this.resize = () => {
+      let w = window.innerWidth
+      let h = window.innerHeight
+      // let th = movil ? 0 : title.scrollHeight
+      let ih = h - 400
+      // if (movil) container.style.height = (h - 60 - 65) + 'px'
+      list_container.style.maxHeight = Math.min(movil ? ih :(ih / 2) - 0, ih) + 'px'
+    }, true)
+    this.resize()
+    if (!movil) {
+      onresize.addResizeListener(list_container, this.resize)
+    }
+    // let gemini = new (require('gemini-scrollbar'))({
+    //   element: container,
+    //   autoshow: true,
+    //   createElements: false,
+    // }).create()
+
+    this.observe('list', (v) => {
+      // gemini.update()
+      if (!movil) resizer()
+    }, {initial: false})
+
+    this.once('teardown', () => {
+      // gemini.destroy()
+      if (!movil) onresize.removeResizeListener(container, resizer)
+    })
+  },
 }
 </script>
 
 <style>
+.list-container {
+  overflow-y: scroll;
+  width: 100%;
+  min-height: 100px;
+  max-height: 720px;
+  padding-bottom: 80px;
+  background: #fff;
+  position: relative;
+  border-radius: 0px 0px 30px 9px;
+}
+.list {
+  position: relative;
+  width: 100%;
+  height: 50px;
+  background-color: #ffffff;
+  transition: background-color 333ms ease-in-out;
+  border-bottom: 1px solid #dadada;
+  clear: both;
+}
 .user {
   float: left;
 }
