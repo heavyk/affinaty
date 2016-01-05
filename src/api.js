@@ -41,6 +41,7 @@ let Api = Ractive.extend({
           case 'term': return 'http://5.9.94.75:1158' // action-terminal
           case 'local': return 'http://localhost:1155' // local
           case 'mothership': return 'http://5.9.94.75:1155' // normal
+          case 'web': return 'http://affinaty.com' // website
         }
 
         // rest of the world

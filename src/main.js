@@ -7,6 +7,9 @@ document.domain = domain.join('.')
 
 let Ractive = require('ractive')
 
+// debug will be false when code is minified because the comment will be removed
+Ractive.DEBUG = /lala/.test(function(){/*lala*/})
+
 // polyfill map
 // TODO delete me when doing koa polyfills
 if (typeof Map === 'undefined')
