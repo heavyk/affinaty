@@ -7,7 +7,7 @@
 
 <div class="container">
 
-  <div class="profile" style="display: {{active === 'follows'|| active === 'following'  ? 'none' : 'block'}}">
+  <div class="profile" style="display: {{mine && (active === 'follows'|| active === 'following')  ? 'none' : 'block'}}">
     <div class="cover">
       <!-- <foto src="{{foto}}"  /> -->
     </div>

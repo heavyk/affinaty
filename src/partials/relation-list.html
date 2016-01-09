@@ -51,7 +51,6 @@ component.exports = {
 
     let __follows
     this.observe('follows', (follows) => { if (follows && follows !== __follows) {
-      debugger
       this.set('loading', true)
       api.action('relation*', {
         creator: follows,
