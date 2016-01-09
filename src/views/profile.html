@@ -7,8 +7,10 @@
 
 <div class="container">
 
-  <div class="profile">
-    <div class="cover"></div>
+  <div class="profile" style="display: {{active === 'follows'|| active === 'following'  ? 'none' : 'block'}}">
+    <div class="cover">
+      <!-- <foto src="{{foto}}"  /> -->
+    </div>
     <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
       {{#if loading}}
         <spinner />
@@ -70,7 +72,7 @@
         <div class="message-inner">
           <i class="fa fa-pencil-square-o" />
           <div class="follow-text">
-            edit profile
+            Editar Perfil
           </div>
         </div>
       </a>
@@ -282,20 +284,24 @@
   margin: 0 auto;
   position: relative;
   width: 100%;
+  height: 130px;
+  /*background: #d4d2d4;
+  background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);*/
+}
+.cover img{
+  width: 100%;
   height: 180px;
-  background: #d4d2d4;
-  background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);
 }
 .center-foto {
   margin: 0px auto -119px;
   position: relative;
   width: 120px;
   height: 120px;
-  top: -60px;
+  top: -90px;
 }
 .name {
   width: 100%;
-  margin-top: 80px;
+  margin-top: 50px;
   text-align: center;
 }
 .name h2 {
@@ -399,7 +405,7 @@
 .follow {
   position: absolute;
   right: 33px;
-  top: 180px;
+  top: 160px;
   width: 100px;
   height: 100px;
   text-align: center;
@@ -425,7 +431,7 @@
 }
 .message {
   /*left: 33px;*/
-  top: 60px;
+  top: 30px;
 }
 .message .fa {
   color: #FF3000;
@@ -569,6 +575,7 @@ component.exports = {
   oninit () {
     this.set('movil', window.isMobile)
     let __id
+    let complete_screen
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
       api.my.notifier.remove_box(id)

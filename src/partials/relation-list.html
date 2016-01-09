@@ -51,6 +51,7 @@ component.exports = {
 
     let __follows
     this.observe('follows', (follows) => { if (follows && follows !== __follows) {
+      debugger
       this.set('loading', true)
       api.action('relation*', {
         creator: follows,
@@ -90,9 +91,9 @@ component.exports = {
       let w = window.innerWidth
       let h = window.innerHeight
       // let th = movil ? 0 : title.scrollHeight
-      let ih = h - 400
+      let ih = h - 200
       // if (movil) container.style.height = (h - 60 - 65) + 'px'
-      list_container.style.maxHeight = Math.min(movil ? ih :(ih / 2) - 0, ih) + 'px'
+      list_container.style.maxHeight = Math.min(movil ? ih :(ih) - 0, ih) + 'px'
     }, true)
     this.resize()
     if (!movil) {
