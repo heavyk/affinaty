@@ -34,8 +34,7 @@
         </div>
         {{/each}}
       </div>
-      {{#if d.options.length < 5}}
-      <div class="row">
+      <div class="row" style="display:{{d.options.length < 5 ? 'block' : 'none'}}">
         <div class="new-poll">
           <div class="text-option col-xs-10">
             <input type="text"
@@ -55,7 +54,7 @@
 
         </div>
       </div>
-      {{/if options.length >= 5}}
+
 
       <button on-tap="submit" class="row button-sign-up">
         Pide opinión
