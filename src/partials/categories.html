@@ -150,8 +150,9 @@ component.exports = {
     })
   },
   activate (event, menu) {
-    this.set('selected', event.context)
+    // this.set('selected', event.context)
     this.fire('select', event.context)
+    this.set('selected', event.context)
     this.set('menu', menu || false)
   },
   onteardown () {
