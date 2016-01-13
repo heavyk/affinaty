@@ -16,7 +16,7 @@
     {{/each}}
   </div>
   <form on-submit="add">
-    <div class="text-container">
+    <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : '88%'}}">
       <textarea
         class="animate"
         on-blur-focus="toggle-focus"
@@ -28,7 +28,7 @@
     </div>
     <div class="submit" style="display: {{~/focused && ~/text.length > 2 ? 'block' : 'none'}}">
       <button type="submit" on-tap="add">
-        <i class="fa fa-comment-o"></i> send
+        <i class="fa fa-comment-o"></i> Enviar
       </button>
     </div>
   </form>
@@ -93,13 +93,13 @@ span.text {
 }
 textarea.animate {
   margin: 0 15px;
-  width: 100%;
   height: 35px;
 }
 .submit {
   position: absolute;
-  right: 8px;
+  right: 44px;
   bottom: 8px;
+  top: 15px;
   margin: 5px;
 }
 .submit button {
@@ -152,7 +152,7 @@ component.exports = {
       this.set('outerHeight', outer)
       this.set('innerHeight', outer - tbox.clientHeight - 25)
       if (_outer !== outer) this.parent.fire('resize')
-      this.set('outerWidth', (movil ? right : right/2))
+      this.set('outerWidth', (movil ? right : right/1.5))
       _outer = outer
     }
     let _resizer = throttle(resizer, 500, true, true)

@@ -19,13 +19,15 @@
           Buscador
         </div>
         {{#each threads}}
-        <div on-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
-          <foto src="{{members.0.foto}}" size="y" />
-          <span class="name">{{members.0.name}}</span>
-          {{#if .nm}}
-            <span class="new-msg">{{.nm}}</span>
-          {{/if}}
-        </div>
+          {{#if .messages > 0}}
+            <div on-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
+              <foto src="{{members.0.foto}}" size="y" />
+              <span class="name">{{members.0.name}}</span>
+              {{#if .nm}}
+                <span class="new-msg">{{.nm}}</span>
+              {{/if}}
+            </div>
+          {{/if .messages > 0}}
         {{else}}
         no threads
         {{/each threads}}
@@ -301,9 +303,9 @@ li.encounter {
   width: 80%;
 }
 .submit {
-  position: absolute;
-  right: 13px;
-  top: 8px;
+  /*position: absolute;
+  right: 44px;
+  top: 15px;*/
 }
 .submit .fa {
   right: 2px;
@@ -388,6 +390,7 @@ component.exports = {
       let threads = this.get('threads')
       if (threads) each(threads, (t, id) => {
         let c = api.my.notifier.get_box(id)
+
         if (t.nm !== c) {
           this.set(`threads.${id}.nm`, c)
         }
@@ -439,7 +442,7 @@ component.exports = {
       let right = iw - left - 40
       this.set('leftWidth', left + 'px')
       this.set('floatleft', left+20 + 'px')
-      this.set('rightWidth', (movil ? right : right/2) + 'px')
+      this.set('rightWidth', (movil ? right : right/1.5) + 'px')
       let outer = window.innerHeight - (movil ? 120 : 100)
       this.set('outerHeight', outer)
 
