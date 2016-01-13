@@ -10,7 +10,14 @@
   {{#if error}}
     ERROR: {{error}}
   {{/if error}}
-
+  {{#if notifications}}
+    <div class="delete all">
+      &nbsp;
+      <span class="remove" on-tap="remove_all(this)">
+        Borrar todas <i class="fa fa-close" />
+      </span>
+    </div>
+  {{/if notifications}}
   {{#each notifications:i}}
     <div class="item clearfix">
       <a href="/profile/{{.a.creator._id}}" class="foto">
@@ -169,6 +176,9 @@ component.exports = {
   },
   remove (d) {
     api.my.notifier._remove(d)
+  },
+  remove_all (d){
+      api.my.notifier._remove_all(d)
   },
   events: {
     tap: require('../lib/events/tap.js'),

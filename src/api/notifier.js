@@ -225,6 +225,19 @@ class notifier extends Ambition {
     })
   }
 
+  _remove_all (d) {
+    let b = this.resolve(d.notifications)
+    if (b) {
+      for (var i = 0; i < b.list.length; i++) {
+        let n = b.list[i]
+        console.log ('notificacion_id:'+ n._id +' tipo:' +  n.t + 'nº:' + i)
+        console.log ("remove")
+        this._remove(n)
+        console.log ("remove--")
+      }
+    }
+  }
+
   remove_box (id) {
     // TODO: this should execute only once it's reached the state '/'
     let b = this.box[id]
