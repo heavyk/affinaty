@@ -2,17 +2,6 @@
 var gobble = require('gobble')
 
 gobble.cwd(__dirname)
-gobble.env('development')
-
-if (gobble.env() === 'production') {
-	// TODO: write this / remove this in the babelrc
-	// maybe it's doable actually with uglifyjs
-	babelWhitelist = babelWhitelist.concat([
-		// for production env
-		'minification.removeConsole',
-		'minification.removeDebugger',
-	])
-}
 
 var affinaty = gobble([
 	gobble('src')
