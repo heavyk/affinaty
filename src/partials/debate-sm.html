@@ -11,7 +11,7 @@
 
     <div class="header-text">
       <h4><a href="/profile/{{~/d.creator._id}}" title="{{~/d.creator.name}}"> {{~/d.creator.name}}</a></h4>
-      <h5><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
+      <h5 style="width: {{~/view === 'list' ? '90%' : '100%'}}"><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
       <time time="{{~/d.created}}" class="since" />
     </div>
 

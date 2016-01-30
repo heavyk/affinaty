@@ -113,17 +113,27 @@
       {{/if}}
 
       {{#if active === 'mundial'}}
+        <th>id</th>
         <th>name</th>
         <th>title</th>
+        <th>birthdate</th>
+        <th>planet</th>
         <th>foto</th>
+        <th>pais</th>
+        <th>provincia</th>
         <th>created</th>
         <th>actions</th>
         {{#each list:i}}
         <tr>
+          <td>{{._id}}</td>
           <td>
             <a href="/profile/{{._id}}">{{.name}}</a>
           </td>
           <td>{{.title}}</td>
+          <td>{{.birthdate}}</td>
+          <td>{{.planet}}</td>
+          <td>{{.c}}</td>
+          <td>{{.p}}</td>
           <td>
             {{#if .foto}}
             <a on-tap="modal('foto', {title: .text, src: .foto, size: 'm', shape: 'sq'})">view</a>
