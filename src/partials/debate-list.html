@@ -44,6 +44,7 @@ let scroll = require('../lib/on-scroll.js')
 let masonry = require('masonry-layout')
 let assign = require('../lib/lodash/object/assign')
 let throttle = require('../lib/lodash/function/throttle')
+let after = require('../lib/lodash/function/after')
 
 function insert (element, array, comparer) {
   let idx = locationOf(element, array, comparer) + 1
@@ -103,13 +104,13 @@ component.exports = {
       this.clear()
       this.go()
       __creator = creator
-    }})
+    }}, {init: false})
 
     this.observe('top', (top) => {
       this.set('query.top', this.query.top = top || null)
       this.clear()
       this.go()
-    })
+    }, {init: false})
 
     let __tag
     this.observe('tag', (tag) => {
@@ -128,7 +129,7 @@ component.exports = {
         this.layout()
       }
       __tag = tag
-    })
+    }, {init: false})
 
 
     let __category
@@ -149,7 +150,7 @@ component.exports = {
       }
       this.go()
       __category = category
-    }})
+    }}, {init: false})
 
     this.on('clear-search', () => {
       this.set('query.text', null)
@@ -181,18 +182,16 @@ component.exports = {
       }
     })
   },
+
   clear () {
     this.set('list.length', 0)
     this.debates = 0
     this.polls = 0
+    this.all_loaded = false
     this.appended = [] // array of the previously appended ids
     this.exists = {} // map of ids -> offset (for adding and removing)
   },
-  // matches (d) {
-  //   let r = this._matches(d)
-  //   console.log('matches', r)
-  //   return r
-  // },
+
   matches (d) {
     if (this.op) return this.op !== d._creator
 
@@ -204,6 +203,7 @@ component.exports = {
 
     return !m
   },
+
   oncomplete () {
     let el = this.find('.debates')
     this.els = this.findAll('.debate', {live: true})
@@ -215,13 +215,6 @@ component.exports = {
         gutter: 20,
       })
     }
-
-    let s = scroll(null, 1.3, (cb) => {
-      this.go(cb)
-    })
-    this.once('teardown', () => {
-      s.cancel()
-    })
 
     this.observe('list', (v, vv) => {
       if (!v || !v.length) return
@@ -242,31 +235,46 @@ component.exports = {
           }
         }
       }, 1)
+    }, {init: false})
+
+    // start it off!
+    this.go(() => {
+      console.info('done loading first ones...')
+      let s = scroll(null, 1200, (cb) => {
+        console.info('scroll!')
+        // logic is, here we will pop items off of the queue and append them into masonry.
+        // then, we do another query for more if the queue is less than 9
+        // ...
+
+        this.go(cb)
+      })
+      this.once('teardown', () => {
+        s.cancel()
+      })
     })
-    // this.add = throttle((d, _id) => {
-    //   let id = _id || d._id
-    //   if (this.exists[id] !== void 0 || !this.matches(d)) return
-    //   this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
-    //   this.appended.push(d._id)
-    //   this.layout()
-    // }, 100)
   },
+
   add (d, _id) {
     let id = _id || d._id
     // console.log('added:', ++this.added)
+    if (d.created < this.skip) this.skip = d.created
     if (this.exists[id] !== void 0 || !this.matches(d)) return
     this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
     this.appended.push(d._id)
     this.layout()
   },
+
   go (next) {
+    if (this.all_loaded) return
+    this.set('loading', true)
+
     let query = this.get('query')
     let list = this.get('list')
     let opinions_creator = this.get('opinions')
     let txt = query.text
-    this.set('loading', true)
     let action = opinions_creator ? 'opinion:debate*' : 'debate' + (txt ? '@' : '*')
     let params = assign({skip: this.debates}, query)
+    let done = after(2, next)
 
     api.action(action, params, (data) => {
       // these are temporary until I fix the api
@@ -293,8 +301,8 @@ component.exports = {
       // eg. give all >= created
       this.debates += data.length
       // TODO better next handling
-      if (next) next()
-    })
+      done()
+    }, done)
 
     action = opinions_creator ? 'selection:poll*' : 'poll' + (txt ? '@' : '*')
     api.action(action, assign({skip: this.polls}, query), (data) => {
@@ -316,9 +324,10 @@ component.exports = {
       for (let i = 0; i < data.length; i++)
         if (data[i]) this.add(data[i])
 
+      if (data.length < this.page_size)
       this.polls += data.length
-      // if (next) next()
-    })
+      done()
+    }, done)
   },
   events: {
     tap: require('../lib/events/tap.js'),
