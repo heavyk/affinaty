@@ -106,7 +106,8 @@
       <div class="affinaty {{floating ? 'floating' : ''}}">
         {{#if floating}}
         <div class="affinaty-left">
-          <foto src="{{me.foto}}" size="z" class="me" />
+          <foto src="{{foto}}" size="z" class="me" />
+          <div class="name-profile">{{name}}</div>
           <span class="affin-neg" style="display: {{movil ? 'none' : ''}}">- affin</span>
           <span class="affin-gradient-left"></span>
           <span class="affin-gradient">
@@ -121,24 +122,25 @@
           </span>
           <span class="affin-gradient-right"></span>
           <span class="affin-pos" style="display: {{movil ? 'none' : ''}}">+ affin</span>
-          <foto src="{{foto}}" size="z" class="you" />
-        </div>
-        <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
-          <div class="follow floating" on-tap="follow">
-            <div class="follow-inner">
-              {{#if !following}}
-                <img src="/img/follow.svg" title="follow" width="30" height="30" />
-              {{else}}
-                <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
-              {{/if}}
+
+          <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
+            <div class="follow floating" on-tap="follow">
+              <div class="follow-inner">
+                {{#if !following}}
+                  <img src="/img/follow.svg" title="follow" width="30" height="30" />
+                {{else}}
+                  <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
+                {{/if}}
+              </div>
+            </div>
+            <div class="message floating" on-tap="send-message">
+              <div class="message-inner">
+                <i class="fa fa-envelope" />
+              </div>
             </div>
           </div>
-          <div class="message floating" on-tap="send-message">
-            <div class="message-inner">
-              <i class="fa fa-envelope" />
-            </div>
-          </div>
         </div>
+
       {{else}}
         <span class="affin-neg">- affin</span>
         <span class="affin-gradient-left"></span>
@@ -205,6 +207,20 @@
 </div>
 
 <style>
+.name-profile{
+  font-size: 24px;
+  color: #414141;
+  text-decoration: none;
+  margin: 0;
+  text-overflow: ellipsis;
+  left: 65px;
+  position: absolute;
+  top: 5px;
+  width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: left;
+}
 .profile {
   margin: 0;
   padding-bottom: 10px;
@@ -358,13 +374,12 @@
 
 }
 .floating .affinaty-left {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  top: -20px;
   height: 56px;
-  width: 75%;
-  border: solid 1px #dadada;
-  border-radius: 50px;
+  width: 80%;
+  margin: 0 auto;
+  left: 25px;
 }
 .floating .affinaty-right {
   position: absolute;
@@ -467,16 +482,16 @@ a.active {
 
 .affinaty.floating {
   position: fixed;
-  top: 50px;
-  left: 5%;
-  width: 90%;
+  top: 30px;
+  left: 0%;
+  width: 100%;
   background: #fff;
-  /* 99 because header is 100 */
   z-index: 99;
   height: 60px;
   padding-top: 25px;
-  border-radius: 30px;
-  border: solid 2px #ccc;
+  border-bottom: 1px solid #fd270d;
+  /* border-radius: 30px; */
+  /* border: 2px solid #ccc; */
 }
 .affinaty {
   text-align: center;
