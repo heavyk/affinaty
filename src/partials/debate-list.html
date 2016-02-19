@@ -185,8 +185,8 @@ component.exports = {
 
   clear () {
     this.set('list.length', 0)
-    this.t_debates = Infinity
-    this.t_polls = Infinity
+    this.t_debates = 0 //Infinity
+    this.t_polls = 0 //Infinity
     this.all_loaded = 0
     this.appended = [] // array of the previously appended ids
     this.exists = {} // map of ids -> offset (for adding and removing)
@@ -264,7 +264,6 @@ component.exports = {
   },
 
   go (next) {
-    // just in case we call it without a callback
     if (!next) next = function () {}
     if (this.all_loaded >= 2) return next()
     this.set('loading', true)
@@ -274,7 +273,7 @@ component.exports = {
     let opinions_creator = this.get('opinions')
     let txt = query.text
     let action = opinions_creator ? 'opinion:debate*' : 'debate' + (txt ? '@' : '*')
-    let params = assign({skip: this.t_debates === Infinity ? 0 : this.t_debates}, query)
+    let params = assign({skip: this.t_debates}, query) // this.t_debates === Infinity ? 0 : 
     let done = after(2, next)
 
     api.action(action, params, (data) => {
@@ -294,7 +293,7 @@ component.exports = {
         Ractive.nexus.debate.insert(d)
 
         // save oldest post for next query
-        if (d.created < this.t_debates) this.t_debates = d.created
+        // if (d.created < this.t_debates) this.t_debates = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
@@ -303,11 +302,12 @@ component.exports = {
 
       // if we're at the end of the list, don't ask more
       if (data.length !== params.limit) this.all_loaded++
+      this.t_polls += query.limit
       done()
     }, done)
 
     action = opinions_creator ? 'selection:poll*' : 'poll' + (txt ? '@' : '*')
-    api.action(action, assign({skip: this.t_polls === Infinity ? 0 : this.t_polls}, query), (data) => {
+    api.action(action, assign({skip: this.t_polls}, query), (data) => { // this.t_polls === Infinity ? 0 :
       // these are temporary until I fix the api
       for (let i = 0; i < data.length; i++) {
         let d = data[i]
@@ -323,7 +323,7 @@ component.exports = {
         Ractive.nexus.debate.insert(d)
 
         // save oldest post for next query
-        if (d.created < this.t_polls) this.t_polls = d.created
+        // if (d.created < this.t_polls) this.t_polls = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
@@ -332,6 +332,7 @@ component.exports = {
 
       // if we're at the end of the list, don't ask more
       if (data.length !== params.limit) this.all_loaded++
+      this.t_polls += params.limit
       done()
     }, done)
   },
