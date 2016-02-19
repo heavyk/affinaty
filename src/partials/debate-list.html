@@ -264,6 +264,8 @@ component.exports = {
   },
 
   go (next) {
+    // just in case we call it without a callback
+    if (!next) next = function () {}
     if (this.all_loaded >= 2) return next()
     this.set('loading', true)
 
