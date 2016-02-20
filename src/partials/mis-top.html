@@ -7,7 +7,7 @@
   </div>
   <div class="tabs">
     <span class="tab{{#if ~/tab === 'post'}} active{{/if}}" on-tap="set('tab', 'post')">Publicaciones</span>
-    <span class="tab{{#if ~/tab !== 'post'}} active{{/if}}" on-tap="set('tab', 'vote')">Opiniones</span>
+    <!-- <span class="tab{{#if ~/tab !== 'post'}} active{{/if}}" on-tap="set('tab', 'vote')">Opiniones</span> -->
   </div>
   <div class="list-container" style="max-height: {{~/rightHeight}}px">
     <div class="gm-scrollbar -vertical">
@@ -118,7 +118,8 @@
 }
 .tab {
   cursor: pointer;
-  width: 50%;
+  /*width: 50%;*/
+  width: 100%;
   border-bottom: solid 1px #dadada;
   display: inline-block;
   float: left;
