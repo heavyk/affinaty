@@ -131,7 +131,6 @@ component.exports = {
         let form = this.validator.validate(this)
         this.set('errors', form.errors)
         if (form.valid) {
-          // api.debate.create(form.data, )
           // TODO spinner
           this.set('saving', true)
           api.action('debate+', form.data, (d) => {

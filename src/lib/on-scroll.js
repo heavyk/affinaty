@@ -25,7 +25,6 @@ export default function onScroll (el, percent_or_px, handler) {
     let rect = body.getBoundingClientRect()
     let bottom_px = window.pageYOffset + window.innerHeight
 
-    // console.log(percent_or_px, rect.height - percent_or_px, bottom_px)
     if ((percent_or_px < 1 && (rect.height * percent_or_px) < bottom_px) || (rect.height - percent_or_px) < bottom_px) {
       obj.working = true
       handler(function () {

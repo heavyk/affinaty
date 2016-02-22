@@ -255,7 +255,6 @@ component.exports = {
 
   add (d, _id) {
     let id = _id || d._id
-    // console.log('added:', ++this.added)
     if (d.created < this.skip) this.skip = d.created
     if (this.exists[id] !== void 0 || !this.matches(d)) return
     this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
@@ -273,7 +272,7 @@ component.exports = {
     let opinions_creator = this.get('opinions')
     let txt = query.text
     let action = opinions_creator ? 'opinion:debate*' : 'debate' + (txt ? '@' : '*')
-    let params = assign({skip: this.t_debates}, query) // this.t_debates === Infinity ? 0 : 
+    let params = assign({skip: this.t_debates}, query) // this.t_debates === Infinity ? 0 :
     let done = after(2, next)
 
     api.action(action, params, (data) => {

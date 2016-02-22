@@ -1,5 +1,8 @@
 'use strict'
 
+// if it complains about 5678 already in use:
+// kill `lsof -i -P | grep LISTEN | grep 5678 | awk '{print $2}'`
+
 var Path = require('path')
 var fS = require('co-fs-extra')
 var genny = require('genny')
@@ -85,11 +88,12 @@ genny.run(function* (resume) {
   }
 
   try {
-    yield spawn(local_psy, ['rm', 'gobbler-' + pkg.name], {cwd: pkg_dir})
+    // yield spawn(local_psy, ['rm', 'gobbler-' + pkg.name], {cwd: pkg_dir})
+    yield spawn(local_psy, ['reset', '--statefile', 'gobbler/.state.json'], {cwd: pkg_dir})
   } catch (e) {}
   try {
     var out = yield spawn(local_psy,
-      ['start', '-n', 'gobbler-' + pkg.name, '--', local_gobble, '-p', '5678'], {cwd: pkg_dir})
+      ['start', '-n', 'gobbler-' + pkg.name, '--', local_gobble, '-p', '5678', '--statefile', 'gobbler/.state.json'], {cwd: pkg_dir})
   } catch (e) {}
   console.log('gobble started', out)
   gobbler.listen(1111, function (err) {
