@@ -1,5 +1,12 @@
 'use strict'
 
+// replace forEach method for performance reasons
+Array.prototype.forEach = function (fn) {
+  for (var i = 0; i < this.length; i++) {
+    fn(this[i], i)
+  }
+}
+
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
 while (domain.length > 2) domain.shift()
