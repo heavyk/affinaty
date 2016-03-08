@@ -30,6 +30,8 @@ var affinaty = gobble([
 				'easy-pie-chart',
 				'chart.js',
 				'es6-map',
+				'socketcluster-client',
+				'engine.io-client',
 			],
 			// strict: true
 		})

@@ -10,25 +10,25 @@
       <div class="col-xs-2" style="margin-left: 16.666666%">
         <a href="/cpanel/identities" class="{{active === 'identities' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-user"></i></div>
-          Identities{{#if stats.identities}} ({{stats.identities}}){{/if}}
+          Identities{{#if ~/stats.identities}} ({{~/stats.identities}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
         <a href="/cpanel/mundial" class="{{active === 'mundial' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-users"></i></div>
-          Creators{{#if stats.mundial}} ({{stats.mundial}}){{/if}}
+          Creators{{#if ~/stats.mundial}} ({{~/stats.mundial}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
         <a href="/cpanel/categories" class="{{active === 'categories' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-list"></i></div>
-          Categories{{#if stats.categories}} ({{stats.categories}}){{/if}}
+          Categories{{#if ~/stats.categories}} ({{~/stats.categories}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
         <a href="/cpanel/images" class="{{active === 'images' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-file-image-o"></i></div>
-          Images{{#if stats.fotos}} ({{stats.fotos}}){{/if}}
+          Images{{#if ~/stats.fotos}} ({{~/stats.fotos}}){{/if}}
         </a>
       </div>
     </div>
@@ -38,19 +38,19 @@
       <div class="col-xs-2" style="margin-left: 16.666666%">
         <a href="/cpanel/debates" class="{{active === 'debates' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-comment-o"></i></div>
-          Debates{{#if stats.debates}} ({{stats.debates}}){{/if}}
+          Debates{{#if ~/stats.debates}} ({{~/stats.debates}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
         <a href="/cpanel/polls" class="{{active === 'polls' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-question-circle"></i></div>
-          Polls{{#if stats.polls}} ({{stats.polls}}){{/if}}
+          Polls{{#if ~/stats.polls}} ({{~/stats.polls}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
         <a href="/cpanel/comments" class="{{active === 'comments' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-comments-o"></i></div>
-          Comments{{#if stats.comments}} ({{stats.comments}}){{/if}}
+          Comments{{#if ~/stats.comments}} ({{~/stats.comments}}){{/if}}
         </a>
       </div>
       <!-- <div class="col-xs-2">
@@ -72,7 +72,18 @@
     <button on-click="new-category">add category</button>
     {{/if}}
   </div>
-
+  <div class="pages">
+    {{#if active === 'debates'}}
+      {{#each ~/pages_debates:i}}
+        <button on-tap="page(this)" style="{{page_active === i+1 ? 'background-color:#fd270d' : '' }}">{{i+1}}</button>
+      {{/each ~/pages_debates}}
+    {{/if}}
+    {{#if active === 'identities'}}
+      {{#each ~/pages_identities:i}}
+        <button on-tap="page(this)" style="{{page_active === i+1 ? 'background-color:#fd270d' : '' }}">{{i+1}}</button>
+      {{/each ~/identities}}
+    {{/if}}
+  </div>
   <div class="lists">
     <table>
       <!-- {{#each field}}
@@ -337,10 +348,23 @@ component.exports = {
       'categories': 'category',
       'polls': 'poll',
     }
+    let pages = 0
     api.action('admin:stats', {}, (data) => {
       this.set('stats', data)
+      pages =  Math.ceil(data.debates / 500)
+      var range = []
+      for (let i = 1; i <= pages; i++) {
+        range.push( i )
+      }
+      this.set ('pages_debates',range)
+      pages =  Math.ceil(data.identities / 500)
+      range = []
+      for (let i = 1; i <= pages; i++) {
+        range.push( i )
+      }
+      this.set ('pages_identities',range)
     })
-
+    this.set('page_active',1)
     this.on('remove', (event) => {
       let d = event.context
       let what = this.lookup[this.get('active')]
@@ -364,18 +388,77 @@ component.exports = {
         this.unshift('list', data)
       })
     })
+
+  },
+  page (d) {
+    let active = this.get('active')
+    this.set('page_active',d)
+      switch (active) {
+        case 'identities':
+          api.action('admin:identity-list', {limit: 500, skip: (d-1)*500}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'mundial':
+          api.action('admin:quest', {t: 'mundial', limit: 1000}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'categories':
+          api.action('admin:quest', {t: 'category', limit: 1000}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'images':
+          api.action('admin:quest', {t: 'foto', limit: 1000}, (data) => {
+            this.set('list', data)
+
+          })
+          break
+
+        case 'debates':
+          api.action('admin:quest', {t: 'debate', limit: 500, skip: (d-1)*500}, (data) => {
+            this.set('list', data.reverse())
+          })
+          break
+        case 'polls':
+          api.action('admin:quest', {t: 'poll', limit: 1000}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'comments':
+          api.action('admin:quest', {t: 'comment', limit: 1000}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'relations':
+          api.action('admin:quest', {t: 'relation', limit: 1000}, (data) => {
+            this.set('list', data)
+          })
+          break
+        case 'stats': break
+          // api.action('admin:timequest', {t: 'relation', limit: 1000}, (data) => {
+          //   this.set('list', data)
+          // })
+          // break
+        // add graph stats
+        default: this.set('active', active = 'debates')
+      }
+
   },
   oninit () {
-    // let __id
-    // this.observe('id', (id) => { if (id && id !== __id) {
-    //   __id = id
-    // }})
-
-
+    let num_pages = 0
+    this.observe('pages_debates', (pages_debates) => {
+      if (typeof(pages_debates) != "undefined") {
+        num_pages= pages_debates.length
+      }
+    })
+    let numpages = 1
+    this.set ('numpages', numpages)
     this.observe('active', (active) => {
       switch (active) {
         case 'identities':
-          api.action('admin:identity-list', {limit: 1000}, (data) => {
+          api.action('admin:identity-list', {limit: 500, skip: (numpages-1)*500}, (data) => {
             this.set('list', data)
           })
           break
@@ -396,8 +479,8 @@ component.exports = {
           break
 
         case 'debates':
-          api.action('admin:quest', {t: 'debate', limit: 1000}, (data) => {
-            this.set('list', data)
+          api.action('admin:quest', {t: 'debate', limit: 500, skip: (numpages-1)*500}, (data) => {
+            this.set('list', data.reverse())
           })
           break
         case 'polls':
