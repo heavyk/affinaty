@@ -182,6 +182,7 @@ function executeCallback (promise, callback) {
 }
 
 function extendPrototype (localforage) {
+  console.log('extending proto getItems')
   var localforagePrototype = Object.getPrototypeOf(localforage)
   if (localforagePrototype) {
     localforagePrototype.getItems = localforageGetItems
@@ -196,7 +197,5 @@ function extendPrototype (localforage) {
     }
   }
 }
-
-// extendPrototype(localforage)
 
 export default extendPrototype

@@ -17,7 +17,7 @@ import notifications from './views/notifications'
 import cpanel from './views/cpanel'
 import api_docs from './views/action-docs'
 // import blog from './views/blog'
-import rpi from './views/rpi'
+// import rpi from './views/rpi'
 
 // these are the views which will change the body's class to view-### otherwise view-default
 let classView = {
@@ -78,7 +78,7 @@ router.addRoute('/action-docs/:active?/:id?', api_docs)
 // router.addRoute('/blog', blog)
 
 // rpi experiment
-router.addRoute('/rpi/:id?', rpi)
+// router.addRoute('/rpi/:id?', rpi)
 
 // TODO remove me when the styles are fixed
 router.on('route', (route) => {

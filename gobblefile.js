@@ -1,5 +1,6 @@
 'use strict'
 var gobble = require('gobble')
+var babel = require('rollup-plugin-babel')
 
 gobble.cwd(__dirname)
 
@@ -15,25 +16,64 @@ var affinaty = gobble([
 				require('cssnano'),
 			]
 		})
-		.transform('rollup-babel', {
+		.transform('rollup', {
 			entry: 'main.js',
 			dest: 'app.js',
 			format: 'cjs',
 			external: [
-				'ractive',
-				'moment',
-				'provinces', // this needs to be moved to the server
-				'gemini-scrollbar',
-				'masonry-layout',
-				'spin.js',
-				'dropzone', // this needs to be replaced by generic code
-				'easy-pie-chart',
-				'chart.js',
-				'es6-map',
-				'socketcluster-client',
-				'engine.io-client',
+				 'ractive',
+				 'moment',
+				 'spin.js',
+				 'gemini-scrollbar',
+				 'masonry-layout',
+				 'dropzone', // this needs to be replaced by generic code
+				 'easy-pie-chart',
+				 'chart.js',
+				 'es6-map',
+				 'engine.io-client',
 			],
 			// strict: true
+			plugins: [
+				babel({
+					// "presets": [ "es2015-rollup" ],
+					exclude: 'node_modules/**',
+					plugins: [
+						[require('babel-plugin-external-helpers-2')],
+						[require('babel-plugin-transform-es2015-literals')],
+						[require('babel-plugin-transform-es2015-function-name')],
+						[require('babel-plugin-transform-es2015-arrow-functions')],
+						[require('babel-plugin-transform-es2015-block-scoped-functions')],
+						[require('babel-plugin-transform-es2015-object-super')],
+						[require('babel-plugin-transform-es2015-shorthand-properties')],
+						[require('babel-plugin-transform-es2015-sticky-regex')],
+						[require('babel-plugin-transform-es2015-unicode-regex')],
+						[require('babel-plugin-transform-es2015-constants')],
+						[require('babel-plugin-transform-es2015-parameters')],
+						[require('babel-plugin-transform-es2015-block-scoping')],
+						// [require('babel-plugin-transform-es2015-typeof-symbol')],
+						// [require('babel-plugin-transform-es2015-template-literals'), { loose: true }],
+						[require('babel-plugin-transform-es2015-classes'), { loose: true }],
+						[require('babel-plugin-transform-es2015-computed-properties'), { loose: true }],
+						[require('babel-plugin-transform-es2015-for-of'), { loose: true }],
+						[require('babel-plugin-transform-es2015-spread'), { loose: true }],
+						[require('babel-plugin-transform-es2015-destructuring'), { loose: true }],
+						// [require('babel-plugin-transform-regenerator'), { async: false, asyncGenerators: false }],
+
+						// optional
+						[require('babel-plugin-transform-undefined-to-void')],
+						[require('babel-plugin-transform-strict-mode')],
+						// [require('babel-plugin-transform-minify-booleans')],
+						// [require('babel-plugin-transform-merge-sibling-variables')],
+						[require('babel-plugin-transform-member-expression-literals')],
+						[require('babel-plugin-transform-property-literals')],
+
+						// debugger
+						// [require('babel-plugin-transform-remove-console')],
+						// [require('babel-plugin-transform-remove-debugger')],
+					],
+					"compact": false
+				})
+			]
 		})
 		.transform('derequire')
 		.transform('browserify', {

@@ -162,6 +162,7 @@ function executeCallback (promise, callback) {
 }
 
 function extendPrototype (localforage) {
+  console.log('extending proto set')
   var localforagePrototype = Object.getPrototypeOf(localforage)
   if (localforagePrototype) {
     localforagePrototype.setItems = localforageSetItems

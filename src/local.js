@@ -4,6 +4,8 @@ import addGetItems from './lib/localForage/getItems'
 import addSetItems from './lib/localForage/setItems'
 
 let localforage = require('localforage')
+
+// add functions to prototype
 addGetItems(localforage)
 addSetItems(localforage)
 
