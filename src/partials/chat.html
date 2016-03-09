@@ -129,8 +129,18 @@ form {
 </style>
 
 <script>
-let assign = require('../lib/lodash/object/assign')
-let throttle = require('../lib/lodash/function/throttle')
+import assign from '../lib/lodash/object/assign'
+import throttle from '../lib/lodash/function/throttle'
+
+// decorators
+import nlElastic from '../lib/decorators/nlElastic'
+import scrollGlue from '../lib/decorators/scrollGlue'
+import markdown from '../lib/decorators/markdown'
+
+//events
+import tap from '../lib/events/tap.js'
+import nlSubmit from '../lib/events/nlSubmit'
+
 component.exports = {
   isolated: true,
   oncomplete () {
@@ -228,13 +238,13 @@ component.exports = {
     })
   },
   decorators: {
-    nlElastic: require('../lib/decorators/nlElastic'),
-    scrollGlue: require('../lib/decorators/scrollGlue'),
-    markdown: require('../lib/decorators/markdown'),
+    nlElastic,
+    scrollGlue,
+    markdown,
   },
   events: {
-    tap: require('../lib/events/tap.js'),
-    nlSubmit: require('../lib/events/nlSubmit')
+    tap,
+    nlSubmit,
   },
 }
 </script>

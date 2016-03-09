@@ -187,24 +187,24 @@ export function removeClass (node, className) {
   }
 }
 
-import repeat from './lodash/string/repeat'
+// import repeat from './lodash/string/repeat'
 
 export default {
   assign,
-  compact,
-  isEmpty,
+  // compact,
+  // isEmpty,
   joinPaths,
   parents,
   parseHash,
   parseJSON,
   parseUri,
   parseQS,
-  pick,
+  // pick,
   scrollTo,
   stringify,
   stringifyHash,
   stringifyQS,
   addClass,
   removeClass,
-  repeat,
+  // repeat,
 }

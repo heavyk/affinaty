@@ -26,8 +26,8 @@
 
 <script>
 let scroll = require('../lib/on-scroll.js')
-let assign = require('../lib/lodash/object/assign')
-let isEqual = require('../lib/lodash/lang/isEqual')
+import assign from '../lib/lodash/object/assign'
+import isEqual from '../lib/lodash/lang/isEqual'
 
 function insert(element, array, comparer) {
   let location = locationOf(element, array, comparer) + 1

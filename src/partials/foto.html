@@ -3,8 +3,10 @@
 
 
 <script>
-let repeat = require('../lib/utils').repeat
+import repeat from '../lib/lodash/string/repeat'
+
 let dpr = Math.round(window.devicePixelRatio || 1)
+
 component.exports = {
   onconfig () {
     this._default = this.get('default')

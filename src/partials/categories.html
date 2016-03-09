@@ -98,6 +98,9 @@ div.category:hover {
 </style>
 
 <script>
+// events
+import tap from '../lib/events/tap.js'
+
 component.exports = {
   isolated: true,
   oninit () {
@@ -158,8 +161,6 @@ component.exports = {
   onteardown () {
     this.parent.off('set-category', this.onsetCategory)
   },
-  events: {
-    tap: require('../lib/events/tap.js'),
-  },
+  events: { tap },
 }
 </script>

@@ -42,8 +42,8 @@
 <script>
 let scroll = require('../lib/on-scroll.js')
 let masonry = require('masonry-layout')
-let assign = require('../lib/lodash/object/assign')
-let throttle = require('../lib/lodash/function/throttle')
+import assign from '../lib/lodash/object/assign'
+import throttle from '../lib/lodash/function/throttle'
 let after = require('../lib/lodash/function/after')
 
 function insert (element, array, comparer) {

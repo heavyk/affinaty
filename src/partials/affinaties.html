@@ -194,9 +194,15 @@
 </style>
 
 <script>
-let onresize = require('../lib/dom/element-onresize')
+import onresize from '../lib/dom/element-onresize'
+import modal from '../modal'
+import throttle from '../lib/lodash/function/throttle'
+
+// events
+import tap from '../lib/events/tap.js'
+
 component.exports = {
-  modal: require('../modal'),
+  modal: modal,
   onconfig () {
     this.set('movil', window.isMobile)
     this.set('list', this.list = [])
@@ -234,7 +240,7 @@ component.exports = {
     let movil = window.isMobile
     let container = this.find('.affinaties-container')
     let list_container = this.find('.list-container')
-    let resizer = require('../lib/lodash/function/throttle')(this.resize = () => {
+    let resizer = throttle(this.resize = () => {
       let w = window.innerWidth
       let h = window.innerHeight
       let th = movil ? 0 : title.scrollHeight
@@ -262,8 +268,6 @@ component.exports = {
       if (!movil) onresize.removeResizeListener(container, resizer)
     })
   },
-  events: {
-    tap: require('../lib/events/tap.js'),
-  },
+  events: { tap },
 }
 </script>
