@@ -586,11 +586,11 @@ a.active {
 </style>
 
 <script>
-let calcAffinaties = require('../lib/calc/affinaties.js')
-let calcAffinaty = require('../lib/calc/affinaty.js')
+import calcAffinaties from '../lib/calc/affinaties.js'
+import calcAffinaty from '../lib/calc/affinaty.js'
 import assign from '../lib/lodash/object/assign'
-let debounce = require('../lib/lodash/function/debounce')
-let opinion_ = require('../api/opinion')
+import debounce from '../lib/lodash/function/debounce'
+import opinion_ from '../api/opinion'
 component.exports = {
   modal: require('../modal'),
   oninit () {

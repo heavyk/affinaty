@@ -35,7 +35,9 @@
 
 <script>
 import assign from '../lib/lodash/object/assign'
-let onresize = require('../lib/dom/element-onresize')
+import onresize from '../lib/dom/element-onresize'
+import throttle from '../lib/lodash/function/throttle'
+
 component.exports = {
   isolated: true,
   onconfig () {
@@ -86,7 +88,7 @@ component.exports = {
     let movil = window.isMobile
     let container = this.find('.affinaties-container')
     let list_container = this.find('.list-container')
-    let resizer = require('../lib/lodash/function/throttle')(this.resize = () => {
+    let resizer = throttle(this.resize = () => {
       let w = window.innerWidth
       let h = window.innerHeight
       // let th = movil ? 0 : title.scrollHeight

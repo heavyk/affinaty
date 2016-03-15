@@ -22,6 +22,7 @@ var affinaty = gobble([
 			format: 'cjs',
 			external: [
 				 'ractive',
+				 'ractive-transitions-fade',
 				 'moment',
 				 'spin.js',
 				 'gemini-scrollbar',
@@ -32,7 +33,6 @@ var affinaty = gobble([
 				 'es6-map',
 				 'engine.io-client',
 			],
-			// strict: true
 			plugins: [
 				babel({
 					// "presets": [ "es2015-rollup" ],
@@ -51,7 +51,7 @@ var affinaty = gobble([
 						[require('babel-plugin-transform-es2015-parameters')],
 						[require('babel-plugin-transform-es2015-block-scoping')],
 						// [require('babel-plugin-transform-es2015-typeof-symbol')],
-						// [require('babel-plugin-transform-es2015-template-literals'), { loose: true }],
+						[require('babel-plugin-transform-es2015-template-literals'), { loose: true }],
 						[require('babel-plugin-transform-es2015-classes'), { loose: true }],
 						[require('babel-plugin-transform-es2015-computed-properties'), { loose: true }],
 						[require('babel-plugin-transform-es2015-for-of'), { loose: true }],
@@ -75,7 +75,6 @@ var affinaty = gobble([
 				})
 			]
 		})
-		.transform('derequire')
 		.transform('browserify', {
 			entries: [ './app' ],
 			dest: 'app.js',
@@ -88,7 +87,6 @@ var affinaty = gobble([
 				: source
 		})
 		.transformIf(gobble.env() === 'production', 'uglifyjs')
-		// .transform('uglifyjs')
 
 	, gobble('files/styles')
 		.transform('less', {
@@ -111,40 +109,41 @@ var affinaty = gobble([
 ])
 .transformIf(gobble.env() === 'production', 'uglifyjs')
 
-var built
-if (gobble.env() === 'production') {
-	built = gobble([
-		affinaty.transform('uglifyjs'),
-		// lib,
-		// lib.transform('uglifyjs', { ext: '.min.js' })
-	])
-} else {
-	built = gobble([
-		affinaty,
-		// lib
-	])
-}
+// var built
+// if (gobble.env() === 'production') {
+// 	built = gobble([
+// 		affinaty.transform('uglifyjs'),
+// 		// lib,
+// 		// lib.transform('uglifyjs', { ext: '.min.js' })
+// 	])
+// } else {
+// 	built = gobble([
+// 		affinaty,
+// 		// lib
+// 	])
+// }
 
 // for future: build the website like this
-if (!module.parent && false) {
-
-  var builder = built.build({
-    dest: 'build',
-    force: true
-  })
-  builder.catch(function(e) {
-    console.log('error:', e.stack)
-  })
-  builder.on('info', console.info.bind(console))
-  builder.on('error', console.error.bind(console))
-  builder.on('complete', function() {
-    console.log('complete!', arguments)
-    // built.serve()
-  })
-
-} else {
-  module.exports = built
-}
+// if (!module.parent && false) {
+//
+//   var builder = built.build({
+//     dest: 'build',
+//     force: true
+//   })
+//   builder.catch(function(e) {
+//     console.log('error:', e.stack)
+//   })
+//   builder.on('info', console.info.bind(console))
+//   builder.on('error', console.error.bind(console))
+//   builder.on('complete', function() {
+//     console.log('complete!', arguments)
+//     // built.serve()
+//   })
+//
+// } else {
+  // module.exports = built
+  module.exports = affinaty
+// }
 
 // TODO: run the build and then update gh-pages every commit :)
 

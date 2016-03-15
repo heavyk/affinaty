@@ -1,11 +1,12 @@
 'use strict'
 
 // replace forEach method for performance reasons
-Array.prototype.forEach = function (fn) {
-  for (var i = 0; i < this.length; i++) {
-    fn(this[i], i)
-  }
-}
+// Array.prototype.forEach = function (fn) {
+//   for (var i = 0; i < this.length; i++) {
+//     // fn.call(this[i], this[i], i)
+//     fn(this[i], i)
+//   }
+// }
 
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')

@@ -61,7 +61,10 @@
 </style>
 
 <script>
-let extend = require('../lib/lodash/object/assign')
+import extend from '../lib/lodash/object/assign'
+import Dropzone from 'dropzone'
+Dropzone.autoDiscover = false
+
 component.exports = {
   isolated: true,
   decorators: {
@@ -85,9 +88,6 @@ component.exports = {
     //   bytes: 2000000 * 0.5,
     //   total: 2000000,
     // })
-
-    let Dropzone = require('dropzone')
-    Dropzone.autoDiscover = false
 
     let cfg = extend({
       previewsContainer: false,

@@ -40,11 +40,11 @@
 </style>
 
 <script>
-let scroll = require('../lib/on-scroll.js')
-let masonry = require('masonry-layout')
+import scroll from '../lib/on-scroll.js'
+import masonry from 'masonry-layout'
 import assign from '../lib/lodash/object/assign'
 import throttle from '../lib/lodash/function/throttle'
-let after = require('../lib/lodash/function/after')
+import after from '../lib/lodash/function/after'
 
 function insert (element, array, comparer) {
   let idx = locationOf(element, array, comparer) + 1

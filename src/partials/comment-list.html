@@ -179,8 +179,10 @@ textarea.animate {
 <script>
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
-let onresize = require('../lib/dom/element-onresize')
-let findIndex = require('../lib/lodash/array/findIndex')
+import onresize from '../lib/dom/element-onresize'
+import findIndex from '../lib/lodash/array/findIndex'
+import throttle from '../lib/lodash/function/throttle'
+
 component.exports = {
   isolated: true,
   modal: require('../modal'),
@@ -256,7 +258,7 @@ component.exports = {
     let adder = this.find('.add-comment')
     let container = this.find('.list-container')
 
-    let _resizer, resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+    let _resizer, resizer = throttle(_resizer = () => {
       this.set('height', window.innerHeight - 65 - title.scrollHeight - adder.scrollHeight)
     }, true)
     onresize.addResizeListener(container, resizer)
