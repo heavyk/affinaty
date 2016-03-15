@@ -2,6 +2,7 @@
 <link rel='ractive' href='../partials/time.html'>
 <link rel='ractive' href='../partials/spinner.html'>
 <link rel='ractive' href='../partials/modal.html'>
+<link rel='ractive' href='../partials/send-notification.html'>
 
 <div class="cpanel">
 
@@ -67,6 +68,16 @@
       </div>
     </div>
   </subheader>
+  <subheader>
+    <div class="row">
+      <div class="col-xs-2" style="margin-left: 16.666666%">
+        <a href="/cpanel/notifications" class="{{active === 'notifications' ? 'active' : '' }}">
+          <div class="symbol"><i class="fa fa-envelope"></i></div>
+          Notificationes Generales
+        </a>
+      </div>
+    </div>
+  </subheader>
   <div class="actions">
     {{#if active === 'categories'}}
     <button on-click="new-category">add category</button>
@@ -85,6 +96,9 @@
     {{/if}}
   </div>
   <div class="lists">
+    {{#if active === 'notifications'}}
+      <send-notification />
+    {{/if}}
     <table>
       <!-- {{#each field}}
         <th>{{.}}</th>
@@ -158,6 +172,7 @@
           <td><time time="{{.created}}" class="since" /></td>
           <td>
             <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
+            <span on-tap="msg" class="action"><i class="fa fa-envelope" /></span>
           </td>
         </tr>
         {{/each list}}
@@ -335,7 +350,7 @@ span.action:hover {
 // https://github.com/JonDum/ractive-datatable
 
 import assign from '../lib/lodash/object/assign'
-let debounce = require('../lib/lodash/function/debounce')
+import debounce from '../lib/lodash/function/debounce'
 component.exports = {
   isolated: true,
   modal: require('../modal'),
@@ -381,6 +396,10 @@ component.exports = {
       if (title) api.action('admin:category-rename', {k: d._id, title}, (data) => {
         this.set(event.keypath, data)
       })
+    })
+    this.on('msg', (event) => {
+      let d = event.context
+      this.modal('send-notification', {title: d.name, id: d._id})
     })
     this.on('new-category', (event) => {
       let title = prompt(`new category`)
@@ -436,7 +455,9 @@ component.exports = {
             this.set('list', data)
           })
           break
-        case 'stats': break
+        case 'notificatons':
+        case 'stats':
+          break
           // api.action('admin:timequest', {t: 'relation', limit: 1000}, (data) => {
           //   this.set('list', data)
           // })
@@ -498,6 +519,7 @@ component.exports = {
             this.set('list', data)
           })
           break
+        case 'notifications':
         case 'stats': break
           // api.action('admin:timequest', {t: 'relation', limit: 1000}, (data) => {
           //   this.set('list', data)

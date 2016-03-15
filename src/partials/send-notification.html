@@ -1,0 +1,217 @@
+<link rel='ractive' href='../partials/foto.html'>
+<link rel='ractive' href='../partials/time.html'>
+
+<div class="messages" style="height: {{~/outerHeight}}px; width: {{~/outerWidth}}px">
+  <form on-submit="send">
+    <div class="title-container">
+      <input type="text" value="{{~/title}}" placeholder="title.." maxlength="2048" class="{{title_error ? 'invalid' : ''}}" />
+    </div>
+    <div class="ticker-container">
+      <input type="text" value="{{~/ticker}}" placeholder="ticker (optional)" maxlength="2048" />
+    </div>
+    <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : '88%'}}">
+      <textarea
+        class="animate {{body_error ? 'invalid' : ''}}"
+        on-blur-focus="toggle-focus"
+        on-nlSubmit="send"
+        maxlength="2048"
+        value="{{~/body}}"
+        placeholder="Escribe tu notification"
+        decorator="nlElastic" />
+    </div>
+    <div class="submit">
+      <button type="submit" on-tap="add">
+        <i class="fa fa-comment-o"></i> Enviar
+      </button>
+    </div>
+  </form>
+</div>
+
+<style>
+.wrapper {
+  height: 100%;
+  overflow-y: auto;
+  padding: 15px 0 5px;
+}
+.messages {
+  position: relative;
+  padding: 10px;
+  text-align: left;
+}
+
+span.text {
+  display: inline-block;
+}
+
+.invalid {
+  border: solid 1px #f00;
+}
+
+.message {
+  position: relative;
+  display: inline-block;
+  margin: 0 45px 10px 15px;
+  padding: 10px 15px;
+  border-radius: 30px 9px 30px 9px;
+  background: #f3f3f3;
+  z-index: 1;
+  color: #494949;
+  word-break: break-all;
+}
+.message .user {
+  position: relative;
+  float: left;
+  margin-right: 10px;
+}
+.right {
+  text-align: right;
+}
+.right .message {
+  text-align: right;
+  margin-left: 45px;
+  margin-right: 15px;
+  border: solid 1px #ababab;
+}
+.right .message .user {
+  float: right;
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+.since {
+  color: #c2c2c2;
+  font-size: 70%;
+}
+
+.text-container {
+  position: relative;
+  width: 100%;
+  margin-left: -15px;
+}
+textarea.animate {
+  margin: 0 15px;
+  height: 35px;
+}
+.submit {
+  margin: 5px;
+}
+.submit button {
+  padding: 1px 20px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+  opacity: .7;
+  transition: all .3s ease-in-out;
+}
+.submit button:hover {
+  opacity: 1;
+  background-color: #fff;
+  border-color: #ccc;
+}
+.submit .fa {
+  color: #fd270d;
+}
+
+form {
+  position: relative;
+}
+
+.left .message {
+  border: solid 1px #fd270d;
+}
+
+</style>
+
+<script>
+import assign from '../lib/lodash/object/assign'
+import throttle from '../lib/lodash/function/throttle'
+
+// decorators
+import nlElastic from '../lib/decorators/nlElastic'
+import scrollGlue from '../lib/decorators/scrollGlue'
+import markdown from '../lib/decorators/markdown'
+
+//events
+import tap from '../lib/events/tap.js'
+import nlSubmit from '../lib/events/nlSubmit'
+
+component.exports = {
+  isolated: true,
+  // oninit () {
+  //   this.validator = new Validator('d', {
+  //     'body': {required: true, min: 2, max: 2048},
+  //     'title': {required: true, min: 2, max: 2048},
+  //   })
+  // },
+  oncomplete () {
+    let tbox = this.find('textarea')
+    let messages_el = this.find('.messages')
+    let movil = window.isMobile
+    setTimeout(() => {
+      tbox.focus()
+    }, 200)
+    let _outer
+    let resizer = () => {
+      let iw = window.innerWidth
+      let left = Math.min((iw / 3), 200)
+      let right = iw - left - 40
+
+      let outer = window.innerHeight - (movil ? 120 : 100)
+      let messageWidth = (movil ? '65%' : '65%')
+      this.set('messageWidth', messageWidth)
+      this.set('outerHeight', outer)
+      this.set('innerHeight', outer - tbox.clientHeight - 25)
+      if (_outer !== outer) this.parent.fire('resize')
+      this.set('outerWidth', (movil ? right : right/1.5))
+      _outer = outer
+    }
+    let _resizer = throttle(resizer, 500, true, true)
+    this.parent.on('resize', _resizer)
+    window.addEventListener('resize', _resizer)
+    this.on('elastic:resize', _resizer)
+    this.once('teardown', () => {
+      window.removeEventListener('resize', _resizer)
+      this.off('elastic:resize', _resizer)
+      this.parent.off('resize', _resizer)
+    })
+    let id = this.parent.get('id')
+
+    this.on('toggle-focus', () => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.toggle('focused')
+      }, 200)
+    })
+
+    this.on('send', (event) => {
+      event.original.preventDefault()
+      let body = (this.get('body') || '').trim()
+      let title = (this.get('title') || '').trim()
+      let ticker = (this.get('ticker') || '').trim()
+      if (body.length < 2) return this.set('body_error', true)
+      if (title.length < 2) return this.set('title_error', true)
+      this.set('saving', true)
+      this.set('body', '')
+      this.set('title', '')
+      this.set('ticker', '')
+      let msg = {body, title, creator: id}
+      if (ticker.length) msg.ticker = ticker
+      this.fire('elastic:adjust')
+      api.action('push-notification', msg, function (data) {
+        console.info('sent', data)
+      }, (error) => {
+        console.error('sending error', error)
+      })
+    })
+  },
+  decorators: {
+    nlElastic,
+    scrollGlue,
+    markdown,
+  },
+  events: {
+    tap,
+    nlSubmit,
+  },
+}
+</script>
