@@ -46,7 +46,7 @@ class tag_ extends Ambition {
     this.list = []
     this.exists = {}
 
-    api.local.getItems(['tag', 'tag:recent'], (err, data) => {
+    local.getItems(['tag', 'tag:recent'], (err, data) => {
       if (data) {
         if (data.tag)
           for (var i = 0; i < data.tag.length; i++)

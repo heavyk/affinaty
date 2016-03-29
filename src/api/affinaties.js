@@ -107,7 +107,7 @@ class affinaties extends Ambition {
       let silent = this.situation !== '/'
       each(data.affinaties, (v, id) => {
         let d = data[id]
-        if (d && d._id !== api.me._id) {
+        if (d && d._id !== api.yo) {
           this.insert(assign({affinaty: v}, d), silent)
         }
       })

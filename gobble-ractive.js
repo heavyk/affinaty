@@ -1,6 +1,7 @@
 var rcu = require('rcu')
 var builders = require('rcu-builders')
 var postcss = require('postcss')
+var path = require('path')
 rcu.init(require('ractive'))
 
 module.exports = ractive
@@ -20,6 +21,7 @@ function ractive (source, options) {
 	}
 
 	var parsed = rcu.parse(source)
+	parsed.name = path.basename(this.src)
 	var dup = {}
 	for (var i = 0; i < parsed.modules.length; i++) {
 		var m = parsed.modules[i]

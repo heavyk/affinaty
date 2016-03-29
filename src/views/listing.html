@@ -207,7 +207,7 @@ component.exports = {
     this.on('dispatch', () => {
       let p = router.uri.path
       let i = p.indexOf('/', 1)
-      let panel = p.substring(1, ~i ? i : p.length)
+      let panel = p.substring(1, ~i ? i : p.length) || 'home'
       this.set('panel', panel)
     })
     let layout = () => {

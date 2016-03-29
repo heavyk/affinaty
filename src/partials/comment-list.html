@@ -201,7 +201,7 @@ component.exports = {
       this.set('loading', true)
       api.action('comment*', assign({sort: '+created'}, query), (data) => {
         for (var i = 0; i < data.length; i++) {
-          data[i]._canDelete = data[i].creator._id === api.me._id
+          data[i]._canDelete = data[i].creator._id === api.yo
         }
         this.set({
           loading: false,

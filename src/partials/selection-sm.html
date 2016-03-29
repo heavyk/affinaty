@@ -1,4 +1,5 @@
 <link rel='ractive' href='../partials/set-up.html'>
+<link rel='ractive' href='../partials/sign-in.html'>
 
 <div class="options">
   {{#each d.options : i}}
@@ -45,6 +46,10 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   selection (iidx) {
+    if (!api.me) return this.modal('sign-in', {onsuccess: () => {
+      console.log('set selection', idx)
+      this.selection(idx)
+    }})
     let idx = this.get('d.idx')
     if (idx !== iidx) {
       this.idx(iidx, idx)

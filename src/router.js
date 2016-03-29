@@ -35,12 +35,14 @@ let classView = {
 let router = new Router({ el: 'view' }, function (request) {
   // TODO better redirects - to a 404 page
   // maybe should be logging this as well
-  this.redirect(api.me ? '/home' : '/')
+  // this.redirect(api.me ? '/home' : '/')
+  console.log('??', request)
 }, function (path, options) {
-  if (path === '/' && api.me)
-    return router.dispatch('/home')
-  if (path !== '/' && !api.me)
-    return router.dispatch('/')
+  console.log('::', path)
+  // if (path === '/' && api.me)
+  //   return router.dispatch('/home')
+  // if (path !== '/' && !api.me)
+  //   return router.dispatch('/')
 })
 
 // implement enter / leave
@@ -48,7 +50,8 @@ let router = new Router({ el: 'view' }, function (request) {
 // probably want to do it as a static method on the component
 
 // landing page
-router.addRoute('/', landing)
+// router.addRoute('/', landing)
+router.addRoute('/', listing)
 // listing (of posts)
 router.addRoute('/home', listing)
 router.addRoute('/mis-top', listing)

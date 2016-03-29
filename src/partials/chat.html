@@ -195,7 +195,7 @@ component.exports = {
       console.info('get mbox!')
       api.action('mbox', {creator: id}, (data) => {
         let members = {}
-        members[api.me._id] = members.me = api.me
+        members[api.yo] = members.me = api.me
         for (let i = 0; i < data.members.length; i++) {
           let m = data.members[i]
           members[m._id] = m
@@ -223,7 +223,7 @@ component.exports = {
       this.fire('elastic:adjust')
       let msg = {
         text: text,
-        creator: api.me._id,
+        creator: api.yo,
         created: Date.now(),
         saving: true
       }

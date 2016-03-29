@@ -99,8 +99,8 @@ component.exports = {
   },
   computed: {
     mine () {
-      // TODO clean this
-      return this.get('d._creator') === api.me._id || this.get('d.creator._id') === api.me._id
+      let creator = this.get('d._creator')
+      return (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo
     }
   },
   events: {

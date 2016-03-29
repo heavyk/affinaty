@@ -190,28 +190,34 @@ component.exports = {
     let id = this.get('id')
     let d = this.get('d') || Ractive.nexus.db.get(id)
     this.set('category', api.category.get(this.get(d.$category)))
-    let tags = this.get('d.tags')
-    if (!tags || !tags.length) {
-      this.set('d.tags', [
-        {title: 'lala', _id: 1234},
-        {title: 'hehe', _id: 1111},
-        {title: 'jiji', _id: 1155},
-      ])
-    }
+    // let tags = this.get('d.tags')
+    // if (!tags || !tags.length) {
+    //   this.set('d.tags', [
+    //     {title: 'lala', _id: 1234},
+    //     {title: 'hehe', _id: 1111},
+    //     {title: 'jiji', _id: 1155},
+    //   ])
+    // }
 
-    api.my.opinion.on(id + '.' + api.me._id, this.on_opinion = (d, _d) => {
-      let pos
-      let totals = this.get('d.totals')
-      if (totals && _d) {
-        pos = _d.pos
-        totals[pos > 0 ? pos + 1 : pos + 2]--
-      }
+    console.log('me', api.me)
+    api.on('sign-in', (me) => {
+      api.my.opinion.on(id + '.' + api.yo, this.on_opinion = (d, _d) => {
+        let pos
+        let totals = this.get('d.totals')
+        if (totals && _d) {
+          pos = _d.pos
+          totals[pos > 0 ? pos + 1 : pos + 2]--
+        }
 
-      if (totals) {
-        if (pos = d.pos)
-          totals[pos > 0 ? pos + 1 : pos + 2]++
-        this.set('d.totals', totals)
-      }
+        if (totals) {
+          if (pos = d.pos)
+            totals[pos > 0 ? pos + 1 : pos + 2]++
+          this.set('d.totals', totals)
+        }
+      })
+    })
+    api.on('sign-out', () => {
+      api.my.opinion.off(id + '.' + api.yo, this.on_opinion)
     })
     this.on('show-stats', () => {
       if (window.isMobile && this.parent) {

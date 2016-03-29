@@ -38,7 +38,7 @@ class opinion_ extends Ambition {
         }
       }
     }
-    this.ages = [18, 25, 35, 45]
+
     this.exists = {}
     this.creator = creator
     this.list = []

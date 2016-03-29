@@ -197,8 +197,8 @@ component.exports = {
       this.stats.until('/', onloaded)
       api.my.opinion.until('/', onloaded)
 
-      let key = id + '.' + api.me._id
-      if (this.on_opinion) api.my.opinion.off(__id + '.' + api.me._id, this.on_opinion)
+      let key = id + '.' + api.yo
+      if (this.on_opinion) api.my.opinion.off(__id + '.' + api.yo, this.on_opinion)
       api.my.opinion.on(key, this.on_opinion = (d, _d) => {
         let stats = this.stats.data
         if (stats) {
@@ -234,7 +234,7 @@ component.exports = {
     }
 
     let ranges = []
-    let mages = api.my.opinion.ages.concat('>')
+    let mages = api.ages.concat('>')
     let r, pr, a
     for (a = 0; a < mages.length; a++) {
       let rr = mages[a]
@@ -277,8 +277,8 @@ component.exports = {
     let totals_p = [0, 0, 0, 0]
     let planets = [0, 0, 0, 0]
     let percents = [0, 0, 0, 0]
-    let ranges = new Array(api.my.opinion.ages.length + 1)
-    let ages = api.my.opinion.ages.concat('>')
+    let ranges = new Array(api.ages.length + 1)
+    let ages = api.ages.concat('>')
     let r, pr, i, sum, gender, pos, k, t
     for (i = 0; i < ages.length; i++) {
       let age = ages[i]

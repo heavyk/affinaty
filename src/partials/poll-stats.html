@@ -145,7 +145,7 @@ component.exports = {
   oncomplete () {
     let id = this.get('id')
     let num_planets = this.get('S.moarPlanets') ? 4 : 2
-    let ages = api.my.opinion.ages
+    let ages = api.ages
     api.action('poll-stats', {_id: id, ages}, (data) => {
       this.set('options', data.options)
       let r, rr, i, sum, gender, option, k, t

@@ -123,10 +123,11 @@ let Api = Ractive.extend({
       }
     }
     console.log('action:', action, _params)
-    if (!this.token)
+    if (this.token)
       // TODO - instead of redirecting to the login page, we should just show a login modal
-      this.signOut(true)
-    else _params.token = this.token
+    //   this.signOut(true)
+    // else
+      _params.token = this.token
 
     return new Ractive.Promise((_resolve, _reject) => {
       let respond = (res) => {
@@ -141,14 +142,8 @@ let Api = Ractive.extend({
         setTimeout(() => {
           console.log('response:', action, _params, res)
           if (res.error) {
-            // this is temporary
-            // TODO: remember the time that the session has existed and either forward to landing or make a popup
-            // TODO: delete me
-            if (~res.error.indexOf('you should sign-in')) {
-              if (router.uri.path !== '/') router.redirect('/')
-              return
-            }
-            // TODO: log errors
+            console.error(action, res.error)
+            // TODO: log errors and send them to the server
             if (reject) reject(res.error)
             else _reject(res.error)
           } else {
@@ -192,7 +187,11 @@ let Api = Ractive.extend({
         api.tag = new tag_
     }
   },
+  category: new category_,
+  tag: new tag_,
 })
 
 let api = new Api
+// temporary :)
+api.ages = [18, 25, 35, 45]
 export default api

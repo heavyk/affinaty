@@ -1,6 +1,6 @@
 
 import api from '../api'
-// import local from '../local'
+import local from '../local'
 
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'

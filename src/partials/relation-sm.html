@@ -89,7 +89,7 @@ component.exports = {
       let following = this.get('d.following')
       api.action('relation' + (following ? '-' : '+'), {
         other: this.get('d._id'),
-        creator: api.me._id
+        creator: api.yo
       }, (data) => {
         this.set('d.following', following ? false : data)
       })
