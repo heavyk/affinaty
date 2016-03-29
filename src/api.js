@@ -59,6 +59,7 @@ let Api = Ractive.extend({
     notifier: new notifier,
   },
   oninit () {
+    this.yo = null
     this.delay = 0 // set this higher to simulate network delay
     this._token = hashCode(this.url + ':token')
     this.token = window.localStorage.getItem(this._token)
@@ -102,6 +103,7 @@ let Api = Ractive.extend({
     return this.whoIaM(data.mundial[0])
   },
   whoIaM(me) {
+    this.yo = me._id
     return this.local.setItem('me', me, (err) => {
       if (!err) this.set('me', me)
       this.set('authenticated', true)
@@ -114,6 +116,7 @@ let Api = Ractive.extend({
     this.set('me', null)
     // if (redirect) router.dispatch('/')
     this.set('authenticated', false)
+    this.yo = null
     this.fire('deauth')
   },
   action (action, params, resolve, reject) {

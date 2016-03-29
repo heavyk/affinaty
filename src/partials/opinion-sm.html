@@ -1,3 +1,4 @@
+<link rel='ractive' href='../partials/sign-in.html'>
 <link rel='ractive' href='../partials/set-up.html'>
 
 <div class="voting clearfix">
@@ -133,22 +134,27 @@ div.cancel {
 
 <script>
 
+// this doesn't work until I have a global list of components (TODO)
+// import Modal from '../modal'
+
 component.exports = {
   isolated: true,
   modal: require('../modal'),
-
-  onconfig () {
-
-  },
-
   oninit () {
+    // if (api.yo) api.on('auth')
+    api.on('deauth', () => {
+      // VERY BAD - creates a memory leak cause we don't 'off' the listener
+      // TODO: listen for 'auth' and 'votes'
+      this.set('d.pos', null)
+    })
+
     this.on('+2', (e) => { this.pos(2) })
     this.on('+1', (e) => { this.pos(1) })
     this.on('-1', (e) => { this.pos(-1) })
     this.on('-2', (e) => { this.pos(-2) })
     this.on('cancel', (e) => { this.pos(0) })
 
-    let params={}
+    let params = {}
     let params_buttoms = []
     params_buttoms.push(
       { text: 'Muy en desacuerdo',
@@ -180,10 +186,16 @@ component.exports = {
 
   },
   pos (pos, skip) {
+    if (!api.me) {
+      api.once('auth', () => {
+        this.pos(pos, skip)
+      })
+      return this.modal('sign-in')
+    }
     let p = api.my.opinion.debate_pos(this.get('d._id'))
     if (pos !== p && !skip) {
       if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
-        this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
+        Modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
             this.pos(pos, !api.me.birthdate
               || !api.me.c

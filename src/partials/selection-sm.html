@@ -42,14 +42,14 @@
 </style>
 
 <script>
+// import Modal from '../modal'
+
 component.exports = {
   isolated: true,
   modal: require('../modal'),
   selection (iidx) {
     if (!api.me) {
       api.once('auth', () => {
-        console.log('auth!!')
-        debugger
         this.selection(iidx)
       })
       return this.modal('sign-in')

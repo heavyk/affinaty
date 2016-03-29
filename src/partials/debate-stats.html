@@ -185,7 +185,7 @@ component.exports = {
       // really I should do this in stats ... for now, this is fine
       let onloaded = after(2, () => {
         let stats = this.stats.data
-        let d = api.my.opinion.debate(id)
+        // let d = api.my.opinion.debate(id)
         let calc = this.calc(stats)
         this.set('totals', calc.totals)
         this.set('totals_p', calc.totals_p)
@@ -195,24 +195,25 @@ component.exports = {
         this.set('ranges', calc.ranges)
       })
       this.stats.until('/', onloaded)
-      api.my.opinion.until('/', onloaded)
-
-      let key = id + '.' + api.yo
-      if (this.on_opinion) api.my.opinion.off(__id + '.' + api.yo, this.on_opinion)
-      api.my.opinion.on(key, this.on_opinion = (d, _d) => {
-        let stats = this.stats.data
-        if (stats) {
-          if (_d) ageStats.subtract(api.me, stats, _d)
-          ageStats.add(api.me, stats, d)
-          let calc = this.calc(stats)
-          this.set('totals', calc.totals)
-          this.set('totals_p', calc.totals_p)
-          this.set('total', calc.total)
-          this.set('percents', calc.percents)
-          this.set('planets', calc.planets)
-          this.set('ranges', calc.ranges)
-        }
-      })
+      if (api.my.opinion) {
+        api.my.opinion.until('/', onloaded)
+        let key = id + '.' + api.yo
+        if (this.on_opinion) api.my.opinion.off(__id + '.' + api.yo, this.on_opinion)
+        api.my.opinion.on(key, this.on_opinion = (d, _d) => {
+          let stats = this.stats.data
+          if (stats) {
+            if (_d) ageStats.subtract(api.me, stats, _d)
+            ageStats.add(api.me, stats, d)
+            let calc = this.calc(stats)
+            this.set('totals', calc.totals)
+            this.set('totals_p', calc.totals_p)
+            this.set('total', calc.total)
+            this.set('percents', calc.percents)
+            this.set('planets', calc.planets)
+            this.set('ranges', calc.ranges)
+          }
+        })
+      } else onloaded()
     }, {initial: false})
   },
   oncomplete () {
