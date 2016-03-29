@@ -105,14 +105,16 @@ let Api = Ractive.extend({
     return this.local.setItem('me', me, (err) => {
       if (!err) this.set('me', me)
       this.set('authenticated', true)
+      this.fire('auth', me)
     })
   },
   signOut (redirect) {
     window.localStorage.removeItem(this._token)
     this.local.removeItem('me')
     this.set('me', null)
-    if (redirect) router.dispatch('/')
+    // if (redirect) router.dispatch('/')
     this.set('authenticated', false)
+    this.fire('deauth')
   },
   action (action, params, resolve, reject) {
     const start = Date.now()

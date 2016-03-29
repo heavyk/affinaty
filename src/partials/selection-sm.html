@@ -46,10 +46,14 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   selection (iidx) {
-    if (!api.me) return this.modal('sign-in', {onsuccess: () => {
-      console.log('set selection', idx)
-      this.selection(idx)
-    }})
+    if (!api.me) {
+      api.once('auth', () => {
+        console.log('auth!!')
+        debugger
+        this.selection(iidx)
+      })
+      return this.modal('sign-in')
+    }
     let idx = this.get('d.idx')
     if (idx !== iidx) {
       this.idx(iidx, idx)

@@ -123,7 +123,7 @@ setTimeout(function () {
       }
     })
   } else {
-    api.signOut(true)
+    // api.signOut(true)
     router.init()
   }
 }, 1)

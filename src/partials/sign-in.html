@@ -2,6 +2,7 @@
 <link rel='ractive' href='../partials/remember-password.html'>
 <link rel='ractive' href='../partials/change-password.html'>
 <div class="sign-in">
+  <img class="logo" src="/img/landing.svg" />
   <form on-submit="submit">
     <div class="form">
       <input type="email" value="{{email}}" placeholder="Correo Electrónico">
@@ -51,6 +52,10 @@
 </div>
 
 <style>
+
+img.logo {
+  margin: 20px;
+}
 
 .remember-check .fa {
   width: 16px;
@@ -119,8 +124,9 @@
   color: #888;
 }
 .form {
-  padding: 28px 28px 0;
-  padding-bottom: 10px;
+  /*padding: 28px 28px 0;
+  padding-bottom: 10px;*/
+  padding: 0 10px;
 }
 .form input[type="email"],
 .form input[type="password"] {
@@ -243,8 +249,11 @@ component.exports = {
           setTimeout(() => {
             if (data.tmp) {
               this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
-            } else {
-              router.dispatch('/home')
+            // } else if (router.uri !== '/ho') {
+            //   router.dispatch('/home')
+            }
+            if (this.parent && this.parent.teardown) {
+              this.parent.teardown()
             }
           }, 1)
         })
