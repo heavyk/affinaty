@@ -190,7 +190,7 @@ EnhancedEmitter.prototype.emit = function () {
     return false;
   }
 
-  for (var i = 0, l = fns.length; i < l; i++) {
+  for (var i = 0; i < fns.length; i++) {
     if (arguments.length === 1) {
       fns[i].call(this);
     } else if (arguments.length === 2) {

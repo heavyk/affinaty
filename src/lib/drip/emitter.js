@@ -66,7 +66,7 @@ function mixin (obj) {
 
 EventEmitter.prototype.on =
 EventEmitter.prototype.addListener = function () {
-  
+
   var map = this._events || (this._events = {})
     , ev = arguments[0]
     , fn = arguments[1];
@@ -197,7 +197,7 @@ EventEmitter.prototype.emit = function () {
   // handle multiple callbacks
   else {
     var a;
-    for (var i = 0, l = fns.length; i < l; i++) {
+    for (var i = 0; i < fns.length; i++) {
       if (arguments.length === 1) {
         fns[i].call(this);
       } else if (arguments.length === 2) {
