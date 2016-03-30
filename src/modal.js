@@ -13,10 +13,15 @@ export default function modal(component, opts) {
     throw new Error(`requested component ${component} not a component`)
   if (_modal) _modal.teardown()
   let M = this.components.modal || Modal
+  // TODO: use @this when upgrading to Ractive-0.8.0
+  let o = ''
+  for(var i in opts) {
+    o += `${i}=${JSON.stringify(opts[i])} `
+  }
   _modal = new M({
     components: components,
     partials: {
-      modalContent: `<${component} />`,
+      modalContent: `<${component} ${o}/>`,
     },
     data: assign({modalName: component, parent: this}, opts),
   })
