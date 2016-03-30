@@ -15,6 +15,16 @@
   </div>
 {{/if ~/txt}} -->
 
+<!-- <div class="test-panel">
+  <div>test panel</div>
+  <div>list: {{~/list.length}}</div>
+  <div>wait: {{~/waiting_list.length}}</div>
+  <div>t_debates: {{~/t_debates}}</div>
+  <div>t_polls: {{~/t_polls}}</div>
+  <div>t_waiting: {{~/t_waiting}}</div>
+  <button on-click="go()">get more</button>
+</div> -->
+
 <div class="debates">
   {{#each ~/list}}
     {{#if .options}}
@@ -36,6 +46,17 @@
   float: right;
   margin-right: 10px;
 }
+
+/*
+.test-panel {
+  z-index: 2000;
+  border: solid 1px #000;
+  background: #ccc;
+  position: fixed;
+  top: 100px;
+  right: 200px;
+}
+*/
 
 </style>
 
@@ -73,8 +94,15 @@ function locationOf (element, array, comparer, start, end) {
 component.exports = {
   oninit () {
     let list = this.list = []
+    this.waiting_list = []
     this.set('list', list)
+    // this.set('waiting_list', this.waiting_list)
     this.clear()
+    // this.set({
+    //   t_polls: this.t_polls,
+    //   t_debates: this.t_debates,
+    //   t_waiting: this.t_waiting
+    // })
 
     Ractive.header.on('category', (category) => {
       this.set('category', (this.category = category ? category._id : null))
@@ -93,7 +121,7 @@ component.exports = {
 
     this.layout = throttle(() => {
       if (this.m) setTimeout(() => {
-        this.m.reloadItems()
+        // this.m.reloadItems()
         this.m.layout()
       }, 1)
     }, 500, true)
@@ -185,10 +213,10 @@ component.exports = {
 
   clear () {
     this.set('list.length', 0)
-    this.t_debates = 0 //Infinity
-    this.t_polls = 0 //Infinity
+    this.t_debates = Infinity
+    this.t_polls = Infinity
+    this.t_waiting = 0
     this.all_loaded = 0
-    this.appended = [] // array of the previously appended ids
     this.exists = {} // map of ids -> offset (for adding and removing)
   },
 
@@ -216,27 +244,6 @@ component.exports = {
       })
     }
 
-    this.observe('list', (v, vv) => {
-      if (!v || !v.length) return
-      setTimeout(() => {
-        let i, c = 0, add = [], append = []
-        while (c++ < 3 && (i = this.appended.pop())) {
-          let idx = this.exists[i]
-          if (idx === this.els.length - 1) append.push(this.els[idx])
-          else add.push(this.els[idx])
-        }
-        if (!movil) {
-          if (add.length) {
-            this.m.addItems(add)
-            this.layout()
-          } else if (append.length) {
-            this.m.appended(append)
-            this.layout()
-          }
-        }
-      }, 1)
-    }, {init: false})
-
     // start it off!
     this.go(() => {
       console.info('done loading first ones...')
@@ -255,11 +262,27 @@ component.exports = {
 
   add (d, _id) {
     let id = _id || d._id
-    if (d.created < this.skip) this.skip = d.created
     if (this.exists[id] !== void 0 || !this.matches(d)) return
     this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
-    this.appended.push(d._id)
-    this.layout()
+  },
+
+  process_waiting () {
+    let append = []
+    for (var i = 0; i < this.waiting_list.length; i++) {
+      let d = this.waiting_list[i]
+      if (d.created < this.t_waiting) {
+        this.waiting_list.splice(i--, 1)
+        insert(d, append, (a, b) => b.created > a.created ? 1 : -1)
+      }
+    }
+
+    if (append.length) {
+      let len = this.list.length
+      this.list.push.apply(this.list, append)
+      let els = this.findAll('.debate').splice(len)
+      this.m.appended(els)
+      this.layout()
+    }
   },
 
   go (next) {
@@ -272,9 +295,20 @@ component.exports = {
     let opinions_creator = this.get('opinions')
     let txt = query.text
     let action = opinions_creator ? 'opinion:debate*' : 'debate' + (txt ? '@' : '*')
-    let params = assign({skip: this.t_debates}, query) // this.t_debates === Infinity ? 0 :
-    let done = after(2, next)
+    let params = assign({skip: this.t_debates === Infinity ? 0 : this.t_debates}, query)
+    let done = after(2, () => {
+      // after adding all to the waiting_list, we're gonna process it
+      this.process_waiting()
+      // this.set({
+      //   t_polls: this.t_polls,
+      //   t_debates: this.t_debates,
+      //   t_waiting: this.t_waiting
+      // })
+      next()
+    })
 
+    // if (this.t_debates < this.t_polls && this.t_debates !== Infinity) done()
+    // else
     api.action(action, params, (data) => {
       // these are temporary until I fix the api
       this.set('loading', false)
@@ -292,21 +326,26 @@ component.exports = {
         Ractive.nexus.debate.insert(d)
 
         // save oldest post for next query
-        // if (d.created < this.t_debates) this.t_debates = d.created
+        if (d.created < this.t_debates) this.t_debates = d.created
+        if (d.created > this.t_waiting && d.created < this.t_polls) this.t_waiting = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
-        if (data[i]) this.add(data[i])
+        this.waiting_list.push(data[i])
       }
 
       // if we're at the end of the list, don't ask more
       if (data.length !== params.limit) this.all_loaded++
-      this.t_debates += query.limit
+      // this.t_debates += query.limit
+
+      // if (this.t_debates < this.t_polls) this.get_debates()
       done()
     }, done)
 
     action = opinions_creator ? 'selection:poll*' : 'poll' + (txt ? '@' : '*')
-    api.action(action, assign({skip: this.t_polls}, query), (data) => { // this.t_polls === Infinity ? 0 :
+    // if (this.t_polls < this.t_debates && this.t_polls !== Infinity) done()
+    // else
+    api.action(action, assign({skip: this.t_polls === Infinity ? 0 : this.t_polls}, query), (data) => {
       // these are temporary until I fix the api
       for (let i = 0; i < data.length; i++) {
         let d = data[i]
@@ -322,16 +361,17 @@ component.exports = {
         Ractive.nexus.debate.insert(d)
 
         // save oldest post for next query
-        // if (d.created < this.t_polls) this.t_polls = d.created
+        if (d.created < this.t_polls) this.t_polls = d.created
+        if (d.created > this.t_waiting && d.created < this.t_debates) this.t_waiting = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
-        if (data[i]) this.add(data[i])
+        this.waiting_list.push(data[i])
       }
 
       // if we're at the end of the list, don't ask more
       if (data.length !== params.limit) this.all_loaded++
-      this.t_polls += params.limit
+      // this.t_polls += params.limit
       done()
     }, done)
   },
