@@ -190,7 +190,6 @@ component.exports = {
     let query
     this.get('text') || this.set('text', '')
     router.on('dispatch', () => {
-      console.info('dispatch')
       let _query = assign({}, {
         debate: this.get('debate'),
         poll: this.get('poll'),

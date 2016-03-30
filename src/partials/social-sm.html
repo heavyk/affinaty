@@ -80,6 +80,8 @@ component.exports = {
   oninit () {
     let type = this.get('d.options') ? 'poll' : 'debate'
     let id = this.get('d._id')
+    let creator = this.get('d.creator')
+    this.set('mine', (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo)
     this.dispatch = (active) => {
       router.dispatch(`/${type}/${id}/${active}`)
     }
@@ -96,12 +98,6 @@ component.exports = {
         }
       })
     })
-  },
-  computed: {
-    mine () {
-      let creator = this.get('d._creator')
-      return (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo
-    }
   },
   events: {
     tap: require('../lib/events/tap.js'),
