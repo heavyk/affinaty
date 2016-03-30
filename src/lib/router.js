@@ -69,7 +69,7 @@ export default class Router extends EventEmitter {
     // prepare data
     var defaults = typeof this.data === 'function' ? this.data() : this.data
     var data = assign(defaults, options.state, options.hash, options.qs)
-    debugger
+    // debugger
 
     if (route === this.route) {
       // don't save a back-button
@@ -117,6 +117,7 @@ export default class Router extends EventEmitter {
   }
 
   init (options) {
+    if (this.route) return
     return this.dispatch(this.getUri(), assign({ history: false }, options))
   }
 

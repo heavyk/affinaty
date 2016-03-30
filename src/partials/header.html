@@ -1,3 +1,4 @@
+<link rel='ractive' href='../partials/sign-in.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/categories.html'>
 <link rel='ractive' href='../partials/notification-list.html'>
@@ -6,8 +7,8 @@
 
 {{#if !movil}}
   <div class="header-container">
-    {{#if me}}
     <nav>
+      {{#if ~/me}}
       <li class="dropdown moar-dropdown">
         <a class="dropdown-toggle moar-toggle">
           <img src="/img/opin.svg" width="26" height="26" class="opin" />
@@ -28,11 +29,13 @@
           </li>
         </ul>
       </li>
+      <!-- {{/if}} -->
       <li class="button">
         <a class="home" href="/home">
           <img src="/img/home.svg" width="25" height="25" />
         </a>
       </li>
+      <!-- {{#if ~/me}} -->
       <li class="button">
         <a class="notifications" href="/inbox">
           <img src="/img/inbox.svg" width="25" height="25" />
@@ -67,6 +70,9 @@
           </li>
         </ul>
       </li>
+      {{else}}
+      <button class="start-session" on-click="modal('sign-in')">Iniciar Sesión</button>
+      {{/if}}
     </nav>
     <div class="logo">
       <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
@@ -82,17 +88,14 @@
     </div>
     <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
 
+    {{#if ~/me}}
     <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
       <notification-list />
       <!-- <div class="view-all">
         <a href="/notifications">view all</a>
       </div> -->
     </div>
-    {{else}}
-    <div class="logo">
-      <h1><a href="/">Affinaty</a></h1>
-    </div>
-    {{/if me}}
+    {{/if}}
   </div>
 {{else}}
   <!-- movil -->
@@ -246,6 +249,10 @@ span.name {
   width: 17px;
   font-size: 10px;
   text-align: center;
+}
+.start-session {
+  color: #000;
+  margin-top: 10px;
 }
 img {
   vertical-align: middle;
@@ -410,6 +417,7 @@ import assign from '../lib/lodash/object/assign'
 
 component.exports = {
   isolated: true,
+  modal: require('../modal'),
   onconfig () {
     // this.set('show_n', true)
     // this.set('show_m', true)

@@ -105,7 +105,7 @@ component.exports = {
         this.observeOnce('debate', () => {
           setTimeout(() => {
             this.find('.comments').scrollIntoView()
-            this.find('.comments textarea').focus()
+            if (api.yo) this.find('.comments textarea').focus()
           }, 1)
         })
       }

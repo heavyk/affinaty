@@ -1,6 +1,7 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
 <link rel='ractive' href='../partials/are-you-sure.html'>
+<link rel='ractive' href='../partials/sign-in.html'>
 
 <div class="comments">
   <h6 class="header">
@@ -14,13 +15,13 @@
             class="animate"
             on-blur-focus="toggle-focus"
             on-nlSubmit="add"
-            value="{{text}}"
+            value="{{~/text}}"
             maxlength="500"
             placeholder="Escribe tu comentario"
             decorator="nlElastic">
           </textarea>
         </div>
-        <div class="submit" style="display: {{focused && text.length > 2 ? 'block' : 'none'}}">
+        <div class="submit" style="display: {{~/focused && ~/text.length > 2 ? 'block' : 'none'}}">
           <button type="submit" on-tap="add">
             <i class="fa fa-comment-o"></i> send
           </button>
@@ -209,10 +210,27 @@ component.exports = {
         })
       })
     })
+    this.observe('focused', (focused) => {
+      if (focused && !api.yo) {
+        let m = this.modal('sign-in', {comments: true})
+        m.once('teardown', () => {
+          if (api.yo) this.find('textarea').focus()
+        })
+      }
+    }, {initial: false})
     this.on('add', (event) => {
       event.original.preventDefault()
       let text = this.get('text').trim()
       if (text.length < 2) return
+      // if (!api.yo) {
+      //   // let a = [event]
+      //   api.once('auth', () => {
+      //     debugger
+      //     this.fire('add', event)
+      //   })
+      //   debugger
+      //   return this.modal('sign-in')
+      // }
       this.set('saving', true)
       this.set('text', '')
       this.fire('elastic:adjust')
