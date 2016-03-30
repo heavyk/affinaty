@@ -6,28 +6,28 @@
 <link rel='ractive' href='../partials/debate-create.html'>
 <link rel='ractive' href='../partials/poll-create.html'>
 
-{{#if !movil}}
+{{#if !~/movil}}
   <div class="left-column" style="width: {{leftWidth}}px">
-    {{#if panel !== 'mis-top'}}
-      <div class="pop-tag-container-outer" style="width: {{leftWidth - 10}}px">
+    {{#if ~/panel !== 'mis-top'}}
+      <div class="pop-tag-container-outer" style="width: {{~/leftWidth - 10}}px">
         <div class="pop-tag-container">
-          <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
-            <pop-tag-carousel category="{{category}}" />
+          <div class="pop-tag-container-inner" style="width: {{~/popTagWidth}}px">
+            <pop-tag-carousel category="{{~/category}}" />
           </div>
         </div>
       </div>
     {{else}}
       <div class="title-mis-top">Mis Top</div>,
     {{/if}}
-    <div class="debates-list" style="width: {{leftWidth}}px">
-      {{#if panel}}
-        <debate-list category="{{category}}" tag="{{tag}}" top="{{ panel === 'mis-top' ? true : false }}" />
+    <div class="debates-list" style="width: {{~/leftWidth}}px">
+      {{#if ~/panel}}
+        <debate-list category="{{~/category}}" tag="{{~/tag}}" top="{{ ~/panel === 'mis-top' ? true : false }}" />
       {{/if}}
     </div>
   </div>
-  <div class="right-column" style="width: {{rightWidth}}px">
+  <div class="right-column" style="width: {{~/rightWidth}}px">
     <affinaties />
-    {{#if panel === 'mis-top'}}
+    {{#if ~/panel === 'mis-top'}}
       <pop-tag-list />
     {{else}}
       <mis-top />
@@ -35,35 +35,35 @@
   </div>
 {{else}}
   <div class="tabs-movil">
-    <span class="tab-movil{{#if tab === 'populares'}} active{{/if}}" on-tap="set('tab', 'populares')">Populares</span>
-    <span class="tab-movil{{#if tab === 'mis-top'}} active{{/if}}" on-tap="set('tab', 'mis-top')">Mis Top</span>
-    <span class="tab-movil{{#if tab === 'affin'}} active{{/if}}" on-tap="set('tab', 'affin')">Affines</span>
+    <span class="tab-movil{{#if ~/tab === 'populares'}} active{{/if}}" on-tap="set('tab', 'populares')">Populares</span>
+    <span class="tab-movil{{#if ~/tab === 'mis-top'}} active{{/if}}" on-tap="set('tab', 'mis-top')">Mis Top</span>
+    <span class="tab-movil{{#if ~/tab === 'affin'}} active{{/if}}" on-tap="set('tab', 'affin')">Affines</span>
 
-    {{#if tab === 'populares'}}
+    {{#if ~/tab === 'populares'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
-      {{#if panel}}
+      {{#if ~/panel}}
         <div class="pop-tag-container-outer" style="width: 100%">
           <div class="pop-tag-container">
-            <div class="pop-tag-container-inner" style="width: {{popTagWidth}}px">
-              <pop-tag-carousel category="{{category}}" />
+            <div class="pop-tag-container-inner" style="width: {{~/popTagWidth}}px">
+              <pop-tag-carousel category="{{~/category}}" />
             </div>
           </div>
         </div>
-        <debate-list category="{{category}}" tag="{{tag}}" top="false" />
+        <debate-list category="{{~/category}}" tag="{{~/tag}}" top="false" />
       {{/if}}
     </div>
     {{/if}}
 
-    {{#if tab === 'mis-top'}}
+    {{#if ~/tab === 'mis-top'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
-      {{#if panel}}
+      {{#if ~/panel}}
       <div class="clearfix"></div>
-        <debate-list category="{{category}}" tag="{{tag}}" top="true" />
+        <debate-list category="{{~/category}}" tag="{{~/tag}}" top="true" />
       {{/if}}
     </div>
     {{/if}}
 
-    {{#if tab === 'affin'}}
+    {{#if ~/tab === 'affin'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
       <div class="clearfix"></div>
       <affinaties />

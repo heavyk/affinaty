@@ -8,37 +8,36 @@ import repeat from '../lib/lodash/string/repeat'
 let dpr = Math.round(window.devicePixelRatio || 1)
 
 component.exports = {
+  isolated: true,
   onconfig () {
     this._default = this.get('default')
     this._size = this.get('size')
     this._shape = this.get('shape')
   },
-  computed: {
-    cls () {
-      let str = (this._shape || 'rd') + '-' + this._size
-      if (!this.get('src')) str = 'n-' + str
-      let cls = this.get('.class')
-      if (cls) str += ' ' + cls
-      return str
-    },
-    px () {
-      switch (this._size) {
-        case 'x': return 1920
-        case 'l': return 1440
-        case 'm': return 720
-        case 's': return 360
-        case 't': return 240
-        case 'a': return 120
-        case 'k': return 28
-        case 'y': return 36
-        case 'z': return 49
-      }
-      return 0
-    },
-    url () {
-      let id = this.get('src')
-      return id ? api.url + '/i/' + repeat(this._size, dpr) + '/' + id : (this._default || '/img/default.svg')
+  oninit () {
+    let id = this.get('src')
+    let px = 0
+    switch (this._size) {
+      case 'x': px = 1920; break
+      case 'l': px = 1440; break
+      case 'm': px = 720; break
+      case 's': px = 360; break
+      case 't': px = 240; break
+      case 'a': px = 120; break
+      case 'k': px = 28; break
+      case 'y': px = 36; break
+      case 'z': px = 49; break
     }
-  }
+
+    let cls = (this._shape || 'rd') + '-' + this._size
+    if (!id) cls = 'n-' + cls
+    let _class = this.get('.class')
+    if (_class) cls += ' ' + _class
+
+    this.set({
+      px, cls,
+      url: id ? api.url + '/i/' + repeat(this._size, dpr) + '/' + id : (this._default || '/img/default.svg'),
+    })
+  },
 }
 </script>

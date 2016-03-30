@@ -3,22 +3,22 @@
 <link rel='ractive' href='../partials/time.html'>
 
 <div class="notification-list-inner">
-  {{#if loading}}
+  {{#if ~/loading}}
     <spinner />
-  {{/if loading}}
+  {{/if ~/loading}}
 
-  {{#if error}}
-    ERROR: {{error}}
-  {{/if error}}
-  {{#if notifications}}
+  {{#if ~/error}}
+    ERROR: {{~/error}}
+  {{/if ~/error}}
+  {{#if ~/notifications}}
     <div class="delete all">
       &nbsp;
       <span class="remove" on-tap="remove_all(this)">
         Borrar todas <i class="fa fa-close" />
       </span>
     </div>
-  {{/if notifications}}
-  {{#each notifications:i}}
+  {{/if ~/notifications}}
+  {{#each ~/notifications:i}}
     <div class="item clearfix">
       <a href="/profile/{{.a.creator._id}}" class="foto">
         <foto src="{{.a.creator.foto}}" size="z" />
@@ -32,9 +32,9 @@
           <time time="{{.a.created}}" class="since" />
         </h4>
         <div class="action">
-          {{VERB[.t]}}
+          {{~/VERB[.t]}}
           <a href="{{ link(this) }}" on-tap="remove(this)">
-          {{TYPE[.t]}}
+          {{~/TYPE[.t]}}
           </a>
         </div>
       </div>
@@ -43,7 +43,7 @@
     <div class="no-content">
       no tienes notificaciones
     </div>
-  {{/each notifications}}
+  {{/each ~/notifications}}
 </div>
 
 <style>

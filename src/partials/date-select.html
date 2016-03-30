@@ -2,18 +2,18 @@
 <link rel='ractive' href='../partials/spinner.html'>
 
 <div class="pick-date">
-  <select on-change="select-day" value="{{day}}">
-    {{#each days}}
+  <select on-change="select-day" value="{{~/day}}">
+    {{#each ~/days}}
       <option value="{{.}}">{{.}}</option>
     {{/each}}
   </select>
-  <select on-change="select-day" value="{{month}}">
-    {{#each months : i}}
+  <select on-change="select-day" value="{{~/month}}">
+    {{#each ~/months : i}}
       <option value="{{i}}">{{.}}</option>
     {{/each}}
   </select>
-  <select on-change="select-day" value="{{year}}">
-    {{#each years}}
+  <select on-change="select-day" value="{{~/year}}">
+    {{#each ~/years}}
       <option value="{{.}}">{{.}}</option>
     {{/each}}
   </select>

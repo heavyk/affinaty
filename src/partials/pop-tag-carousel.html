@@ -117,7 +117,7 @@ component.exports = {
       this.set('category', (category ? category._id : null))
     })
     this.doFade = (force) => {
-      if (!this.get('.engaged') || force) {
+      if (!this.get('engaged') || force) {
         this.list.unshift(this.list.pop())
         var els = this.findAll('.list')
         for (var i = 0; i < els.length; i++) {

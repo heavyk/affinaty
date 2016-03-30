@@ -1,19 +1,19 @@
 <link rel='ractive' href='../partials/debate-sm.html'>
 <link rel='ractive' href='../partials/poll-sm.html'>
 
-{{#txt}}
+<!-- {{#if ~/txt}}
   <div class="search">
-    searching for: '{{txt}}'
-    {{#if results > 0}}
-      {{results}} results
-    {{elseif results === 0}}
+    searching for: '{{~/txt}}'
+    {{#if ~/results > 0}}
+      {{~/results}} results
+    {{elseif ~/results === 0}}
       no results
     {{else}}
       loading...
     {{/if}}
     <span class="clear-search" on-tap="clear-search"><i class="fa fa-times" /> clear</span>
   </div>
-{{/txt}}
+{{/if ~/txt}} -->
 
 <div class="debates">
   {{#each ~/list}}

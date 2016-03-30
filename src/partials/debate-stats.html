@@ -3,61 +3,61 @@
 
 <div class="debate-stats">
   <h4 class="title">Estadísticas</h4>
-  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
+  <h6 class="total">Total opiniones <span class="total">{{~/total}}</span></h6>
 
-  {{#if totals}}
+  {{#if ~/totals}}
     <div class="stats-box">
       <div class="bar">
         <div class="stat-text">Muy de acuerdo</div>
-        <button class="button-mas-mas {{d.pos === 2 ? 'active' : ''}}">
+        <button class="button-mas-mas {{~/d.pos === 2 ? 'active' : ''}}">
           <i class="fa fa-check"></i>
           <i class="fa fa-check"></i>
         </button>
-        <span class="num_votes">{{totals[3]}}</span>
+        <span class="num_votes">{{~/totals.3}}</span>
         <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{bar_width}}px"></button>
-          <button class="bar mas-mas" style="{{#if totals[3]}}color:#fff;width:{{muyDeAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.3}}%</button>
+          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+          <button class="bar mas-mas" style="{{#if ~/totals.3}}color:#fff;width:{{~/muyDeAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.3}}%</button>
         </div>
       </div>
       <div class="bar">
         <div class="stat-text">De acuerdo</div>
-        <button class="button-mas {{d.pos === 1 ? 'active' : ''}} single">
+        <button class="button-mas {{~/d.pos === 1 ? 'active' : ''}} single">
           <i class="fa fa-check"></i>
         </button>
-        <span class="num_votes">{{totals[2]}}</span>
+        <span class="num_votes">{{~/totals.2}}</span>
         <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{bar_width}}px"></button>
-          <button class="bar mas" style="{{#if totals[2]}}color:#fff;width:{{deAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.2}}%</button>
+          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+          <button class="bar mas" style="{{#if ~/totals.2}}color:#fff;width:{{~/deAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.2}}%</button>
         </div>
       </div>
       <div class="bar">
         <div class="stat-text">En desacuerdo</div>
-        <button class="button-woa {{d.pos === -1 ? 'active' : ''}} single">
+        <button class="button-woa {{~/d.pos === -1 ? 'active' : ''}} single">
           <i class="fa fa-times"></i>
         </button>
-        <span class="num_votes">{{totals[1]}}</span>
+        <span class="num_votes">{{~/totals.1}}</span>
         <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{bar_width}}px"></button>
-          <button class="bar woa" style="{{#if totals[1]}}color:#fff;width:{{desAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.1}}%</button>
+          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+          <button class="bar woa" style="{{#if ~/totals.1}}color:#fff;width:{{~/desAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.1}}%</button>
         </div>
       </div>
       <div class="bar">
         <div class="stat-text">Muy en desacuerdo</div>
-        <button class="button-woa-woa {{d.pos === -2 ? 'active' : ''}}">
+        <button class="button-woa-woa {{~/d.pos === -2 ? 'active' : ''}}">
           <i class="fa fa-times"></i>
           <i class="fa fa-times"></i>
         </button>
-        <span class="num_votes">{{totals[0]}}</span>
+        <span class="num_votes">{{~/totals.0}}</span>
         <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{bar_width}}px"></button>
-          <button class="bar woa-woa" style="{{#if totals[0]}}color:#fff;width:{{muyDesAcuerdo}}px{{else}}width:0{{/if}}">{{totals_p.0}}%</button>
+          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+          <button class="bar woa-woa" style="{{#if ~/totals.0}}color:#fff;width:{{~/muyDesAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.0}}%</button>
         </div>
       </div>
     </div>
-  {{/if totals}}
+  {{/if ~/totals}}
 
-  <sex-stats planets="{{planets}}" percents="{{percents}}" />
-  <age-stats legend="{{legend}}" ranges="{{ranges}}" />
+  <sex-stats planets="{{~/planets}}" percents="{{~/percents}}" />
+  <age-stats legend="{{~/legend}}" ranges="{{~/ranges}}" />
 </div>
 
 

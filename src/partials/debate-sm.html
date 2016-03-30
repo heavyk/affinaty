@@ -27,8 +27,8 @@
       </div>
 
       <div class="total">
-        {{#if limits.sum}}
-          {{limits.sum}} opiniones
+        {{#if ~/limits.sum}}
+          {{~/limits.sum}} opiniones
         {{else}}
           no opinions
         {{/if}}
@@ -57,14 +57,14 @@
     <div class="text" decorator="markdown:{{~/d.text}}"></div>
   {{/if}}
 
-  {{#if d.foto}}
-    <p class="foto" on-tap="modal('foto', {title: d.text, src: d.foto, size: 'm', shape: 'sq'})">
+  {{#if ~/d.foto}}
+    <p class="foto" on-tap="modal('foto', {title: ~/d.text, src: ~/d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{~/d.foto}}" size="t" shape="sq" />
     </p>
-  {{/if d.foto}}
+  {{/if ~/d.foto}}
 
-  <social-sm d="{{d}}" />
-  <opinion-sm d="{{d}}" />
+  <social-sm d="{{~/d}}" />
+  <opinion-sm d="{{~/d}}" />
 </div>
 
 <style>
@@ -190,16 +190,7 @@ component.exports = {
     let id = this.get('id')
     let d = this.get('d') || Ractive.nexus.db.get(id)
     this.set('category', api.category.get(this.get(d.$category)))
-    // let tags = this.get('d.tags')
-    // if (!tags || !tags.length) {
-    //   this.set('d.tags', [
-    //     {title: 'lala', _id: 1234},
-    //     {title: 'hehe', _id: 1111},
-    //     {title: 'jiji', _id: 1155},
-    //   ])
-    // }
 
-    console.log('me', api.me)
     api.on('sign-in', (me) => {
       api.my.opinion.on(id + '.' + api.yo, this.on_opinion = (d, _d) => {
         let pos

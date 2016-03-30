@@ -1,5 +1,5 @@
-<div title="{{abs}}" class="[[class]]">
-  {{since}}
+<div title="{{~/abs}}" class="[[~/class]]">
+  {{~/since}}
 </div>
 
 <script>
@@ -11,13 +11,14 @@
 
 import moment from 'moment'
 component.exports = {
+  isolated: true,
   data: {
     format: 'MMMM Do YYYY, h:mm:ss a',
   },
   oninit () {
     this.set('update', this.i = 1)
     this.time = api.rolex.on(60000, () => {
-      this.set('update', ++this.i)
+      this.set('~/update', ++this.i)
     })
   },
   onteardown () {
@@ -25,7 +26,7 @@ component.exports = {
   },
   computed: {
     since () {
-      this.get('update')
+      this.get('~/update')
       return moment(this.get('time')).fromNow() // .startOf('day')
     },
     abs () {

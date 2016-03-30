@@ -3,16 +3,16 @@
 <!-- much of this code has been borrowed from https://github.com/alexk111/ngImgCrop -->
 
 <div class="foto-crop">
-  <canvas style="display: {{cropped ? 'none' : 'block'}}"></canvas>
-  {{#if cropped}}
-    {{#if foto}}
-      <foto src="{{foto}}" shape="{{shape}}" size="{{size}}" />
+  <canvas style="display: {{~/cropped ? 'none' : 'block'}}"></canvas>
+  {{#if ~/cropped}}
+    {{#if ~/foto}}
+      <foto src="{{~/foto}}" shape="{{~/shape}}" size="{{~/size}}" />
     {{else}}
-      <img src="{{image}}" width="{{width}}" height="{{height}}" />
+      <img src="{{~/image}}" width="{{~/width}}" height="{{~/height}}" />
     {{/if}}
   {{/if}}
-  <button on-tap="done" class="{{cropped ? 'done' : ''}}">
-    {{#if cropped}}
+  <button on-tap="done" class="{{~/cropped ? 'done' : ''}}">
+    {{#if ~/cropped}}
       modify
     {{else}}
       sí, quiero esta foto
@@ -39,6 +39,8 @@ import extend from '../lib/lodash/object/assign'
 import CropHost from '../lib/crop-host'
 import isEqual from '../lib/lodash/lang/isEqual.js'
 import EventEmitter from '../lib/drip/emitter'
+
+
 component.exports = {
   isolated: true,
   define (key, val) {

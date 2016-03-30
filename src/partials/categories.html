@@ -1,42 +1,42 @@
 <link rel='ractive' href='../partials/spinner.html'>
-{{#if !movil || L.show_button}}
-<a class="categories-button {{class}}" on-tap="toggle('menu')">
-    {{#if selected}}
-      [[#if typeof L.selected === 'string']]
-        [[L.selected]]
+{{#if !~/movil || ~/L.show_button}}
+<a class="categories-button {{~/class}}" on-tap="toggle('menu')">
+    {{#if ~/selected}}
+      [[#if typeof ~/L.selected === 'string']]
+        [[~/L.selected]]
       [[else]]
         Categoría:&nbsp;
       [[/if]]
-      {{selected.title}}
+      {{~/selected.title}}
     {{else}}
-      {{L.selector || 'Categories'}}
+      {{~/L.selector || 'Categories'}}
     {{/if}}
   </a>
 {{/if}}
-  <div class="categories" style="display: {{menu ? 'block' : 'none'}}">
-    {{#if loading}}
+  <div class="categories" style="display: {{~/menu ? 'block' : 'none'}}">
+    {{#if ~/loading}}
       <spinner scale="0.2" />
-    {{/if loading}}
+    {{/if ~/loading}}
 
-    {{#if error}}
-      ERROR: {{error}}
-    {{/if error}}
+    {{#if ~/error}}
+      ERROR: {{~/error}}
+    {{/if ~/error}}
 
-    {{#if categories}}
-      {{#if L.unselect && selected}}
-        <div class="category" on-tap="clear" style="color: #f55">{{L.unselect}}</div>
+    {{#if ~/categories}}
+      {{#if ~/L.unselect && ~/selected}}
+        <div class="category" on-tap="clear" style="color: #f55">{{~/L.unselect}}</div>
       {{/if}}
       <div class="categories-left">
-        {{#each l1}}
-          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
-        {{/each l1}}
+        {{#each ~/l1}}
+          <div class="category" on-tap="activate(event, ~/alwaysShow)">{{.title}}</div>
+        {{/each ~/l1}}
       </div>
       <div class="categories-right">
-        {{#each l2}}
-          <div class="category" on-tap="activate(event, alwaysShow)">{{.title}}</div>
-        {{/each l2}}
+        {{#each ~/l2}}
+          <div class="category" on-tap="activate(event, ~/alwaysShow)">{{.title}}</div>
+        {{/each ~/l2}}
       </div>
-    {{/if categories}}
+    {{/if ~/categories}}
   </div>
 
 
@@ -138,10 +138,12 @@ component.exports = {
       let len = Math.round(list.length / 2)
       let l1 = list.slice(0, len)
       let l2 = list.slice(len)
-      this.set('categories', list)
-      this.set('l1', l1)
-      this.set('l2', l2)
-      this.set('loading', false)
+      this.set({
+        categories: list,
+        l1: l1,
+        l2: l2,
+        loading: false,
+      })
     })
     this.on('clear', () => {
       this.activate({context: null}, this.get('alwaysShow'))
@@ -155,8 +157,10 @@ component.exports = {
   activate (event, menu) {
     // this.set('selected', event.context)
     this.fire('select', event.context)
-    this.set('selected', event.context)
-    this.set('menu', menu || false)
+    this.set({
+      selected: event.context,
+      menu: menu || false,
+    })
   },
   onteardown () {
     this.parent.off('set-category', this.onsetCategory)

@@ -1,10 +1,10 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/foto-crop.html'>
 
-<div class="foto-upload col-{{size}}">
-  {{#if uploaded && cropping}}
-    {{#each uploaded : i}}
-      <foto-crop src="{{.}}" area-type="{{shape}}" rect="{{rect[i]}}" foto="{{cropped[i]}}" />
+<div class="foto-upload col-{{~/size}}">
+  {{#if ~/uploaded && ~/cropping}}
+    {{#each ~/uploaded : i}}
+      <foto-crop src="{{.}}" area-type="{{~/shape}}" rect="{{~/rect[i]}}" foto="{{~/cropped[i]}}" />
       <div class="cancel" on-tap="delete-foto" decorator="tip:'Eliminar',28">
         <!-- <i class="fa fa-ellipsis-h"></i> -->
         <i class="fa fa-close" ></i>
@@ -12,17 +12,17 @@
     {{/each}}
   {{else}}
     <div class="dropzone-area dz-message">
-      [[#if icon]]
+      [[#if ~/icon]]
         <img src="/img/icon-foto.svg" width="40" height="40" />
         <!-- <i class="fa fa-[[icon]]"></i> -->
       [[/if]]
-      [[#if L.message]]
-        <div class="message">[[L.message]]</div>
+      [[#if ~/L.message]]
+        <div class="message">[[~/L.message]]</div>
       [[/if]]
-      {{#if progress}}
+      {{#if ~/progress}}
         <div class="uploading">
-          <div class="uploading-bar" style="width: {{progress.percent}}%" />
-          <div class="uploading-progress">{{progress.bytes}} / {{progress.total}}</div>
+          <div class="uploading-bar" style="width: {{~/progress.percent}}%" />
+          <div class="uploading-progress">{{~/progress.bytes}} / {{~/progress.total}}</div>
         </div>
       {{/if}}
     </div>

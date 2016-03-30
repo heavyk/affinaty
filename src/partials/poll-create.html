@@ -6,35 +6,35 @@
   <div class="row">
     <div class="col-xs-6">
       <div class="row">
-        <categories L="{selector:'Seleccione una categoría', selected: ''}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" />
+        <categories L="{selector:'Seleccione una categoría', selected: ''}" on-select="category" class="{{~/errors.d.category ? 'invalid' : ''}}" />
       </div>
-      <div class="row {{errors.d.tag ? 'invalid' : ''}}">
-        <tag-completer selected="{{tags}}" />
+      <div class="row {{~/errors.d.tag ? 'invalid' : ''}}">
+        <tag-completer selected="{{~/tags}}" />
       </div>
       <div class="row">
         <textarea
           placeholder="Escribe texto de tu encuesta..."
           name="text"
           maxlength="2048"
-          value="{{d.text}}"
-          class="{{errors.d.text ? 'invalid' : ''}}">
+          value="{{~/d.text}}"
+          class="{{~/errors.d.text ? 'invalid' : ''}}">
         </textarea>
       </div>
-      <div class="row {{errors.d.options ? 'invalid' : ''}}">
-        {{#each d.options : i}}
+      <div class="row {{~/errors.d.options ? 'invalid' : ''}}">
+        {{#each ~/d.options : i}}
         <div class="row">
           <div class="text-option col-xs-10">
-            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{text}}" />
+            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{~/text}}" />
           </div>
 
-          <div class="remove-option col-xs-2 {{#if d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
+          <div class="remove-option col-xs-2 {{#if ~/d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
             <i class="fa fa-minus"></i>
           </div>
 
         </div>
         {{/each}}
       </div>
-      <div class="row" style="display:{{d.options.length < 5 ? 'block' : 'none'}}">
+      <div class="row" style="display:{{~/d.options.length < 5 ? 'block' : 'none'}}">
         <div class="new-poll">
           <div class="text-option col-xs-10">
             <input type="text"
@@ -42,13 +42,13 @@
               decorator="focusSelect"
               on-focus-blur="toggle('highlight')"
               placeholder="Escribe más opciones"
-              value="{{new_option.text}}"
+              value="{{~/new_option.text}}"
               on-nlSubmit="add-option"
-              class="{{errors.new_option.text ? 'invalid' : ''}}"
+              class="{{~/errors.new_option.text ? 'invalid' : ''}}"
              />
           </div>
 
-          <div class="add-option col-xs-2 {{highlight ? 'highlight' : ''}}" on-tap="add-option">
+          <div class="add-option col-xs-2 {{~/highlight ? 'highlight' : ''}}" on-tap="add-option">
             <a><i class="fa fa-plus"></i></a>
           </div>
 
@@ -62,7 +62,7 @@
     </div>
 
     <div class="col-xs-6" >
-      <foto-upload icon="camera" cropped="{{cropped}}" />
+      <foto-upload icon="camera" cropped="{{~/cropped}}" />
     </div>
   </div>
 </div>

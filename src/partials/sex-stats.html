@@ -1,33 +1,33 @@
 
-<div class="sex-stats" style="display: {{planets ? 'block' : none}}">
+<div class="sex-stats" style="display: {{~/planets ? 'block' : 'none'}}">
   <div class="sex-graph-container venus">
-    <div class="sex-graph" title="{{Math.round(percents.0)}}%">
+    <div class="sex-graph" title="{{Math.round(~/percents.0)}}%">
       <div class="percent-gauge venus">
-        <i class="fa fa-venus"></i>{{planets.0}}
+        <i class="fa fa-venus"></i>{{~/planets.0}}
       </div>
     </div>
     <h6 class="sex-stat">Mujeres</h6>
   </div>
   <div class="sex-graph-container mars">
-    <div class="sex-graph" title="{{Math.round(percents.1)}}%">
+    <div class="sex-graph" title="{{Math.round(~/percents.1)}}%">
       <div class="percent-gauge mars">
-        <i class="fa fa-mars"></i>{{planets.1}}
+        <i class="fa fa-mars"></i>{{~/planets.1}}
       </div>
     </div>
     <h6 class="sex-stat">Hombres</h6>
   </div>
-  [[#if S.moarPlanets]]
+  [[#if ~/S.moarPlanets]]
   <div class="sex-graph-container">
-    <div class="sex-graph" title="{{Math.round(percents[2])}}%">
+    <div class="sex-graph" title="{{Math.round(~/percents.2)}}%">
       <div class="percent-gauge earth">
-        <i class="fa fa-circle-thin"></i>{{planets.2}}
+        <i class="fa fa-circle-thin"></i>{{~/planets.2}}
       </div>
     </div>
   </div>
   <div class="sex-graph-container">
-    <div class="sex-graph" title="{{Math.round(percents[3])}}%">
+    <div class="sex-graph" title="{{Math.round(~/percents.3)}}%">
       <div class="percent-gauge mercury">
-        <i class="fa fa-mercury"></i>{{planets.3}}
+        <i class="fa fa-mercury"></i>{{~/planets.3}}
       </div>
     </div>
   </div>

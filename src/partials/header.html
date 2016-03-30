@@ -5,7 +5,7 @@
 <link rel='ractive' href='../partials/debate-create.html'>
 <link rel='ractive' href='../partials/poll-create.html'>
 
-{{#if !movil}}
+{{#if !~/movil}}
   <div class="header-container">
     <nav>
       {{#if ~/me}}
@@ -29,38 +29,36 @@
           </li>
         </ul>
       </li>
-      <!-- {{/if}} -->
       <li class="button">
         <a class="home" href="/home">
           <img src="/img/home.svg" width="25" height="25" />
         </a>
       </li>
-      <!-- {{#if ~/me}} -->
       <li class="button">
         <a class="notifications" href="/inbox">
           <img src="/img/inbox.svg" width="25" height="25" />
-          {{#if new_msgs}}
-            <span class="count">{{new_msgs}}</span>
+          {{#if ~/new_msgs}}
+            <span class="count">{{~/new_msgs}}</span>
           {{/if}}
         </a>
       </li>
-      <li class="button {{show_n ? 'selected' : ''}}">
+      <li class="button {{~/show_n ? 'selected' : ''}}">
         <a class="notifications" on-click="toggle('show_n')"><!-- href="/notifications" -->
           <img src="/img/notifications.svg" width="25" height="25" />
-          {{#if notifications}}
-            <span class="count">{{notifications}}</span>
+          {{#if ~/notifications}}
+            <span class="count">{{~/notifications}}</span>
           {{/if}}
         </a>
       </li>
       <li class="dropdown">
         <a class="dropdown-toggle">
-          <a href="/profile/{{me._id}}"><foto src="{{me.foto}}" size="y" /></a>
-          <span class="name">{{me.name}}</span>
+          <a href="/profile/{{~/me._id}}"><foto src="{{~/me.foto}}" size="y" /></a>
+          <span class="name">{{~/me.name}}</span>
           <i class="fa fa-caret-down"></i>
         </a>
         <ul>
           <li>
-            <a class="item-menu" href="/profile/{{me._id}}"><i class="fa fa-fw fa-user"></i>Perfil</a>
+            <a class="item-menu" href="/profile/{{~/me._id}}"><i class="fa fa-fw fa-user"></i>Perfil</a>
           </li>
           <li>
             <a class="item-menu" href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>
@@ -78,10 +76,10 @@
       <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
     </div>
     <div class="search-box search">
-      <input type="text" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: {{search_width}}px">
+      <input type="text" placeholder="Buscar publicaciones" value="{{~/text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: {{~/search_width}}px">
       <i class="fa fa-search"></i>
       <div class="submit">
-        <button type="submit" on-click="send_text" style="display: {{focused ? 'block' : 'none'}}">
+        <button type="submit" on-click="send_text" style="display: {{~/focused ? 'block' : 'none'}}">
           <i class="fa fa-arrow-right"></i>
         </button>
       </div>
@@ -89,7 +87,7 @@
     <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" />
 
     {{#if ~/me}}
-    <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+    <div class="notification-list" style="display: {{~/show_n ? 'block' : 'none'}}">
       <notification-list />
       <!-- <div class="view-all">
         <a href="/notifications">view all</a>
@@ -100,15 +98,15 @@
 {{else}}
   <!-- movil -->
   <div class="header-container-mov">
-    {{#if me}}
+    {{#if ~/me}}
       <div class="search-mov-icon" on-tap="toggle('show_search')">
-        <i class="fa fa-search"></i>&nbsp; {{category}}
+        <i class="fa fa-search"></i>&nbsp; {{~/category}}
       </div>
-      <div class="search" style="display: {{show_search ? 'block' : 'none'}}">
+      <div class="search" style="display: {{~/show_search ? 'block' : 'none'}}">
         <li class="search-text">
-          <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
+          <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{~/text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
           <div class="submit">
-            <button type="submit" on-tap="send_text" style="display: {{focused ? 'block' : 'none'}}">
+            <button type="submit" on-tap="send_text" style="display: {{~/focused ? 'block' : 'none'}}">
               <i class="fa fa-arrow-right"></i>
             </button>
           </div>
@@ -128,7 +126,7 @@
       </div>
     {{/if}}
   </div>
-  <div class="settings" style="display: {{show_settings ? 'block' : 'none'}}">
+  <div class="settings" style="display: {{~/show_settings ? 'block' : 'none'}}">
     <ul>
       <li>
         <a href="/settings"><i class="fa fa-fw fa-cog"></i>Ajustes</a>

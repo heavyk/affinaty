@@ -6,33 +6,33 @@
 <div class="container">
   <div class="row">
     <div class='expandable'>
-      {{#if showDetail}}
-        <div class='detail' style="display: {{showDetail ? '' : 'none'}}">
-          <debate-stats debate="{{id}}"></debate-stats>
+      {{#if ~/showDetail}}
+        <div class='detail' style="display: {{~/showDetail ? '' : 'none'}}">
+          <debate-stats debate="{{~/id}}"></debate-stats>
           <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
         </div>
       {{/if}}
     </div>
 
-    <div class="{{movil ? '' : 'col-xs-6 col-md-7 col-sm-6'}}">
-      {{#if loading}}
+    <div class="{{~/movil ? '' : 'col-xs-6 col-md-7 col-sm-6'}}">
+      {{#if ~/loading}}
         <spinner />
-      {{/if loading}}
+      {{/if ~/loading}}
 
-      {{#if error}}
-        ERROR: {{error}}
-      {{/if error}}
+      {{#if ~/error}}
+        ERROR: {{~/error}}
+      {{/if ~/error}}
 
-      {{#if debate}}
-        <debate-sm id="{{id}}" d="{{debate}}" />
-      {{/if debate}}
-      <comment-list debate="{{id}}"></comment-list>
+      {{#if ~/debate}}
+        <debate-sm id="{{~/id}}" d="{{~/debate}}" />
+      {{/if ~/debate}}
+      <comment-list debate="{{~/id}}"></comment-list>
     </div>
-    {{#if !movil}}
+    {{#unless ~/movil}}
     <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
-      <debate-stats debate="{{id}}"></debate-stats>
+      <debate-stats debate="{{~/id}}"></debate-stats>
     </div>
-    {{/if}}
+    {{/unless}}
   </div>
 </div>
 

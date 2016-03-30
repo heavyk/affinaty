@@ -28,7 +28,7 @@
         </div>
       </form>
     </div>
-    <div class="list-container" style="height: {{height}}px">
+    <div class="list-container" style="height: {{~/height}}px">
       <div class="gm-scrollbar -vertical">
         <div class="thumb"></div>
       </div>
@@ -36,10 +36,10 @@
         <div class="thumb"></div>
       </div>
       <div class="gm-scroll-view">
-        {{#if loading}}
+        {{#if ~/loading}}
           loading...
         {{else}}
-          {{#list}}
+          {{#each ~/list}}
             <div class="comment">
               <div class="header">
                 <span class="user">
@@ -56,11 +56,10 @@
                   </div>
                 {{/if}}
               </div>
-              <div class="comment-body" decorator="markdown:{{text}}">
-              </div>
+              <div class="comment-body" decorator="markdown:{{.text}}"></div>
             </div>
-          {{/list}}
-        {{/if loading}}
+          {{/each ~/list}}
+        {{/if ~/loading}}
       </div>
     </div>
   </div>

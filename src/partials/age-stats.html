@@ -1,12 +1,12 @@
 
 <div class="age-graph">
   <ul class="legend">
-    {{#each legend}}
+    {{#each ~/legend}}
       <li>
-        <span style="background-color: {{color}}"></span>
+        <span style="background-color: {{.color}}"></span>
         {{.label}}: {{.value}}
       </li>
-    {{/each legend}}
+    {{/each ~/legend}}
   </ul>
   <canvas width="200" height="200"></canvas>
 </div>

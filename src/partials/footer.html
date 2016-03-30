@@ -1,25 +1,25 @@
 <link rel='ractive' href='../partials/debate-create.html'>
 <link rel='ractive' href='../partials/poll-create.html'>
 
-<div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
+<div class="footer-bar" style="display: {{~/active === 'landing' ? 'none' : ''}}">
   <!-- HOME -->
-  <div class="footer-item {{active === 'home' ? 'active' : ''}}">
+  <div class="footer-item {{~/active === 'home' ? 'active' : ''}}">
     <a class="home" href="/home">
       <img src="/img/home-grey.svg" width="42" height="42" />
     </a>
   </div>
   <!-- NOTIFICACIONES -->
-  <div class="footer-item {{active === 'notifications' ? 'active' : ''}}">
-    <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
+  <div class="footer-item {{~/active === 'notifications' ? 'active' : ''}}">
+    <li class="button-head-noti-mov {{~/show_n ? 'selected' : ''}}">
       <!-- <a class="notifications" on-tap="toggle('show_n')"> -->
       <a class="notifications" href="/notifications">
         <img src="/img/notifications-grey.svg" width="42" height="42" />
-        {{#if notifications}}
-          <span class="count">{{notifications}}</span>
+        {{#if ~/notifications}}
+          <span class="count">{{~/notifications}}</span>
         {{/if}}
       </a>
     </li>
-    <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+    <div class="notification-list" style="display: {{~/show_n ? 'block' : 'none'}}">
       <notification-list />
     </div>
   </div>
@@ -30,22 +30,22 @@
     </div>
   </div>
   <!-- MENSAJES -->
-  <div class="footer-item {{active === 'inbox' ? 'active' : ''}}">
+  <div class="footer-item {{~/active === 'inbox' ? 'active' : ''}}">
       <a class="notifications" href="/inbox">
         <img src="/img/inbox-grey.svg" width="42" height="42" />
-        {{#if new_msgs}}
-          <span class="count">{{new_msgs}}</span>
+        {{#if ~/new_msgs}}
+          <span class="count">{{~/new_msgs}}</span>
         {{/if}}
       </a>
   </div>
   <!-- PERFIL -->
-  <div class="footer-item {{active === 'profile' ? 'active' : ''}}">
-    <a href="/profile/{{me._id}}">
+  <div class="footer-item {{~/active === 'profile' ? 'active' : ''}}">
+    <a href="/profile/{{~/me._id}}">
       <img src="/img/profile-grey.svg" width="42" height="42" />
     </a>
   </div>
 </div>
-<div class="opina" style="display: {{show_opina ? 'block' : 'none'}}">
+<div class="opina" style="display: {{~/show_opina ? 'block' : 'none'}}">
   <div class="opin-left" on-tap="toggle('show_opina')">
     <a on-tap="modal('debate-create', {title: 'da tu opinión'})">
       <img src="/img/opinion.svg" width="150" height="150" class="opin" />

@@ -7,67 +7,67 @@
 
 <div class="container-profile">
 
-  <div class="profile" style="display: {{mine && (active === 'follows'|| active === 'following')  ? 'none' : 'block'}}">
+  <div class="profile" style="display: {{~/mine && (~/active === 'follows'|| ~/active === 'following')  ? 'none' : 'block'}}">
     <div class="cover">
-      <!-- <foto src="{{foto}}"  /> -->
+      <!-- <foto src="{{~/foto}}"  /> -->
     </div>
     <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
-      {{#if loading}}
+      {{#if ~/loading}}
         <spinner />
       {{else}}
-        <foto src="{{foto}}" size="a" />
-      {{/if loading}}
+        <foto src="{{~/foto}}" size="a" />
+      {{/if ~/loading}}
     </div>
     <div class="name">
-      <h2>{{name}}</h2>
+      <h2>{{~/name}}</h2>
     </div>
     <div class="title">
-      <h3>{{title}}</h3>
+      <h3>{{~/title}}</h3>
     </div>
-    {{#if networks}}
+    {{#if ~/networks}}
       <div class="networks">
-        {{#if networks.blog}}
+        {{#if ~/networks.blog}}
         <div class="net-blog">
-          <a href="{{networks.blog}}" target="blog">
+          <a href="{{~/networks.blog}}" target="blog">
             <i class="fa fa-pencil" /> blog
           </a>
         </div>
-        {{/if networks.blog}}
+        {{/if ~/networks.blog}}
 
-        {{#if networks.github}}
+        {{#if ~/networks.github}}
         <div class="net-github">
-          <a href="{{networks.github}}" target="github">
+          <a href="{{~/networks.github}}" target="github">
             <i class="fa fa-github" /> GitHub
           </a>
         </div>
-        {{/if networks.github}}
+        {{/if ~/networks.github}}
 
-        {{#if networks.twitter}}
+        {{#if ~/networks.twitter}}
         <div class="net-twitter">
-          <a href="{{networks.twitter}}" target="twitter">
+          <a href="{{~/networks.twitter}}" target="twitter">
             <i class="fa fa-twitter" /> Twitter
           </a>
         </div>
-        {{/if networks.twitter}}
+        {{/if ~/networks.twitter}}
 
-        {{#if networks.facebook}}
+        {{#if ~/networks.facebook}}
         <div class="net-facebook">
-          <a href="{{networks.facebook}}" target="facebook">
+          <a href="{{~/networks.facebook}}" target="facebook">
             <i class="fa fa-facebook" /> Facebook
           </a>
         </div>
-        {{/if networks.facebook}}
+        {{/if ~/networks.facebook}}
 
-        {{#if networks.youtube}}
+        {{#if ~/networks.youtube}}
         <div class="net-youtube">
-          <a href="{{networks.youtube}}" target="youtube">
+          <a href="{{~/networks.youtube}}" target="youtube">
             <i class="fa fa-youtube" /> YouTube
           </a>
         </div>
-        {{/if networks.youtube}}
+        {{/if ~/networks.youtube}}
       </div>
-    {{/if networks}}
-    {{#if mine}}
+    {{/if ~/networks}}
+    {{#if ~/mine}}
       <a class="message" href="/settings">
         <div class="message-inner">
           <i class="fa fa-pencil-square-o" />
@@ -79,13 +79,13 @@
     {{else}}
       <div class="follow" on-tap="follow">
         <div class="follow-inner">
-          {{#if !following}}
+          {{#if !~/following}}
             <img src="/img/follow.svg" title="follow" width="40" height="40" />
           {{else}}
             <img src="/img/unfollow.svg" title="unfollow" width="40" height="40" />
           {{/if}}
           <div class="follow-text">
-            {{#if following}}
+            {{#if ~/following}}
               No Seguir
             {{else}}
               Seguir
@@ -103,30 +103,30 @@
       </div>
 
 
-      <div class="affinaty {{floating ? 'floating' : ''}}">
-        {{#if floating}}
+      <div class="affinaty {{~/floating ? 'floating' : ''}}">
+        {{#if ~/floating}}
         <div class="affinaty-left">
-          <foto src="{{foto}}" size="z" class="me" />
-          <div class="name-profile">{{name}}</div>
-          <span class="affin-neg" style="display: {{movil ? 'none' : ''}}">- affin</span>
+          <foto src="{{~/foto}}" size="z" class="me" />
+          <div class="name-profile">{{~/name}}</div>
+          <span class="affin-neg" style="display: {{~/movil ? 'none' : ''}}">- affin</span>
           <span class="affin-gradient-left"></span>
           <span class="affin-gradient">
             <div class="gradient-pos" style="">
-              <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+              <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
                 <i class="fa fa-circle"></i>
               </span>
-              <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
-                {{Math.round(affinaty_percent)}}%
+              <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
+                {{Math.round(~/affinaty_percent)}}%
               </span>
             </div>
           </span>
           <span class="affin-gradient-right"></span>
-          <span class="affin-pos" style="display: {{movil ? 'none' : ''}}">+ affin</span>
+          <span class="affin-pos" style="display: {{~/movil ? 'none' : ''}}">+ affin</span>
 
-          <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
+          <div class="affinaty-right" style="right: {{~/movil ? '-44px' : ''}}">
             <div class="follow floating" on-tap="follow">
               <div class="follow-inner">
-                {{#if !following}}
+                {{#if !~/following}}
                   <img src="/img/follow.svg" title="follow" width="30" height="30" />
                 {{else}}
                   <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
@@ -146,62 +146,62 @@
         <span class="affin-gradient-left"></span>
         <span class="affin-gradient">
           <div class="gradient-pos" style="">
-            <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+            <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
               <i class="fa fa-circle"></i>
             </span>
-            <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
-              {{Math.round(affinaty_percent)}}%
+            <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
+              {{Math.round(~/affinaty_percent)}}%
             </span>
           </div>
         </span>
         <span class="affin-gradient-right"></span>
         <span class="affin-pos">+ affin</span>
-      {{/if floating}}
+      {{/if ~/floating}}
     </div>
-    {{/if me}}
+    {{/if ~/me}}
   </div>
 
   <subheader>
     <div class="row">
       <div class="col-xs-2" style="margin-left: 16.666666%">
-        <a href="/profile/{{id}}/debates" class="{{active === 'debates' ? 'active' : ''}}">
+        <a href="/profile/{{~/id}}/debates" class="{{~/active === 'debates' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-list"></i></div>
           Publicaciones
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/profile/{{id}}/opinions" class="{{active === 'opinions' ? 'active' : ''}}">
+        <a href="/profile/{{~/id}}/opinions" class="{{~/active === 'opinions' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-comment-o"></i></div>
           Opiniones
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/profile/{{id}}/follows" class="{{active === 'follows' ? 'active' : ''}}">
+        <a href="/profile/{{~/id}}/follows" class="{{~/active === 'follows' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-user"></i></div>
           Siguiendo{{#if numFollows}} ({{numFollows}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/profile/{{id}}/following" class="{{active === 'following' ? 'active' : '' }}">
+        <a href="/profile/{{~/id}}/following" class="{{~/active === 'following' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-user"></i></div>
-          Seguidores{{#if numFollowing}} ({{numFollowing}}){{/if}}
+          Seguidores{{#if ~/numFollowing}} ({{~/numFollowing}}){{/if}}
         </a>
       </div>
     </div>
   </subheader>
   <div class="lists">
-    {{#if active === 'debates'}}
-      <debate-list creator="{{id}}" />
+    {{#if ~/active === 'debates'}}
+      <debate-list creator="{{~/id}}" />
     {{/if}}
-    {{#if active === 'opinions'}}
-      <debate-list opinions="{{id}}" />
-      <!-- <opinion-breakdown creator="{{id}}" /> -->
+    {{#if ~/active === 'opinions'}}
+      <debate-list opinions="{{~/id}}" />
+      <!-- <opinion-breakdown creator="{{~/id}}" /> -->
     {{/if}}
-    {{#if active === 'follows'}}
-      <relation-list follows="{{id}}" />
+    {{#if ~/active === 'follows'}}
+      <relation-list follows="{{~/id}}" />
     {{/if}}
-    {{#if active === 'following'}}
-      <relation-list following="{{id}}" />
+    {{#if ~/active === 'following'}}
+      <relation-list following="{{~/id}}" />
     {{/if}}
   </div>
 </div>
