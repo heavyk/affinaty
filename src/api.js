@@ -114,7 +114,7 @@ let Api = Ractive.extend({
     window.localStorage.removeItem(this._token)
     this.local.removeItem('me')
     this.set('me', null)
-    if (redirect) router.dispatch('/')
+    // if (redirect) router.dispatch('/')
     this.set('authenticated', false)
     this.yo = null
     this.fire('deauth')
@@ -128,10 +128,10 @@ let Api = Ractive.extend({
       }
     }
     console.log('action:', action, _params)
-    if (!this.token)
+    if (this.token)
       // TODO - instead of redirecting to the login page, we should just show a login modal
-      this.signOut(true)
-    else
+    //   this.signOut(true)
+    // else
       _params.token = this.token
 
     return new Ractive.Promise((_resolve, _reject) => {
@@ -147,10 +147,6 @@ let Api = Ractive.extend({
         setTimeout(() => {
           console.log('response:', action, _params, res)
           if (res.error) {
-            if (~res.error.indexOf('you should sign-in')) {
-              if (router.uri.path !== '/') router.redirect('/')
-              return
-            }
             console.error(action, res.error)
             // TODO: log errors and send them to the server
             if (reject) reject(res.error)

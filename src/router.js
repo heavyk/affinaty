@@ -39,10 +39,10 @@ let router = new Router({ el: 'view' }, function (request) {
   console.log('??', request)
 }, function (path, options) {
   console.log('::', path)
-  if (path === '/' && api.me)
-    return router.dispatch('/home')
-  if (path !== '/' && !api.me)
-    return router.dispatch('/')
+  // if (path === '/' && api.me)
+  //   return router.dispatch('/home')
+  // if (path !== '/' && !api.me)
+  //   return router.dispatch('/')
 })
 
 // implement enter / leave
@@ -50,8 +50,8 @@ let router = new Router({ el: 'view' }, function (request) {
 // probably want to do it as a static method on the component
 
 // landing page
-router.addRoute('/', landing)
-// router.addRoute('/', listing)
+// router.addRoute('/', landing)
+router.addRoute('/', listing)
 // listing (of posts)
 router.addRoute('/home', listing)
 router.addRoute('/mis-top', listing)
@@ -118,10 +118,12 @@ setTimeout(function () {
         //   console.log('something about me changed')
       } else {
         if (_me) api.signOut(true)
+        // else
+        //   console.log("I'm still no one")
       }
     })
   } else {
-    api.signOut(true)
+    // api.signOut(true)
     router.init()
   }
 }, 1)
