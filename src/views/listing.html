@@ -7,7 +7,7 @@
 <link rel='ractive' href='../partials/poll-create.html'>
 
 {{#if !~/movil}}
-  <div class="left-column" style="width: {{leftWidth}}px">
+  <div class="left-column" style="width: {{~/leftWidth}}px">
     {{#if ~/panel !== 'mis-top'}}
       <div class="pop-tag-container-outer" style="width: {{~/leftWidth - 10}}px">
         <div class="pop-tag-container">
@@ -202,6 +202,7 @@ import debounce from '../lib/lodash/function/debounce'
 import onresize from '../lib/dom/element-onresize'
 
 component.exports = {
+  isolated: true,
   onconfig () {
     this.set('movil', window.isMobile)
     this.on('dispatch', () => {

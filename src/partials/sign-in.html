@@ -5,11 +5,11 @@
   <img class="logo" src="/img/landing.svg" />
   <form on-submit="submit">
     <div class="form">
-      <input type="email" value="{{email}}" placeholder="Correo Electrónico">
-      <input type="password" value="{{password}}" placeholder="Contraseña">
+      <input type="email" value="{{~/email}}" placeholder="Correo Electrónico">
+      <input type="password" value="{{~/password}}" placeholder="Contraseña">
       <div class="remember-container">
         <span class="remember-check" on-tap="toggle('remember')">
-          <i class="fa {{remember ? 'fa-check' : ''}}" />
+          <i class="fa {{~/remember ? 'fa-check' : ''}}" />
         </span>
         <span class="remember-text" on-tap="toggle('remember')">
           Recuérdame
@@ -19,9 +19,9 @@
         </div>
       </div>
       <div class="submit">
-        {{#error}}
-          <span class="error">{{error}}</span>
-        {{/error}}
+        {{#if ~/error}}
+          <span class="error">{{~/error}}</span>
+        {{/if ~/error}}
         <button type="submit" class="enter">
           Entrar
         </button>

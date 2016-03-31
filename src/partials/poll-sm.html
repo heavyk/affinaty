@@ -23,7 +23,7 @@
           {{#each ~/d.options : i}}
           <button
             class="bar-bg"
-            style="width: {{ bar(i, 52) }}px; margin: 0 0 {{margin}}px 0; padding: {{padding}}px"
+            style="width: {{ bar(i, 52) }}px; margin: 0 0 {{ ~/margin }}px 0; padding: {{ ~/padding }}px"
             title="{{ bar_txt(i) }}">
           </button>
           {{/each}}
@@ -31,8 +31,8 @@
       </div>
 
       <div class="total">
-        {{#if limits.sum}}
-          {{limits.sum}} votos
+        {{#if ~/limits.sum}}
+          {{~/limits.sum}} votos
         {{else}}
           sin votos
         {{/if}}
@@ -40,37 +40,37 @@
     </a>
   </div>
 
-  {{#if d.tag}}
+  {{#if ~/d.tag}}
   <div class="heading">
     <p class="tags">
-      {{#d.tag}}
-        <a class="tag" href="/tag/{{_id}}">#{{title}}</a>[[' ']]
-      {{/d.tag}}
+      {{#each ~/d.tag}}
+        <a class="tag" href="/tag/{{ ._id }}">#{{ .title }}</a>[[' ']]
+      {{/each ~/d.tag}}
     </p>
   </div>
   {{/if d.tag}}
 
-  {{#if view === 'list'}}
+  {{#if ~/view === 'list'}}
     <div class="text">
-      <a href="/poll/{{~/d._id}}" class="text list-text" decorator="markdown:{{~/d.text}}"></a>
+      <a href="/poll/{{ ~/d._id }}" class="text list-text" decorator="markdown:{{ ~/d.text }}"></a>
     </div>
-    {{#if read_more}}
-      <a href="/poll/{{~/d._id}}" class="read-more">leer más</a>
-    {{/if read_more}}
+    {{#if ~/read_more}}
+      <a href="/poll/{{ ~/d._id }}" class="read-more">leer más</a>
+    {{/if ~/read_more}}
   {{else}}
     <div class="text" decorator="markdown:{{~/d.text}}" />
   {{/if}}
 
   <h6>¿Qué opinas?</h6>
-  <selection-sm d="{{d}}" />
+  <selection-sm d="{{ ~/d }}" />
 
-  {{#if d.foto}}
+  {{#if ~/d.foto}}
     <p class="foto" on-tap="modal('foto', {title: ~/d.text, src: ~/d.foto, size: 'm', shape: 'sq'})">
       <foto src="{{~/d.foto}}" size="t" shape="sq" />
     </p>
-  {{/if d.foto}}
+  {{/if ~/d.foto}}
 
-  <social-sm d="{{d}}" />
+  <social-sm d="{{ ~/d }}" />
 </div>
 
 <style>

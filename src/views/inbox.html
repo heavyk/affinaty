@@ -5,24 +5,24 @@
 <div>
 
   <!-- left column -->
-  <div style="width: {{leftWidth}}" class="col-left">
-    <div class="threads" style="height: {{outerHeight}}px;">
+  <div style="width: {{~/leftWidth}}" class="col-left">
+    <div class="threads" style="height: {{~/outerHeight}}px;">
       <h4>Mensajería</h4>
       <div>
-        <!-- <input type="text" value="{{search}}" placeholder="Busca para enviar mensaje" /> -->
-        <div on-tap="activate('settings')" class="settings {{panel === 'settings' ? 'active' : ''}}">
+        <!-- <input type="text" value="{{~/search}}" placeholder="Busca para enviar mensaje" /> -->
+        <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
           <i class="fa fa-toggle-on"></i>
           Preferencias
         </div>
-        <div on-tap="activate('encounter')" class="encounter {{panel === 'encounter' ? 'active' : ''}}">
+        <div on-tap="activate('encounter')" class="encounter {{~/panel === 'encounter' ? 'active' : ''}}">
           <i class="fa fa-users"></i>
           Buscador
         </div>
-        {{#each threads}}
+        {{#each ~/threads}}
           {{#if .messages > 0}}
-            <div on-tap="activate('thread', ._id)" class="thread {{panel === 'thread' && mbox === _id ? 'active' : ''}}">
-              <foto src="{{members.0.foto}}" size="y" />
-              <span class="name">{{members.0.name}}</span>
+            <div on-tap="activate('thread', ._id)" class="thread {{~/panel === 'thread' && mbox === _id ? 'active' : ''}}">
+              <foto src="{{~/members.0.foto}}" size="y" />
+              <span class="name">{{~/members.0.name}}</span>
               {{#if .nm}}
                 <span class="new-msg">{{.nm}}</span>
               {{/if}}
@@ -30,15 +30,15 @@
           {{/if .messages > 0}}
         {{else}}
         no threads
-        {{/each threads}}
+        {{/each ~/threads}}
       </div>
     </div>
   </div>
 
   <!-- right column -->
-  <div style="width: {{rightWidth}};left: {{floatleft}}" class="col-right">
+  <div style="width: {{~/rightWidth}};left: {{~/floatleft}}" class="col-right">
     <!-- settings page -->
-    {{#if panel === 'settings'}}
+    {{#if ~/panel === 'settings'}}
     <div class="messages summary">
       <h3>Preferencias <span class="not-yet">(Función aún no activa)</span></h3>
       <div>Con los filtros de control podrás:</div>
@@ -52,18 +52,18 @@
     {{/if}}
 
     <!-- thread view -->
-    {{#if panel === 'thread'}}
-    <chat members={{members}} />
+    {{#if ~/panel === 'thread'}}
+    <chat members={{~/members}} />
     {{/if}}
 
-    {{#if !panel || panel === 'encounter'}}
+    {{#if !~/panel || ~/panel === 'encounter'}}
     <div class="messages summary">
       <h3>Buscador</h3>
       <div class="search">
         <div class="txt_search">
           <input
             type="text"
-            value="{{search_name}}"
+            value="{{~/search_name}}"
             placeholder="busca una por su nombre"
             on-nlSubmit="search"
             on-keyup="keyup"
@@ -76,7 +76,7 @@
         </div>
       </div>
       <div class="results">
-        {{#if search_results.length === 0}}
+        {{#if ~/search_results.length === 0}}
         <div>No hay resultados</div>
         {{/if}}
 
@@ -87,7 +87,7 @@
           <div class="thumb"></div>
         </div>
         <div class="gm-scroll-view">
-          {{#if loading}}
+          {{#if ~/loading}}
             <spinner scale="0.2" />
           {{else}}
             {{#each ~/search_results}}
@@ -107,10 +107,8 @@
                   </div>
                 </div>
               </div>
-            {{else}}
-
             {{/each}}
-          {{/if loading}}
+          {{/if ~/loading}}
         </div>
       </div>
     </div>
@@ -333,6 +331,7 @@ import each from '../lib/lodash/collection/each'
 import onresize from '../lib/dom/element-onresize'
 
 component.exports = {
+  isolated: true,
   // modal: require('../modal'),
   oninit () {
     this.on('send_text', (event) => {

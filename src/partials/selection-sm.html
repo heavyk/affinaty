@@ -2,8 +2,8 @@
 <link rel='ractive' href='../partials/sign-in.html'>
 
 <div class="options">
-  {{#each d.options : i}}
-  <button class="option {{d.idx == null ? 'unselected' : d.idx === i ? 'selected' : ''}}" on-tap="selection(i)">
+  {{#each ~/d.options : i}}
+  <button class="option {{~/d.idx == null ? 'unselected' : ~/d.idx === i ? 'selected' : ''}}" on-tap="selection(i)">
     {{.text}}
   </button>
   {{/each}}

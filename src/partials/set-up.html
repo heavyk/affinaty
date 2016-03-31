@@ -2,31 +2,31 @@
 <link rel='ractive' href='../partials/foto-upload.html'>
 <link rel='ractive' href='../partials/date-select.html'>
 
-<div class="{{prevote ? 'square' : 'rectangle'}} container">
-  {{#if prevote}}
+<div class="{{~/prevote ? 'square' : 'rectangle'}} container">
+  {{#if ~/prevote}}
   <div class="notice">
     Para que funcionen bien las estadisticas, necesitamos que rellenes los datos indicados antes de opinar.
   </div>
   {{/if}}
   <form on-submit="submit">
 
-    <div class="{{prevote ? '' : 'left-column'}}">
+    <div class="{{~/prevote ? '' : 'left-column'}}">
 
       <div class="field localization">
         <div class="left-column">
-          <select value="{{me.c}}" class="{{errors.me.c ? 'invalid' : ''}}">
+          <select value="{{~/me.c}}" class="{{~/errors.me.c ? 'invalid' : ''}}">
             <option value="ES">España</option>
-            {{#each countries}}
-            <option value="{{short}}">{{name}}</option>
+            {{#each ~/countries}}
+            <option value="{{.short}}">{{.name}}</option>
             {{/each}}
           </select>
         </div>
-        {{#if provinces}}
+        {{#if ~/provinces}}
         <div class="col-right">
-          <select value="{{me.p}}" class="{{errors.me.p ? 'invalid' : ''}}">
+          <select value="{{~/me.p}}" class="{{~/errors.me.p ? 'invalid' : ''}}">
             <option value="">Provincia</option>
-            {{#each provinces}}
-            <option value="{{short}}">{{name}}</option>
+            {{#each ~/provinces}}
+            <option value="{{.short}}">{{.name}}</option>
             {{/each}}
           </select>
         </div>
@@ -34,20 +34,20 @@
       </div>
 
       <div class="field planet">
-        <div class="left-column {{errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 0)">
-          <input type="radio" name="{{me.planet}}" value="0"> Mujer
+        <div class="left-column {{~/errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 0)">
+          <input type="radio" name="{{~/me.planet}}" value="0"> Mujer
         </div>
-        <div class="col-right {{errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 1)">
-          <input type="radio" name="{{me.planet}}" value="1"> Hombre
+        <div class="col-right {{~/errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 1)">
+          <input type="radio" name="{{~/me.planet}}" value="1"> Hombre
         </div>
       </div>
 
-      <div class="field birthdate {{errors.me.birthdate ? 'invalid' : ''}}">
-        <date-select value="{{me.birthdate}}" />
+      <div class="field birthdate {{~/errors.me.birthdate ? 'invalid' : ''}}">
+        <date-select value="{{~/me.birthdate}}" />
       </div>
 
       <button on-tap="change-appearance" class="button-sign-up">
-        {{#if prevote}}
+        {{#if ~/prevote}}
         Votar
         {{else}}
         Vente y opina <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
@@ -57,13 +57,13 @@
     </div>
 
     <!-- right column -->
-    <div class="col-right" style="display: {{prevote ? 'none' : 'block'}}">
-      <div class="foto {{errors.me.foto ? 'invalid' : ''}}">
+    <div class="col-right" style="display: {{~/prevote ? 'none' : 'block'}}">
+      <div class="foto {{~/errors.me.foto ? 'invalid' : ''}}">
         <!-- Sí, quiero esta foto -->
-        {{#if change_foto}}
-        <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{cropped}}" />
+        {{#if ~/change_foto}}
+        <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{~/cropped}}" />
         {{else}}
-        <foto src="{{me.foto}}" size="t" />
+        <foto src="{{~/me.foto}}" size="t" />
         {{/if}}
       </div>
     </div>

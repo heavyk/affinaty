@@ -6,27 +6,28 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-6">
-      {{#if loading}}
+      {{#if ~/loading}}
         <spinner />
-      {{/if loading}}
+      {{/if ~/loading}}
 
-      {{#if error}}
+      {{#if ~/error}}
         ERROR: {{error}}
-      {{/if error}}
+      {{/if ~/error}}
 
-      {{#if poll}}
-        <poll-sm id="{{_id}}" d={{poll}} />
-      {{/if poll}}
-      <comment-list poll="{{id}}"></comment-list>
+      {{#if ~/poll}}
+        <poll-sm id="{{~/_id}}" d={{~/poll}} />
+      {{/if ~/poll}}
+      <comment-list poll="{{~/id}}" />
     </div>
     <div class="col-xs-6">
-      <poll-stats poll="{{id}}" idx="{{poll.idx}}" totals="{{poll.totals}}"></poll-stats>
+      <poll-stats poll="{{~/id}}" idx="{{~/poll.idx}}" totals="{{~/poll.totals}}" />
     </div>
   </div>
 </div>
 
 <script>
 component.exports = {
+  isolated: true,
   oninit: function () {
     this.set('loading', true)
     api.action('poll', {_id: this.get('id')}, (data) => {

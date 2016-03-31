@@ -11,7 +11,7 @@
     <div class="cover">
       <!-- <foto src="{{~/foto}}"  /> -->
     </div>
-    <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
+    <div class="center-foto" on-tap="modal('foto', {title: ~/name, src: ~/foto, size: 'm', shape: 'sq'})">
       {{#if ~/loading}}
         <spinner />
       {{else}}
@@ -178,7 +178,7 @@
       <div class="col-xs-2">
         <a href="/profile/{{~/id}}/follows" class="{{~/active === 'follows' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-user"></i></div>
-          Siguiendo{{#if numFollows}} ({{numFollows}}){{/if}}
+          Siguiendo{{#if ~/numFollows}} ({{~/numFollows}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
@@ -592,6 +592,7 @@ import assign from '../lib/lodash/object/assign'
 import debounce from '../lib/lodash/function/debounce'
 import opinion_ from '../api/opinion'
 component.exports = {
+  isolated: true,
   modal: require('../modal'),
   oninit () {
     this.set('movil', window.isMobile)
@@ -603,7 +604,7 @@ component.exports = {
       // if (api.me && api.me._id === id && false) {
       //   this.set(assign({ mine: true, }, api.me))
       // } else {
-        this.set({ mine: api.me._id === id, loading: true })
+        this.set({ mine: api.yo === id, loading: true })
         this.opinion = new opinion_(id)
         this.opinion.until('/', () => {
           this.refresh()

@@ -3,20 +3,20 @@
 <div class="square container">
   <form on-submit="submit">
     <div>
-      <input type="text" maxlength="100" value="{{d.name}}" placeholder="Nombre de usuario" class="{{errors.d.name ? 'invalid' : ''}}">
+      <input type="text" maxlength="100" value="{{ ~/d.name }}" placeholder="Nombre de usuario" class="{{ ~/errors.d.name ? 'invalid' : '' }}">
     </div>
     <div>
-      <input type="email" maxlength="100" value="{{d.ident}}" placeholder="Correo electrónico" class="{{errors.d.ident ? 'invalid' : ''}}">
+      <input type="email" maxlength="100" value="{{ ~/d.ident }}" placeholder="Correo electrónico" class="{{ ~/errors.d.ident ? 'invalid' : '' }}">
     </div>
     <div>
-      <input type="password" maxlength="100" value="{{d.password}}" placeholder="Contraseña" class="{{errors.d.password ? 'invalid' : ''}}">
+      <input type="password" maxlength="100" value="{{ ~/d.password }}" placeholder="Contraseña" class="{{ ~/errors.d.password ? 'invalid' : '' }}">
     </div>
     <div>
-      <input type="password" maxlength="100" value="{{d.confirm}}" placeholder="Confirmar contraseña" class="{{errors.d.confirm ? 'invalid' : ''}}">
+      <input type="password" maxlength="100" value="{{ ~/d.confirm }}" placeholder="Confirmar contraseña" class="{{ ~/errors.d.confirm ? 'invalid' : '' }}">
     </div>
-    {{#if error}}
+    {{#if ~/error}}
     <div class="error">
-      {{ L[error] }}
+      {{ ~/L[ ~/error ] }}
     </div>
     {{/if}}
     <div class="submit">

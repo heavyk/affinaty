@@ -4,14 +4,14 @@
 <div class="messages" style="height: {{~/outerHeight}}px; width: {{~/outerWidth}}px">
   <form on-submit="send">
     <div class="title-container">
-      <input type="text" value="{{~/title}}" placeholder="title.." maxlength="2048" class="{{title_error ? 'invalid' : ''}}" />
+      <input type="text" value="{{~/title}}" placeholder="title.." maxlength="2048" class="{{~/title_error ? 'invalid' : ''}}" />
     </div>
     <div class="ticker-container">
       <input type="text" value="{{~/ticker}}" placeholder="ticker (optional)" maxlength="2048" />
     </div>
     <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : '88%'}}">
       <textarea
-        class="animate {{body_error ? 'invalid' : ''}}"
+        class="animate {{~/body_error ? 'invalid' : ''}}"
         on-blur-focus="toggle-focus"
         on-nlSubmit="send"
         maxlength="2048"

@@ -9,25 +9,25 @@
   <subheader>
     <div class="row">
       <div class="col-xs-2" style="margin-left: 16.666666%">
-        <a href="/cpanel/identities" class="{{active === 'identities' ? 'active' : ''}}">
+        <a href="/cpanel/identities" class="{{~/active === 'identities' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-user"></i></div>
           Identities{{#if ~/stats.identities}} ({{~/stats.identities}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/cpanel/mundial" class="{{active === 'mundial' ? 'active' : ''}}">
+        <a href="/cpanel/mundial" class="{{~/active === 'mundial' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-users"></i></div>
           Creators{{#if ~/stats.mundial}} ({{~/stats.mundial}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/cpanel/categories" class="{{active === 'categories' ? 'active' : ''}}">
+        <a href="/cpanel/categories" class="{{~/active === 'categories' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-list"></i></div>
           Categories{{#if ~/stats.categories}} ({{~/stats.categories}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/cpanel/images" class="{{active === 'images' ? 'active' : '' }}">
+        <a href="/cpanel/images" class="{{~/active === 'images' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-file-image-o"></i></div>
           Images{{#if ~/stats.fotos}} ({{~/stats.fotos}}){{/if}}
         </a>
@@ -37,31 +37,31 @@
   <subheader>
     <div class="row">
       <div class="col-xs-2" style="margin-left: 16.666666%">
-        <a href="/cpanel/debates" class="{{active === 'debates' ? 'active' : ''}}">
+        <a href="/cpanel/debates" class="{{~/active === 'debates' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-comment-o"></i></div>
           Debates{{#if ~/stats.debates}} ({{~/stats.debates}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/cpanel/polls" class="{{active === 'polls' ? 'active' : ''}}">
+        <a href="/cpanel/polls" class="{{~/active === 'polls' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-question-circle"></i></div>
           Polls{{#if ~/stats.polls}} ({{~/stats.polls}}){{/if}}
         </a>
       </div>
       <div class="col-xs-2">
-        <a href="/cpanel/comments" class="{{active === 'comments' ? 'active' : ''}}">
+        <a href="/cpanel/comments" class="{{~/active === 'comments' ? 'active' : ''}}">
           <div class="symbol"><i class="fa fa-comments-o"></i></div>
           Comments{{#if ~/stats.comments}} ({{~/stats.comments}}){{/if}}
         </a>
       </div>
       <!-- <div class="col-xs-2">
-        <a href="/cpanel/relations" class="{{active === 'relations' ? 'active' : '' }}">
+        <a href="/cpanel/relations" class="{{~/active === 'relations' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-bullseye"></i></div>
           Relations{{#if stats.relations}} ({{stats.relations}}){{/if}}
         </a>
       </div> -->
       <div class="col-xs-2">
-        <a href="/cpanel/stats" class="{{active === 'stats' ? 'active' : '' }}">
+        <a href="/cpanel/stats" class="{{~/active === 'stats' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-line-chart"></i></div>
           Stats
         </a>
@@ -71,7 +71,7 @@
   <subheader>
     <div class="row">
       <div class="col-xs-2" style="margin-left: 16.666666%">
-        <a href="/cpanel/notifications" class="{{active === 'notifications' ? 'active' : '' }}">
+        <a href="/cpanel/notifications" class="{{~/active === 'notifications' ? 'active' : '' }}">
           <div class="symbol"><i class="fa fa-envelope"></i></div>
           Notificationes Generales
         </a>
@@ -79,24 +79,24 @@
     </div>
   </subheader>
   <div class="actions">
-    {{#if active === 'categories'}}
+    {{#if ~/active === 'categories'}}
     <button on-click="new-category">add category</button>
     {{/if}}
   </div>
   <div class="pages">
-    {{#if active === 'debates'}}
+    {{#if ~/active === 'debates'}}
       {{#each ~/pages_debates:i}}
         <button on-tap="page(this)" style="{{page_active === i+1 ? 'background-color:#fd270d' : '' }}">{{i+1}}</button>
       {{/each ~/pages_debates}}
     {{/if}}
-    {{#if active === 'identities'}}
+    {{#if ~/active === 'identities'}}
       {{#each ~/pages_identities:i}}
         <button on-tap="page(this)" style="{{page_active === i+1 ? 'background-color:#fd270d' : '' }}">{{i+1}}</button>
       {{/each ~/identities}}
     {{/if}}
   </div>
   <div class="lists">
-    {{#if active === 'notifications'}}
+    {{#if ~/active === 'notifications'}}
       <send-notification />
     {{/if}}
     <table>
@@ -104,7 +104,7 @@
         <th>{{.}}</th>
       {{/each field}} -->
 
-      <!-- {{#each list}}
+      <!-- {{#each ~/list}}
         {{# {item: . } }}
         <tr>
           {{#each field}}
@@ -114,14 +114,14 @@
           {{/each field}}
         </tr>
         {{/}}
-      {{/each list}} -->
+      {{/each ~/list}} -->
 
-      {{#if active === 'identities'}}
+      {{#if ~/active === 'identities'}}
         <th>ident</th>
         <th>creators</th>
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{.ident}}</td>
           <td>
@@ -134,10 +134,10 @@
             <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'mundial'}}
+      {{#if ~/active === 'mundial'}}
         <th>id</th>
         <th>name</th>
         <th>title</th>
@@ -148,7 +148,7 @@
         <th>provincia</th>
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{._id}}</td>
           <td>
@@ -175,15 +175,15 @@
             <span on-tap="msg" class="action"><i class="fa fa-envelope" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'categories'}}
+      {{#if ~/active === 'categories'}}
         <th>title</th>
         <!-- <th>foto</th> -->
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{.title}}</td>
           <!-- <td>
@@ -197,22 +197,22 @@
             <span on-tap="rename" class="action"><i class="fa fa-pencil" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'images'}}
+      {{#if ~/active === 'images'}}
         TODO: image list
       {{/if}}
 
       <!-- ---- -->
 
-      {{#if active === 'debates'}}
+      {{#if ~/active === 'debates'}}
         <th>text</th>
         <th>foto</th>
         <th>tags</th>
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{.text}}</td>
           <td>
@@ -231,17 +231,17 @@
             <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'polls'}}
+      {{#if ~/active === 'polls'}}
         <th>text</th>
         <th>foto</th>
         <th>tags</th>
         <th>options</th>
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{.text}}</td>
           <td>
@@ -265,14 +265,14 @@
             <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'comments'}}
+      {{#if ~/active === 'comments'}}
         <th>text</th>
         <th>created</th>
         <th>actions</th>
-        {{#each list:i}}
+        {{#each ~/list : i}}
         <tr>
           <td>{{.text}}</td>
           <td><time time="{{.created}}" class="since" /></td>
@@ -280,21 +280,21 @@
             <span on-tap="remove" class="action"><i class="fa fa-close" /></span>
           </td>
         </tr>
-        {{/each list}}
+        {{/each ~/list}}
       {{/if}}
 
-      {{#if active === 'stats'}}
+      {{#if ~/active === 'stats'}}
         <th>type</th>
         <th>count</th>
-        {{#each stats:i}}
+        {{#each ~/stats : i}}
         <tr>
           <td>{{i}}</td>
           <td>{{.}}</td>
         </tr>
-        {{/each stats}}
+        {{/each ~/stats}}
       {{/if}}
 
-      {{#if active === 'relations'}}
+      {{#if ~/active === 'relations'}}
         TODO: relation stats
       {{/if}}
 

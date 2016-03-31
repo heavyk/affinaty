@@ -1,35 +1,35 @@
 <div class="tag-completer">
   <input
     type="text"
-    value="{{title}}"
+    value="{{~/title}}"
     placeholder="escribe los tags aquí"
     on-nlSubmit="add"
     on-focus="set('taglist', true)"
-    style="display: {{selected.length < 3 ? 'block' : 'none'}}"
+    style="display: {{~/selected.length < 3 ? 'block' : 'none'}}"
     on-keyup="keyup" />
-  <div class="tags" style="display: {{taglist ? 'block' : 'none'}}">
+  <div class="tags" style="display: {{~/taglist ? 'block' : 'none'}}">
     <div class="wrapper">
-      {{#list:i}}
+      {{#each ~/list : i}}
       <div class="tag" on-click="add">
-        {{title}}
+        {{.title}}
       </div>
-      {{/}}
-      {{#if recent}}
+      {{/each ~/list}}
+      {{#if ~/recent}}
         <div class="recent">recent</div>
-        {{#recent:i}}
+        {{#each ~/recent : i}}
         <div class="tag" on-click="add">
-          {{title}}
+          {{.title}}
         </div>
-        {{/recent}}
+        {{/each ~/recent}}
       {{/if}}
     </div>
   </div>
   <ul class="selected-tags wtf">
-    {{#selected:i}}
+    {{#each ~/selected : i}}
     <li class="tag" on-tap="removeTag(event, i)">
-      #{{title}}
+      #{{~/title}}
     </li>
-    {{/}}
+    {{/each ~/selected}}
   </ul>
 </div>
 

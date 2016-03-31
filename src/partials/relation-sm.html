@@ -4,18 +4,18 @@
 <div class="relation">
   <div class="user clearfix">
     <div class="foto">
-      <a href="/profile/{{d._id}}" title="{{d.name}}">
-        <foto src="{{d.foto}}" size="a" />
+      <a href="/profile/{{~/d._id}}" title="{{~/d.name}}">
+        <foto src="{{~/d.foto}}" size="a" />
       </a>
     </div>
     <div class="follow-sm" on-tap="follow">
-      {{#if !d.following}}
-        <img src="/img/follow.svg" title="follow" width="20" height="20" />
-      {{else}}
+      {{#if ~/d.following}}
         <img src="/img/unfollow.svg" title="unfollow" width="20" height="20" />
+      {{else}}
+        <img src="/img/follow.svg" title="follow" width="20" height="20" />
       {{/if}}
       <div class="follow-text">
-        {{#if d.following}}
+        {{#if ~/d.following}}
           No Seguir
         {{else}}
           Seguir
@@ -23,8 +23,8 @@
       </div>
     </div>
     <div>
-      <h4><a href="/profile/{{d._id}}" title="{{d.name}}">{{d.name}}</a></h4>
-      <h5>{{d.title}}</h5>
+      <h4><a href="/profile/{{~/d._id}}" title="{{~/d.name}}">{{~/d.name}}</a></h4>
+      <h5>{{~/d.title}}</h5>
     </div>
   </div>
 </div>

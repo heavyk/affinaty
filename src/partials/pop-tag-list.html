@@ -3,26 +3,26 @@
 
 <div class="pop-tag-list">
   <div class="title section-title">Populares</div>
-  <div class="list-container" style="max-height: {{rightHeight}}px">
-    {{#if loading}}
+  <div class="list-container" style="max-height: {{ ~/rightHeight }}px">
+    {{#if ~/loading}}
       <spinner scale="0.2" />
     {{else}}
-      {{#list}}
+      {{#each ~/list}}
         <div class="list">
-          <a href="/tag/{{d._id}}">
-            <foto src="{{d.foto}}" size="z" shape="sq" />
+          <a href="/tag/{{ .d._id }}">
+            <foto src="{{ .d.foto }}" size="z" shape="sq" />
           </a>
           <div class="tag">
-            <a class="tag" href="/tag/{{d._id}}">{{d.title}}</a>
+            <a class="tag" href="/tag/{{ .d._id }}">{{ .d.title }}</a>
           </div>
           <div class="stats">
-            <div class="opin">{{score}} opins</div>
-            <div class="opin">{{posts}} posts</div>
+            <div class="opin">{{ .score }} opins</div>
+            <div class="opin">{{ .posts }} posts</div>
           </div>
           <div class="clearfix"></div>
         </div>
-      {{/list}}
-    {{/if loading}}
+      {{/each ~/list}}
+    {{/if ~/loading}}
   </div>
   <div class="view-more"><a href="/home">Ver más</a></div>
 </div>

@@ -12,13 +12,13 @@
       <div class="menu">
         <h4>Settings</h4>
         <nav>
-          <li on-tap="activate('appearance')" class="{{active === 'appearance' ? 'active' : ''}}">
+          <li on-tap="activate('appearance')" class="{{~/active === 'appearance' ? 'active' : ''}}">
             Editar perfil
           </li>
-          <li on-tap="activate('identities')" class="{{active === 'identities' ? 'active' : ''}}">
+          <li on-tap="activate('identities')" class="{{~/active === 'identities' ? 'active' : ''}}">
             Configuración
           </li>
-          <li on-tap="activate('networks')" class="{{active === 'networks' ? 'active' : ''}}">
+          <li on-tap="activate('networks')" class="{{~/active === 'networks' ? 'active' : ''}}">
             Redes Sociales
           </li>
         </nav>
@@ -27,46 +27,46 @@
 
     <!-- right column -->
     <div class="col-sm-8 col-md-9">
-      {{#if active === 'appearance' }}
+      {{#if ~/active === 'appearance' }}
       <div class="settings">
         <div class="profile-foto">
           <span class="change-foto" on-tap="toggle('change_foto')">
-            {{#if change_foto}}
+            {{#if ~/change_foto}}
             <i class="fa fa-close"></i> Cancelar
             {{else}}
             <i class="fa fa-camera"></i> Cambiar foto
             {{/if}}
           </span>
-          {{#if change_foto}}
-          <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{cropped}}" />
+          {{#if ~/change_foto}}
+          <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{~/cropped}}" />
           {{else}}
-          <foto src="{{me.foto}}" size="t" />
+          <foto src="{{~/me.foto}}" size="t" />
           {{/if}}
         </div>
 
         <form on-submit="change-appearance">
           <div><h5>Cambia tu nombre</h5></div>
-          <input type="text" maxlength="50" value="{{me.name}}" placeholder="{{me.name}}">
+          <input type="text" maxlength="50" value="{{~/me.name}}" placeholder="{{~/me.name}}">
 
           <div><h5>Cambia tu descripción</h5></div>
-          <input type="text" maxlength="100" value="{{me.title}}" placeholder="{{me.title}}">
+          <input type="text" maxlength="100" value="{{~/me.title}}" placeholder="{{~/me.title}}">
 
           <div><h5>Cambia tu localización</h5></div>
           <div class="row">
             <div class="col-xs-6">
-              <select value="{{me.c}}">
+              <select value="{{~/me.c}}">
                 <option value="">País</option>
-                {{#each countries}}
+                {{#each ~/countries}}
                 <option value="{{.short}}">{{.name}}</option>
                 {{/each}}
               </select>
             </div>
-            {{#if provinces}}
+            {{#if ~/provinces}}
             <div class="col-xs-6">
-              <select value="{{me.p}}">
+              <select value="{{~/me.p}}">
                 <option value="">Provincia</option>
-                {{#each provinces}}
-                <option value="{{short}}">{{name}}</option>
+                {{#each ~/provinces}}
+                <option value="{{.short}}">{{.name}}</option>
                 {{/each}}
               </select>
             </div>
@@ -74,24 +74,24 @@
           </div>
 
           <div><h5>Cambia tu fecha de nacimiento</h5></div>
-          <date-select value="{{me.birthdate}}" />
+          <date-select value="{{~/me.birthdate}}" />
 
           <div><h5>Cambia tu género</h5></div>
           <div style="text-align: center">
             <div class="planet row">
               <div class="col-xs-6">
-                <i class="fa fa-venus {{me.planet === 0 ? 'active' : ''}}" on-tap="set('me.planet', 0)"></i>
+                <i class="fa fa-venus {{~/me.planet === 0 ? 'active' : ''}}" on-tap="set('me.planet', 0)"></i>
                 <div>Mujer</div>
               </div>
               <div class="col-xs-6">
-                <i class="fa fa-mars {{me.planet === 1 ? 'active' : ''}}" on-tap="set('me.planet', 1)"></i>
+                <i class="fa fa-mars {{~/me.planet === 1 ? 'active' : ''}}" on-tap="set('me.planet', 1)"></i>
                 <div>Hombre</div>
               </div>
             </div>
 
             <div style="margin-top: 60px">
-              <button class="button-sign-up" on-tap="appearance">Guardar</button> {{save_success}}
-              {{#if saving}}
+              <button class="button-sign-up" on-tap="appearance">Guardar</button> {{~/save_success}}
+              {{#if ~/saving}}
                 <spinner />
               {{/if}}
             </div>
@@ -100,41 +100,41 @@
       </div>
       {{/if}}
 
-      {{#if active === 'identities' }}
+      {{#if ~/active === 'identities' }}
       <div class="settings">
         <!-- <form on-submit="change-identities">
           <div>
             <div><h5>Correo elecrónico</h5></div>
-            <input type="text" maxlength="100" value="{{new_email}}" placeholder="{{ident.ident}}">
+            <input type="text" maxlength="100" value="{{~/new_email}}" placeholder="{{~/ident.ident}}">
           </div>
         </form> -->
         <form on-submit="change-password">
           <div>
             <div><h5>Contraseña actual</h5></div>
-            <input type="password" maxlength="100" value="{{pw.oldPassword}}" placeholder="tu contraseña actual">
+            <input type="password" maxlength="100" value="{{~/pw.oldPassword}}" placeholder="tu contraseña actual">
           </div>
           <div>
             <div><h5>Nueva contraseña</h5></div>
-            <input type="password" maxlength="100" value="{{pw.newPassword}}" placeholder="tu nueva contraseña">
+            <input type="password" maxlength="100" value="{{~/pw.newPassword}}" placeholder="tu nueva contraseña">
           </div>
           <div>
             <div><h5>Confimar Contraseña</h5></div>
-            <input type="password" maxlength="100" value="{{pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
+            <input type="password" maxlength="100" value="{{~/pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
           </div>
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-tap="appearance">Guardar</button> {{save_success}}
-            {{#if saving}}
+            <button class="button-sign-up" on-tap="appearance">Guardar</button> {{~/save_success}}
+            {{#if ~/saving}}
               <spinner />
-            {{/if saving}}
-            {{#if passwd_success}}
-              <div>{{passwd_success}}</div>
-            {{/if passwd_success}}
+            {{/if ~/saving}}
+            {{#if ~/passwd_success}}
+              <div>{{~/passwd_success}}</div>
+            {{/if ~/passwd_success}}
           </div>
         </form>
       </div>
       {{/if}}
 
-      {{#if active === 'networks' }}
+      {{#if ~/active === 'networks' }}
       <div class="settings">
         <div class="heading">
           Estos datos aparecen en tu perfil
@@ -143,35 +143,35 @@
           <select class="network-list" value="{{new_network}}" on-change="add-network">
             <option value="">Añadir una nueva red</option>
             {{#each network_list}}
-              {{#if me.networks[.id] === undefined}}
+              {{#if ~/me.networks[ .id ] === undefined}}
                 <option value="{{.id}}">{{.title}}</option>
               {{/if}}
             {{/each}}
           </select>
         </div>
         <form on-submit="change-networks">
-          {{#if network_count === 0}}
+          {{#if ~/network_count === 0}}
             <span>No tienes ninguna red añadida.</span>
           {{/if}}
-          {{#each network_list}}
-            {{#if me.networks[.id] !== undefined}}
+          {{#each ~/network_list}}
+            {{#if ~/me.networks[ .id ] !== undefined}}
               <div>
                 <div><h5>{{.title}}:</h5></div>
                 <div style="position: relative">
-                  <input type="text" maxlength="200" value="{{me.networks[.id]}}" placeholder="{{.text}}" />
+                  <input type="text" maxlength="200" value="{{ ~/me.networks[ .id ] }}" placeholder="{{ .text }}" />
                   <span class="remove" on-tap="remove-network" decorator="tip:'Eliminar',16"><i class="fa fa-times" /></span>
                 </div>
               </div>
             {{/if}}
           {{/each}}
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-tap="change-networks">Guardar</button> {{save_success}}
-            {{#if saving}}
+            <button class="button-sign-up" on-tap="change-networks">Guardar</button> {{~/save_success}}
+            {{#if ~/saving}}
               <spinner />
-            {{/if saving}}
-            {{#if passwd_success}}
-              <div>{{passwd_success}}</div>
-            {{/if passwd_success}}
+            {{/if ~/saving}}
+            {{#if ~/passwd_success}}
+              <div>{{~/passwd_success}}</div>
+            {{/if ~/passwd_success}}
           </div>
         </form>
       </div>

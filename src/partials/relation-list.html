@@ -16,17 +16,12 @@
       <spinner scale="0.2" />
     {{else}}
     <div class="relations">
-      {{#if loading}}
-        <spinner />
-        <!-- loading... -->
+      {{#each ~/list}}
+        <!-- d: {{JSON.stringify(this)}} -->
+        <relation-sm d="{{.}}" />
       {{else}}
-        {{#list}}
-          <!-- d: {{JSON.stringify(this)}} -->
-          <relation-sm d="{{.}}" />
-        {{else}}
-          no relations
-        {{/list}}
-      {{/if loading}}
+        no relations
+      {{/each ~/list}}
     </div>
     {{/if ~/loading}}
   </div>
@@ -113,7 +108,7 @@ component.exports = {
 
     this.once('teardown', () => {
       // gemini.destroy()
-      if (!movil) onresize.removeResizeListener(container, resizer)
+      if (!movil) onresize.removeResizeListener(list_container, resizer)
     })
   },
 }
