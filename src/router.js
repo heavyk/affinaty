@@ -9,7 +9,6 @@ import listing from './views/listing'
 import inbox from './views/inbox'
 import profile from './views/profile'
 import settings from './views/settings'
-import category from './views/category'
 import debate from './views/debate'
 import poll from './views/poll'
 // import opinions from './views/opinions'
@@ -26,7 +25,6 @@ let classView = {
   inbox,
   profile,
   settings,
-  category,
   debate,
   poll,
   // blog,
