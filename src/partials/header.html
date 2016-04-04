@@ -69,7 +69,7 @@
         </ul>
       </li>
       {{else}}
-      <button class="start-session" on-click="modal('sign-in')">Iniciar Sesión</button>
+      <button class="start-session" on-click="modal('sign-in', {header: false})">Iniciar Sesión</button>
       {{/if}}
     </nav>
     <div class="logo">
@@ -428,7 +428,12 @@ component.exports = {
       this.set('notifications', c)
     })
     api.observe('me', (me) => {
+      console.warn('me'. me)
       this.set('me', me)
+    }, {initial: false})
+    api.once('deauth', (yo) => {
+      // debugger
+      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
     })
     this.set('search_width', 200)
     this.on('toggle-focus', (event) => {
@@ -473,7 +478,6 @@ component.exports = {
   },
   oncomplete () {
     let onclick = (e) => {
-
       let status = this.get('show_n') || this.get('show_m') || this.get('show_settings') || this.get('show_search')
       if (!status) return
       let target = e.target
@@ -497,7 +501,6 @@ component.exports = {
   signOut () {
     api.signOut(true)
   },
-  modal: require('../modal'),
   events: {
     tap: require('../lib/events/tap.js'),
   },

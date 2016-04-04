@@ -189,7 +189,7 @@ component.exports = {
       api.once('auth', () => {
         this.pos(pos, skip)
       })
-      return this.modal('sign-in')
+      return this.modal('sign-in', {header: false})
     }
     let p = api.my.opinion.debate_pos(this.get('d._id'))
     if (pos !== p && !skip) {

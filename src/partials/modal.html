@@ -2,14 +2,22 @@
 <div class="modal-background" on-tap="modal-close" intro="fade" outro="fade">
   <div class="modal-outer {{~/modalName}}">
     <div class="modal">
+      {{#if ~/header !== false}}
       <h1>
         {{~/title}}
         <div class="modal-close" on-tap="modal-close">
           <i class="fa fa-close"></i>
         </div>
       </h1>
-      {{>modalContent}}
+      {{/if ~/header}}
+
+      {{> modalContent}}
     </div>
+    {{#if ~/footer}}
+    <div class="modal-footer">
+      {{> modalFooter}}
+    </div>
+    {{/if ~/footer}}
   </div>
 </div>
 
@@ -82,6 +90,14 @@
   cursor: pointer;
 }
 
+.modal-footer {
+  position: fixed;
+  bottom: 26px;
+  color: #fff;
+  text-align: center;
+  width: 100%;
+}
+
 .modal h1 {
   margin: 0;
   color: #fff;
@@ -114,6 +130,7 @@ component.exports = {
   onrender () {
     this.outer = this.find('.modal-outer')
     this.modal = this.find('.modal')
+    // this.footer = this.find('.modal-footer')
     this.closeButton = this.find('.modal-close')
 
     let resizeHandler = () => {
@@ -121,13 +138,15 @@ component.exports = {
       let modalHeight = this.modal.clientHeight
       let verticalSpace = (outerHeight - modalHeight) / 2
       this.modal.style.top = verticalSpace + 'px'
+      // console.log(outerHeight, modalHeight, verticalSpace)
+      // if (this.footer) this.footer.style.top = ((verticalSpace + modalHeight)) + 'px'
     }
 
     this.on('resize', resizeHandler)
 
     this.on('modal-close', function (event) {
       event.original.stopImmediatePropagation()
-      if (!this.modal.contains(event.original.target) || this.closeButton.contains(event.original.target)) {
+      if (!this.modal.contains(event.original.target) || (this.closeButton && this.closeButton.contains(event.original.target))) {
         this.teardown()
       }
     })

@@ -70,7 +70,7 @@ component.exports = {
       api.once('auth', () => {
         this.selection(iidx)
       })
-      return this.modal('sign-in')
+      return this.modal('sign-in', {header: false})
     }
     let idx = this.get('d.idx')
     if (idx !== iidx) {

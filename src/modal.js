@@ -22,6 +22,8 @@ export default function modal(component, opts) {
     components: components,
     partials: {
       modalContent: `<${component} ${o}/>`,
+      // modalFooter: opts.footer ? `<${opts.footer} />` : void 0,
+      modalFooter: opts.footer ? opts.footer : void 0,
     },
     data: assign({modalName: component, parent: this}, opts),
   })
