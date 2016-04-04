@@ -21,7 +21,6 @@
   <div>wait: {{~/waiting_list.length}}</div>
   <div>t_debates: {{~/t_debates}}</div>
   <div>t_polls: {{~/t_polls}}</div>
-  <div>t_waiting: {{~/t_waiting}}</div>
   <button on-click="go()">get more</button>
 </div> -->
 
@@ -101,7 +100,6 @@ component.exports = {
     // this.set({
     //   t_polls: this.t_polls,
     //   t_debates: this.t_debates,
-    //   t_waiting: this.t_waiting
     // })
 
     Ractive.header.on('category', (category) => {
@@ -215,7 +213,6 @@ component.exports = {
     this.set('list.length', 0)
     this.t_debates = Infinity
     this.t_polls = Infinity
-    this.t_waiting = 0
     this.all_loaded = 0
     this.exists = {} // map of ids -> offset (for adding and removing)
   },
@@ -237,6 +234,7 @@ component.exports = {
     this.els = this.findAll('.debate', {live: true})
     let movil = window.isMobile
     if (!movil || window.screen.width > 578) {
+      // window.m =
       this.m = new masonry(el, {
         itemSelector: '.debate',
         columnWidth: 289,
@@ -263,14 +261,21 @@ component.exports = {
   add (d, _id) {
     let id = _id || d._id
     if (this.exists[id] !== void 0 || !this.matches(d)) return
-    this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
+    let pos = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
+    for (var i in this.exists) {
+      if (this.exists[i] >= pos) this.exists[i]++
+    }
+    this.exists[d._id] = pos
+    this.m.reloadItems()
+    this.m.layout()
   },
 
   process_waiting () {
     let append = []
+    let max = Math.max(this.t_debates, this.t_polls)
     for (var i = 0; i < this.waiting_list.length; i++) {
       let d = this.waiting_list[i]
-      if (d.created < this.t_waiting) {
+      if (d.created <= max) {
         this.waiting_list.splice(i--, 1)
         insert(d, append, (a, b) => b.created > a.created ? 1 : -1)
       }
@@ -302,7 +307,6 @@ component.exports = {
       // this.set({
       //   t_polls: this.t_polls,
       //   t_debates: this.t_debates,
-      //   t_waiting: this.t_waiting
       // })
       next()
     })
@@ -327,7 +331,6 @@ component.exports = {
 
         // save oldest post for next query
         if (d.created < this.t_debates) this.t_debates = d.created
-        if (d.created > this.t_waiting && d.created < this.t_polls) this.t_waiting = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
@@ -337,8 +340,6 @@ component.exports = {
       // if we're at the end of the list, don't ask more
       if (data.length !== params.limit) this.all_loaded++
       // this.t_debates += query.limit
-
-      // if (this.t_debates < this.t_polls) this.get_debates()
       done()
     }, done)
 
@@ -362,7 +363,6 @@ component.exports = {
 
         // save oldest post for next query
         if (d.created < this.t_polls) this.t_polls = d.created
-        if (d.created > this.t_waiting && d.created < this.t_debates) this.t_waiting = d.created
       }
 
       for (let i = 0; i < data.length; i++) {
