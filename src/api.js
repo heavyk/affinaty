@@ -11,6 +11,7 @@ import category_ from './api/category'
 import tag_ from './api/tag'
 // my stuff
 import opinion from './api/opinion'
+import selection from './api/selection'
 import affinaties from './api/affinaties'
 import notifier from './api/notifier'
 // import relation_ from './api/relation'
@@ -184,6 +185,8 @@ let Api = Ractive.extend({
       // my.* initialization
       if (!api.my.opinion || api.my.opinion.creator !== me._id)
         api.my.opinion = new opinion(me._id)
+      if (!api.my.selection || api.my.selection.creator !== me._id)
+        api.my.selection = new selection(me._id)
       // if (!api.my.relation || api.my.relation.creator !== me._id)
       //   api.my.relation = new relation_(me._id)
       // if (!api.my.debate || api.my.debate.creator !== me._id)

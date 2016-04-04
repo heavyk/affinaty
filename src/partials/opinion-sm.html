@@ -142,10 +142,16 @@ component.exports = {
   modal: require('../modal'),
   oninit () {
     // if (api.yo) api.on('auth')
-    api.on('deauth', () => {
-      // VERY BAD - creates a memory leak cause we don't 'off' the listener
-      // TODO: listen for 'auth' and 'votes'
+    api.on('deauth', this.on_deauth = () => {
       this.set('d.pos', null)
+      console.info('d.pos', null)
+    })
+
+    api.on('auth', this.on_auth = () => {
+      api.my.opinion.until('/', () => {
+        this.set('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
+        console.info('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
+      })
     })
 
     this.on('+2', (e) => { this.pos(2) })
@@ -237,6 +243,10 @@ component.exports = {
         }
       }
     }
+  },
+  onteardown() {
+    api.off('auth'. this.on_auth)
+    api.off('deauth', this.on_deauth)
   },
   decorators: {
     tip: require('../lib/decorators/tip')
