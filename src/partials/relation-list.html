@@ -109,7 +109,7 @@ component.exports = {
     this.observe('list', (v) => {
       // gemini.update()
       if (!movil) resizer()
-    }, {initial: false})
+    }, {init: false})
 
     this.once('teardown', () => {
       // gemini.destroy()

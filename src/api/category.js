@@ -71,9 +71,13 @@ class category_ extends Ambition {
     if (!this['+created'] || this['+created'] > d.created) this['+created'] = d.created
     if (!this['-created'] || this['-created'] < d.created) this['-created'] = d.created
     if (loc === void 0) {
-      this.exists[d._id] = insert(d, this.list, (a, b) => {
-        return a.title > b.title ? 1 : a.title < b.title ? -1 : 0
-      })
+      let pos = insert(d, this.list, (a, b) => a.title > b.title ? 1 : a.title < b.title ? -1 : 0)
+      // this is like totally ugly...
+      // TODO: abstratct this away in a container of sorts
+      for (var i in this.exists) {
+        if (this.exists[i] >= pos) this.exists[i]++
+      }
+      this.exists[d._id] = pos
       if (!silent) {
         this.emit(d._id, d)
       }
