@@ -56,6 +56,8 @@ let Api = Ractive.extend({
       } catch(e) {}
     }()),
   my: {
+    // opinon: new opinion,
+    // selection: new selection,
     affinaties: new affinaties,
     notifier: new notifier,
   },
@@ -112,13 +114,14 @@ let Api = Ractive.extend({
     })
   },
   signOut (redirect) {
+    let yo = api.yo
     window.localStorage.removeItem(this._token)
     this.local.removeItem('me')
     this.set('me', null)
     // if (redirect) router.dispatch('/')
     this.set('authenticated', false)
     this.yo = null
-    this.fire('deauth')
+    this.fire('deauth', yo)
   },
   action (action, params, resolve, reject) {
     // if (action === 'debate*' && !arguments[4]) {
@@ -191,12 +194,6 @@ let Api = Ractive.extend({
       //   api.my.relation = new relation_(me._id)
       // if (!api.my.debate || api.my.debate.creator !== me._id)
       //   api.my.debate = new debate_(me._id)
-
-      // other initialization
-      if (!api.category)
-        api.category = new category_
-      if (!api.tag)
-        api.tag = new tag_
     }
   },
   category: new category_,

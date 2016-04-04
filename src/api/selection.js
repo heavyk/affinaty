@@ -139,15 +139,15 @@ class selection_ extends Ambition {
     for (var i = 0; i < this.list.length; i++) {
       if (this.list[i].poll === poll) return +this.list[i].idx
     }
-    return 0
+    return null
   }
 
-  create (target, pos) {
-    return api.action('selection!', assign({pos: pos}, target), (data) => {
-      this.insert(data.selection)
-      api.my.affinaties.update(data.affinaties)
-    })
-  }
+  // create (target, pos) {
+  //   return api.action('selection!', assign({pos: pos}, target), (data) => {
+  //     this.insert(data.selection)
+  //     api.my.affinaties.update(data.affinaties)
+  //   })
+  // }
 
   poll (poll) {
     // TODO - I think this can use this.list[this.exists[poll]]

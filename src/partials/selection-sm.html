@@ -50,18 +50,19 @@ component.exports = {
   oninit() {
     api.on('deauth', this.on_deauth = () => {
       this.set('d.idx', null)
-      console.info('d.idx', null)
+      // console.info('d.idx', null)
     })
 
     api.on('auth', this.on_auth = () => {
       api.my.selection.until('/', () => {
         this.set('d.idx', api.my.selection.poll_pos(this.get('d._id') || null))
-        console.info('d.idx', api.my.selection.poll_pos(this.get('d._id') || null))
+        // console.info('d.idx', api.my.selection.poll_pos(this.get('d._id') || null))
       })
     })
+    if (api.yo) this.on_auth()
   },
   onteardown() {
-    api.off('auth'. this.on_auth)
+    api.off('auth', this.on_auth)
     api.off('deauth', this.on_deauth)
   },
   selection (iidx) {

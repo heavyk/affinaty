@@ -77,6 +77,7 @@
         </div>
       </a>
     {{else}}
+      {{#if ~/auth}}
       <div class="follow" on-tap="follow">
         <div class="follow-inner">
           {{#if !~/following}}
@@ -93,6 +94,7 @@
           </div>
         </div>
       </div>
+
       <div class="message" on-tap="send-message">
         <div class="message-inner">
           <i class="fa fa-envelope" />
@@ -101,6 +103,8 @@
           </div>
         </div>
       </div>
+      {{/if ~/auth}}
+
 
 
       <div class="affinaty {{~/floating ? 'floating' : ''}}">
@@ -638,11 +642,20 @@ component.exports = {
       this.set('affinaty_update', 1 + this.get('affinaty_update') || 0)
     }, 200, false)
     this.set('affinaty_update', 0)
-    api.my.opinion.on([api.me._id, '*'], () => {
+    api.on('deauth', this.on_deauth = (yo) => {
+      this.set('auth', false)
+      if (api.my.opinion) api.my.opinion.off([api.yo, '*'], this.on_opinion)
       this.refresh()
     })
-    api.my.opinion.until('/', () => {
-      this.refresh()
+
+    api.on('auth', this.on_auth = () => {
+      this.set('auth', true)
+      api.my.opinion.until('/', () => {
+        this.refresh()
+        api.my.opinion.on([api.yo, '*'], this.on_opinion = () => {
+          this.refresh()
+        })
+      })
     })
   },
   oncomplete () {
@@ -655,6 +668,8 @@ component.exports = {
     }
   },
   onteardown () {
+    api.off('auth', this.on_auth)
+    api.off('deauth', this.on_deauth)
     if (!this.get('mine')) {
       window.removeEventListener('scroll', this.onscroll)
     }
@@ -662,7 +677,7 @@ component.exports = {
   computed: {
     affinaty () {
       let update = this.get('affinaty_update')
-      if (!this.opinion) return 0
+      if (!this.opinion || !api.my.opinion) return 0
       let their_opinions = this.opinion
       let affinaty = 0
       let coinciding = []

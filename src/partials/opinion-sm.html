@@ -144,15 +144,16 @@ component.exports = {
     // if (api.yo) api.on('auth')
     api.on('deauth', this.on_deauth = () => {
       this.set('d.pos', null)
-      console.info('d.pos', null)
+      // console.info('d.pos', null)
     })
 
     api.on('auth', this.on_auth = () => {
       api.my.opinion.until('/', () => {
         this.set('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
-        console.info('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
+        // console.info('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
       })
     })
+    if (api.yo) this.on_auth()
 
     this.on('+2', (e) => { this.pos(2) })
     this.on('+1', (e) => { this.pos(1) })
@@ -245,7 +246,7 @@ component.exports = {
     }
   },
   onteardown() {
-    api.off('auth'. this.on_auth)
+    api.off('auth', this.on_auth)
     api.off('deauth', this.on_deauth)
   },
   decorators: {
