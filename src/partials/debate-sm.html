@@ -191,7 +191,7 @@ component.exports = {
     let d = this.get('d') || Ractive.nexus.db.get(id)
     this.set('category', api.category.get(this.get(d.$category)))
 
-    api.on('sign-in', (me) => {
+    api.on('auth', this.on_auth = () => {
       api.my.opinion.on(id + '.' + api.yo, this.on_opinion = (d, _d) => {
         let pos
         let totals = this.get('d.totals')
@@ -207,8 +207,8 @@ component.exports = {
         }
       })
     })
-    api.on('sign-out', () => {
-      api.my.opinion.off(id + '.' + api.yo, this.on_opinion)
+    api.on('deauth', this.on_deauth = (yo) => {
+      api.my.opinion.off(id + '.' + yo, this.on_opinion)
     })
     this.on('show-stats', () => {
       if (window.isMobile && this.parent) {
@@ -228,6 +228,10 @@ component.exports = {
     if (n = this.find('.foto img')) {
       n.style.height = n.clientWidth + 'px'
     }
+  },
+  onteardown () {
+    api.off('auth', this.on_auth)
+    api.off('deauth', this.on_deauth)
   },
   computed: {
     limits () {

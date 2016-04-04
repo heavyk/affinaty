@@ -137,6 +137,24 @@ div.cancel {
 // this doesn't work until I have a global list of components (TODO)
 // import Modal from '../modal'
 
+const params_buttoms = [
+  { text: 'Muy en desacuerdo',
+    color: '#bb0217'
+  },
+  {
+    text: 'En desacuerdo',
+    color: '#cc4d41'
+  },
+  {
+    text: 'De acuerdo',
+    color: '#5a9727'
+  },
+  {
+    text: 'Muy deacuerdo',
+    color: '#2e8034'
+  }
+]
+
 component.exports = {
   isolated: true,
   modal: require('../modal'),
@@ -161,35 +179,9 @@ component.exports = {
     this.on('-2', (e) => { this.pos(-2) })
     this.on('cancel', (e) => { this.pos(0) })
 
-    let params = {}
-    let params_buttoms = []
-    params_buttoms.push(
-      { text: 'Muy en desacuerdo',
-        color: '#bb0217'
-      },
-      {
-        text: 'En desacuerdo',
-        color: '#cc4d41'
-      },
-      {
-        text: 'De acuerdo',
-        color: '#5a9727'
-      },
-      {
-        text: 'Muy deacuerdo',
-        color: '#2e8034'
-      }
-    )
-    switch (this.get('d.pos')){
-      case -2:  this.set('params_vote', params_buttoms[0])
-                break
-      case -1:  this.set('params_vote', params_buttoms[1])
-                break
-      case  +1: this.set('params_vote', params_buttoms[2])
-                break
-      case  +2: this.set('params_vote', params_buttoms[3])
-                break
-    }
+    this.observe('d.pos', (pos) => {
+      this.set('params_vote', params_buttoms[pos > 0 ? pos + 1 : pos + 2])
+    }, {initial: false})
 
   },
   pos (pos, skip) {
@@ -213,35 +205,6 @@ component.exports = {
       } else {
         this.set('d.pos', pos)
         api.my.opinion.create({debate: this.get('d._id')}, pos)
-        let params={}
-        let params_buttoms = []
-        params_buttoms.push(
-          { text: 'Muy en desacuerdo',
-            color: '#bb0217'
-          },
-          {
-            text: 'En desacuerdo',
-            color: '#cc4d41'
-          },
-          {
-            text: 'De acuerdo',
-            color: '#5a9727'
-          },
-          {
-            text: 'Muy deacuerdo',
-            color: '#2e8034'
-          }
-        )
-        switch (pos){
-          case -2:  this.set('params_vote', params_buttoms[0])
-                    break
-          case -1:  this.set('params_vote', params_buttoms[1])
-                    break
-          case  +1: this.set('params_vote', params_buttoms[2])
-                    break
-          case  +2: this.set('params_vote', params_buttoms[3])
-                    break
-        }
       }
     }
   },
