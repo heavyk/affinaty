@@ -168,7 +168,11 @@ component.exports = {
         for (let i = 0; i < this.list.length; i++) {
           let d = this.list[i]
           if (this.category !== d._category) {
+            let exists = this.exists[d._id]
             this.list.splice(i--, 1)
+            for (let i in this.exists) {
+              if (this.exists[i] > exists) this.exists[i]--
+            }
             this.exists[d._id] = void 0
           }
         }

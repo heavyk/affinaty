@@ -125,7 +125,6 @@ let Api = Ractive.extend({
   },
   action (action, params, resolve, reject) {
     // if (action === 'debate*' && !arguments[4]) {
-    //   // debugger
     //   return setTimeout(() => { this.action(action, params, resolve, reject, true) }, 500)
     // }
     const start = Date.now()
