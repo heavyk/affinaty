@@ -120,6 +120,10 @@ let Api = Ractive.extend({
     this.fire('deauth')
   },
   action (action, params, resolve, reject) {
+    // if (action === 'debate*' && !arguments[4]) {
+    //   // debugger
+    //   return setTimeout(() => { this.action(action, params, resolve, reject, true) }, 500)
+    // }
     const start = Date.now()
     let _params = {}
     for (var k in params) {
