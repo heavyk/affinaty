@@ -86,7 +86,7 @@ var affinaty = gobble([
 				? source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 				: source
 		})
-		.transformIf(gobble.env() === 'production', 'uglifyjs')
+		// .transformIf(gobble.env() === 'production', 'uglifyjs')
 
 	, gobble('files/styles')
 		.transform('less', {

@@ -212,9 +212,9 @@ component.exports = {
 
     api.my.affinaties.until('/', () => {
       this.set('loading', false)
-      console.profile('set affinaties')
+      // console.profile('set affinaties')
       this.set('list', api.my.affinaties.list)
-      console.profileEnd('set affinaties')
+      // console.profileEnd('set affinaties')
     })
     api.my.affinaties.on('updated', (updated) => {
       let els = this.findAll('.list')

@@ -4,6 +4,7 @@
 // kill `lsof -i -P | grep LISTEN | grep 5678 | awk '{print $2}'`
 
 var Path = require('path')
+var kill = require('tree-kill')
 var fS = require('co-fs-extra')
 var genny = require('genny')
 var spawn = require('co-child-process')
