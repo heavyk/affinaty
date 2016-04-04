@@ -8,6 +8,7 @@
         <foto src="{{~/d.foto}}" size="a" />
       </a>
     </div>
+    {{#if ~/auth}}
     <div class="follow-sm" on-tap="follow">
       {{#if ~/d.following}}
         <img src="/img/unfollow.svg" title="unfollow" width="20" height="20" />
@@ -22,6 +23,7 @@
         {{/if}}
       </div>
     </div>
+    {{/if ~/auth}}
     <div>
       <h4><a href="/profile/{{~/d._id}}" title="{{~/d.name}}">{{~/d.name}}</a></h4>
       <h5>{{~/d.title}}</h5>
@@ -64,7 +66,8 @@ h4 {
 h5 {
   color: #747474;
   font-size: 16px;
-  padding-bottom: 28px;
+  padding-bottom: 32px;
+  height: 18px;
 }
 .follow-sm {
   position: absolute;
@@ -93,6 +96,13 @@ component.exports = {
       }, (data) => {
         this.set('d.following', following ? false : data)
       })
+    })
+    this.set('auth', !!api.yo)
+    api.on('deauth', this.on_deauth = (yo) => {
+      this.set('auth', false)
+    })
+    api.on('auth', this.on_auth = () => {
+      this.set('auth', true)
     })
   },
   events: {
