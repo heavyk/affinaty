@@ -111,7 +111,7 @@ component.exports = {
     this.set('sort', true)
     this.set('query', this.query = assign({}, {
       sort: '+created',
-      limit: 9,
+      limit: 27,
       creator: this.op ? this.op : this.get('creator'),
       category: this.get('category'),
       tag: this.get('tag'),
@@ -272,13 +272,22 @@ component.exports = {
   },
 
   process_waiting () {
+    console.info('process_waiting')
+    // debugger
+    // let els = this.findAll('.debate', {live: true})
+    // this.set({
+    //   t_polls: this.t_polls,
+    //   t_debates: this.t_debates,
+    // })
     let append = []
+    let c = 6
     let max = Math.max(this.t_debates, this.t_polls)
     for (var i = 0; i < this.waiting_list.length; i++) {
       let d = this.waiting_list[i]
-      if (d.created <= max) {
+      if (d.created >= max) {
         this.waiting_list.splice(i--, 1)
         insert(d, append, (a, b) => b.created > a.created ? 1 : -1)
+        if (--c < 0) break
       }
     }
 
@@ -288,6 +297,7 @@ component.exports = {
       let els = this.findAll('.debate').splice(len)
       this.m.appended(els)
       this.layout()
+      if (this.waiting_list.length) setTimeout(() => this.process_waiting(), 200)
     }
   },
 
@@ -305,15 +315,11 @@ component.exports = {
     let done = after(2, () => {
       // after adding all to the waiting_list, we're gonna process it
       this.process_waiting()
-      // this.set({
-      //   t_polls: this.t_polls,
-      //   t_debates: this.t_debates,
-      // })
       next()
     })
 
-    // if (this.t_debates < this.t_polls && this.t_debates !== Infinity) done()
-    // else
+    if (this.t_debates < this.t_polls && this.t_debates !== Infinity) done()
+    else
     api.action(action, params, (data) => {
       // these are temporary until I fix the api
       this.set('loading', false)
@@ -332,10 +338,7 @@ component.exports = {
 
         // save oldest post for next query
         if (d.created < this.t_debates) this.t_debates = d.created
-      }
-
-      for (let i = 0; i < data.length; i++) {
-        this.waiting_list.push(data[i])
+        insert(d, this.waiting_list, (a, b) => b.created > a.created ? 1 : -1)
       }
 
       // if we're at the end of the list, don't ask more
@@ -345,8 +348,8 @@ component.exports = {
     }, done)
 
     action = opinions_creator ? 'selection:poll*' : 'poll' + (txt ? '@' : '*')
-    // if (this.t_polls < this.t_debates && this.t_polls !== Infinity) done()
-    // else
+    if (this.t_polls < this.t_debates && this.t_polls !== Infinity) done()
+    else
     api.action(action, assign({skip: this.t_polls === Infinity ? 0 : this.t_polls}, query), (data) => {
       // these are temporary until I fix the api
       for (let i = 0; i < data.length; i++) {
@@ -362,12 +365,9 @@ component.exports = {
         Ractive.nexus.dd.set(d._id, d)
         Ractive.nexus.debate.insert(d)
 
-        // save oldest post for next query
+        // save oldest post (lower timestamp) for next query
         if (d.created < this.t_polls) this.t_polls = d.created
-      }
-
-      for (let i = 0; i < data.length; i++) {
-        this.waiting_list.push(data[i])
+        insert(d, this.waiting_list, (a, b) => b.created > a.created ? 1 : -1)
       }
 
       // if we're at the end of the list, don't ask more
