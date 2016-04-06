@@ -1,5 +1,4 @@
 
-import api from '../api'
 import local from '../local'
 
 import assign from '../lib/lodash/object/assign'
@@ -39,7 +38,7 @@ class category_ extends Ambition {
         this.now('/')
       }
 
-      this.go()
+      setTimeout(() => { this.go() }, 1)
     })
   }
 

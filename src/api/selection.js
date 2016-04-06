@@ -1,5 +1,4 @@
 
-import api from '../api'
 import local from '../local'
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
@@ -33,7 +32,7 @@ class selection_ extends Ambition {
       creator: creator,
     })
 
-    api.local.getItems(this.keys, (err, data) => {
+    local.getItems(this.keys, (err, data) => {
       if (data && data[this.keys[0]]) {
         // PUT ME BACK KENNY
         // for (var i = 0; i < data[this.keys[0]].length; i++)
@@ -46,7 +45,7 @@ class selection_ extends Ambition {
 
       this.go()
     })
-    // api.local.getItem('selection*:' + creator, (err, data) => {
+    // local.getItem('selection*:' + creator, (err, data) => {
     //   if (data) {
     //     for (var i = 0; i < data.length; i++)
     //       this.insert(data[i])

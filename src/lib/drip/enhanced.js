@@ -149,7 +149,7 @@ EnhancedEmitter.prototype.removeAllListeners = function (ev, fn) {
   var evs = Array.isArray(ev) ? ev.slice(0) : ev.split(this._drip.delimeter);
 
   if (evs.length === 1 && !fn) {
-    if (this._events[ev]) this._events[ev]._ = nul ;
+    if (this._events[ev]) this._events[ev]._ = null;
     return this;
   } else {
 
