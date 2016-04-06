@@ -72,6 +72,7 @@ class notifier extends Ambition {
     //     }
     //   })
     // }, 1)
+    this.now('loading')
   }
 
   update (updates) {

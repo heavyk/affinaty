@@ -195,10 +195,10 @@ let Api = Ractive.extend({
         api.my.notifier = new notifier(me._id)
 
       // other initialization
-      if (!api.category)
-        api.category = new category_
-      if (!api.tag)
-        api.tag = new tag_
+      // if (!api.category)
+      //   api.category = new category_
+      // if (!api.tag)
+      //   api.tag = new tag_
     }
   },
   category: new category_,
