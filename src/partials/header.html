@@ -421,11 +421,19 @@ component.exports = {
     // this.set('show_m', true)
     // this.set('notifications', 3)
     // this.set('new_msgs', 3)
-    api.my.notifier.on('msg*', (c) => {
-      this.set('new_msgs', c)
+    api.on('auth', () => {
+      api.my.notifier.on('msg*', this.on_msg = (c) => {
+        this.set('new_msgs', c)
+      })
+      api.my.notifier.on('list*', this.on_not = (c) => {
+        this.set('notifications', c)
+      })
     })
-    api.my.notifier.on('list*', (c) => {
-      this.set('notifications', c)
+    api.on('deauth', () => {
+      if (api.my.notifier) {
+        api.my.notifier.off('msg*', this.on_msg)
+        api.my.notifier.off('list*', this.on_not)
+      }
     })
     api.observe('me', (me) => {
       this.set('me', me)

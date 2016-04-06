@@ -54,10 +54,7 @@ let Api = Ractive.extend({
           : window.location.origin
       } catch(e) {}
     }()),
-  my: {
-    affinaties: new affinaties,
-    notifier: new notifier,
-  },
+  my: {},
   oninit () {
     this.yo = null
     this.delay = 0 // set this higher to simulate network delay
@@ -192,6 +189,10 @@ let Api = Ractive.extend({
       //   api.my.relation = new relation_(me._id)
       // if (!api.my.debate || api.my.debate.creator !== me._id)
       //   api.my.debate = new debate_(me._id)
+      if (!api.my.affinaties || api.my.affinaties.creator !== me._id)
+        api.my.affinaties = new affinaties(me._id)
+      if (!api.my.notifier || api.my.notifier.creator !== me._id)
+        api.my.notifier = new notifier(me._id)
 
       // other initialization
       if (!api.category)
@@ -204,7 +205,4 @@ let Api = Ractive.extend({
   tag: new tag_,
 })
 
-let api = new Api
-// temporary :)
-api.ages = [18, 25, 35, 45]
-export default api
+export default Api

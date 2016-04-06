@@ -1,5 +1,4 @@
 
-import api from '../api'
 import local from '../local'
 import assign from '../lib/lodash/object/assign'
 import each from '../lib/lodash/collection/each'
@@ -33,6 +32,7 @@ class notifier extends Ambition {
   constructor (creator) {
     super()
     this.box = {}
+    this.creator = creator
     this.situations = {
       'loading': {
         '>' () {
@@ -64,14 +64,14 @@ class notifier extends Ambition {
 
     // setTimeout because api may not be resolved just yet
     // (after all, we are constructing this inside of the api)
-    setTimeout(() => {
-      api.observe('me', (me, _me) => {
-        if (me && this._id !== me._id) {
-          this._id = me._id
-          this.now('loading')
-        }
-      })
-    }, 1)
+    // setTimeout(() => {
+    //   api.observe('me', (me, _me) => {
+    //     if (me && this._id !== me._id) {
+    //       this._id = me._id
+    //       this.now('loading')
+    //     }
+    //   })
+    // }, 1)
   }
 
   update (updates) {

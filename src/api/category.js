@@ -1,5 +1,4 @@
 
-import api from '../api'
 import local from '../local'
 
 import assign from '../lib/lodash/object/assign'

@@ -103,29 +103,6 @@ export default router
 // if I put this code into api.js, router will not be defined yet (in the api.signOut method)
 // this is the only way I can be sure that I do not run into the issue
 
-import api from './api'
-import isEqual from './lib/lodash/lang/isEqual'
-
-setTimeout(function () {
-  if (api.token) {
-    api.observe('me', function (me, _me) {
-      // console.log('me:', me, _me)
-      if (me) {
-        if (!_me) router.init()
-        // else if (isEqual(me, _me))
-        //   console.log('the same me')
-        // else
-        //   console.log('something about me changed')
-      } else {
-        if (_me) api.signOut(true)
-      }
-    })
-  } else {
-    api.signOut(true)
-    router.init()
-  }
-}, 1)
-
 //  ==============================
 // ======== T E S T I N G =========
 //  ==============================
