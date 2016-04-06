@@ -818,6 +818,17 @@ blockquote {
   }
 }
 
+// fix for really long links in text blocks
+.text a {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+}
+a.list-text {
+  white-space: normal;
+}
+
 p, h1, h2, h3, h4, h5, h6 {
   padding: 0 15px 0 0;
   margin: 0 0 10px 0;

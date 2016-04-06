@@ -93,14 +93,18 @@ function locationOf (element, array, comparer, start, end) {
 component.exports = {
   oninit () {
     let list = this.list = []
-    this.waiting_list = []
     this.set('list', list)
-    // this.set('waiting_list', this.waiting_list)
     this.clear()
+    // this.set('waiting_list', this.waiting_list)
     // this.set({
     //   t_polls: this.t_polls,
     //   t_debates: this.t_debates,
     // })
+
+    router.on('dispatch', this.on_dispatch = () => {
+      console.log('dispatch')
+      // this.clear()
+    })
 
     Ractive.header.on('category', (category) => {
       this.set('category', (this.category = category ? category._id : null))
@@ -108,13 +112,17 @@ component.exports = {
 
     this.op = this.get('opinions')
 
+    let category = this.get('category')
+    Ractive.header.fire('category', category ? {_id: category} : null)
+    let tag = this.get('tag')
+
     this.set('sort', true)
     this.set('query', this.query = assign({}, {
       sort: '+created',
       limit: 27,
       creator: this.op ? this.op : this.get('creator'),
-      category: this.get('category'),
-      tag: this.get('tag'),
+      category: category,
+      tag: tag,
     }))
 
     this.layout = throttle(() => {
@@ -124,13 +132,11 @@ component.exports = {
       }, 1)
     }, 500, true)
 
-    let __creator
-    this.observe('creator', (creator) => { if (creator && creator !== __creator) {
+    this.observe('creator', (creator) => {
       this.set('query.creator', this.query.creator = creator)
       this.clear()
       this.go()
-      __creator = creator
-    }}, {init: false})
+    }, {init: false})
 
     this.observe('top', (top) => {
       this.set('query.top', this.query.top = top || null)
@@ -138,49 +144,20 @@ component.exports = {
       this.go()
     }, {init: false})
 
-    let __tag
     this.observe('tag', (tag) => {
       this.set('query.tag', this.query.tag = tag)
       this.clear()
       this.go()
-
-      if (tag) {
-        for (let i = 0; i < this.list.length; i++) {
-          let d = this.list[i]
-          if (this.tag !== d._tag) {
-            this.list.splice(i--, 1)
-            this.exists[d._id] = void 0
-          }
-        }
-        this.layout()
-      }
-      __tag = tag
     }, {init: false})
 
-
-    let __category
-    this.observe('category', (category) => { if (category !== __category) {
+    this.observe('category', (category) => {
+      console.info('category', category)
+      // debugger
       Ractive.header.fire('category', category ? {_id: category} : null)
       this.set('query.category', this.query.category = category)
       this.clear()
-
-      if (category) {
-        for (let i = 0; i < this.list.length; i++) {
-          let d = this.list[i]
-          if (this.category !== d._category) {
-            let exists = this.exists[d._id]
-            this.list.splice(i--, 1)
-            for (let i in this.exists) {
-              if (this.exists[i] > exists) this.exists[i]--
-            }
-            this.exists[d._id] = void 0
-          }
-        }
-        this.layout()
-      }
       this.go()
-      __category = category
-    }}, {init: false})
+    }, {init: false})
 
     this.on('clear-search', () => {
       this.set('query.text', null)
@@ -199,25 +176,21 @@ component.exports = {
       this.add(d)
     })
 
-    Ractive.nexus.debate.on('-', (id) => {
-      let exists = this.exists[id]
-      if (exists !== void 0) {
-        // TODO need proper remove function
-        this.list.splice(exists, 1)
-        this.exists[id] = void 0
-        for (let i in this.exists) {
-          if (this.exists[i] > exists) this.exists[i]--
-        }
-        this.layout()
-      }
-    })
+    Ractive.nexus.debate.on('-', (id) => this.remove(id))
+  },
+
+  onteardown () {
+    router.off('dispatch', this.on_dispatch)
   },
 
   clear () {
+    // if (this.list.length) debugger
     this.set('list.length', 0)
+    // if (this.list.length) this.list.splice(this.list.length)
     this.t_debates = Infinity
     this.t_polls = Infinity
     this.all_loaded = 0
+    this.waiting_list = []
     this.exists = {} // map of ids -> offset (for adding and removing)
   },
 
@@ -275,6 +248,32 @@ component.exports = {
     this.m.layout()
   },
 
+  remove (id) {
+    let exists = this.exists[id]
+    // debugger
+    if (exists !== void 0) {
+      // TODO need proper remove function
+      console.log('removing', id, this.list[exists])
+      for (let i in this.exists) {
+        let offset = this.exists[i]
+        if (!offset) continue
+        if (i !== this.list[offset]._id) {
+          console.error('not equal', i, this.list[offset]._id)
+        } else {
+          console.log('good')
+        }
+      }
+
+      this.list.splice(exists, 1)
+      this.exists[id] = void 0
+      for (let i in this.exists) {
+        if (this.exists[i] > exists) this.exists[i]--
+      }
+
+      this.layout()
+    }
+  },
+
   process_waiting () {
     console.info('process_waiting')
     // debugger
@@ -284,14 +283,17 @@ component.exports = {
     //   t_debates: this.t_debates,
     // })
     let append = []
-    let c = 6
+    let c = 0
     let max = Math.max(this.t_debates, this.t_polls)
     for (var i = 0; i < this.waiting_list.length; i++) {
       let d = this.waiting_list[i]
       if (d.created >= max) {
         this.waiting_list.splice(i--, 1)
-        insert(d, append, (a, b) => b.created > a.created ? 1 : -1)
-        if (--c < 0) break
+        this.exists[d._id] = insert(d, append, (a, b) => b.created > a.created ? 1 : -1) + this.list.length
+        if (++c > 5 && this.waiting_list.length) {
+          setTimeout(() => this.process_waiting(), 200)
+          break
+        }
       }
     }
 
@@ -346,7 +348,12 @@ component.exports = {
       }
 
       // if we're at the end of the list, don't ask more
-      if (data.length !== params.limit) this.all_loaded++
+      if (data.length !== params.limit) {
+        this.all_loaded++
+        // if no results were found
+        if (this.t_debates === Infinity) this.t_debates = 0
+        if (this.t_polls === Infinity) this.t_polls = 0
+      }
       // this.t_debates += query.limit
       done()
     }, done)
@@ -375,7 +382,11 @@ component.exports = {
       }
 
       // if we're at the end of the list, don't ask more
-      if (data.length !== params.limit) this.all_loaded++
+      if (data.length !== params.limit) {
+        this.all_loaded++
+        // if no results were found
+        if (this.t_polls === Infinity) this.t_polls = 0
+      }
       // this.t_polls += params.limit
       done()
     }, done)

@@ -3,12 +3,13 @@
 // original code here:
 // https://github.com/thgreasi/localForage-setItems
 
-var Promise = require('promise')
+import Promise from 'lie'
+import executeCallback from './utils/executeCallback'
+import serializer from './utils/serializer'
 
 var globalObject = window
-var serializer = require('localforage/src/utils/serializer')
 
-function localforageSetItems (items, keyFn, valueFn, callback) {
+export function localforageSetItems (items, keyFn, valueFn, callback) {
   var localforageInstance = this
   var currentDriver = localforageInstance.driver()
 
@@ -52,7 +53,7 @@ function forEachItem (items, keyFn, valueFn, loopFn) {
   return result
 }
 
-function setItemsGeneric (items, keyFn, valueFn, callback) {
+export function setItemsGeneric (items, keyFn, valueFn, callback) {
   var localforageInstance = this
 
   var itemPromises = forEachItem(items, keyFn, valueFn, function (key, value) {
@@ -64,7 +65,7 @@ function setItemsGeneric (items, keyFn, valueFn, callback) {
   return promise
 }
 
-function setItemsIndexedDB (items, keyFn, valueFn, callback) {
+export function setItemsIndexedDB (items, keyFn, valueFn, callback) {
   var localforageInstance = this
 
   var promise = new Promise(function (resolve, reject) {
@@ -108,7 +109,7 @@ function setItemsIndexedDB (items, keyFn, valueFn, callback) {
   return promise
 }
 
-function setItemsWebsql (items, keyFn, valueFn, callback) {
+export function setItemsWebsql (items, keyFn, valueFn, callback) {
   var localforageInstance = this
   var promise = new Promise(function (resolve, reject) {
     localforageInstance.ready().then(function () {
@@ -150,34 +151,3 @@ function setItemsWebsql (items, keyFn, valueFn, callback) {
   executeCallback(promise, callback)
   return promise
 }
-
-function executeCallback (promise, callback) {
-  if (callback) {
-    promise.then(function (result) {
-      callback(null, result)
-    }, function (error) {
-      callback(error)
-    })
-  }
-}
-
-function extendPrototype (localforage) {
-  console.log('extending proto set')
-  var localforagePrototype = Object.getPrototypeOf(localforage)
-  if (localforagePrototype) {
-    localforagePrototype.setItems = localforageSetItems
-    localforagePrototype.setItems.indexedDB = function () {
-      return setItemsIndexedDB.apply(this, arguments)
-    }
-    localforagePrototype.setItems.websql = function () {
-      return setItemsWebsql.apply(this, arguments)
-    }
-    localforagePrototype.setItems.generic = function () {
-      return setItemsGeneric.apply(this, arguments)
-    }
-  }
-}
-
-// extendPrototype(localforage)
-
-export default extendPrototype

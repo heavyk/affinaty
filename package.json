@@ -47,7 +47,7 @@
     "gobble-rollup-babel": "^0.6.1",
     "gobble-uglifyjs": "^0.2.1",
     "http-proxy": "^1.11.3",
-    "localforage": "=1.2.8",
+    "lie": "^3.0.2",
     "markdown-it": "^6.0.0",
     "markdown-it-emoji": "^1.1.0",
     "markdown-it-video": "heavyk/markdown-it-video#vine-parser",

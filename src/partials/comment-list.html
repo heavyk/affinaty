@@ -215,7 +215,7 @@ component.exports = {
           if (api.yo) this.find('textarea').focus()
         })
       }
-    }, {initial: false})
+    }, {init: false})
     this.on('add', (event) => {
       event.original.preventDefault()
       let text = this.get('text').trim()
