@@ -99,18 +99,18 @@ let Api = Ractive.extend({
       })
     })
   },
-  signIn (data) {
+  signIn (data, skip) {
     this.mundial = data.mundial
     this.token = data.token
     window.localStorage.setItem(this._token, data.token)
-    return this.whoIaM(data.mundial[0])
+    return this.whoIaM(data.mundial[0], skip)
   },
-  whoIaM(me) {
+  whoIaM(me, skip) {
     this.yo = me._id
     return this.local.setItem('me', me, (err) => {
       if (!err) this.set('me', me)
       this.set('authenticated', true)
-      this.fire('auth', me)
+      if (!skip) this.fire('auth', me)
     })
   },
   signOut (redirect) {

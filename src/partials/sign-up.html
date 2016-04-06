@@ -108,9 +108,9 @@ component.exports = {
         this.set('saving', true)
         api.action('sign-up', form.data, (data) => {
           this.set('saving', false)
-          api.signIn(data).then(() => {
+          api.signIn(data, true).then(() => {
             this.parent.teardown()
-            router.dispatch('/home')
+            // router.dispatch('/home')
             this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
           })
         }, (err) => {

@@ -181,14 +181,15 @@ component.exports = {
 
     this.observe('d.pos', (pos) => {
       this.set('params_vote', params_buttoms[pos > 0 ? pos + 1 : pos + 2])
-    }, {initial: false})
+    })
 
   },
   pos (pos, skip) {
     if (!api.me) {
-      api.once('auth', () => {
-        this.pos(pos, skip)
-      })
+      // deactivated cause it breaks statistics
+      // api.once('auth', () => {
+      //   this.pos(pos, skip)
+      // })
       return this.modal('sign-in', {header: false})
     }
     let p = api.my.opinion.debate_pos(this.get('d._id'))

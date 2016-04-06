@@ -50,13 +50,11 @@ component.exports = {
   oninit() {
     api.on('deauth', this.on_deauth = () => {
       this.set('d.idx', null)
-      // console.info('d.idx', null)
     })
 
     api.on('auth', this.on_auth = () => {
       api.my.selection.until('/', () => {
         this.set('d.idx', api.my.selection.poll_pos(this.get('d._id') || null))
-        // console.info('d.idx', api.my.selection.poll_pos(this.get('d._id') || null))
       })
     })
     if (api.yo) this.on_auth()
@@ -67,9 +65,10 @@ component.exports = {
   },
   selection (iidx) {
     if (!api.me) {
-      api.once('auth', () => {
-        this.selection(iidx)
-      })
+      // deactivated cause it breaks statistics
+      // api.once('auth', () => {
+      //   this.selection(iidx)
+      // })
       return this.modal('sign-in', {header: false})
     }
     let idx = this.get('d.idx')
