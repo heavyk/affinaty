@@ -15,29 +15,32 @@ component.exports = {
     this._shape = this.get('shape')
   },
   oninit () {
-    let id = this.get('src')
-    let px = 0
-    switch (this._size) {
-      case 'x': px = 1920; break
-      case 'l': px = 1440; break
-      case 'm': px = 720; break
-      case 's': px = 360; break
-      case 't': px = 240; break
-      case 'a': px = 120; break
-      case 'k': px = 28; break
-      case 'y': px = 36; break
-      case 'z': px = 49; break
+    let set_src = (id) => {
+      let px = 0
+      switch (this._size) {
+        case 'x': px = 1920; break
+        case 'l': px = 1440; break
+        case 'm': px = 720; break
+        case 's': px = 360; break
+        case 't': px = 240; break
+        case 'a': px = 120; break
+        case 'k': px = 28; break
+        case 'y': px = 36; break
+        case 'z': px = 49; break
+      }
+
+      let cls = (this._shape || 'rd') + '-' + this._size
+      if (!id) cls = 'n-' + cls
+      let _class = this.get('.class')
+      if (_class) cls += ' ' + _class
+
+      this.set({
+        px, cls,
+        url: id ? api.url + '/i/' + repeat(this._size, dpr) + '/' + id : (this._default || '/img/default.svg'),
+      })
     }
-
-    let cls = (this._shape || 'rd') + '-' + this._size
-    if (!id) cls = 'n-' + cls
-    let _class = this.get('.class')
-    if (_class) cls += ' ' + _class
-
-    this.set({
-      px, cls,
-      url: id ? api.url + '/i/' + repeat(this._size, dpr) + '/' + id : (this._default || '/img/default.svg'),
-    })
+    if (this.get('observe')) this.observe('src', set_src)
+    else set_src(this.get('src'))
   },
 }
 </script>

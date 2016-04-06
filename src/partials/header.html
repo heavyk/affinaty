@@ -52,7 +52,9 @@
       </li>
       <li class="dropdown">
         <a class="dropdown-toggle">
-          <a href="/profile/{{~/me._id}}"><foto src="{{~/me.foto}}" size="y" /></a>
+          <a href="/profile/{{~/me._id}}">
+            <foto src="{{~/me.foto}}" size="y" observe="1" />
+          </a>
           <span class="name">{{~/me.name}}</span>
           <i class="fa fa-caret-down"></i>
         </a>
@@ -430,7 +432,7 @@ component.exports = {
     api.observe('me', (me) => {
       console.warn('me'. me)
       this.set('me', me)
-    }, {initial: false})
+    }, {init: false})
     api.once('deauth', (yo) => {
       // debugger
       if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})

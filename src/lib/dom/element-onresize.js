@@ -20,7 +20,7 @@ function resizeListener (e) {
   if (win._raf) cancelFrame(win._raf)
   win._raf = requestFrame(function () {
     let trigger = win._trigger
-    trigger._listeners.forEach(function (fn) {
+    if (trigger) trigger._listeners.forEach(function (fn) {
       fn.call(trigger, e)
     })
   })
