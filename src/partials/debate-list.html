@@ -222,8 +222,10 @@ component.exports = {
       if (this.exists[i] >= pos) this.exists[i]++
     }
     this.exists[d._id] = pos
-    this.m.reloadItems()
-    this.m.layout()
+    if (this.m) {
+      this.m.reloadItems()
+      this.m.layout()
+    }
   },
 
   remove (id) {
@@ -275,13 +277,14 @@ component.exports = {
       }
     }
 
-    if (append.length && this.m) {
+    if (append.length) {
       let len = this.list.length
       this.list.push.apply(this.list, append)
-      let els = this.findAll('.debate').splice(len)
-      this.m.appended(els)
-      this.layout()
-      if (this.waiting_list.length) setTimeout(() => this.process_waiting(), 200)
+      if (this.m) {
+        let els = this.findAll('.debate').splice(len)
+        this.m.appended(els)
+        this.layout()
+      }
     }
   },
 

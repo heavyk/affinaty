@@ -38,7 +38,7 @@ class category_ extends Ambition {
         this.now('/')
       }
 
-      setTimeout(() => { this.go() }, 1)
+      this.go()
     })
   }
 
@@ -77,6 +77,7 @@ class category_ extends Ambition {
 
   go (next) {
     let query = this.query
+    if (typeof api !== 'object') return setTimeout(() => { this.go(next) }, 10)
     // TODO change the queries to go based on time
     api.action('category*', assign({skip: this.skip}, query), (data) => {
       // if skip is really big, then we've already fetched
