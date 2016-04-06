@@ -438,7 +438,7 @@ component.exports = {
       }
     })
     api.observe('me', (me) => {
-      console.warn('me'. me)
+      console.warn('me', me)
       this.set('me', me)
     }, {init: false})
     api.once('deauth', (yo) => {

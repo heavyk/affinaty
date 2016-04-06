@@ -6,14 +6,14 @@
   <canvas style="display: {{~/cropped ? 'none' : 'block'}}"></canvas>
   {{#if ~/cropped}}
     {{#if ~/foto}}
-      <foto src="{{~/foto}}" shape="{{~/shape}}" size="{{~/size}}" />
+      <foto src="{{~/foto}}" shape="{{~/shape}}" size="{{~/size}}" observe="1" />
     {{else}}
       <img src="{{~/image}}" width="{{~/width}}" height="{{~/height}}" />
     {{/if}}
   {{/if}}
   <button on-tap="done" class="{{~/cropped ? 'done' : ''}}">
     {{#if ~/cropped}}
-      modify
+      modificar
     {{else}}
       sí, quiero esta foto
     {{/if}}
