@@ -207,28 +207,37 @@ component.exports = {
     this.set('movil', window.isMobile)
     this.set('list', this.list = [])
   },
-  oninit () {
-    this.set('loading', true)
-
-    api.my.affinaties.until('/', () => {
-      this.set('loading', false)
-      // console.profile('set affinaties')
-      this.set('list', api.my.affinaties.list)
-      // console.profileEnd('set affinaties')
-    })
-    api.my.affinaties.on('updated', (updated) => {
-      let els = this.findAll('.list')
-      clearTimeout(this.timeout)
-      for (var i = 0; i < els.length; i++) {
-        if (~updated.indexOf(i)) els[i].className += ' updated'
-      }
-      this.timeout = setTimeout(() => {
+  onconfig () {
+    api.on('auth', this.on_auth = () => {
+      this.set('loading', true)
+      api.my.affinaties.until('/', () => {
+        // debugger
+        this.set('loading', false)
+        console.log('set affinaties')
+        // console.profile('set affinaties')
+        this.set('list', api.my.affinaties.list)
+        // console.profileEnd('set affinaties')
+      })
+      api.my.affinaties.on('updated', (updated) => {
+        let els = this.findAll('.list')
+        clearTimeout(this.timeout)
         for (var i = 0; i < els.length; i++) {
-          els[i].className = 'list'
+          if (~updated.indexOf(i)) els[i].className += ' updated'
         }
-      }, 2000)
-      // TODO set them a different color or something
+        this.timeout = setTimeout(() => {
+          for (var i = 0; i < els.length; i++) {
+            els[i].className = 'list'
+          }
+        }, 2000)
+        // TODO set them a different color or something
+      })
     })
+    if (api.yo) this.on_auth()
+
+    api.on('deauth', this.on_deauth = () => {
+      console.log('api.my.affinaties', api.my.affinaties)
+    })
+
     this.on('send-message', (event) => {
       let _id = event.context._id
       let name = event.context.name
@@ -267,6 +276,10 @@ component.exports = {
       // gemini.destroy()
       if (!movil) onresize.removeResizeListener(container, resizer)
     })
+  },
+  onteardown () {
+    api.off('auth', this.on_auth)
+    api.off('deauth', this.on_deauth)
   },
   events: { tap },
 }
