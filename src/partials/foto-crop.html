@@ -11,7 +11,7 @@
       <img src="{{~/image}}" width="{{~/width}}" height="{{~/height}}" />
     {{/if}}
   {{/if}}
-  <button on-tap="done" class="{{~/cropped ? 'done' : ''}}">
+  <button on-tap="done" type="button" class="{{~/cropped ? 'done' : ''}}">
     {{#if ~/cropped}}
       modificar
     {{else}}
@@ -48,7 +48,7 @@ component.exports = {
     if (typeof v === 'undefined' || v !== val)
       this.set(key, val)
   },
-  oninit () {
+  onconfig () {
     this.define('cropped', false)
     // TODO retina compat
     this.define('width', 240)
@@ -56,8 +56,10 @@ component.exports = {
     this.define('size', 't')
     this.on('done', (cb) => {
       let cropped = this.get('cropped')
-      this.set('cropped', !cropped)
-      if (!cropped) {
+      debugger
+      if (cropped) {
+        this.set('cropped', false)
+      } else {
         let r = this.cropHost.getRect()
         let s = r.size / 2
         let rect = {
@@ -67,13 +69,13 @@ component.exports = {
           h: r.size / r.h,
         }
         if (rect.l === 0 && rect.t === 0 && rect.w === 1 && rect.h === 1) {
-          this.set('foto', this.get('src'))
+          this.set({foto: this.get('src'), cropped: true})
         } else {
           api.action('foto<', {
             _id: this.get('src'),
             rect: rect,
           }, (res) => {
-            res && this.set('foto', res)
+            res && this.set({foto: res, cropped: true})
             typeof cb === 'function' && cb()
           })
         }

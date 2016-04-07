@@ -131,7 +131,7 @@ component.exports = {
     }, this.get('dropzone-events'))
 
     this.parent.on('submitting', this.onsubmitting = (cb) => {
-      if (cb) if (this.get('cropping')) {
+      if (typeof cb === 'function') if (this.get('cropping')) {
         this.fire('finish-cropping', cb)
       } else cb()
     })
