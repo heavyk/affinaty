@@ -85,9 +85,12 @@ component.exports = {
     })
 
     this.set('d', {
-      name: '',
+      // name: 'user' + Math.round(Math.random() * 100),
       // ident: 'random' + Math.round(Math.random() * 100) + '@affinaty.com',
-      ident: window.localStorage.email,
+      // password: 'test',
+      // confirm: 'test',
+      name: '',
+      ident: window.localStorage.email || '',
     })
     this.validator = new Validator('d', {
       'name': {required: true, min: 4, max: 30, type: 'string'},

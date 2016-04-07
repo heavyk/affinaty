@@ -237,6 +237,16 @@ component.exports = {
     this.set('email', email)
     this.set('password', password)
     this.set('remember', email || password ? true : false)
+    api.once('auth', (me) => {
+      setTimeout(() => {
+        if (me.tmp) {
+          this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
+        }
+        if (this.parent && this.parent.teardown) {
+          this.parent.teardown()
+        }
+      }, 1)
+    })
     this.on('submit', (e) => {
       e.original.preventDefault()
       let email = this.get('email')
@@ -245,18 +255,7 @@ component.exports = {
       let opts = { ident: email, password: password }
       if (remember) opts.ttl = 365 * 24 * 3600
       api.action('sign-in', opts, (data) => {
-        api.signIn(data).then(() => {
-          setTimeout(() => {
-            if (data.tmp) {
-              this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
-            // } else if (router.uri !== '/ho') {
-            //   router.dispatch('/home')
-            }
-            if (this.parent && this.parent.teardown) {
-              this.parent.teardown()
-            }
-          }, 1)
-        })
+        api.signIn(data)
       }, (error) => {
         this.set('error', 'correo o contraseña incorrectos')
         api.signOut()
