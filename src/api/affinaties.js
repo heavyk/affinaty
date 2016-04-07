@@ -4,7 +4,8 @@ import assign from '../lib/lodash/object/assign'
 import each from '../lib/lodash/collection/each'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
-import { insert } from '../lib/ordered-array'
+import { insert_d } from '../lib/ordered-array'
+import { affinaty_asc } from '../lib/order-by'
 
 class affinaties extends Ambition {
   constructor (creator) {
@@ -46,7 +47,7 @@ class affinaties extends Ambition {
         this.list[exists].affinaty += v
       }
     })
-    this.list.sort((a, b) => b.affinaty > a.affinaty ? 1 : b.affinaty < a.affinaty ? -1 : 0)
+    this.list.sort(affinaty_asc)
     // reset our exists list
     for (let i = 0; i < this.list.length; i++) {
       let d = this.list[i]
@@ -64,7 +65,7 @@ class affinaties extends Ambition {
   insert (d, silent) {
     let loc = this.exists[d._id]
     if (loc === void 0) {
-      this.exists[d._id] = insert(d, this.list, (a, b) => b.affinaty > a.affinaty ? 1 : b.affinaty < a.affinaty ? -1 : 0)
+      insert_d(d, this.list, this.exists, affinaty_asc)
       if (!silent) {
         this.emit(d._id, d)
       }

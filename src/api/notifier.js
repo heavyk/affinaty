@@ -4,7 +4,8 @@ import assign from '../lib/lodash/object/assign'
 import each from '../lib/lodash/collection/each'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
-import { insert } from '../lib/ordered-array'
+import { insert_d } from '../lib/ordered-array'
+import { affinaty_asc, T_asc } from '../lib/order-by'
 
 class notifier extends Ambition {
   constructor (creator) {
@@ -39,7 +40,7 @@ class notifier extends Ambition {
         '>' () {}
       }
     }
-    
+
     this.now('loading')
   }
 
@@ -50,7 +51,7 @@ class notifier extends Ambition {
         this.list[exists].affinaty += v
       }
     })
-    this.list.sort((a, b) => b.affinaty > a.affinaty ? 1 : b.affinaty < a.affinaty ? -1 : 0)
+    this.list.sort(affinaty_asc)
     // reset our exists list
     for (let i = 0; i < this.list.length; i++) {
       let d = this.list[i]
@@ -114,7 +115,7 @@ class notifier extends Ambition {
 
     let loc = exists[d._id]
     if (loc === void 0) {
-      exists[d._id] = insert(d, list, (a, b) => b.T > a.T ? 1 : b.T < a.T ? -1 : 0)
+      insert_d(d, list, exists, T_asc)
       if (d.T > this.gt) this.gt = d.T
       if (d.T < this.lt) this.lt = d.T
       if (!silent) {
@@ -168,20 +169,15 @@ class notifier extends Ambition {
   }
 
   _remove (d) {
+    let idx
     let r = this.resolve(d)
     let exists = r.exists
     let list = r.list
     let ns = r.ns
 
-    let idx = exists[d._id]
-    if (idx !== void 0) {
-      list.splice(idx, 1)
-      delete exists[d._id]
+    if (remove_d(d._id, list, exists) !== void 0) {
       let b = this.box[d._b]
       if (b) ~(idx = b.indexOf(d._id)) && b.splice(idx, 1)
-      for (var i = 0; i < list.length; i++) {
-        exists[list[i]._id] = i
-      }
       this.emit(`${ns}*`, list.length)
     }
 

@@ -65,7 +65,8 @@ import masonry from 'masonry-layout'
 import assign from '../lib/lodash/object/assign'
 import throttle from '../lib/lodash/function/throttle'
 import after from '../lib/lodash/function/after'
-import { insert } from '../lib/ordered-array'
+import { insert, insert_d, remove_d } from '../lib/ordered-array'
+import { created_asc } from '../lib/order-by'
 
 
 component.exports = {
@@ -217,11 +218,7 @@ component.exports = {
   add (d, _id) {
     let id = _id || d._id
     if (this.exists[id] !== void 0 || !this.matches(d)) return
-    let pos = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
-    for (var i in this.exists) {
-      if (this.exists[i] >= pos) this.exists[i]++
-    }
-    this.exists[d._id] = pos
+    insert_d(d, this.list, this.exists, created_asc)
     if (this.m) {
       this.m.reloadItems()
       this.m.layout()
@@ -229,29 +226,7 @@ component.exports = {
   },
 
   remove (id) {
-    let exists = this.exists[id]
-    // debugger
-    if (exists !== void 0) {
-      // TODO need proper remove function
-      console.log('removing', id, this.list[exists])
-      for (let i in this.exists) {
-        let offset = this.exists[i]
-        if (!offset) continue
-        if (i !== this.list[offset]._id) {
-          console.error('not equal', i, this.list[offset]._id)
-        } else {
-          console.log('good')
-        }
-      }
-
-      this.list.splice(exists, 1)
-      this.exists[id] = void 0
-      for (let i in this.exists) {
-        if (this.exists[i] > exists) this.exists[i]--
-      }
-
-      this.layout()
-    }
+    if (remove_d(id, this.list, this.exists) !== void 0) this.layout()
   },
 
   process_waiting () {
@@ -269,7 +244,7 @@ component.exports = {
       let d = this.waiting_list[i]
       if (d.created >= max) {
         this.waiting_list.splice(i--, 1)
-        this.exists[d._id] = insert(d, append, (a, b) => b.created > a.created ? 1 : -1) + this.list.length
+        this.exists[d._id] = insert(d, append, created_asc) + this.list.length
         if (++c > 5 && this.waiting_list.length) {
           setTimeout(() => this.process_waiting(), 200)
           break
@@ -325,7 +300,7 @@ component.exports = {
 
         // save oldest post for next query
         if (d.created < this.t_debates) this.t_debates = d.created
-        insert(d, this.waiting_list, (a, b) => b.created > a.created ? 1 : -1)
+        insert(d, this.waiting_list, created_asc)
       }
 
       // if we're at the end of the list, don't ask more

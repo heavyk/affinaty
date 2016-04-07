@@ -3,7 +3,8 @@ import local from '../local'
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
-import { insert } from '../lib/ordered-array'
+import { insert_d } from '../lib/ordered-array'
+import { title_dsc } from '../lib/order-by'
 
 class tag_ extends Ambition {
   constructor () {
@@ -43,9 +44,7 @@ class tag_ extends Ambition {
   insert (d, silent) {
     let loc = this.exists[d._id]
     if (loc === void 0) {
-      this.exists[d._id] = insert(d, this.list, (a, b) => {
-        return a.title > b.title ? 1 : a.title < b.title ? -1 : 0
-      })
+      insert_d(d, this.list, this.exists, title_dsc)
       if (!silent) {
         this.emit(d._id, d)
       }

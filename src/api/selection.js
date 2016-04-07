@@ -3,7 +3,8 @@ import local from '../local'
 import assign from '../lib/lodash/object/assign'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
-import { insert } from '../lib/ordered-array'
+import { insert_d } from '../lib/ordered-array'
+import { created_asc } from '../lib/order-by'
 
 class selection_ extends Ambition {
   constructor (creator) {
@@ -60,7 +61,7 @@ class selection_ extends Ambition {
     if (!this['+created'] || this['+created'] > d.created) this['+created'] = d.created
     if (!this['-created'] || this['-created'] < d.created) this['-created'] = d.created
     if (loc === void 0) {
-      this.exists[d._id] = insert(d, this.list, (a, b) => b.created > a.created ? 1 : -1)
+      insert_d(d, this.list, this.exists, created_asc)
       // console.info('not found', d._id)
       if (!silent) {
         this.emit(d.poll + '.' + d.creator, d)
