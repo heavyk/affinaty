@@ -31,6 +31,7 @@ var affinaty = gobble([
 				 'easy-pie-chart',
 				 'chart.js',
 				 'es6-map',
+				 'lie',
 				 'engine.io-client',
 			],
 			plugins: [
