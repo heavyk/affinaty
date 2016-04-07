@@ -81,6 +81,11 @@ class affinaties extends Ambition {
     }
   }
 
+  get (id) {
+    let pos = this.exists[id]
+    return pos === void 0 ? null : this.list[pos]
+  }
+
   go (next) {
     let list = this.list
     api.action('affinaties', {}, (data) => {

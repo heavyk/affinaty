@@ -103,7 +103,10 @@ component.exports = {
       this.set('auth', false)
     })
     api.on('auth', this.on_auth = () => {
-      this.set('auth', true)
+      api.my.affinaties.until('/', () => {
+        this.set('d.following', api.my.affinaties.get(this.get('d._id')))
+        this.set('auth', true)
+      })
     })
   },
   events: {
