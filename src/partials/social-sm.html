@@ -16,6 +16,9 @@
     <i class="fa fa-close" ></i>
   </div>
   {{/if ~/mine}}
+  <!-- <div class="others" on-tap="remove-debug" decorator="tip:'test removal',39">
+    <i class="fa fa-close" style="color: blue" ></i>
+  </div> -->
 </div>
 
 <style>
@@ -90,7 +93,7 @@ component.exports = {
       this.set('mine', (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo)
     })
     if (api.yo) this.on_auth()
-    
+
     this.dispatch = (active) => {
       router.dispatch(`/${type}/${id}/${active}`)
     }
@@ -102,11 +105,16 @@ component.exports = {
           if (v) {
             api.action(type + '-', {_id: id}, (res) => {
               if (res) Ractive.nexus.debate.fire('-', id)
+              // if view is debate/poll, redirect to the home
+              if (router.uri.path.split('/')[1] === type) router.dispatch('/', { history: false })
             })
           }
         }
       })
     })
+    // this.on('remove-debug', () => {
+    //   Ractive.nexus.debate.fire('-', id)
+    // })
   },
   onteardown() {
     api.off('auth', this.on_auth)
