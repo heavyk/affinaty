@@ -604,7 +604,7 @@ component.exports = {
     let complete_screen
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
-      api.my.notifier.remove_box(id)
+      if (api.my.notifier) api.my.notifier.remove_box(id)
       // if (api.me && api.me._id === id && false) {
       //   this.set(assign({ mine: true, }, api.me))
       // } else {

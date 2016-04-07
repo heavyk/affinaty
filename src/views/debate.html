@@ -87,7 +87,7 @@ component.exports = {
     let __id
     this.observe('id', (_id) => {
       this.set('loading', true)
-      api.my.notifier.remove_box(_id)
+      if (api.my.notifier) api.my.notifier.remove_box(_id)
       api.action('debate', {_id}, (data) => {
         this.set('loading', false)
         this.set('debate', data)
