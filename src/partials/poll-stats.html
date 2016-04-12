@@ -178,7 +178,7 @@ component.exports = {
 
       let percents = new Array(count)
       for (gender = 0; gender < num_planets; gender++)
-        percents[gender] = planets[gender] / total * 100
+        percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
 
       this.set('total', total)
       this.set('totals', totals)
@@ -211,7 +211,7 @@ component.exports = {
     percent_total (i, px) {
       let v = this.get('totals.'+i)
       let c = this.get('total')
-      return Math.round(v / c * (px || 100))
+      return c ? Math.round(v / c * (px || 100)) : 0
     },
     text (i) {
       return this.get('options.'+i+'.text')

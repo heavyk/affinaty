@@ -24,7 +24,7 @@
         {{#each ~/d.options : i}}
         <div class="row">
           <div class="text-option col-xs-10">
-            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" />
+            <input type="text" maxlength="50" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" />
           </div>
 
           <div class="remove-option col-xs-2 {{#if ~/d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
@@ -38,7 +38,7 @@
         <div class="new-poll">
           <div class="text-option col-xs-10">
             <input type="text"
-              maxlength="30"
+              maxlength="50"
               decorator="focusSelect"
               on-focus-blur="toggle('highlight')"
               placeholder="Escribe más opciones"
@@ -193,7 +193,7 @@ component.exports = {
       'foto': {required: false, type: 'id'},
     })
     this.option_validator = new Validator('new_option', {
-      'text': {required: true, type: 'string', min: 1, max: 30},
+      'text': {required: true, type: 'string', min: 1, max: 50},
     })
     this.on('category', (category) => {
       this.set('d.category', category._id)
