@@ -27,7 +27,7 @@
   <ul class="selected-tags wtf">
     {{#each ~/selected : i}}
     <li class="tag" on-tap="removeTag(event, i)">
-      #{{~/title}}
+      #{{.title}}
     </li>
     {{/each ~/selected}}
   </ul>

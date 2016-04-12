@@ -24,7 +24,7 @@
         {{#each ~/d.options : i}}
         <div class="row">
           <div class="text-option col-xs-10">
-            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{~/text}}" />
+            <input type="text" maxlength="30" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" />
           </div>
 
           <div class="remove-option col-xs-2 {{#if ~/d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
