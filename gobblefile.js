@@ -18,6 +18,7 @@ var affinaty = gobble([
 		})
 		.transform('rollup', {
 			entry: 'affinaty-web.js',
+			// entry: 'affinaty-cpanel.js',
 			dest: 'app.js',
 			format: 'cjs',
 			external: [

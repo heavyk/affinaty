@@ -92,110 +92,28 @@ moment.locale('es')
 // debug will be false when code is minified because the comment will be removed
 Ractive.DEBUG = /lala/.test(function(){/*lala*/})
 
-// polyfill map
-// TODO delete me when doing koa polyfills
-if (typeof Map === 'undefined')
-  window.Map = require('es6-map')
-
-Ractive.nexus = {
-  dd: new Map,
-  debate: new Ractive({
-    dd: new Map,
-    text: new Map,
-    opinions: new Map,
-    insert (d) {
-      this.dd.set(d._id, d)
-    },
-    create (d) {
-      d._creator = d.creator._id
-      d._category = d.category._id
-      d._tag = d.tag.map((t) => t._id)
-      if (!d.totals) {
-        if (d.options) {
-          // is poll
-          d.totals = new Array(d.options.length)
-          for (var i = 0; i < d.options.length; i++) {
-            d.totals[i] = 0
-          }
-        } else {
-          // is debate
-          // you automatically agree with what you wrote
-          d.totals = [0,0,0,1]
-        }
-      }
-      if (d.creator !== 'object') d.creator = api.me
-      if (d.category !== 'object') d.category = api.category.get(d.category)
-      if (d.opinion) {
-        api.my.opinion.insert(d.opinion.opinion)
-        delete d.opinion
-      }
-      // this should read:
-      // if (d._tag && d.tag === void 9)
-      if (d.tag && d.tag.length) {
-        for (var i = 0; i < d.tag.length; i++) {
-          d.tag[i] = api.tag.get(d.tag[i])
-        }
-      }
-
-      // Ractive.opinon.create
-      this.fire('+', d)
-    },
-  }),
-  poll: new Ractive({
-    dd: new Map,
-    text: new Map,
-    insert (d) {
-      this.dd.set(d._id, d)
-      search.transform(d.text.toUpperCase()).concat(search.words(d.text.toUpperCase()))
-        // TODO - move to debate
-        .concat(d.options.map((opt) => {
-          return search.transform(opt.text.toUpperCase()).concat(search.words(opt.text.toUpperCase()))
-        }))
-        .forEach((word) => {
-          let m = this.text.get(word) || new Map()
-          m.set(d._id, d)
-          this.text.set(word, m)
-        })
-    },
-    create (d) {
-      // d.totals = [0, 0, 0, 1]
-      if (!d.creator) d.creator = api.me
-      // TODO - this.insert (once db confirms it)
-      this.fire('+', d)
-    },
-  }),
-}
 
 // globals
 // TODO: move router into main
 // import router from './router'
 import Router from './lib/router.js'
 
-// header / footer
-import header from './partials/header'
-import footer from './partials/footer'
+// header / (no) footer
+import header from './partials/header-cpanel'
+// import footer from './partials/footer'
 
 // views
-// import landing from './views/landing'
 import listing from './views/listing'
-import inbox from './views/inbox'
 import profile from './views/profile'
-import settings from './views/settings'
 import debate from './views/debate'
 import poll from './views/poll'
-// import opinions from './views/opinions'
-import notifications from './views/notifications'
-
-// import blog from './views/blog'
-// import rpi from './views/rpi'
+import cpanel from './views/cpanel'
+import api_docs from './views/action-docs'
 
 // these are the views which will change the body's class to view-### otherwise view-default
 let classView = {
-  // landing,
   listing,
-  inbox,
   profile,
-  settings,
   debate,
   poll,
 }
@@ -213,38 +131,17 @@ let router = new Router({ el: 'view' }, function (request) {
   //   return router.dispatch('/')
 })
 
-// implement enter / leave
-// https://github.com/rich-harris/roadtrip
-// probably want to do it as a static method on the component
-
-// landing page
-// router.addRoute('/', landing)
-router.addRoute('/', listing)
-// listing (of posts)
-router.addRoute('/home', listing)
-router.addRoute('/mis-top', listing)
-router.addRoute('/tag/:id', listing)
-router.addRoute('/category/:category', listing)
-router.addRoute('/search/:query', listing)
-router.addRoute('/tag/:tag', listing)
-// inbox
-router.addRoute('/inbox/:panel?/:mbox?', inbox)
+// router.addRoute('/:active?/:id?', cpanel)
 // profile
 router.addRoute('/profile/:id?/:active?', profile)
-// settings
-router.addRoute('/settings/:active?', settings)
 // debate
 router.addRoute('/debate/:id/:active?', debate)
 // poll
 router.addRoute('/poll/:id/:active?', poll)
-// opinions
-// router.addRoute('/opinions/:id?', opinions)
-// notifications
-router.addRoute('/notifications/:id?', notifications)
-//blog
-// router.addRoute('/blog', blog)
-// rpi experiment
-// router.addRoute('/rpi/:id?', rpi)
+// cpanel
+router.addRoute('/cpanel/:active?/:id?', cpanel)
+// api-docs
+router.addRoute('/action-docs/:active?/:id?', api_docs)
 
 router.on('route', (route) => {
   let cls = 'default'
@@ -280,9 +177,9 @@ window.onload = function () {
   api.ages = [18, 25, 35, 45]
 
   Ractive.header = new header({ el: 'header' })
-  if (window.isMobile) {
-    Ractive.footer = new footer({ el: 'footer' })
-  }
+  // if (window.isMobile) {
+  //   Ractive.footer = new footer({ el: 'footer' })
+  // }
 
   // router init
   router
