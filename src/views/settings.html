@@ -352,6 +352,7 @@ import Validator from '../validator'
 
 let net_form = new Validator('net', {
   'blog': {required: false, type: 'string', min: 4, max: 100},
+  'web': {required: false, type: 'string', min: 4, max: 100},
   'facebook': {required: false, type: 'string', min: 4, max: 100},
   'twitter': {required: false, type: 'string', min: 4, max: 100},
   'youtube': {required: false, type: 'string', min: 4, max: 100},
@@ -373,6 +374,7 @@ component.exports = {
 
     let network_list = [
       {id: 'facebook', text: '(ej. https://facebook.com/pepelotero)', title: 'Facebook' },
+      {id: 'web', text: '(ej. http://coolwebsite.com)', title: 'Página web' },
       {id: 'twitter', text: '(ej. https://twitter.com/pepelotero)', title: 'Twitter' },
       {id: 'youtube', text: '(ej. http://youtube.com/user/PepeLotero)', title: 'Youtube' },
       {id: 'github', text: '(ej. http://github.com/PepeLotero)', title: 'Github' },
