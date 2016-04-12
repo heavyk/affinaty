@@ -2,7 +2,6 @@
 // bump this number if you need to purge localStorage
 let VERSION = '1'
 
-import router from './router'
 import local from './local'
 
 // TODO move this out of here and make an abstration of api (so it's not so specific)

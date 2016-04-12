@@ -8,6 +8,7 @@
 //   }
 // }
 
+const body = document.body
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
 if (isNaN(domain[0] * 1)) {
@@ -167,10 +168,101 @@ Ractive.nexus = {
 
 // globals
 // TODO: move router into main
-import router from './router'
+// import router from './router'
+import Router from './lib/router.js'
 
+// header / footer
 import header from './partials/header'
 import footer from './partials/footer'
+
+// views
+import landing from './views/landing'
+import listing from './views/listing'
+import inbox from './views/inbox'
+import profile from './views/profile'
+import settings from './views/settings'
+import debate from './views/debate'
+import poll from './views/poll'
+// import opinions from './views/opinions'
+import notifications from './views/notifications'
+import cpanel from './views/cpanel'
+import api_docs from './views/action-docs'
+// import blog from './views/blog'
+// import rpi from './views/rpi'
+
+// these are the views which will change the body's class to view-### otherwise view-default
+let classView = {
+  landing,
+  listing,
+  inbox,
+  profile,
+  settings,
+  debate,
+  poll,
+}
+
+let router = new Router({ el: 'view' }, function (request) {
+  // TODO better redirects - to a 404 page
+  // maybe should be logging this as well
+  // this.redirect(api.me ? '/home' : '/')
+  console.log('??', request)
+}, function (path, options) {
+  console.log('::', path)
+  // if (path === '/' && api.me)
+  //   return router.dispatch('/home')
+  // if (path !== '/' && !api.me)
+  //   return router.dispatch('/')
+})
+
+// implement enter / leave
+// https://github.com/rich-harris/roadtrip
+// probably want to do it as a static method on the component
+
+// landing page
+// router.addRoute('/', landing)
+router.addRoute('/', listing)
+// listing (of posts)
+router.addRoute('/home', listing)
+router.addRoute('/mis-top', listing)
+router.addRoute('/tag/:id', listing)
+router.addRoute('/category/:category', listing)
+router.addRoute('/search/:query', listing)
+router.addRoute('/tag/:tag', listing)
+// inbox
+router.addRoute('/inbox/:panel?/:mbox?', inbox)
+// profile
+router.addRoute('/profile/:id?/:active?', profile)
+// settings
+router.addRoute('/settings/:active?', settings)
+// debate
+router.addRoute('/debate/:id/:active?', debate)
+// poll
+router.addRoute('/poll/:id/:active?', poll)
+// opinions
+// router.addRoute('/opinions/:id?', opinions)
+// notifications
+router.addRoute('/notifications/:id?', notifications)
+// cpanel (remove me)
+router.addRoute('/cpanel/:active?/:id?', cpanel)
+// api-docs (remove me)
+router.addRoute('/action-docs/:active?/:id?', api_docs)
+//blog
+// router.addRoute('/blog', blog)
+// rpi experiment
+// router.addRoute('/rpi/:id?', rpi)
+
+router.on('route', (route) => {
+  let cls = 'default'
+  for (let k in classView) {
+    if (route.view instanceof classView[k])
+      cls = k
+  }
+
+  if (window.isMobile) cls += ' movil'
+
+  body.className = cls
+  route.view.el.className = 'view-' + cls
+})
 
 window.onload = function () {
   window.Ractive = Ractive

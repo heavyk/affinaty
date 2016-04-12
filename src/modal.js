@@ -1,5 +1,5 @@
 
-import router from './router'
+// import router from './router'
 import Modal from './partials/modal'
 
 import assign from './lib/lodash/object/assign'
