@@ -228,7 +228,7 @@ component.exports = {
         saving: true
       }
       this.get('.msgs').push(msg)
-      api.action('msg+', {text: text, mbox: __mbox}, function (data) {
+      api.action('msg+', {text: text, mbox: __mbox}, (data) => {
         msg.saving = false
         assign(msg, data)
       }, (error) => {
