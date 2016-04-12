@@ -17,7 +17,7 @@ var affinaty = gobble([
 			]
 		})
 		.transform('rollup', {
-			entry: 'main.js',
+			entry: 'affinaty-web.js',
 			dest: 'app.js',
 			format: 'cjs',
 			external: [
