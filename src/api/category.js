@@ -39,7 +39,7 @@ class category_ extends Ambition {
         this.now('/')
       }
 
-      this.go()
+      setTimeout(() => { this.go() }, 1)
     })
   }
 

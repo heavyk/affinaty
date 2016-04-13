@@ -80,11 +80,6 @@ component.exports = {
     //   t_debates: this.t_debates,
     // })
 
-    router.on('dispatch', this.on_dispatch = () => {
-      console.log('dispatch')
-      // this.clear()
-    })
-
     Ractive.header.on('category', (category) => {
       this.set('category', (this.category = category ? category._id : null))
     })
