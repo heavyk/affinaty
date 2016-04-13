@@ -476,15 +476,13 @@ component.exports = {
     this.on('category', (category) => {
       if (category) {
         let uri = '/category/'+category._id
-        if (uri !== router.getUri())
+        if (uri !== router.uri.path)
           router.dispatch(uri, {history: false})
         this.fire('set-category', category._id)
         if (window.isMobile) this.set('show_search', false)
         if (!category.title) category = api.category.get(category._id)
         if (category) this.set('category', category.title)
       } else {
-        if (router.getUri().substr(0, 9) === '/category')
-          router.dispatch('/home')
         this.fire('set-category', null)
         this.set('category', null)
       }
