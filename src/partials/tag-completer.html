@@ -86,19 +86,12 @@ li.tag {
 </style>
 
 <script>
-function idx(tags, id, field) {
-  field = field || '_id'
-  for (let i = 0; i < tags.length; i++) {
-    if (tags[i][field] === id) return i
-  }
-  return -1
-}
-
 import assign from '../lib/lodash/object/assign'
 import uniq from '../lib/lodash/array/uniq'
 import compact from '../lib/lodash/array/compact'
 import findIndex from '../lib/lodash/array/findIndex'
 import each from '../lib/lodash/collection/each'
+
 component.exports = {
   isolated: true,
   onconfig () {
@@ -118,7 +111,7 @@ component.exports = {
     this.set('recent', recent)
     this.on('add', (event) => {
       let i, t = assign({}, event.context)
-      if (~idx(selected, t._id)) return
+      if (~findIndex(selected, '_id', t._id)) return this.set({ taglist: false, title: '' })
       if (~(i = findIndex(recent, 'title', t.title))) {
         selected.push(recent[i])
         recent.splice(i, 1)
@@ -131,8 +124,7 @@ component.exports = {
         }
       })
 
-      this.set('title', '')
-      this.set('taglist', false)
+      this.set({ taglist: false, title: '' })
       event.original.stopImmediatePropagation()
     })
     this.removeTag = (event, idx) => {
