@@ -20,11 +20,11 @@
           class="{{~/errors.d.text ? 'invalid' : ''}}">
         </textarea>
       </div>
-      <div class="row {{~/errors.d.options ? 'invalid' : ''}}">
+      <div class="row">
         {{#each ~/d.options : i}}
         <div class="row">
           <div class="text-option col-xs-10">
-            <input type="text" maxlength="50" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" />
+            <input type="text" maxlength="50" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" class="{{errors.d.options[i] ? 'invalid' : ''}}" />
           </div>
 
           <div class="remove-option col-xs-2 {{#if ~/d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
@@ -59,6 +59,10 @@
       <button on-tap="submit" class="row button-sign-up">
         Pide opinión
       </button>
+
+      {{#if ~/error}}
+        <div class="alert alert-fail">{{~/error}}</div>
+      {{/if ~/error}}
     </div>
 
     <div class="col-xs-6" >
@@ -193,6 +197,7 @@ component.exports = {
       'foto': {required: false, type: 'id'},
     })
     this.option_validator = new Validator('new_option', {
+      // existing options max length is checked below on submit
       'text': {required: true, type: 'string', min: 1, max: 50},
     })
     this.on('category', (category) => {
@@ -233,13 +238,23 @@ component.exports = {
       this.submitted = true
       this.fire('submitting', () => {
         let form = this.validator.validate(this)
+        for (var i = 0; i < options.length; i++) {
+          let len = options[i].text
+          if (len < 1 || len > 50) {
+            if (!form.errors.d.options) form.errors.d.options = {}
+            form.errors.d.options[i] = 'invalid length'
+          }
+        }
         this.set('errors', form.errors)
         if (form.valid) {
-          this.set('saving', true)
+          this.set({saving: true, error: null})
           api.action('poll+', form.data, (d) => {
             this.set('saving', false)
             Ractive.nexus.debate.create(d)
             this.parent.teardown()
+          }, () => {
+            this.set({saving: false, error: 'se ha producido un error. inténtalo de nuevo'})
+            this.submitting = false
           })
         }
       })
