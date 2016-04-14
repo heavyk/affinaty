@@ -65,7 +65,7 @@ class notifier extends Ambition {
     // setTimeout because api may not be resolved just yet
     // (after all, we are constructing this inside of the api)
     // setTimeout(() => {
-    //   api.observe('me', (me, _me) => {
+    //   api.on('me', (me, _me) => {
     //     if (me && this._id !== me._id) {
     //       this._id = me._id
     //       this.now('loading')

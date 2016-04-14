@@ -39,9 +39,12 @@ let router = new Router({ el: 'view' }, function (request) {
   console.log('??', request)
 }, function (path, options) {
   console.log('::', path)
-  if (path === '/' && api.me)
-    return router.dispatch('/home')
-  if (path !== '/' && !api.me)
+  if (path === '/' && api.authenticated)
+    return setTimeout(() => {
+      // debugger
+      router.dispatch('/home', {history: false})
+    }, 1)
+  if (path !== '/' && !api.authenticated)
     return router.dispatch('/')
 })
 

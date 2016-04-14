@@ -2,6 +2,8 @@
 // bump this number if you need to purge localStorage
 let VERSION = '1'
 
+import Ambition from './lib/insightful/consciousness/ambition'
+
 import router from './router'
 import local from './local'
 
@@ -15,8 +17,8 @@ import affinaties from './api/affinaties'
 import notifier from './api/notifier'
 // import relation_ from './api/relation'
 
-let CronTab = require('crontabjs')
-let Ractive = require('ractive')
+import CronTab from 'crontabjs'
+
 
 function hashCode(str) {
   var hash = 0;
@@ -29,12 +31,25 @@ function hashCode(str) {
   return hash
 }
 
-let Api = Ractive.extend({
-  data: {
-    authenticated: false,
-    connected: false,
-  },
-    url: (function() {
+class Api extends Ambition {
+  constructor () {
+    super()
+    this.situations = {
+      '/': {
+        '>' () {
+          // this.skip = this['+created']
+        }
+      }
+    }
+
+    this.category = new category_
+    this.tag = new tag_
+  }
+
+  pregage () {
+    this.yo = null
+    this.my = {}
+    this.url = (function() {
       try {
         // forced host override
         switch (window.localStorage.host) {
@@ -53,10 +68,8 @@ let Api = Ractive.extend({
         ) ? 'http://5.9.94.75:1155'
           : window.location.origin
       } catch(e) {}
-    }()),
-  my: {},
-  oninit () {
-    this.yo = null
+    }())
+
     this.delay = 0 // set this higher to simulate network delay
     this._token = hashCode(this.url + ':token')
     this.token = window.localStorage.getItem(this._token)
@@ -66,22 +79,26 @@ let Api = Ractive.extend({
       name: store,
       storeName: store,
     })
+
     let version = window.localStorage.affinaty_version
     if (version !== VERSION) this.local.clear(() => {
       console.warn(`upgraded from version ${version} -> ${VERSION}`)
       window.localStorage.affinaty_version = VERSION
     })
-    this.observe('me', (me, _me) => {
-      this.me = me
-      this.initialize(me, _me)
-    })
+
+    // this.on('me', (me, _me) => {
+    //   this.initialize(me, _me)
+    // })
+
     this.local.getItem('me', (err, val) => {
-      if (err || !this.token) return this.signOut()
-      this.set('me', val)
+      if (err || !this.token) this.signOut()
+      else this.initialize(val)
     })
+
     this.client = new ActionheroClient({ url: this.url })
-    this.client.on('connected', () => this.set('connected', Date.now()))
-    this.client.on('disconnected', () => this.set('connected', 0))
+    this.client.on('connected', () => { this.connected = Date.now() })
+    this.client.on('disconnected', () => { this.connected = 0 })
+
     // reconnecting logic?
     this.client.connect(() => {
       if (this.token) this.client.action('who-am-i', {token: this.token}, (res) => {
@@ -92,30 +109,60 @@ let Api = Ractive.extend({
         }
       })
     })
-  },
+  }
+
+  initialize (me) {
+    let _me = this.me
+    this.me = me
+    if (me) {
+      this.yo = me._id
+      this.authenticated = true
+      // my.* initialization
+      if (!api.my.opinion || api.my.opinion.creator !== me._id)
+        api.my.opinion = new opinion(me._id)
+      // if (!api.my.relation || api.my.relation.creator !== me._id)
+      //   api.my.relation = new relation_(me._id)
+      // if (!api.my.debate || api.my.debate.creator !== me._id)
+      //   api.my.debate = new debate_(me._id)
+      if (!api.my.affinaties || api.my.affinaties.creator !== me._id)
+        api.my.affinaties = new affinaties(me._id)
+      if (!api.my.notifier || api.my.notifier.creator !== me._id)
+        api.my.notifier = new notifier(me._id)
+
+      // other initialization
+      // if (!api.category)
+      //   api.category = new category_
+      // if (!api.tag)
+      //   api.tag = new tag_
+
+      this.emit('me', me, _me)
+      this.emit('auth', me)
+    }
+  }
+
   signIn (data) {
     this.mundial = data.mundial
     this.token = data.token
     window.localStorage.setItem(this._token, data.token)
     return this.whoIaM(data.mundial[0])
-  },
+  }
+
   whoIaM(me) {
-    this.yo = me._id
     return this.local.setItem('me', me, (err) => {
-      if (!err) this.set('me', me)
-      this.set('authenticated', true)
-      this.fire('auth', me)
+      if (!err) this.initialize(me)
     })
-  },
+  }
+
   signOut (redirect) {
     window.localStorage.removeItem(this._token)
     this.local.removeItem('me')
-    this.set('me', null)
     if (redirect) router.dispatch('/')
-    this.set('authenticated', false)
+    this.authenticated = false
     this.yo = null
-    this.fire('deauth')
-  },
+    this.me = null
+    this.emit('deauth')
+  }
+
   action (action, params, resolve, reject) {
     // if (action === 'debate*' && !arguments[4]) {
     //   // debugger
@@ -179,30 +226,44 @@ let Api = Ractive.extend({
         else this.client.action(action, _params, respond)
       }
     })
-  },
-  initialize (me, _me) {
-    if (me) {
-      // my.* initialization
-      if (!api.my.opinion || api.my.opinion.creator !== me._id)
-        api.my.opinion = new opinion(me._id)
-      // if (!api.my.relation || api.my.relation.creator !== me._id)
-      //   api.my.relation = new relation_(me._id)
-      // if (!api.my.debate || api.my.debate.creator !== me._id)
-      //   api.my.debate = new debate_(me._id)
-      if (!api.my.affinaties || api.my.affinaties.creator !== me._id)
-        api.my.affinaties = new affinaties(me._id)
-      if (!api.my.notifier || api.my.notifier.creator !== me._id)
-        api.my.notifier = new notifier(me._id)
+  }
 
-      // other initialization
-      // if (!api.category)
-      //   api.category = new category_
-      // if (!api.tag)
-      //   api.tag = new tag_
-    }
-  },
-  category: new category_,
-  tag: new tag_,
-})
+}
+
+
+// let Api = Ractive.extend({
+//   data: {
+//     authenticated: false,
+//     connected: false,
+//   },
+//     ,
+//   my: {},
+//   onconfig () {
+//
+//   },
+//   ,
+//   initialize (me, _me) {
+//     if (me) {
+//       // my.* initialization
+//       if (!api.my.opinion || api.my.opinion.creator !== me._id)
+//         api.my.opinion = new opinion(me._id)
+//       // if (!api.my.relation || api.my.relation.creator !== me._id)
+//       //   api.my.relation = new relation_(me._id)
+//       // if (!api.my.debate || api.my.debate.creator !== me._id)
+//       //   api.my.debate = new debate_(me._id)
+//       if (!api.my.affinaties || api.my.affinaties.creator !== me._id)
+//         api.my.affinaties = new affinaties(me._id)
+//       if (!api.my.notifier || api.my.notifier.creator !== me._id)
+//         api.my.notifier = new notifier(me._id)
+//
+//       // other initialization
+//       // if (!api.category)
+//       //   api.category = new category_
+//       // if (!api.tag)
+//       //   api.tag = new tag_
+//     }
+//   },
+//
+// })
 
 export default Api

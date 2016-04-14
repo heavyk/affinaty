@@ -203,7 +203,7 @@ window.onload = function () {
     .watchState()
 
   if (api.token) {
-    api.observe('me', function (me, _me) {
+    api.on('me', function (me, _me) {
       // console.log('me:', me, _me)
       if (me) {
         if (!_me) router.init()

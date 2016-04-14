@@ -192,7 +192,7 @@ component.exports = {
   onconfig () {
     let me = api.get('me')
     this.set('active', 'appearance')
-    api.observe('me', (_me) => {
+    api.on('me', (_me) => {
       this.set('me', _me)
       me = _me
     })

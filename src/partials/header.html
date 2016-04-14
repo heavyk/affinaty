@@ -435,7 +435,7 @@ component.exports = {
         api.my.notifier.off('list*', this.on_not)
       }
     })
-    api.observe('me', (me) => {
+    api.on('me', (me) => {
       this.set('me', me)
     })
     this.set('search_width', 200)
