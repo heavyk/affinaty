@@ -441,8 +441,7 @@ component.exports = {
         api.my.notifier.off('list*', this.on_not)
       }
     })
-    api.observe('me', (me) => {
-      console.warn('me', me)
+    api.on('me', (me) => {
       this.set('me', me)
     }, {init: false})
     api.once('deauth', (yo) => {

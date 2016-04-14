@@ -418,7 +418,7 @@ component.exports = {
       }
     }, {init: false})
 
-    api.observe('me', (_me) => {
+    api.on('me', (_me) => {
       if (!_me) return
       if (!_me.networks) _me.networks = {}
       this.set('me', _me)
