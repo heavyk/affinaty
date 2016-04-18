@@ -405,7 +405,7 @@ component.exports = {
       me = _me
     })
 
-    let me = api.get('me')
+    let me = api.me
     // stupid hack for when c = ''
     // (this can happen because of a bug in ractive option boxes setting the value to '' when no option is selected)
     if (me.c === '') delete me.c
@@ -413,7 +413,7 @@ component.exports = {
 
     this.observe('me', (_me) => {
       if (_me) {
-        api.set('me', _me)
+        api.emit('me', _me)
         me = _me
       }
     })

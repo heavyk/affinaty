@@ -190,7 +190,7 @@ import Validator from '../validator'
 component.exports = {
   // isolated: true,
   onconfig () {
-    let me = api.get('me')
+    let me = api.me
     this.set('active', 'appearance')
     api.on('me', (_me) => {
       this.set('me', _me)
