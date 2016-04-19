@@ -148,11 +148,19 @@ component.exports = {
       else if (/^\/profile/.test(path)) active = 'profile'
       this.set('active', active)
     })
-    api.my.notifier.on('msg*', (c) => {
-      this.set('new_msgs', c)
+    api.on('auth', () => {
+      api.my.notifier.on('msg*', this.on_msg = (c) => {
+        this.set('new_msgs', c)
+      })
+      api.my.notifier.on('list*', this.on_not = (c) => {
+        this.set('notifications', c)
+      })
     })
-    api.my.notifier.on('list*', (c) => {
-      this.set('notifications', c)
+    api.on('deauth', () => {
+      if (api.my.notifier) {
+        api.my.notifier.off('msg*', this.on_msg)
+        api.my.notifier.off('list*', this.on_not)
+      }
     })
     api.on('me', (me) => {
       this.set('me', me)
