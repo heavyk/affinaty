@@ -118,6 +118,8 @@ class Api extends Ambition {
       // my.* initialization
       if (!api.my.opinion || api.my.opinion.creator !== me._id)
         api.my.opinion = new opinion(me._id)
+      if (!api.my.selection || api.my.selection.creator !== me._id)
+        api.my.selection = new selection(me._id)
       // if (!api.my.relation || api.my.relation.creator !== me._id)
       //   api.my.relation = new relation_(me._id)
       // if (!api.my.debate || api.my.debate.creator !== me._id)
