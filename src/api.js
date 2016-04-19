@@ -4,9 +4,6 @@ let VERSION = '1'
 
 import Ambition from './lib/insightful/consciousness/ambition'
 
-import router from './router'
-import local from './local'
-
 // TODO move this out of here and make an abstration of api (so it's not so specific)
 // generic containers
 import category_ from './api/category'
