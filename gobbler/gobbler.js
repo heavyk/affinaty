@@ -22,7 +22,7 @@ gobbleProxy.on('error', function (err) {
 })
 
 var gobbler = require('http').createServer(function (req, res) {
-  var url = req.url
+  var url = req.url.split('?')[0]
 
   if (url !== '/'
     // this is mainly for dev purposes until koala-deployer is done
