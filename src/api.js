@@ -52,7 +52,7 @@ class Api extends Ambition {
         // forced host override
         switch (window.localStorage.host) {
           case 'term': return 'http://5.9.94.75:1158' // action-terminal
-          case 'local': return 'http://localhost:1155' // local
+          case 'local': return `http://${window.location.hostname}:1155` // local
           case 'mothership': return 'http://5.9.94.75:1155' // normal
           case 'web': return 'http://affinaty.com' // website
         }
