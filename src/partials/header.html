@@ -448,10 +448,6 @@ component.exports = {
     api.on('me', (me) => {
       this.set('me', me)
     }, {init: false})
-    api.once('deauth', (yo) => {
-      // debugger
-      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
-    })
     this.set('search_width', 200)
     this.on('toggle-focus', (event) => {
       // this is a stupid hack to prevent the display: none from happening
@@ -498,20 +494,22 @@ component.exports = {
       let target = e.target
       let pEl = target
       if (pEl.nodeName == 'A') {
-        this.set({show_settings: false})
-        return
-      }
-      else{
+        return this.set({show_settings: false})
+      } else {
         do {
           if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('search') || ~pEl.className.indexOf('settings')))  return
         } while (pEl = pEl.parentNode)
       }
-      //debugger
       this.set({show_n: false, show_m: false, show_settings: false, show_search: false})
-      //this.set('menu', false)
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+    console.info('do sign-in --', !!api.yo)
+    api.once('deauth', (yo, _yo) => {
+      console.log('yo', yo, '_yo', _yo)
+      debugger
+      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
+    })
   },
   signOut () {
     api.signOut(true)
