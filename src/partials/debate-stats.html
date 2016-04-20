@@ -302,10 +302,10 @@ component.exports = {
     }
 
     for (gender = 0; gender < num_planets; gender++)
-      percents[gender] = planets[gender] / total * 100
+      percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
 
     for (i = 0; i < 4; i++) {
-      totals_p[i] = Math.round(totals[i] / total * 100)
+      totals_p[i] = total > 0 ? Math.round(totals[i] / total * 100) : 0
     }
 
     return {
