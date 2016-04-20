@@ -83,8 +83,10 @@ genny.run(function* (resume) {
   var cfg = yield readJson(cfg_path, resume())
   if (cfg.h_deps !== h_deps) {
     cfg.h_deps = h_deps
-    console.log('deps changed. installing...')
-    yield spawn('npm', ['install'], {cwd: pkg_dir})
+    if (process.env.USER !== 'kenny') {
+      console.log('deps changed. installing...')
+      yield spawn('npm', ['install'], {cwd: pkg_dir})
+    }
     yield fS.outputJson(cfg_path, cfg)
   }
 
