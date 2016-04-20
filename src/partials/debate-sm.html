@@ -193,16 +193,10 @@ component.exports = {
 
     api.on('auth', this.on_auth = () => {
       api.my.opinion.on(id + '.' + api.yo, this.on_opinion = (d, _d) => {
-        let pos
-        let totals = this.get('d.totals')
-        if (totals && _d) {
-          pos = _d.pos
-          totals[pos > 0 ? pos + 1 : pos + 2]--
-        }
-
-        if (totals) {
-          if (pos = d.pos)
-            totals[pos > 0 ? pos + 1 : pos + 2]++
+        let pos, totals
+        if (totals = this.get('d.totals')) {
+          if (_d && (pos = _d.pos)) totals[pos > 0 ? pos + 1 : pos + 2]--
+          if (pos = d.pos) totals[pos > 0 ? pos + 1 : pos + 2]++
           this.set('d.totals', totals)
         }
       })

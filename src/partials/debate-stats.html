@@ -185,14 +185,7 @@ component.exports = {
       // really I should do this in stats ... for now, this is fine
       let onloaded = after(2, () => {
         let stats = this.stats.data
-        // let d = api.my.opinion.debate(id)
-        let calc = this.calc(stats)
-        this.set('totals', calc.totals)
-        this.set('totals_p', calc.totals_p)
-        this.set('total', calc.total)
-        this.set('percents', calc.percents)
-        this.set('planets', calc.planets)
-        this.set('ranges', calc.ranges)
+        this.set(this.calc(stats))
       })
       this.stats.until('/', onloaded)
       if (api.my.opinion) {
@@ -204,13 +197,7 @@ component.exports = {
           if (stats) {
             if (_d) ageStats.subtract(api.me, stats, _d)
             ageStats.add(api.me, stats, d)
-            let calc = this.calc(stats)
-            this.set('totals', calc.totals)
-            this.set('totals_p', calc.totals_p)
-            this.set('total', calc.total)
-            this.set('percents', calc.percents)
-            this.set('planets', calc.planets)
-            this.set('ranges', calc.ranges)
+            this.set(this.calc(stats))
           }
         })
       } else onloaded()
