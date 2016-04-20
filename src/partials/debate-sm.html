@@ -207,6 +207,7 @@ component.exports = {
         }
       })
     })
+    if (api.yo) this.on_auth()
     api.on('deauth', this.on_deauth = (yo) => {
       api.my.opinion.off(id + '.' + yo, this.on_opinion)
     })
@@ -232,6 +233,7 @@ component.exports = {
   onteardown () {
     api.off('auth', this.on_auth)
     api.off('deauth', this.on_deauth)
+    if (this.on_opinion && api.yo) api.my.opinion.off(this.get('id') + '.' + api.yo, this.on_opinion)
   },
   computed: {
     limits () {
