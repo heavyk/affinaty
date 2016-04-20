@@ -1,29 +1,7 @@
-/*!
- * Drip - EventEmitter (simple)
- * Copyright(c) 2012-2013 Jake Luer <jake@qualiancy.com>
- * MIT Licensed
- */
-
-/*!
- * Internal Dependencies
- */
-
-// var common = require('./common');
 import common from './common'
 
-/*!
- * Primary Exports
- */
-
-// module.exports = EventEmitter;
-export default EventEmitter
-
-/*!
- * EventEmitter constructor
- */
-
 function EventEmitter (obj) {
-  if (obj) return mixin(obj);
+  if (obj) return mixin(obj)
 }
 
 /*!
@@ -32,7 +10,7 @@ function EventEmitter (obj) {
  *
  * ```js
  * function Something () {}
- * EventEmitter.mixin(Something.prototype);
+ * EventEmitter.mixin(Something.prototype)
  * ```
  *
  * @param {Object} object to add methods to
@@ -42,11 +20,11 @@ function EventEmitter (obj) {
 
 function mixin (obj) {
   for (var key in EventEmitter.prototype) {
-    obj[key] = EventEmitter.prototype[key];
+    obj[key] = EventEmitter.prototype[key]
   }
 
-  return obj;
-};
+  return obj
+}
 
 /**
  * ### .on (event, callback)
@@ -54,7 +32,7 @@ function mixin (obj) {
  * Bind a `callback` function to all emits of `event`.
  *
  * ```js
- * drop.on('foo', callback);
+ * drop.on('foo', callback)
  * ```
  *
  * @param {String} event
@@ -64,37 +42,33 @@ function mixin (obj) {
  * @api public
  */
 
-EventEmitter.prototype.on =
-EventEmitter.prototype.addListener = function () {
-
+EventEmitter.prototype.on = EventEmitter.prototype.addListener = function (ev, fn) {
   var map = this._events || (this._events = {})
-    , ev = arguments[0]
-    , fn = arguments[1];
 
   if (!map[ev]) {
-    map[ev] = fn;
+    map[ev] = fn
   } else if ('function' === typeof map[ev]) {
-    map[ev] = [ map[ev], fn ];
+    map[ev] = [ map[ev], fn ]
   } else {
-    map[ev].push(fn);
+    map[ev].push(fn)
   }
 
-  return this;
-};
+  return this
+}
 
 /**
  * @import ./common.js#exports.many
  * @api public
  */
 
-EventEmitter.prototype.many = common.many;
+EventEmitter.prototype.many = common.many
 
 /**
  * @import ./common.js#exports.once
  * @api public
  */
 
-EventEmitter.prototype.once = common.once;
+EventEmitter.prototype.once = common.once
 
 /**
  * ### .off ([event], [callback])
@@ -104,7 +78,7 @@ EventEmitter.prototype.once = common.once;
  * no event is provided, event store will be purged.
  *
  * ```js
- * emitter.off('event', callback);
+ * emitter.off('event', callback)
  * ```
  *
  * @param {String} event _optional_
@@ -115,37 +89,35 @@ EventEmitter.prototype.once = common.once;
  * @api public
  */
 
-EventEmitter.prototype.off =
-EventEmitter.prototype.removeListener =
-EventEmitter.prototype.removeAllListeners = function (ev, fn) {
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener = EventEmitter.prototype.removeAllListeners = function (ev, fn) {
   if (!this._events || arguments.length == 0) {
-    this._events = {};
-    return this;
+    this._events = {}
+    return this
   }
 
   if (!fn) {
-    this._events[ev] = null;
-    return this;
+    this._events[ev] = null
+    return this
   }
 
-  var fns = this._events[ev];
-  if (!fns) return this;
+  var fns = this._events[ev]
+  if (!fns) return this
 
   if ('function' === typeof fns && fns == fn) {
-    this._events[ev] = null;
+    this._events[ev] = null
   } else {
     for (var i = 0; i < fns.length; i++) {
-      if (fns[i] == fn) fns.splice(i, 1);
+      if (fns[i] == fn) fns.splice(i, 1)
     }
 
     if (fns.length === 0) {
-      this._events[ev] = null;
+      this._events[ev] = null
     } else if (fns.length === 1) {
-      this._events[ev] = fns[0];
+      this._events[ev] = fns[0]
     }
   }
 
-  return this;
+  return this
 }
 
 /**
@@ -154,7 +126,7 @@ EventEmitter.prototype.removeAllListeners = function (ev, fn) {
  * Trigger `event`, passing any arguments to callback functions.
  *
  * ```js
- * emitter.emit('event', arg, ...);
+ * emitter.emit('event', arg, ...)
  * ```
  *
  * @param {String} event name
@@ -163,60 +135,55 @@ EventEmitter.prototype.removeAllListeners = function (ev, fn) {
  * @api public
  */
 
-EventEmitter.prototype.emit = function () {
-  if (!this._events) this._events = {};
+EventEmitter.prototype.emit = function (ev, arg1, arg2) {
+  if (!this._events) this._events = {}
 
-  var ev = arguments[0]
-    , fns = this._events[ev];
+  var fns = this._events[ev]
 
   // throw if error event
   if (!fns && 'error' === ev) {
-    var err = arguments[1];
-    err = err || new Error('EventEmitter "error" event without argument.');
-    throw err;
+    throw arg1 || new Error('EventEmitter "error" event without argument.')
   } else if (!fns) {
-    return false;
+    return false
   }
 
-  // handle single callback
+  var argc = arguments.length
   if ('function' == typeof fns) {
-    if (arguments.length == 1) {
-      fns.call(this);
-    } else if (arguments.length == 2) {
-      fns.call(this, arguments[1]);
-    } else if (arguments.length == 3) {
-      fns.call(this, arguments[1], arguments[2]);
+    // handle single callback
+    if (argc == 1) {
+      fns.call(this)
+    } else if (argc == 2) {
+      fns.call(this, arg1)
+    } else if (argc == 3) {
+      fns.call(this, arg1, arg2)
     } else {
-      var l = arguments.length
-        , a = Array(l - 1);
-      for (var i = 1; i < l; i++) a[i - 1] = arguments[i];
-      fns.apply(this, a);
+      var l = argc,
+        a = Array(l - 1)
+      for (var i = 1; i < l; i++) a[i - 1] = arguments[i]
+      fns.apply(this, a)
     }
-  }
-
-  // handle multiple callbacks
-  else {
-    var a;
+  } else {
+    // handle multiple callbacks
+    var a
     for (var i = 0; i < fns.length; i++) {
-      if (arguments.length === 1) {
-        fns[i].call(this);
-      } else if (arguments.length === 2) {
-        fns[i].call(this, arguments[1]);
-      } else if (arguments.length === 3) {
-        fns[i].call(this, arguments[1], arguments[2]);
+      if (argc === 1) {
+        fns[i].call(this)
+      } else if (argc === 2) {
+        fns[i].call(this, arg1)
+      } else if (argc === 3) {
+        fns[i].call(this, arg1, arg2)
       } else {
         if (!a) {
-          var l = arguments.length
-          a = Array(l - 1);
-          for (var i2 = 1; i2 < l; i2++) a[i2 - 1] = arguments[i2];
+          a = Array(argc - 1)
+          for (var i2 = 1; i2 < argc; i2++) a[i2 - 1] = arguments[i2]
         }
-        fns[i].apply(this, a);
+        fns[i].apply(this, a)
       }
     }
   }
 
-  return true;
-};
+  return true
+}
 
 /**
  * ### .hasListener (ev[, function])
@@ -233,11 +200,11 @@ EventEmitter.prototype.emit = function () {
  */
 
 EventEmitter.prototype.hasListener = function (ev, fn) {
-  if (!this._events) return false;
-  var fns = this._events[ev];
-  if (!fns) return false;
-  return common.hasListener(fns, fn);
-};
+  if (!this._events) return false
+  var fns = this._events[ev]
+  if (!fns) return false
+  return common.hasListener(fns, fn)
+}
 
 /**
  * ### .listners (ev)
@@ -252,12 +219,12 @@ EventEmitter.prototype.hasListener = function (ev, fn) {
  */
 
 EventEmitter.prototype.listeners = function (ev) {
-  if (!this._events) return [];
-  var fns = this._events[ev];
-  if (!fns) return [];
-  if ('function' === typeof fns) return [ fns ];
-  else return fns;
-};
+  if (!this._events) return []
+  var fns = this._events[ev]
+  if (!fns) return []
+  if ('function' === typeof fns) return [ fns ]
+  else return fns
+}
 
 /**
  * ### .bindEvent (event, target)
@@ -267,7 +234,7 @@ EventEmitter.prototype.listeners = function (ev) {
  * functionality is compable with node event emitter.
  *
  * ```js
- * emitter.bindEvent('request', target);
+ * emitter.bindEvent('request', target)
  * ```
  *
  * Note that proxies will also be removed if a generic `off` call
@@ -279,7 +246,7 @@ EventEmitter.prototype.listeners = function (ev) {
  * @api public
  */
 
-EventEmitter.prototype.bindEvent = common.bindEvent;
+EventEmitter.prototype.bindEvent = common.bindEvent
 
 /**
  * ### .unbindEvent (event, target)
@@ -288,7 +255,7 @@ EventEmitter.prototype.bindEvent = common.bindEvent;
  * must be provied the same as in `bindEvent`.
  *
  * ```js
- * emitter.unbindEvent('request', target);
+ * emitter.unbindEvent('request', target)
  * ```
  *
  * @param {String} event key to bind
@@ -297,7 +264,7 @@ EventEmitter.prototype.bindEvent = common.bindEvent;
  * @api public
  */
 
-EventEmitter.prototype.unbindEvent = common.unbindEvent;
+EventEmitter.prototype.unbindEvent = common.unbindEvent
 
 /**
  * ### .proxyEvent (event, [namespace], target)
@@ -313,9 +280,9 @@ EventEmitter.prototype.unbindEvent = common.unbindEvent;
  *
  * ```js
  * function ProxyServer (port) {
- *   Drip.call(this, { delimeter: ':' });
- *   this.server = http.createServer().listen(port);
- *   this.bindEvent('request', 'server', this.server);
+ *   Drip.call(this, { delimeter: ':' })
+ *   this.server = http.createServer().listen(port)
+ *   this.bindEvent('request', 'server', this.server)
  * }
  * ```
  *
@@ -325,10 +292,10 @@ EventEmitter.prototype.unbindEvent = common.unbindEvent;
  * available.
  *
  * ```js
- * var proxy = new ProxyServer(8080);
+ * var proxy = new ProxyServer(8080)
  *   proxy.on('server:request', function (req, res) {
  *   // ..
- * });
+ * })
  * ```
  *
  * If you decide to use the namespace option, you can namespace
@@ -336,9 +303,9 @@ EventEmitter.prototype.unbindEvent = common.unbindEvent;
  * uses your delimeter or `:`. The following examples are valid.
  *
  * ```js
- * emitter.proxyEvent('request', 'proxy:server', server);
- * emitter.proxyEvent('request', [ 'proxy', 'server' ], server);
- * emitter.on('proxy:server:request', cb);
+ * emitter.proxyEvent('request', 'proxy:server', server)
+ * emitter.proxyEvent('request', [ 'proxy', 'server' ], server)
+ * emitter.on('proxy:server:request', cb)
  * ```
  *
  * @param {String} event key to proxy
@@ -348,7 +315,7 @@ EventEmitter.prototype.unbindEvent = common.unbindEvent;
  * @api public
  */
 
-EventEmitter.prototype.proxyEvent = common.proxyEvent;
+EventEmitter.prototype.proxyEvent = common.proxyEvent
 
 /**
  * ### .unproxyEvent (event, [namespace], target)
@@ -358,8 +325,8 @@ EventEmitter.prototype.proxyEvent = common.proxyEvent;
  * if it was used during `proxyEvent`.
  *
  * ```js
- * proxy.unbindEvent('request', proxy.server);
- * proxy.unbindEvent('request', 'request', proxy.server);
+ * proxy.unbindEvent('request', proxy.server)
+ * proxy.unbindEvent('request', 'request', proxy.server)
  * ```
  *
  * @param {String} event key to proxy
@@ -369,4 +336,6 @@ EventEmitter.prototype.proxyEvent = common.proxyEvent;
  * @api public
  */
 
-EventEmitter.prototype.unproxyEvent = common.unproxyEvent;
+EventEmitter.prototype.unproxyEvent = common.unproxyEvent
+
+export default EventEmitter
