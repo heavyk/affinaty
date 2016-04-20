@@ -660,7 +660,7 @@ component.exports = {
     this.set('affinaty_update', 0)
     api.on('deauth', this.on_deauth = (yo) => {
       this.set('auth', false)
-      if (api.my.opinion) api.my.opinion.off([api.yo, '*'], this.on_opinion)
+      if (yo) api.my.opinion.off([api.yo, '*'], this.on_opinion)
       this.refresh()
     })
 

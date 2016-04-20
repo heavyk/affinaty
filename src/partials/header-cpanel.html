@@ -337,8 +337,8 @@ component.exports = {
         this.set('notifications', c)
       })
     })
-    api.on('deauth', () => {
-      if (api.my.notifier) {
+    api.on('deauth', (yo) => {
+      if (yo) {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }
@@ -348,7 +348,6 @@ component.exports = {
       this.set('me', me)
     }, {init: false})
     api.once('deauth', (yo) => {
-      // debugger
       if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
     })
     this.set('search_width', 200)

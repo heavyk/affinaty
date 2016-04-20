@@ -159,16 +159,13 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   oninit () {
-    // if (api.yo) api.on('auth')
     api.on('deauth', this.on_deauth = () => {
       this.set('d.pos', null)
-      // console.info('d.pos', null)
     })
 
     api.on('auth', this.on_auth = () => {
       api.my.opinion.until('/', () => {
         this.set('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
-        // console.info('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
       })
     })
     if (api.yo) this.on_auth()

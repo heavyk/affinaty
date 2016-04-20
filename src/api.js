@@ -161,7 +161,7 @@ class Api extends Ambition {
     this.authenticated = false
     this.yo = null
     this.me = null
-    this.emit('deauth')
+    this.emit('deauth', yo)
   }
 
   action (action, params, resolve, reject) {

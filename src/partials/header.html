@@ -439,8 +439,9 @@ component.exports = {
         this.set('notifications', c)
       })
     })
-    api.on('deauth', () => {
-      if (api.my.notifier) {
+    api.on('deauth', (yo) => {
+      this.set('me', null)
+      if (yo) {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }
@@ -504,10 +505,7 @@ component.exports = {
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
-    console.info('do sign-in --', !!api.yo)
-    api.once('deauth', (yo, _yo) => {
-      console.log('yo', yo, '_yo', _yo)
-      debugger
+    api.once('deauth', (yo) => {
       if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
     })
   },

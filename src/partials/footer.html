@@ -156,8 +156,8 @@ component.exports = {
         this.set('notifications', c)
       })
     })
-    api.on('deauth', () => {
-      if (api.my.notifier) {
+    api.on('deauth', (yo) => {
+      if (yo) {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }

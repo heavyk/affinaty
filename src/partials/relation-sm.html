@@ -99,7 +99,7 @@ component.exports = {
       })
     })
     this.set('auth', !!api.yo)
-    api.on('deauth', this.on_deauth = (yo) => {
+    api.on('deauth', this.on_deauth = () => {
       this.set('auth', false)
     })
     api.on('auth', this.on_auth = () => {

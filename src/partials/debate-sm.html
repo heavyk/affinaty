@@ -203,7 +203,7 @@ component.exports = {
     })
     if (api.yo) this.on_auth()
     api.on('deauth', this.on_deauth = (yo) => {
-      api.my.opinion.off(id + '.' + yo, this.on_opinion)
+      if (yo) api.my.opinion.off(id + '.' + yo, this.on_opinion)
     })
     this.on('show-stats', () => {
       if (window.isMobile && this.parent) {
