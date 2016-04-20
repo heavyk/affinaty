@@ -410,13 +410,15 @@ component.exports = {
     // (this can happen because of a bug in ractive option boxes setting the value to '' when no option is selected)
     if (me.c === '') delete me.c
     this.old_me = assign({}, me)
+    if (!me.networks) me.networks = {}
+    this.set('me', me)
 
     this.observe('me', (_me) => {
       if (_me) {
         api.emit('me', _me)
         me = _me
       }
-    })
+    }, {init: false})
 
     this.on('add-network', () => {
       let n = this.get('new_network')
@@ -486,6 +488,7 @@ component.exports = {
       'blog': {required: false, type: 'string', min: 4, max: 100},
       'facebook': {required: false, type: 'string', min: 4, max: 100},
       'twitter': {required: false, type: 'string', min: 4, max: 100},
+      'linkedin': {required: false, type: 'string', min: 4, max: 100},
       'youtube': {required: false, type: 'string', min: 4, max: 100},
       'github': {required: false, type: 'string', min: 4, max: 100},
     })
@@ -514,7 +517,8 @@ component.exports = {
   },
   computed: {
     network_count () {
-      return Object.keys(this.get('me.networks')).length
+      let net = this.get('me.networks')
+      return net ? Object.keys(net).length : 0
     },
   },
   activate (sub, id) {
