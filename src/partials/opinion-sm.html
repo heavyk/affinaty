@@ -193,9 +193,11 @@ component.exports = {
       return this.modal('sign-in', {header: false})
     }
 
-    let id = this.get('d._id')
-    let p = api.my.opinion.debate_pos(id)
-    if (pos !== p && !skip) {
+    if (!skip) {
+      let id = this.get('d._id')
+      let p = api.my.opinion.debate_pos(id)
+      if (pos === p && pos) pos = 0
+      console.info(p, '->', pos)
       if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
         this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
