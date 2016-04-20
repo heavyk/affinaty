@@ -33,6 +33,7 @@ var affinaty = gobble([
 				 'ractive',
 				 'ractive-transitions-fade',
 				 'moment',
+				 'lie',
 				 'crontabjs',
 				 'spin.js',
 				 'gemini-scrollbar',
@@ -73,6 +74,7 @@ var affinaty = gobble([
 						// optional
 						[require('babel-plugin-transform-undefined-to-void')],
 						[require('babel-plugin-transform-strict-mode')],
+						// [require('babel-plugin-transform-es2015-duplicate-keys')],
 						// [require('babel-plugin-transform-minify-booleans')],
 						// [require('babel-plugin-transform-merge-sibling-variables')],
 						[require('babel-plugin-transform-member-expression-literals')],
