@@ -221,7 +221,7 @@ component.exports = {
       let left = Math.floor((inner - right - 32) / (289+20)) * (289+20)
       this.set('rightWidth', right + (inner - left - right)-20)
       this.set('leftWidth', api.yo ? left : inner)
-      this.set('popTagWidth', Math.floor((window.isMobile ? window.innerWidth : left - 10) / 128) * 128 + 4)
+      this.set('popTagWidth', Math.floor(((window.isMobile ? window.innerWidth : api.yo ? left : inner) - 10) / 128) * 128 + 4)
       // MAJOR CACA
       // using global set in debate-list
       let m = window.masonry
