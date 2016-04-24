@@ -1,0 +1,301 @@
+<link rel='ractive' href='../partials/sign-up.html'>
+<link rel='ractive' href='../partials/sign-up-movil.html'>
+<link rel='ractive' href='../partials/remember-password.html'>
+<link rel='ractive' href='../partials/change-password.html'>
+<div class="sign-in">
+  <div class="logo-box">
+    <img class="logo2" width="300" height="100" src="/img/landing.svg" />
+  </div>
+  <form on-submit="submit">
+    <div class="form">
+      <input type="email" value="{{~/email}}" placeholder="Correo Electrónico">
+      <input type="password" value="{{~/password}}" placeholder="Contraseña">
+      <div class="remember-container">
+        <span class="remember-check" on-tap="toggle('remember')">
+          <i class="fa {{~/remember ? 'fa-check' : ''}}" />
+        </span>
+        <span class="remember-text" on-tap="toggle('remember')">
+          Recuérdame
+        </span>
+        <div class="button-remember" on-tap="modal('remember-password', {title: 'Recordar contraseña'})">
+          Recordar contraseña
+        </div>
+      </div>
+      <div class="submit1">
+        {{#if ~/error}}
+          <span class="error">{{~/error}}</span>
+        {{/if ~/error}}
+        <button type="submit" class="button-register">
+          Entrar
+        </button>
+      </div>
+    </div>
+    <div class="access-prompt">
+      Entra con tu red social
+    </div>
+    <div class="access">
+      <div class="access-button">
+        <div class="face" on-click="facebook">
+          <i class="fa fa-facebook-official"></i>
+        </div>
+      </div>
+      <!-- <div class="access-button">
+        <div class="twitter" decorator="tip:'función aún no disponible'">
+          <i class="fa fa-twitter-square"></i>
+        </div>
+      </div> -->
+    </div>
+  </form>
+  <div class="register row">
+    ¿No tienes cuenta?
+    <button class="button-register" on-tap="sign-up">
+      Vente y opina!
+    </button>
+  </div>
+</div>
+
+<style>
+
+.logo-box {
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+img.logo2 {
+  display: inline;
+  text-align: center;
+  /* position: absolute; */
+  margin: 0 auto;
+}
+
+.remember-check .fa {
+  width: 16px;
+  height: 16px;
+}
+
+.remember-check {
+  border: solid 1px #eee;
+  border-radius: 4px;
+  padding: 3px;
+  margin-right: 4px;
+}
+
+.remember-container {
+  margin-top: 17px;
+  text-align: left;
+  color: #888;
+  cursor: pointer;
+}
+.remember-container a {
+  color: #F30;
+  float: right;
+  text-decoration: none;
+  letter-spacing: -0.02em;
+}
+
+.button-register {
+  padding: 9px 15px;
+  background: #fd270d;
+  text-align: center;
+  /*margin-left: 10px;*/
+}
+.button-register:hover {
+  background: #FF4314;
+  color:#FFF;
+}
+.button-register:active {
+  opacity: 1;
+}
+
+.button-remember {
+  color: #F30;
+  float: right;
+  letter-spacing: -.02em;
+  font-size: 120%;
+}
+.button-remember:hover {
+  color: #F30;
+  background-color: #fff;
+}
+
+.access-prompt {
+  color: #888;
+  font-size: 130%;
+  margin-top: 8px;
+  padding-left: 10px;
+}
+
+.register {
+  border-radius: 0 0 30px 11px;
+  background-color: #EFEFEF;
+  width: 100%;
+  margin-left: 0px;
+  height: 50px;
+  padding-top: 5px;
+  padding-left: 10px;
+  /*border-top: solid 1px #ddd;*/
+  color: #888;
+}
+.form {
+  /*padding: 28px 28px 0;
+  padding-bottom: 10px;*/
+  padding: 0 10px;
+}
+.form input[type="email"],
+.form input[type="password"] {
+  background-color: #fff;
+}
+.submit1 {
+  text-align: center;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.submit1 button {
+  width: 100%;
+  height: 44px;
+}
+.form .error {
+  color: #D23232;
+  font-weight: 800;
+  margin-right: 10px;
+}
+.access {
+  width: 100%;
+  color: #ffffff;
+  font-size: 24px;
+  padding: 14px 0;
+  height: 92px;
+}
+.access div.access-button {
+  float: left;
+  width: 100%;
+  /*height: 30px;*/
+  padding: 0 8px;
+  /*width: 50%;*/
+}
+.access div.access-button .fa {
+  vertical-align: baseline;
+}
+.access-button .face {
+  background-color: #2372A6;
+  /*width: 80%;*/
+  width: 50%;
+  /*float: right;*/
+  border-radius: 5px;
+  padding: 4px;
+  margin: 0 auto;
+}
+.access-button .twitter {
+  background-color: #259FD8;
+  width: 80%;
+  float: left;
+  border-radius: 5px;
+  padding: 4px;
+}
+.access-button .googleplus {
+  background-color: #C33626;
+}
+button,
+.btn {
+  color: #ffffff;
+  margin-bottom: 5px;
+}
+button,
+.btn,
+button[disabled]:hover,
+.btn[disabled]:hover {
+  background: #fd270d;
+}
+button:hover,
+.btn:hover {
+  background: #FF4314;
+  color: #fff;
+}
+button[disabled],
+.btn[disabled] {
+  opacity: .65;
+  cursor: default;
+}
+button.danger,
+.btn.danger,
+button.danger[disabled]:hover,
+.btn.danger[disabled]:hover {
+  background: #ee5f5b;
+  background: linear-gradient(to bottom, #ee5f5b 0%, #bd362f 100%);
+}
+button.danger:hover,
+.btn.danger:hover {
+  background: #bd362f;
+}
+@media (max-width: 768px) {
+  .access-prompt {
+    margin-top: 0px;
+  }
+  .access{
+    height: 56px;
+    padding: 0px 0;
+  }
+}
+
+</style>
+
+<script>
+let ls = window.localStorage
+component.exports = {
+  // isolated: true,
+  modal: require('../modal'),
+  onconfig () {
+    this.on('sign-up', (e)=> {
+      this.set('register','signup')
+    })
+    let email = ls.getItem('email') || ''
+    let password = ls.getItem('password') || ''
+    this.set('email', email)
+    this.set('password', password)
+    this.set('remember', email || password ? true : false)
+    api.once('auth', (me) => {
+      setTimeout(() => {
+        if (me.tmp) {
+          this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
+        }
+        if (this.parent && this.parent.teardown) {
+          this.parent.teardown()
+        }
+      }, 1)
+    })
+    this.on('submit', (e) => {
+      e.original.preventDefault()
+      let email = this.get('email')
+      let password = this.get('password')
+      let remember = this.get('remember')
+      let opts = { ident: email, password: password }
+      if (remember) opts.ttl = 365 * 24 * 3600
+      api.action('sign-in', opts, (data) => {
+        api.signIn(data)
+      }, (error) => {
+        this.set('error', 'correo o contraseña incorrectos')
+        api.signOut()
+      })
+      if (remember) {
+        ls.setItem('email', email)
+        // ls.setItem('password', password)
+        ls.setItem('remember', true)
+      } else {
+        ls.removeItem('email')
+        ls.removeItem('password')
+        ls.removeItem('remember')
+      }
+    })
+    this.on('facebook', () => {
+      window.open(`http://${localStorage.host === 'local' ? 'localhost' : document.domain}:1155/auth/facebook`, '_blank', 'width=500,height=500,left=100,top=100')
+    })
+  },
+
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
+  decorators: {
+    tip: require('../lib/decorators/tip')
+  }
+}
+</script>

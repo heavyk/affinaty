@@ -38,10 +38,11 @@
   {{/if ~/auth}}
 {{else}}
   <div class="tabs-movil">
+    {{#if ~/me}}
     <span class="tab-movil{{#if ~/tab === 'populares'}} active{{/if}}" on-tap="set('tab', 'populares')">Populares</span>
     <span class="tab-movil{{#if ~/tab === 'mis-top'}} active{{/if}}" on-tap="set('tab', 'mis-top')">Mis Top</span>
     <span class="tab-movil{{#if ~/tab === 'affin'}} active{{/if}}" on-tap="set('tab', 'affin')">Affines</span>
-
+    {{/if ~/me}}
     {{#if ~/tab === 'populares'}}
     <div class="debates-list" style="width: 100%; margin-top: 10px">
       {{#if ~/panel}}

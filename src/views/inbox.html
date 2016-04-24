@@ -3,7 +3,7 @@
 <link rel='ractive' href='../partials/spinner.html'>
 
 <div>
-
+  {{#if !movil}}
   <!-- left column -->
   <div style="width: {{~/leftWidth}}" class="col-left">
     <div class="threads" style="height: {{~/outerHeight}}px;">
@@ -114,10 +114,147 @@
     </div>
     {{/if}}
   </div>
+  {{else}}
+  <!-- Parte movil -->
+  <!-- left column -->
+  {{#if ~/columactive === 'right'}}
+  <div class="cancel" on-tap="cancel">
+    <i class="fa fa-times"></i>
+  </div>
+  {{/if}}
+  <div style="width: {{~/columactive === 'left' ? '96%' : '0%'}}" class="col-left">
+    <div class="threads" style="height: {{~/outerHeight}}px;">
+      <h4>Mensajería</h4>
+      <div>
+        <!-- <input type="text" value="{{~/search}}" placeholder="Busca para enviar mensaje" /> -->
+        <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
+          <i class="fa fa-toggle-on"></i>
+          Preferencias
+        </div>
+        <div on-tap="activate('encounter')" class="encounter {{~/panel === 'encounter' ? 'active' : ''}}">
+          <i class="fa fa-users"></i>
+          Buscador
+        </div>
+        {{#each ~/threads}}
+          {{#if .messages > 0}}
+            <div on-tap="activate('thread', ._id)" class="thread {{~/panel === 'thread' && mbox === _id ? 'active' : ''}}">
+              <foto src="{{~/members.0.foto}}" size="y" />
+              <span class="name">{{~/members.0.name}}</span>
+              {{#if .nm}}
+                <span class="new-msg">{{.nm}}</span>
+              {{/if}}
+            </div>
+          {{/if .messages > 0}}
+        {{else}}
+        no threads
+        {{/each ~/threads}}
+      </div>
+    </div>
+  </div>
+
+  <!-- right column -->
+  <div style="width: {{~/columactive === 'right' ? '100%' : '0%'}};left: {{~/columactive === 'left' ? ~/floatleft :'0'}}; display: {{~/columactive === 'left' ? 'none' : 'block'}}" class="col-right">
+    <!-- settings page -->
+    {{#if ~/panel === 'settings'}}
+    <div class="messages summary">
+      <h3>Preferencias <span class="not-yet">(Función aún no activa)</span></h3>
+      <div>Con los filtros de control podrás:</div>
+      <ul>
+        <li>Bloquear usuarios</li>
+        <li>Denunciar</li>
+        <li>Formatear la visualización de tus conversaciones</li>
+        <li>Borrar historal</li>
+      </ul>
+    </div>
+    {{/if}}
+
+    <!-- thread view -->
+    {{#if ~/panel === 'thread'}}
+    <chat members={{~/members}} />
+    {{/if}}
+
+    {{#if (!~/panel || ~/panel === 'encounter') && ~/search === 'active'}}
+    <div class="messages summary">
+      <h3>Buscador</h3>
+      <div class="search">
+        <div class="txt_search">
+          <input
+            type="text"
+            value="{{~/search_name}}"
+            placeholder="busca una por su nombre"
+            on-nlSubmit="search"
+            on-keyup="keyup"
+            />
+        </div>
+        <div class="submit">
+          <button type="submit" on-tap="search">
+            <i class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="results">
+        {{#if ~/search_results.length === 0}}
+        <div>No hay resultados</div>
+        {{/if}}
+
+        <div class="gm-scrollbar-vertical">
+          <div class="thumb"></div>
+        </div>
+        <div class="gm-scrollbar-horizontal">
+          <div class="thumb"></div>
+        </div>
+        <div class="gm-scroll-view">
+          {{#if ~/loading}}
+            <spinner scale="0.2" />
+          {{else}}
+            {{#each ~/search_results}}
+              <div class="list">
+                <div class="user">
+                  <a href="/profile/{{._id}}" title="{{.name}}">
+                    <foto src="{{foto}}" size="y" />
+                  </a>
+                  <div class="ellipsis">
+                    <a href="/profile/{{._id}}" class="profile-name" title="{{.name}}"> {{.name}}</a>
+                    <h5>{{.title}}</h5>
+                  </div>
+                </div>
+                <div class="message1" on-tap="send-message">
+                  <div class="message-inner">
+                    <i class="fa fa-envelope" />
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          {{/if ~/loading}}
+        </div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  {{/if}}
 </div>
 
 <style>
-
+.cancel {
+  display: block;
+  content: "\00D7";
+  background: #fff;
+  color: #000;
+  width: 30px;
+  height: 30px;
+  padding-right: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 100;
+  line-height: 1px;
+  text-indent: 1px;
+  border-radius: 0 0 0 4px;
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index:999999;
+}
 .threads {
   /*position: fixed;*/
   /*max-height: 90%;*/
@@ -334,8 +471,13 @@ component.exports = {
   isolated: true,
   // modal: require('../modal'),
   oninit () {
+    this.set('movil', window.isMobile)
+    this.set('columactive','left')
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
+    })
+    this.on('cancel', (event) =>{
+      this.set('columactive','left')
     })
     this.on('send-message', (event) => {
       // this.modal('chat', {title: event.context.name, minimize: true, id: event.context._id})
@@ -450,6 +592,7 @@ component.exports = {
     resizer()
   },
   activate (sub, mbox) {
+    this.set('columactive','right')
     if (mbox && mbox !== this.get('mbox')) this.set('msgs', [])
     router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
   },

@@ -1,0 +1,107 @@
+
+<div class="sex-stats" style="display: {{~/planets ? 'block' : 'none'}}">
+  <div class="sex-graph-container venus">
+    <div class="sex-graph" title="{{Math.round(~/percents.0)}}%">
+      <div class="percent-gauge venus">
+        <i class="fa fa-venus"></i>{{~/planets.0}}
+      </div>
+    </div>
+    <h6 class="sex-stat">Mujeres</h6>
+  </div>
+  <div class="sex-graph-container mars">
+    <div class="sex-graph" title="{{Math.round(~/percents.1)}}%">
+      <div class="percent-gauge mars">
+        <i class="fa fa-mars"></i>{{~/planets.1}}
+      </div>
+    </div>
+    <h6 class="sex-stat">Hombres</h6>
+  </div>
+  [[#if ~/S.moarPlanets]]
+  <div class="sex-graph-container">
+    <div class="sex-graph" title="{{Math.round(~/percents.2)}}%">
+      <div class="percent-gauge earth">
+        <i class="fa fa-circle-thin"></i>{{~/planets.2}}
+      </div>
+    </div>
+  </div>
+  <div class="sex-graph-container">
+    <div class="sex-graph" title="{{Math.round(~/percents.3)}}%">
+      <div class="percent-gauge mercury">
+        <i class="fa fa-mercury"></i>{{~/planets.3}}
+      </div>
+    </div>
+  </div>
+  [[/if]]
+</div>
+
+<style>
+
+.sex-graph-container {
+  float: left;
+  width: 50%;
+}
+
+.sex-graph {
+  width: 50%;
+  position: relative;
+  display: block;
+  width: 80px;
+  height: 80px;
+  margin: 10px auto;
+  text-align: center;
+}
+.sex-stat {
+  font-family: 'Pacifico';
+}
+
+.sex-graph canvas {
+  position: absolute;
+  top: 0;
+  left: 0px;
+  max-width: 80px;
+    max-height: 80px;
+}
+
+.percent-gauge {
+  display: inline-block;
+  z-index: 2;
+  margin-top: 22px;
+font-size: 24px;
+  font-weight: 900;
+}
+
+.venus   { color: #D41A79; }
+.mars    { color: #3CA0BB; }
+.earth   { color: #4B9655; }
+.mercury { color: #812698; }
+
+</style>
+
+
+<script>
+import pie from 'easy-pie-chart'
+import assign from '../lib/lodash/object/assign'
+component.exports = {
+  isolated: true,
+  oncomplete () {
+    let num_planets = this.get('S.moarPlanets') ? 4 : 2
+    let barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
+    let options = {
+      animate: {
+        duration: 0,
+        enabled: false
+      },
+      scaleColor: false,
+      lineWidth: 10,
+      rotate: 0,
+      lineCap: 'butt'
+    }
+
+    let els = this.findAll('.sex-graph')
+    for (let i = 0; i < num_planets; i++) {
+      let p = new pie(els[i], assign({barColor: barColors[i]}, options))
+      this.observe('percents.'+i, function (v) { p.update(v) }, { defer: true })
+    }
+  },
+}
+</script>

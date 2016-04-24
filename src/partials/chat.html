@@ -1,8 +1,8 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
 
-<div class="messages" style="height: {{~/outerHeight}}px; width: {{~/outerWidth}}px">
-  <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{~/innerHeight}}px">
+<div class="messages" style="height: {{~/outerHeight}}px; width: {{~/movil ? '100%' : ~/outerWidth}}px">
+  <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{~/movil ? ~/innerHeight-70 : ~/innerHeight}}px">
     {{#each ~/msgs : i}}
     <div class="{{.creator === ~/members.me._id ? 'left' : 'right'}}">
       <div style="float: {{.creator === ~/members.me._id ? 'left' : 'right'}}">
@@ -16,7 +16,7 @@
     {{/each}}
   </div>
   <form on-submit="add">
-    <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : '88%'}}">
+    <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : ~/movil ? '75%' : '88%'}}">
       <textarea
         class="animate"
         on-blur-focus="toggle-focus"
@@ -147,6 +147,7 @@ component.exports = {
     let tbox = this.find('textarea')
     let messages_el = this.find('.messages')
     let movil = window.isMobile
+    this.set('movil', window.isMobile)
     setTimeout(() => {
       tbox.focus()
     }, 200)

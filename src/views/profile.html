@@ -5,132 +5,129 @@
 <link rel='ractive' href='../partials/chat.html'>
 <link rel='ractive' href='../partials/spinner.html'>
 
-<div class="container-profile">
+{{#if !movil}}
+  <div class="container">
 
-  <div class="profile" style="display: {{~/mine && (~/active === 'follows'|| ~/active === 'following')  ? 'none' : 'block'}}">
-    <div class="cover">
-      <!-- <foto src="{{~/foto}}"  /> -->
-    </div>
-    <div class="center-foto" on-tap="modal('foto', {title: ~/name, src: ~/foto, size: 'm', shape: 'sq'})">
-      {{#if ~/loading}}
-        <spinner />
-      {{else}}
-        <foto src="{{~/foto}}" size="a" />
-      {{/if ~/loading}}
-    </div>
-    <div class="name">
-      <h2>{{~/name}}</h2>
-    </div>
-    <div class="title">
-      <h3>{{~/title}}</h3>
-    </div>
-    {{#if ~/networks}}
-      <div class="networks">
-        {{#if ~/networks.blog}}
-        <div class="net-blog">
-          <a href="{{~/networks.blog}}" target="blog">
-            <i class="fa fa-pencil" /> blog
-          </a>
-        </div>
-        {{/if ~/networks.blog}}
-
-        {{#if ~/networks.github}}
-        <div class="net-github">
-          <a href="{{~/networks.github}}" target="github">
-            <i class="fa fa-github" /> GitHub
-          </a>
-        </div>
-        {{/if ~/networks.github}}
-
-        {{#if ~/networks.twitter}}
-        <div class="net-twitter">
-          <a href="{{~/networks.twitter}}" target="twitter">
-            <i class="fa fa-twitter" /> Twitter
-          </a>
-        </div>
-        {{/if ~/networks.twitter}}
-
-        {{#if ~/networks.facebook}}
-        <div class="net-facebook">
-          <a href="{{~/networks.facebook}}" target="facebook">
-            <i class="fa fa-facebook" /> Facebook
-          </a>
-        </div>
-        {{/if ~/networks.facebook}}
-
-        {{#if ~/networks.youtube}}
-        <div class="net-youtube">
-          <a href="{{~/networks.youtube}}" target="youtube">
-            <i class="fa fa-youtube" /> YouTube
-          </a>
-        </div>
-        {{/if ~/networks.youtube}}
+    <div class="profile" style="display: {{mine && (active === 'follows'|| active === 'following')  ? 'none' : 'block'}}">
+      <div class="cover">
+        <!-- <foto src="{{foto}}"  /> -->
       </div>
-    {{/if ~/networks}}
-    {{#if ~/mine}}
-      <a class="message" href="/settings">
-        <div class="message-inner">
-          <i class="fa fa-pencil-square-o" />
-          <div class="follow-text">
-            Editar Perfil
-          </div>
-        </div>
-      </a>
-    {{else}}
-      {{#if ~/auth}}
-      <div class="follow" on-tap="follow">
-        <div class="follow-inner">
-          {{#if !~/following}}
-            <img src="/img/follow.svg" title="follow" width="40" height="40" />
-          {{else}}
-            <img src="/img/unfollow.svg" title="unfollow" width="40" height="40" />
-          {{/if}}
-          <div class="follow-text">
-            {{#if ~/following}}
-              No Seguir
-            {{else}}
-              Seguir
-            {{/if}}
-          </div>
-        </div>
+      <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
+        {{#if loading}}
+          <spinner />
+        {{else}}
+          <foto src="{{foto}}" size="a" />
+        {{/if loading}}
       </div>
-
-      <div class="message" on-tap="send-message">
-        <div class="message-inner">
-          <i class="fa fa-envelope" />
-          <div class="follow-text">
-            Mensaje
-          </div>
-        </div>
+      <div class="name">
+        <h2>{{name}}</h2>
       </div>
-      {{/if ~/auth}}
+      <div class="title">
+        <h3>{{title}}</h3>
+      </div>
+      {{#if networks}}
+        <div class="networks">
+          {{#if networks.blog}}
+          <div class="net-blog">
+            <a href="{{networks.blog}}" target="blog">
+              <i class="fa fa-pencil" /> blog
+            </a>
+          </div>
+          {{/if networks.blog}}
 
+          {{#if networks.github}}
+          <div class="net-github">
+            <a href="{{networks.github}}" target="github">
+              <i class="fa fa-github" /> GitHub
+            </a>
+          </div>
+          {{/if networks.github}}
 
+          {{#if networks.twitter}}
+          <div class="net-twitter">
+            <a href="{{networks.twitter}}" target="twitter">
+              <i class="fa fa-twitter" /> Twitter
+            </a>
+          </div>
+          {{/if networks.twitter}}
 
-      <div class="affinaty {{~/floating ? 'floating' : ''}}">
-        {{#if ~/floating}}
-        <div class="affinaty-left">
-          <foto src="{{~/foto}}" size="z" class="me" />
-          <div class="name-profile">{{~/name}}</div>
-          <span class="affin-neg" style="display: {{~/movil ? 'none' : ''}}">- affin</span>
-          <span class="affin-gradient-left"></span>
-          <span class="affin-gradient">
-            <div class="gradient-pos" style="">
-              <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                <i class="fa fa-circle"></i>
-              </span>
-              <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                {{Math.round(~/affinaty_percent)}}%
-              </span>
+          {{#if networks.facebook}}
+          <div class="net-facebook">
+            <a href="{{networks.facebook}}" target="facebook">
+              <i class="fa fa-facebook" /> Facebook
+            </a>
+          </div>
+          {{/if networks.facebook}}
+
+          {{#if networks.youtube}}
+          <div class="net-youtube">
+            <a href="{{networks.youtube}}" target="youtube">
+              <i class="fa fa-youtube" /> YouTube
+            </a>
+          </div>
+          {{/if networks.youtube}}
+        </div>
+      {{/if networks}}
+      {{#if mine}}
+        <a class="message" href="/settings">
+          <div class="message-inner">
+            <i class="fa fa-pencil-square-o" />
+            <div class="follow-text">
+              Editar Perfil
             </div>
-          </span>
-          <span class="affin-gradient-right"></span>
-          <span class="affin-pos" style="display: {{~/movil ? 'none' : ''}}">+ affin</span>
+          </div>
+        </a>
+      {{else}}
+        <div class="follow" on-tap="follow">
+          <div class="follow-inner">
+            {{#if !following}}
+              <img src="/img/follow.svg" title="follow" width="40" height="40" />
+            {{else}}
+              <img src="/img/unfollow.svg" title="unfollow" width="40" height="40" />
+            {{/if}}
+            <div class="follow-text">
+              {{#if following}}
+                No Seguir
+              {{else}}
+                Seguir
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="message" on-tap="send-message">
+          <div class="message-inner">
+            <i class="fa fa-envelope" />
+            <div class="follow-text">
+              Mensaje
+            </div>
+          </div>
+        </div>
 
-          <div class="affinaty-right" style="right: {{~/movil ? '-44px' : ''}}">
+
+        <div class="affinaty {{floating ? 'floating' : ''}}">
+          {{#if floating}}
+          <div class="affinaty-left">
+            <foto src="{{me.foto}}" size="z" class="me" />
+            <span class="affin-neg" style="display: {{movil ? 'none' : ''}}">- affin</span>
+            <span class="affin-gradient-left"></span>
+            <span class="affin-gradient">
+              <div class="gradient-pos" style="">
+                <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+                  <i class="fa fa-circle"></i>
+                </span>
+                <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+                  {{Math.round(affinaty_percent)}}%
+                </span>
+              </div>
+            </span>
+            <span class="affin-gradient-right"></span>
+            <span class="affin-pos" style="display: {{movil ? 'none' : ''}}">+ affin</span>
+            <foto src="{{foto}}" size="z" class="you" />
+          </div>
+          <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
             <div class="follow floating" on-tap="follow">
               <div class="follow-inner">
-                {{#if !~/following}}
+                {{#if !following}}
                   <img src="/img/follow.svg" title="follow" width="30" height="30" />
                 {{else}}
                   <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
@@ -143,91 +140,277 @@
               </div>
             </div>
           </div>
+        {{else}}
+          <span class="affin-neg">- affin</span>
+          <span class="affin-gradient-left"></span>
+          <span class="affin-gradient">
+            <div class="gradient-pos" style="">
+              <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+                <i class="fa fa-circle"></i>
+              </span>
+              <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+                {{Math.round(affinaty_percent)}}%
+              </span>
+            </div>
+          </span>
+          <span class="affin-gradient-right"></span>
+          <span class="affin-pos">+ affin</span>
+        {{/if floating}}
+      </div>
+      {{/if me}}
+    </div>
+
+    <subheader>
+      <div class="row">
+        <div class="col-xs-2" style="margin-left: 16.666666%">
+          <a href="/profile/{{id}}/debates" class="{{active === 'debates' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-list"></i></div>
+            Publicaciones
+          </a>
+        </div>
+        <div class="col-xs-2">
+          <a href="/profile/{{id}}/opinions" class="{{active === 'opinions' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-comment-o"></i></div>
+            Opiniones
+          </a>
+        </div>
+        <div class="col-xs-2">
+          <a href="/profile/{{id}}/follows" class="{{active === 'follows' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-user"></i></div>
+            Siguiendo{{#if numFollows}} ({{numFollows}}){{/if}}
+          </a>
+        </div>
+        <div class="col-xs-2">
+          <a href="/profile/{{id}}/following" class="{{active === 'following' ? 'active' : '' }}">
+            <div class="symbol"><i class="fa fa-user"></i></div>
+            Seguidores{{#if numFollowing}} ({{numFollowing}}){{/if}}
+          </a>
+        </div>
+      </div>
+    </subheader>
+    <div class="lists">
+      {{#if active === 'debates'}}
+        <debate-list creator="{{id}}" />
+      {{/if}}
+      {{#if active === 'opinions'}}
+        <debate-list opinions="{{id}}" />
+        <!-- <opinion-breakdown creator="{{id}}" /> -->
+      {{/if}}
+      {{#if active === 'follows'}}
+        <relation-list follows="{{id}}" />
+      {{/if}}
+      {{#if active === 'following'}}
+        <relation-list following="{{id}}" />
+      {{/if}}
+    </div>
+  </div>
+{{else}}
+
+<!-- PARTE MOVIL -->
+
+  <div class="container-movil">
+    <div class="profile" style="display: {{mine && (active === 'follows'|| active === 'following')  ? 'none' : 'block'}}">
+      <div class="cover">
+        <!-- <foto src="{{foto}}"  /> -->
+      </div>
+      <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
+        {{#if loading}}
+          <spinner />
+        {{else}}
+          <foto src="{{foto}}" size="a" />
+        {{/if loading}}
+      </div>
+      <div class="name">
+        <h2>{{name}}</h2>
+      </div>
+      <div class="title">
+        <h3>{{title}}</h3>
+      </div>
+      {{#if networks}}
+        <div class="networks">
+          {{#if networks.blog}}
+          <div class="net-blog">
+            <a href="{{networks.blog}}" target="blog">
+              <i class="fa fa-pencil" /> blog
+            </a>
+          </div>
+          {{/if networks.blog}}
+
+          {{#if networks.github}}
+          <div class="net-github">
+            <a href="{{networks.github}}" target="github">
+              <i class="fa fa-github" /> GitHub
+            </a>
+          </div>
+          {{/if networks.github}}
+
+          {{#if networks.twitter}}
+          <div class="net-twitter">
+            <a href="{{networks.twitter}}" target="twitter">
+              <i class="fa fa-twitter" /> Twitter
+            </a>
+          </div>
+          {{/if networks.twitter}}
+
+          {{#if networks.facebook}}
+          <div class="net-facebook">
+            <a href="{{networks.facebook}}" target="facebook">
+              <i class="fa fa-facebook" /> Facebook
+            </a>
+          </div>
+          {{/if networks.facebook}}
+
+          {{#if networks.youtube}}
+          <div class="net-youtube">
+            <a href="{{networks.youtube}}" target="youtube">
+              <i class="fa fa-youtube" /> YouTube
+            </a>
+          </div>
+          {{/if networks.youtube}}
+        </div>
+      {{/if networks}}
+      {{#if mine}}
+        <a class="message-movil" href="/settings">
+          <div class="message-inner">
+            <i class="fa fa-pencil-square-o" />
+            <div class="follow-text-movil">
+              Editar Perfil
+            </div>
+          </div>
+        </a>
+      {{else}}
+        <div class="follow-movil" on-tap="follow">
+          <div class="follow-inner">
+            {{#if !following}}
+              <img src="/img/follow.svg" title="follow" width="30" height="30" />
+            {{else}}
+              <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
+            {{/if}}
+            <div class="follow-text-movil">
+              {{#if following}}
+                No Seguir
+              {{else}}
+                Seguir
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="message-movil" on-tap="send-message">
+          <div class="message-inner">
+            <i class="fa fa-envelope" />
+            <div class="follow-text-movil">
+              Mensaje
+            </div>
+          </div>
         </div>
 
-      {{else}}
-        <span class="affin-neg">- affin</span>
-        <span class="affin-gradient-left"></span>
-        <span class="affin-gradient">
-          <div class="gradient-pos" style="">
-            <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-              <i class="fa fa-circle"></i>
+
+        <div class="affinaty {{floating ? 'floating' : ''}}">
+          {{#if floating}}
+          <div class="affinaty-left">
+
+            <foto src="{{foto}}" size="z" class="me" />
+            <span class="affin-gradient-left"></span>
+            <span class="affin-gradient">
+              <div class="gradient-pos" style="">
+                <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+                  <i class="fa fa-circle"></i>
+                </span>
+                <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+                  {{Math.round(affinaty_percent)}}%
+                </span>
+              </div>
             </span>
-            <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-              {{Math.round(~/affinaty_percent)}}%
-            </span>
+            <span class="affin-gradient-right"></span>
+
+
           </div>
-        </span>
-        <span class="affin-gradient-right"></span>
-        <span class="affin-pos">+ affin</span>
-      {{/if ~/floating}}
+          <div class="affinaty-right" style="right: {{movil ? '-44px' : ''}}">
+            <div class="follow floating" on-tap="follow">
+              <div class="follow-inner">
+                {{#if !following}}
+                  <img src="/img/follow.svg" title="follow" width="30" height="30" />
+                {{else}}
+                  <img src="/img/unfollow.svg" title="unfollow" width="30" height="30" />
+                {{/if}}
+              </div>
+            </div>
+            <div class="message floating" on-tap="send-message">
+              <div class="message-inner">
+                <i class="fa fa-envelope" />
+              </div>
+            </div>
+          </div>
+        {{else}}
+          <span class="affin-gradient-left"></span>
+          <span class="affin-gradient-movil">
+            <div class="gradient-pos" style="">
+              <span class="gradient-point" style="left: {{50 + (affinaty_percent / 2)}}%">
+                <i class="fa fa-circle"></i>
+              </span>
+              <span class="gradient-point gradient-percent" style="left: {{50 + (affinaty_percent / 2)}}%">
+                {{Math.round(affinaty_percent)}}%
+              </span>
+            </div>
+          </span>
+          <span class="affin-gradient-right"></span>
+        {{/if floating}}
+      </div>
+      {{/if me}}
     </div>
-    {{/if ~/me}}
+
+    <subheader>
+      <div class="row sub1">
+        <div class="col-xs-3" >
+          <a href="/profile/{{id}}/debates" class="{{active === 'debates' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-list"></i></div>
+            Publicaciones
+          </a>
+        </div>
+        <div class="col-xs-3">
+          <a href="/profile/{{id}}/opinions" class="{{active === 'opinions' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-comment-o"></i></div>
+            Opiniones
+          </a>
+        </div>
+        <div class="col-xs-3">
+          <a href="/profile/{{id}}/follows" class="{{active === 'follows' ? 'active' : ''}}">
+            <div class="symbol"><i class="fa fa-user"></i></div>
+            Siguiendo{{#if numFollows}} ({{numFollows}}){{/if}}
+          </a>
+        </div>
+        <div class="col-xs-3">
+          <a href="/profile/{{id}}/following" class="{{active === 'following' ? 'active' : '' }}">
+            <div class="symbol"><i class="fa fa-user"></i></div>
+            Seguidores{{#if numFollowing}} ({{numFollowing}}){{/if}}
+          </a>
+        </div>
+      </div>
+    </subheader>
+    <div class="lists">
+      {{#if active === 'debates'}}
+        <debate-list creator="{{id}}" />
+      {{/if}}
+      {{#if active === 'opinions'}}
+        <debate-list opinions="{{id}}" />
+        <!-- <opinion-breakdown creator="{{id}}" /> -->
+      {{/if}}
+      {{#if active === 'follows'}}
+        <relation-list follows="{{id}}" />
+      {{/if}}
+      {{#if active === 'following'}}
+        <relation-list following="{{id}}" />
+      {{/if}}
+    </div>
+
   </div>
 
-  <subheader>
-    <div class="row">
-      <div class="col-xs-2" style="margin-left: 16.666666%">
-        <a href="/profile/{{~/id}}/debates" class="{{~/active === 'debates' ? 'active' : ''}}">
-          <div class="symbol"><i class="fa fa-list"></i></div>
-          Publicaciones
-        </a>
-      </div>
-      <div class="col-xs-2">
-        <a href="/profile/{{~/id}}/opinions" class="{{~/active === 'opinions' ? 'active' : ''}}">
-          <div class="symbol"><i class="fa fa-comment-o"></i></div>
-          Opiniones
-        </a>
-      </div>
-      <div class="col-xs-2">
-        <a href="/profile/{{~/id}}/follows" class="{{~/active === 'follows' ? 'active' : ''}}">
-          <div class="symbol"><i class="fa fa-user"></i></div>
-          Siguiendo{{#if ~/numFollows}} ({{~/numFollows}}){{/if}}
-        </a>
-      </div>
-      <div class="col-xs-2">
-        <a href="/profile/{{~/id}}/following" class="{{~/active === 'following' ? 'active' : '' }}">
-          <div class="symbol"><i class="fa fa-user"></i></div>
-          Seguidores{{#if ~/numFollowing}} ({{~/numFollowing}}){{/if}}
-        </a>
-      </div>
-    </div>
-  </subheader>
-  <div class="lists">
-    {{#if ~/active === 'debates'}}
-      <debate-list creator="{{~/id}}" />
-    {{/if}}
-    {{#if ~/active === 'opinions'}}
-      <debate-list opinions="{{~/id}}" />
-      <!-- <opinion-breakdown creator="{{~/id}}" /> -->
-    {{/if}}
-    {{#if ~/active === 'follows'}}
-      <relation-list follows="{{~/id}}" />
-    {{/if}}
-    {{#if ~/active === 'following'}}
-      <relation-list following="{{~/id}}" />
-    {{/if}}
-  </div>
-</div>
+{{/if}}
 
 <style>
-.container-profile{
-  width: 100%;
-  margin-top: -20px;
-}
-.name-profile{
-  font-size: 24px;
-  color: #414141;
-  text-decoration: none;
-  margin: 0;
-  text-overflow: ellipsis;
-  left: 65px;
-  position: absolute;
-  top: 5px;
-  width: 150px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: left;
+.container-movil {
+    margin-left: auto;
+    margin-right: auto;
 }
 .profile {
   margin: 0;
@@ -288,6 +471,14 @@
   height: 16px;
   /*border-radius: 16px;*/
 }
+.affin-gradient-movil {
+  display: inline-block;
+  background: #ff3232;
+  background: linear-gradient(to right, #ff3232 0%,#f93f31 22%,#24b52d 78%,#4f935a 100%);
+  width: 70%;
+  height: 16px;
+  /*border-radius: 16px;*/
+}
 .affin-gradient-left,
 .affin-gradient-right {
   width: 16px;
@@ -309,8 +500,8 @@
   position: relative;
   width: 100%;
   height: 130px;
-
-  background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);
+  /*background: #d4d2d4;
+  background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);*/
 }
 .cover img{
   width: 100%;
@@ -382,12 +573,13 @@
 
 }
 .floating .affinaty-left {
-  position: relative;
-  top: -20px;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 56px;
-  width: 80%;
-  margin: 0 auto;
-  left: 25px;
+  width: 75%;
+  border: solid 1px #dadada;
+  border-radius: 50px;
 }
 .floating .affinaty-right {
   position: absolute;
@@ -435,15 +627,27 @@
   cursor: pointer;
   padding: 20px;
   white-space: nowrap;
-  /*border: solid 1px #dadada;
-  border-radius: 8px;*/
+  border: solid 1px #dadada;
+  border-radius: 8px;
 }
+.message-movil,
+.follow-movil {
+  position: absolute;
+  right: 30px;
+  top: 100px;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  cursor: pointer;
+  padding: 20px;
+  white-space: nowrap;
+
+}
+
 .message:hover,
 .follow:hover {
-  /*background: rgba(253, 39, 13, 0.08);
-  border: solid 1px #FD270D;*/
-  -webkit-transform: scale(1.05);
-  transform: scale(1.05);
+  background: rgba(253, 39, 13, 0.08);
+  border: solid 1px #FD270D;
   text-decoration: none;
 }
 .message-inner,
@@ -454,13 +658,26 @@
 .follow-text {
   color: #737373;
 }
+.message-text-movil,
+.follow-text-movil {
+  color: #737373;
+  margin-left: -20px;
+}
 .message {
   /*left: 33px;*/
   top: 60px;
 }
-.message .fa {
+.message-movil {
+  /*left: 33px;*/
+  top: 20px;
+}
+.message .fa{
   color: #FF3000;
   font-size: 250%;
+}
+.message-movil .fa{
+  color: #FF3000;
+  font-size: 200%;
 }
 .planet {
   color: #9A00FF;
@@ -492,16 +709,16 @@ a.active {
 
 .affinaty.floating {
   position: fixed;
-  top: 30px;
-  left: 0%;
-  width: 100%;
+  top: 50px;
+  left: 5%;
+  width: 90%;
   background: #fff;
+  /* 99 because header is 100 */
   z-index: 99;
   height: 60px;
   padding-top: 25px;
-  border-bottom: 1px solid #fd270d;
-  /* border-radius: 30px; */
-  /* border: 2px solid #ccc; */
+  border-radius: 30px;
+  border: solid 2px #ccc;
 }
 .affinaty {
   text-align: center;
@@ -584,19 +801,23 @@ a.active {
   position: relative;
   top: 10px;
 }
+.sub1{
+    margin-right: 15px;
+    margin-left: 8px;
+    width: 95%;
+}
 
 
 
 </style>
 
 <script>
-import calcAffinaties from '../lib/calc/affinaties.js'
-import calcAffinaty from '../lib/calc/affinaty.js'
-import assign from '../lib/lodash/object/assign'
-import debounce from '../lib/lodash/function/debounce'
-import opinion_ from '../api/opinion'
+let calcAffinaties = require('../lib/calc/affinaties.js')
+let calcAffinaty = require('../lib/calc/affinaty.js')
+let assign = require('../lib/lodash/object/assign')
+let debounce = require('../lib/lodash/function/debounce')
+let opinion_ = require('../api/opinion')
 component.exports = {
-  isolated: true,
   modal: require('../modal'),
   oninit () {
     this.set('movil', window.isMobile)
@@ -604,11 +825,11 @@ component.exports = {
     let complete_screen
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
-      if (api.my.notifier) api.my.notifier.remove_box(id)
+      api.my.notifier.remove_box(id)
       // if (api.me && api.me._id === id && false) {
       //   this.set(assign({ mine: true, }, api.me))
       // } else {
-        this.set({ mine: api.yo === id, loading: true })
+        this.set({ mine: api.me._id === id, loading: true })
         this.opinion = new opinion_(id)
         this.opinion.until('/', () => {
           this.refresh()
@@ -642,20 +863,11 @@ component.exports = {
       this.set('affinaty_update', 1 + this.get('affinaty_update') || 0)
     }, 200, false)
     this.set('affinaty_update', 0)
-    api.on('deauth', this.on_deauth = (yo) => {
-      this.set('auth', false)
-      if (api.my.opinion) api.my.opinion.off([api.yo, '*'], this.on_opinion)
+    api.my.opinion.on([api.me._id, '*'], () => {
       this.refresh()
     })
-
-    api.on('auth', this.on_auth = () => {
-      this.set('auth', true)
-      api.my.opinion.until('/', () => {
-        this.refresh()
-        api.my.opinion.on([api.yo, '*'], this.on_opinion = () => {
-          this.refresh()
-        })
-      })
+    api.my.opinion.until('/', () => {
+      this.refresh()
     })
   },
   oncomplete () {
@@ -668,8 +880,6 @@ component.exports = {
     }
   },
   onteardown () {
-    api.off('auth', this.on_auth)
-    api.off('deauth', this.on_deauth)
     if (!this.get('mine')) {
       window.removeEventListener('scroll', this.onscroll)
     }
@@ -677,7 +887,7 @@ component.exports = {
   computed: {
     affinaty () {
       let update = this.get('affinaty_update')
-      if (!this.opinion || !api.my.opinion) return 0
+      if (!this.opinion) return 0
       let their_opinions = this.opinion
       let affinaty = 0
       let coinciding = []

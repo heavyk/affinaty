@@ -1,4 +1,7 @@
 <link rel='ractive' href='../partials/sign-in.html'>
+<link rel='ractive' href='../partials/sign-in-movil.html'>
+<link rel='ractive' href='../partials/sign-up-movil.html'>
+<link rel='ractive' href='../partials/set-up-movil.html'>
 <link rel='ractive' href='../partials/set-up.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/categories.html'>
@@ -104,7 +107,6 @@
 {{else}}
   <!-- movil -->
   <div class="header-container-mov">
-    {{#if ~/me}}
       <div class="search-mov-icon" on-tap="toggle('show_search')">
         <i class="fa fa-search"></i>&nbsp; {{~/category}}
       </div>
@@ -119,16 +121,18 @@
           <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
         </li>
       </div>
-
+    {{#if ~/me}}
       <div class="logo">
         <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
       </div>
       <div class="conf-mov conf" on-tap="toggle('show_settings')">
             <i class="fa fa-cog"></i>
       </div>
+
     {{else}}
       <div class="logo">
         <h1><a href="/">Affinaty</a></h1>
+          <div class="start-session-movil" on-tap="sign-in">Iniciar Sesión</div>
       </div>
     {{/if}}
   </div>
@@ -142,9 +146,79 @@
       </li>
     </ul>
   </div>
+  {{#if register ==='signin' || register ==='signup' || register ==='setup'}}
+  <div class="register-background">
+    <div class="register-outer">
+      <div class="register-box">
+        <div class="register-close" on-tap="close">
+          <i class="fa fa-close"></i>
+        </div>
+        {{#if register==='signin'}}
+          <sign-in-movil register={{register}} >
+        {{/if }}
+        {{#if register==='signup'}}
+          <sign-up-movil register={{register}}>
+        {{/if }}
+
+        {{#if register==='setup'}}
+          <set-up-movil register={{register}}>
+        {{/if }}
+        </div>
+      </div>
+    </div>
+
+  {{/if }}
 {{/if}}
 
 <style>
+.register-background{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.5);
+  padding: .5em;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+.register-close {
+  display: block;
+  content: "\00D7";
+  background: #fff;
+  color: #000;
+  width: 30px;
+  height: 30px;
+  padding-right: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 100;
+  line-height: 1px;
+  text-indent: 1px;
+  border-radius: 0 0 0 4px;
+  cursor: pointer;
+  position: absolute;
+  top: -3px;
+  right: 0px;
+  z-index:999999;
+}
+.register-outer{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+.register-box{
+  position: relative;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px rgba(0,0,0,.1);
+  margin: 0 auto;
+  max-width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  box-sizing: border-box;
+  border-radius: 8px;
+  /*border: 1px solid #9a9a9a;*/
+}
 .header-container {
   padding: 0 40px;
 }
@@ -199,12 +273,12 @@
 .settings{
   top: 50px;
   position: absolute;
-  width: 229px;
+  width: 170px;
   right: 3%;
   background: #fff;
   border-radius: 30px 9px;
   box-shadow: 5px 7px 10px -5px rgba(41,41,41,.53);
-  font-size: 26px;
+  font-size: 20px;
 }
 .button-head-conf-mov {
   left: 60px;
@@ -257,6 +331,11 @@ span.name {
 .start-session {
   color: #000;
   margin-top: 10px;
+}
+.start-session-movil {
+  color: #000;
+  margin-top: 10px;
+  float: right;
 }
 img {
   vertical-align: middle;
@@ -418,10 +497,13 @@ a.dropdown-toggle.moar-toggle {
 
 <script>
 import assign from '../lib/lodash/object/assign'
+import onresize from '../lib/dom/element-onresize.js'
 
 component.exports = {
   isolated: true,
   modal: require('../modal'),
+  el: document.body,
+  append: true,
   onconfig () {
     // this.set('show_n', true)
     // this.set('show_m', true)
@@ -440,6 +522,43 @@ component.exports = {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }
+    })
+    this.on('close', (e)=> {
+      this.set('register','')
+    })
+    this.on('sign-in',(e)=> {
+      this.set('register','signin')
+      this.outer = this.find('.register-outer')
+      this.modal = this.find('.register-box')
+      // this.footer = this.find('.modal-footer')
+      // this.closeButton = this.find('.register-close')
+
+      let resizeHandler = () => {
+        let outerHeight = this.outer.clientHeight
+        let modalHeight = this.modal.clientHeight
+        let verticalSpace = (outerHeight - modalHeight) / 2
+        this.modal.style.top = verticalSpace + 'px'
+        // console.log(outerHeight, modalHeight, verticalSpace)
+        // if (this.footer) this.footer.style.top = ((verticalSpace + modalHeight)) + 'px'
+      }
+
+      this.on('resize', resizeHandler)
+
+
+
+      // when the window resizes, keep the modal horizontally and vertically centred
+      window.addEventListener('resize', resizeHandler, false)
+
+      // when the modal element size changes, same thing
+      if (this.modal)
+      onresize.addResizeListener(this.modal, resizeHandler)
+
+      // this.once('teardown', () => {
+      //   window.removeEventListener('resize', resizeHandler)
+      //   onresize.removeResizeListener(this.modal, resizeHandler)
+      // })
+
+      setTimeout(resizeHandler, 1)
     })
     api.observe('me', (me) => {
       console.warn('me', me)
@@ -515,6 +634,10 @@ component.exports = {
   signOut () {
     api.signOut(true)
   },
+  onrender () {
+
+  },
+
   events: {
     tap: require('../lib/events/tap.js'),
   },

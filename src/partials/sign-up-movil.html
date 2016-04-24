@@ -1,0 +1,148 @@
+<link rel='ractive' href='../partials/set-up-movil.html'>
+
+<div class="square container">
+  {{#if register==='signup'}}
+
+    <form on-submit="submit">
+      <div>
+        <input type="text" maxlength="100" value="{{ ~/d.name }}" placeholder="Nombre de usuario" class="{{ ~/errors.d.name ? 'invalid' : '' }}">
+      </div>
+      <div>
+        <input type="email" maxlength="100" value="{{ ~/d.ident }}" placeholder="Correo electrónico" class="{{ ~/errors.d.ident ? 'invalid' : '' }}">
+      </div>
+      <div>
+        <input type="password" maxlength="100" value="{{ ~/d.password }}" placeholder="Contraseña" class="{{ ~/errors.d.password ? 'invalid' : '' }}">
+      </div>
+      <div>
+        <input type="password" maxlength="100" value="{{ ~/d.confirm }}" placeholder="Confirmar contraseña" class="{{ ~/errors.d.confirm ? 'invalid' : '' }}">
+      </div>
+      {{#if ~/error}}
+      <div class="error">
+        {{ ~/L[ ~/error ] }}
+      </div>
+      {{/if}}
+      <div class="submit1">
+        <button type="submit" class="button-register">
+          Vente y opina
+          <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
+        </button>
+      </div>
+    </form>
+    <div class="terms">
+      Al registrarte, aceptas las Condiciones del servicio y la Política de privacidad
+    </div>
+
+  {{/if }}
+</div>
+
+<style>
+.submit1 {
+  text-align: center;
+  margin-top: 10px;
+  padding-top: 10px;
+}
+.submit1 button {
+  width: 100%;
+  height: 44px;
+}
+.button-register {
+  padding: 9px 15px;
+  background: #fd270d;
+  text-align: center;
+  /*margin-left: 10px;*/
+}
+.error {
+  padding: 5px;
+  color: red;
+  font-weight: bold;
+  border: solid 2px;
+  margin: 5px;
+}
+
+div.square {
+  /*width: 500px;*/
+  padding: 20px;
+}
+
+.button-sign-up {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.angle {
+  position: absolute;
+  right: 30px;
+}
+
+.invalid {
+  border: solid 1px #f00;
+}
+
+.terms {
+  font-weight: 300;
+  font-size: 88%;
+  margin-top: 20px;
+  color: #333;
+}
+
+</style>
+
+<script>
+import Validator from '../validator'
+component.exports = {
+  isolated: true,
+  data: {},
+  onconfig () {
+    // TODO move this up  - and use merge instead of set
+    this.set('L', {
+      'could not authenticate identity': 'Este usuario ya existe',
+      // 'Confirmar contraseña': 'Confirmar contraseña'
+      'passwords must match': 'Las contraseñas no coinciden'
+    })
+
+    this.set('d', {
+      // name: 'user' + Math.round(Math.random() * 100),
+      // ident: 'random' + Math.round(Math.random() * 100) + '@affinaty.com',
+      // password: 'test',
+      // confirm: 'test',
+      name: '',
+      ident: window.localStorage.email || '',
+    })
+    this.validator = new Validator('d', {
+      'name': {required: true, min: 4, max: 30, type: 'string'},
+      'ident': {required: true, min: 4, max: 100, type: 'string', email: true},
+      'password': {required: true, min: 4, max: 100, type: 'string', password: 'd.confirm'},
+      'confirm': {required: true, min: 4, max: 100, type: 'string', password: 'd.password'},
+    })
+    this.observe('d', () => {
+      if (this.validator.submitted)
+        this.set('errors', this.validator.validate(this).errors)
+    })
+    this.on('submit', (event) => {
+      event.original.preventDefault()
+      this.validator.submitted = true
+      let form = this.validator.validate(this)
+      this.set('errors', form.errors)
+      if (form.valid) {
+        this.set('saving', true)
+        api.action('sign-up', form.data, (data) => {
+          this.set('saving', false)
+          api.signIn(data, true).then(() => {
+            //  this.parent.teardown()
+            // router.dispatch('/home')
+            this.set('register','setup')
+            // this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
+          })
+        }, (err) => {
+          this.set('error', err.split('\n')[0].substr(7, 31).trim())
+          // debugger
+        })
+      }
+    })
+  },
+  modal: require('../modal')
+}
+
+</script>
