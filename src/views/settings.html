@@ -46,10 +46,10 @@
 
         <form on-submit="change-appearance">
           <div><h5>Cambia tu nombre</h5></div>
-          <input type="text" maxlength="50" value="{{~/me.name}}" placeholder="{{~/me.name}}">
+          <input type="text" maxlength="50" value="{{~/me.name}}" placeholder="{{~/me.name}}" decorator="focusSelect">
 
           <div><h5>Cambia tu descripción</h5></div>
-          <input type="text" maxlength="100" value="{{~/me.title}}" placeholder="{{~/me.title}}">
+          <input type="text" maxlength="100" value="{{~/me.title}}" placeholder="{{~/me.title}}" decorator="focusSelect">
 
           <div><h5>Cambia tu localización</h5></div>
           <div class="row">
@@ -90,7 +90,7 @@
             </div>
 
             <div style="margin-top: 60px">
-              <button class="button-sign-up" on-tap="appearance">Guardar</button> {{~/save_success}}
+              <button class="button-sign-up">Guardar</button> {{~/save_success}}
               {{#if ~/saving}}
                 <spinner />
               {{/if}}
@@ -111,24 +111,27 @@
         <form on-submit="change-password">
           <div>
             <div><h5>Contraseña actual</h5></div>
-            <input type="password" maxlength="100" value="{{~/pw.oldPassword}}" placeholder="tu contraseña actual">
+            <input type="password" maxlength="100" value="{{~/pw.oldPassword}}" placeholder="tu contraseña actual" class="{{~/errors.pw.oldPassword ? 'invalid' : ''}}">
           </div>
           <div>
             <div><h5>Nueva contraseña</h5></div>
-            <input type="password" maxlength="100" value="{{~/pw.newPassword}}" placeholder="tu nueva contraseña">
+            <input type="password" maxlength="100" value="{{~/pw.newPassword}}" placeholder="tu nueva contraseña" class="{{~/errors.pw.newPassword ? 'invalid' : ''}}">
           </div>
           <div>
             <div><h5>Confimar Contraseña</h5></div>
-            <input type="password" maxlength="100" value="{{~/pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña">
+            <input type="password" maxlength="100" value="{{~/pw.confirmPassword}}" placeholder="confirmar tu nueva contraseña" class="{{~/errors.pw.confirmPassword ? 'invalid' : ''}}">
           </div>
           <div style="margin-top: 60px">
-            <button class="button-sign-up" on-tap="appearance">Guardar</button> {{~/save_success}}
+            <button class="button-sign-up">Guardar</button> {{~/save_success}}
             {{#if ~/saving}}
               <spinner />
             {{/if ~/saving}}
             {{#if ~/passwd_success}}
-              <div>{{~/passwd_success}}</div>
+              <div class="alert alert-success">{{~/passwd_success}}</div>
             {{/if ~/passwd_success}}
+            {{#if ~/passwd_fail}}
+              <div class="alert alert-fail">{{~/passwd_fail}}</div>
+            {{/if ~/passwd_fail}}
           </div>
         </form>
       </div>
@@ -169,9 +172,6 @@
             {{#if ~/saving}}
               <spinner />
             {{/if ~/saving}}
-            {{#if ~/passwd_success}}
-              <div>{{~/passwd_success}}</div>
-            {{/if ~/passwd_success}}
           </div>
         </form>
       </div>
@@ -321,6 +321,10 @@ button.button-sign-up {
   cursor: pointer;
 }
 
+.invalid {
+  border: solid 1px #f00;
+}
+
 </style>
 
 <script>
@@ -329,6 +333,24 @@ import assign from '../lib/lodash/object/assign'
 import find from '../lib/lodash/collection/find'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Validator from '../validator'
+
+let net_form = new Validator('net', {
+  'blog': {required: false, type: 'string', min: 4, max: 100},
+  'web': {required: false, type: 'string', min: 4, max: 100},
+  'facebook': {required: false, type: 'string', min: 4, max: 100},
+  'twitter': {required: false, type: 'string', min: 4, max: 100},
+  'youtube': {required: false, type: 'string', min: 4, max: 100},
+  'github': {required: false, type: 'string', min: 4, max: 100},
+  'linkedin': {required: false, type: 'string', min: 4, max: 100},
+})
+
+let pw_form = new Validator('pw', {
+  'oldPassword': {required: true, min: 4, max: 100},
+  'newPassword': {required: true, min: 4, max: 100, password: 'pw.confirmPassword'},
+  'confirmPassword': {required: true, min: 4, max: 100, password: 'pw.newPassword'},
+})
+
+
 component.exports = {
   isolated:true,
   onconfig () {
@@ -337,6 +359,7 @@ component.exports = {
 
     let network_list = [
       {id: 'facebook', text: '(ej. https://facebook.com/pepelotero)', title: 'Facebook' },
+      {id: 'web', text: '(ej. http://coolwebsite.com)', title: 'Página web' },
       {id: 'twitter', text: '(ej. https://twitter.com/pepelotero)', title: 'Twitter' },
       {id: 'youtube', text: '(ej. http://youtube.com/user/PepeLotero)', title: 'Youtube' },
       {id: 'github', text: '(ej. http://github.com/PepeLotero)', title: 'Github' },
@@ -396,7 +419,7 @@ component.exports = {
       }
     }, {init: false})
 
-    api.observe('me', (_me) => {
+    api.on('me', (_me) => {
       if (!_me) return
       if (!_me.networks) _me.networks = {}
       this.set('me', _me)
@@ -405,18 +428,20 @@ component.exports = {
       me = _me
     })
 
-    let me = api.get('me')
+    let me = api.me
     // stupid hack for when c = ''
     // (this can happen because of a bug in ractive option boxes setting the value to '' when no option is selected)
     if (me.c === '') delete me.c
     this.old_me = assign({}, me)
+    if (!me.networks) me.networks = {}
+    this.set('me', me)
 
     this.observe('me', (_me) => {
       if (_me) {
-        api.set('me', _me)
+        api.emit('me', _me)
         me = _me
       }
-    })
+    }, {init: false})
 
     this.on('add-network', () => {
       let n = this.get('new_network')
@@ -454,6 +479,9 @@ component.exports = {
               api.whoIaM(data)
               this.set('change_foto', false)
               this.set('saving', false)
+              setTimeout(() => {
+                router.dispatch('/')
+              }, 1000)
             }
           })
         }
@@ -461,42 +489,41 @@ component.exports = {
     })
 
     // change-password
-    this.pw = new Validator('pw', {
-      'oldPassword': {required: true, min: 4, max: 100},
-      'newPassword': {required: true, min: 4, max: 100, password: 'd.confirm'},
-      'confirmPassword': {required: true, min: 4, max: 100, password: 'd.password'},
-    })
     this.observe('pw', () => {
-      if (this.pw.submitted)
-        this.set('errors', this.pw.validate(this).errors)
-    })
+      let form = pw_form.validate(this)
+      if (pw_form.submitted) {
+        this.set('errors', form.errors)
+      // } else {
+      //   console.log('save_enabled', form.valid)
+      //   this.set('save_enabled', form.valid)
+      }
+    }, { init: false })
+
     this.on('change-password', (e) => {
       e.original.preventDefault()
-      this.pw.submitted = true
-      let form = this.pw.validate(this)
+      pw_form.submitted = true
+      let form = pw_form.validate(this)
       this.set('errors', form.errors)
-      if (form.valid) api.action('change-password', form.data, function (data) {
+      if (form.valid) api.action('change-password', form.data, (data) => {
         if (data)
-          this.set('passwd_success', 'Password changed successfully')
+          this.set('passwd_success', 'Contraseña actualizada')
+      }, (err) => {
+        if (~err.indexOf(`password isn't correct`))
+          this.set('errors.pw.oldPassword', 'incorrect')
+        else this.set('passwd_fail', 'No se ha podido cambiar la contraseña')
       })
     })
 
     // change-networks
-    this.net = new Validator('net', {
-      'blog': {required: false, type: 'string', min: 4, max: 100},
-      'facebook': {required: false, type: 'string', min: 4, max: 100},
-      'twitter': {required: false, type: 'string', min: 4, max: 100},
-      'youtube': {required: false, type: 'string', min: 4, max: 100},
-      'github': {required: false, type: 'string', min: 4, max: 100},
-    })
     this.observe('net', () => {
-      if (this.net.submitted)
-        this.set('errors', this.net.validate(this).errors)
-    })
+      if (net_form.submitted)
+        this.set('errors', net_form.validate(this).errors)
+    }, { init: false })
+
     this.on('change-networks', (e) => {
       e.original.preventDefault()
-      this.net.submitted = true
-      let form = this.net.validate(this)
+      net_form.submitted = true
+      let form = net_form.validate(this)
       this.set('errors', form.errors)
       if (form.valid)
         this.set('saving', true)
@@ -514,14 +541,16 @@ component.exports = {
   },
   computed: {
     network_count () {
-      return Object.keys(this.get('me.networks')).length
+      let net = this.get('me.networks')
+      return net ? Object.keys(net).length : 0
     },
   },
   activate (sub, id) {
     router.dispatch('/settings/' + sub + (id ? '/' + id : ''), { history: false })
   },
   decorators: {
-    tip: require('../lib/decorators/tip')
+    tip: require('../lib/decorators/tip'),
+    focusSelect: require('../lib/decorators/focusSelect'),
   },
   events: {
     tap: require('../lib/events/tap.js'),

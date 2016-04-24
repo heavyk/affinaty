@@ -56,7 +56,7 @@
       {{/each list}} -->
 
       {{#if ~/active === 'data'}}
-      I am data {{~/id}}
+      I am data {{~/id}} (TODO data browser... lol)
       {{/if ~/active === 'data'}}
 
       {{#if ~/active === 'fns'}}
@@ -238,16 +238,9 @@ component.exports = {
   modal: require('../modal'),
   onconfig () {
 
-  },
-  oninit () {
-    // let __id
-    // this.observe('id', (id) => { if (id && id !== __id) {
-    //   __id = id
-    // }})
-
-
     this.observe('active', (active) => {
       this.set('list', false)
+      // this.set('list', false)
       switch (active) {
         case 'api':
           // this.set('list', false)
@@ -261,53 +254,14 @@ component.exports = {
         case 'fns':
           // this.set('list', this.fns)
           api.action('action-docs', {}, (data) => {
-            // debugger
             this.set('fns', this.fns = data)
           })
           break
-        // case 'mundial':
-        //   api.action('admin:quest', {t: 'mundial', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        // case 'categories':
-        //   api.action('admin:quest', {t: 'category', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        // case 'images':
-        //   api.action('admin:quest', {t: 'foto', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        //
-        // case 'debates':
-        //   api.action('admin:quest', {t: 'debate', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        // case 'polls':
-        //   api.action('admin:quest', {t: 'poll', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        // case 'comments':
-        //   api.action('admin:quest', {t: 'comment', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
-        // case 'relations':
-        //   api.action('admin:quest', {t: 'relation', limit: 1000}, (data) => {
-        //     this.set('list', data)
-        //   })
-        //   break
         default: this.set('active', active = 'fns')
       }
       router.dispatch(`/action-docs/${active || ''}/${this.get('id') || ''}`, {history: false})
     })
   },
-  oncomplete () {},
-  onteardown () {},
   computed: {
     _type () {
       debugger

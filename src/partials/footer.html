@@ -267,14 +267,13 @@ component.exports = {
         this.set('notifications', c)
       })
     })
-    api.on('deauth', () => {
-      if (api.my.notifier) {
+    api.on('deauth', (yo) => {
+      if (yo) {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }
     })
-    api.observe('me', (me) => {
-      console.warn('me', me)
+    api.on('me', (me) => {
       this.set('me', me)
     }, {init: false})
     this.set('search_width', 200)

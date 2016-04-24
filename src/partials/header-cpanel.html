@@ -1,0 +1,423 @@
+<link rel='ractive' href='../partials/sign-in.html'>
+<!-- <link rel='ractive' href='../partials/set-up.html'> -->
+<link rel='ractive' href='../partials/foto.html'>
+<!-- <link rel='ractive' href='../partials/categories.html'> -->
+<link rel='ractive' href='../partials/notification-list.html'>
+<link rel='ractive' href='../partials/debate-create.html'>
+<link rel='ractive' href='../partials/poll-create.html'>
+
+<div class="header-container">
+  <nav>
+    {{#if ~/me}}
+    <li class="button">
+      <a class="home" href="/cpanel">
+        <img src="/img/home.svg" width="25" height="25" />
+      </a>
+    </li>
+    <li class="button">
+      <a class="action-docs" href="/action-docs">
+        <i class="fa fa-file-text-o"></i>
+      </a>
+    </li>
+    <li class="dropdown">
+      <a class="dropdown-toggle">
+        <a href="/profile/{{~/me._id}}">
+          <foto src="{{~/me.foto}}" size="y" observe="1" />
+        </a>
+        <span class="name">{{~/me.name}}</span>
+        <i class="fa fa-caret-down"></i>
+      </a>
+      <ul>
+        <li>
+          <a class="item-menu" href="/profile/{{~/me._id}}"><i class="fa fa-fw fa-user"></i>Perfil</a>
+        </li>
+        <li>
+          <a class="item-menu" on-click="signOut()"><i class="fa fa-fw fa-sign-out"></i>Salir</a>
+        </li>
+      </ul>
+    </li>
+    {{else}}
+    <button class="start-session" on-click="modal('sign-in', {header: false})">Iniciar Sesión</button>
+    {{/if}}
+  </nav>
+  <div class="logo">
+    <h1 onclick="window.scrollTo(0,0)"><a href="/cpanel">Affinaty cpanel</a></h1>
+  </div>
+
+</div>
+
+<style>
+.header-container {
+  padding: 0 40px;
+}
+.header-container-mov {
+  padding: 0 0px;
+  list-style-type: none;
+}
+.search-mov{
+  position: relative;
+  width: 250px;
+}
+.search-mov-icon {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+
+}
+.search-text {
+  position: absolute;
+  left: 30px;
+  margin-top: 13px;
+  z-index: 9;
+}
+.search-input-mov {
+  width: 250px;
+  display: block;
+  height: 33px;
+  padding: 11px 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #888;
+  font-weight: 400;
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #eee;
+  border-radius: 6px;
+}
+.conf-mov{
+  padding-top: 4px;
+  font-size: 25px;
+  font-weight: 700;
+  position: absolute;
+  right: 30px;
+}
+.conf{
+  color:#fff;
+}
+.settings{
+  top: 50px;
+  position: absolute;
+  width: 229px;
+  right: 3%;
+  background: #fff;
+  border-radius: 30px 9px;
+  box-shadow: 5px 7px 10px -5px rgba(41,41,41,.53);
+  font-size: 26px;
+}
+.button-head-conf-mov {
+  left: 60px;
+}
+.add-oppin {
+  list-style-type: none;
+  left: 80%;
+  position: relative;
+  top: 43px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  position: fixed;
+  left: 50%;
+  padding: 0 15px;
+  width: 200px;
+  margin-left: -100px;
+  text-align: center;
+}
+h1 a {
+  display: inline-block;
+  padding: 12px 0;
+  color: #ffffff;
+  font-family: 'Pacifico';
+}
+a:hover {
+  text-decoration: none;
+}
+li a:hover,
+h1:hover,
+li.selected {
+  background: #D2210B;
+}
+span.name {
+  margin: 0 0 0 8px;
+}
+.count {
+  position: absolute;
+  top: 5px;
+  right: 6px;
+  background: #000;
+  border-radius: 50%;
+  height: 17px;
+  width: 17px;
+  font-size: 10px;
+  text-align: center;
+}
+.start-session {
+  color: #000;
+  margin-top: 10px;
+}
+img {
+  vertical-align: middle;
+}
+.dropdown img.opin {
+  vertical-align: top;
+  margin: 4px;
+}
+/* don't want this to get background */
+.moar-dropdown a:hover {
+  background: initial;
+}
+.search-box {
+  position: relative;
+  left: 0;
+  top: 12px;
+  display: inline;
+  float: left;
+}
+.logo {
+  display: inline;
+  position: relative;
+  width: 100%;
+}
+.categories-button {
+  margin-left: 20px;
+}
+.categories {
+  position: fixed;
+  top: 50px;
+  /*margin-left: -30px;*/
+}
+.moar-dropdown {
+  background-color: #fff;
+  color: #fd270d;
+  font-size: 20px;
+  border: solid 2px #fff;
+  border-radius: 6px 6px 6px 6px;
+  border: 0px solid #000;
+  font-weight: bold;
+  height: 32px;
+  margin: 8px 8px 0 0;
+  box-shadow: 5px 11px 20px -4px rgba(41,41,41,.53);
+}
+.moar-dropdown-mov {
+  height: 36px;
+  min-width: 0;
+  bottom: 14px;
+}
+.search input[type="text"] {
+  box-shadow: 5px 4px 20px -4px rgba(41,41,41,.53);
+  margin: 0;
+}
+.search {
+  display: none;
+  position: relative;
+  vertical-align: middle;
+}
+.search .fa-search {
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  color: #414141;
+}
+.search input[type="text"] {
+  height: 26px;
+  width: 200px;
+  padding: 0 12px 0 30px;
+  background: #ffffff;
+  -webkit-transition: width ease 0.15s;
+          transition: width ease 0.15s;
+}
+.search input[type="text"]:focus {
+  background: #ffffff;
+  /*width: 300px;*/
+}
+li.moar {
+  background: #fff;
+  border-radius: 20px;
+}
+li.moar a,
+.moar-toggle {
+  color: #414141;
+}
+a.dropdown-toggle.moar-toggle {
+  padding: 0;
+}
+.action-down {
+  border: solid 1px #eee;
+  border-radius: 20px;
+  background: #fff;
+  left: -35px;
+  margin-top: 0px;
+  top: 42px;
+  background: #fff;
+  border-radius: 30px 9px;
+}
+.moar-toggle,
+.action-down a:hover {
+  background: initial;
+  color: #fd270d;
+  text-decoration: none;
+}
+.submit {
+  position: absolute;
+  right: -2px;
+  top: -3px;
+}
+.submit .fa {
+  right: 2px;
+  position: relative;
+}
+.submit button {
+  padding: 1px 8px;
+  z-index: 10;
+  border: 1px solid #d5d5d5;
+  border-radius: 15px;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  color: #fd270d;
+}
+/* responsive layout */
+.search input[type="submit"] {
+  display: none;
+}
+@media (min-width: 768px) {
+  .search {
+    display: inline-block;
+  }
+}
+.notifications {
+  position: relative;
+}
+.notification-list {
+  position: fixed;
+  right: 100px;
+  top: 50px;
+  color: #414141;
+  border: solid 1px #dadada;
+  border-width: 0 1px 1px 1px;
+  z-index: -10;
+  min-width: 350px;
+  max-width: 600px;
+  background: #fff;
+}
+.item-menu:hover {
+  background-color: #fff;
+}
+
+/*.view-all {
+  text-align: center;
+  font-size: 11px;
+}*/
+</style>
+
+
+<script>
+import assign from '../lib/lodash/object/assign'
+
+component.exports = {
+  isolated: true,
+  modal: require('../modal'),
+  onconfig () {
+    // this.set('show_n', true)
+    // this.set('show_m', true)
+    // this.set('notifications', 3)
+    // this.set('new_msgs', 3)
+    api.on('auth', () => {
+      api.my.notifier.on('msg*', this.on_msg = (c) => {
+        this.set('new_msgs', c)
+      })
+      api.my.notifier.on('list*', this.on_not = (c) => {
+        this.set('notifications', c)
+      })
+    })
+    api.on('deauth', (yo) => {
+      if (yo) {
+        api.my.notifier.off('msg*', this.on_msg)
+        api.my.notifier.off('list*', this.on_not)
+      }
+    })
+    api.observe('me', (me) => {
+      console.warn('me', me)
+      this.set('me', me)
+    }, {init: false})
+    api.once('deauth', (yo) => {
+      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
+    })
+    this.set('search_width', 200)
+    this.on('toggle-focus', (event) => {
+      // this is a stupid hack to prevent the display: none from happening
+      // before the event has propagated to the form
+      setTimeout(() => {
+        this.set('search_width', event.context.focused ? 200 : 300)
+        this.toggle('focused')
+      }, 200)
+    })
+    this.set('movil', window.isMobile)
+  },
+  oninit () {
+    this.on('send_text', (event) => {
+      this.fire('search', event.context.text)
+    })
+    this.on('text', (event) => {
+      if (event && event.original) {
+        event.original.stopImmediatePropagation()
+        let key = event.original.which
+        if (key === 13 || key === void 9) {
+          this.fire('search', event.context.text)
+        }
+      }
+    })
+    this.on('category', (category) => {
+      if (category) {
+        let uri = '/category/'+category._id
+        if (uri !== router.getUri())
+          router.dispatch(uri, {history: false})
+        this.fire('set-category', category._id)
+        if (window.isMobile) this.set('show_search', false)
+        if (!category.title) category = api.category.get(category._id)
+        if (category) this.set('category', category.title)
+      } else {
+        if (router.getUri().substr(0, 9) === '/category')
+          router.dispatch('/home')
+        this.fire('set-category', null)
+        this.set('category', null)
+      }
+    })
+  },
+  oncomplete () {
+    let onclick = (e) => {
+      let status = this.get('show_n') || this.get('show_m') || this.get('show_settings') || this.get('show_search')
+      if (!status) return
+      let target = e.target
+      let pEl = target
+      if (pEl.nodeName == 'A') {
+        this.set({show_settings: false})
+        return
+      }
+      else{
+        do {
+          if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('search') || ~pEl.className.indexOf('settings')))  return
+        } while (pEl = pEl.parentNode)
+      }
+      //debugger
+      this.set({show_n: false, show_m: false, show_settings: false, show_search: false})
+      //this.set('menu', false)
+    }
+    window.addEventListener('click', onclick, true)
+    this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+  },
+  signOut () {
+    api.signOut(true)
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
+}
+</script>

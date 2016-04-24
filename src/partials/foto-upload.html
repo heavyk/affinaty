@@ -119,8 +119,10 @@ component.exports = {
         this.set('error', ev)
       },
       complete: (ev) => {
-        let res = JSON.parse(ev.xhr.response)
-        this.merge('uploaded', res)
+        try {
+          let res = JSON.parse(ev.xhr.response)
+          this.merge('uploaded', res)
+        } catch (e) {}
       },
       queuecomplete: () => {
         let uploaded = this.get('uploaded')

@@ -1,4 +1,4 @@
-var concat = require('tea-concat');
+var concat = require('tea-concat')
 
 /**
  * ### .many (event, ttl, callback)
@@ -15,16 +15,16 @@ var concat = require('tea-concat');
  */
 
 function many (ev, times, fn) {
-  var self = this;
+  var self = this
 
   function wrap () {
-    if (--times === 0) self.off(ev, wrap);
-    fn.apply(null, arguments);
-  };
+    if (--times === 0) self.off(ev, wrap)
+    fn.apply(null, arguments)
+  }
 
-  this.on(ev, wrap);
-  return this;
-};
+  this.on(ev, wrap)
+  return this
+}
 
 /**
  * ### .once (event, callback)
@@ -39,9 +39,9 @@ function many (ev, times, fn) {
  */
 
 function once (ev, fn) {
-  this.many(ev, 1, fn);
-  return this;
-};
+  this.many(ev, 1, fn)
+  return this
+}
 
 /**
  * Determine if a function is included in a
@@ -54,56 +54,55 @@ function once (ev, fn) {
  */
 
 function hasListener (fns, fn) {
-  if (!fn && 'function' === typeof fns) return true;
-  else if (fn && 'function' === typeof fns && fn == fns) return true;
-  else if (fns.length === 0) return false;
-  else if (fn && fns.indexOf(fn) > -1) return true;
-  else if (fn) return false;
-  else return true;
-};
+  if (!fn && 'function' === typeof fns) return true
+  else if (fn && 'function' === typeof fns && fn == fns) return true
+  else if (fns.length === 0) return false
+  else if (fn && fns.indexOf(fn) > -1) return true
+  else if (fn) return false
+  else return true
+}
 
 function bindEvent (ev, target) {
-  var proxy = eventProxy.call(this, ev, target);
-  this.on(ev, proxy);
-  return this;
-};
+  var proxy = eventProxy.call(this, ev, target)
+  this.on(ev, proxy)
+  return this
+}
 
 function unbindEvent (ev, target) {
-  var proxy = eventProxy.call(this, ev, target);
-  this.off(ev, proxy);
-  return this;
-};
+  var proxy = eventProxy.call(this, ev, target)
+  this.off(ev, proxy)
+  return this
+}
 
 function proxyEvent (ev, ns, target) {
-  if (arguments.length === 2) target = ns, ns = null;
-  var drip = this._drip || {}
-    , listen = !drip.delimeter
-      ? (ns  ? ns + ':' + ev : ev)
+  if (arguments.length === 2) target = ns, ns = null
+  var drip = this._drip || {},
+    listen = !drip.delimeter
+      ? (ns ? ns + ':' + ev : ev)
       : (ns
         ? (Array.isArray(ns)
           ? concat(ns, [ ev ])
           : concat(ns.split(drip.delimeter), [ ev ]))
-        : ev);
+        : ev)
 
-  target.addListener(ev, eventProxy.call(this, listen, this));
-  return this;
-};
+  target.addListener(ev, eventProxy.call(this, listen, this))
+  return this
+}
 
 function unproxyEvent (ev, ns, target) {
-  if (arguments.length === 2) target = ns, ns = null;
-  var drip = this._drip || {}
-    , listen = !drip.delimeter
-      ? (ns  ? ns + ':' + ev : ev)
+  if (arguments.length === 2) target = ns, ns = null
+  var drip = this._drip || {},
+    listen = !drip.delimeter
+      ? (ns ? ns + ':' + ev : ev)
       : (ns
         ? (Array.isArray(ns)
           ? concat(ns, [ ev ])
           : concat(ns.split(drip.delimeter), [ ev ]))
-        : ev);
+        : ev)
 
-  target.removeListener(ev, eventProxy.call(this, listen, this));
-  return this;
-};
-
+  target.removeListener(ev, eventProxy.call(this, listen, this))
+  return this
+}
 
 /*!
  * Create a function to use as a listener for bind/unbind or
@@ -119,25 +118,25 @@ function unproxyEvent (ev, ns, target) {
  */
 
 function eventProxy (ev, target) {
-  var _drip = this._drip || (this._drip = {})
-    , _memoize = _drip.memoize || (_drip.memoize = {})
-    , event = (_drip.delimeter && Array.isArray(ev))
+  var _drip = this._drip || (this._drip = {}),
+    _memoize = _drip.memoize || (_drip.memoize = {}),
+    event = (_drip.delimeter && Array.isArray(ev))
       ? ev.join(_drip.delimeter)
-      : ev
-    , mem = _memoize[event]
-    , proxy = null;
+      : ev,
+    mem = _memoize[event],
+    proxy = null
 
   if (!mem) {
-    proxy = makeProxy(event, target);
-    _memoize[event] = [ [ target, proxy ] ];
+    proxy = makeProxy(event, target)
+    _memoize[event] = [ [ target, proxy ] ]
   } else {
     for (var i = 0, l = mem.length; i < l; i++)
-      if (mem[i][0] === target) return mem[i][1];
-    proxy = makeProxy(event, target);
-    mem.push([ target, proxy ]);
+      if (mem[i][0] === target) return mem[i][1]
+    proxy = makeProxy(event, target)
+    mem.push([ target, proxy ])
   }
 
-  return proxy;
+  return proxy
 }
 
 /*!
@@ -152,12 +151,12 @@ function eventProxy (ev, target) {
  * @api private
  */
 
-function makeProxy(ev, target) {
+function makeProxy (ev, target) {
   return function proxy () {
-    var args = Array.prototype.slice.call(arguments)
-      , evs = [ ev ].concat(args);
-    target.emit.apply(target, evs);
-  };
+    var args = Array.prototype.slice.call(arguments),
+      evs = [ ev ].concat(args)
+    target.emit.apply(target, evs)
+  }
 }
 
 export default {

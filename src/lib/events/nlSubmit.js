@@ -1,7 +1,7 @@
 
 // function nlSubmit (node, _event) {
   // var submit = _event || 'submit'
-function nlSubmit (node, fire) {
+export default function nlSubmit (node, fire) {
   // var submit = 'submit'
   var ractive = Ractive.getNodeInfo(node).ractive
   var not_ta = node.nodeName !== 'TEXTAREA'
@@ -36,5 +36,3 @@ function nlSubmit (node, fire) {
     }
   };
 }
-
-export default nlSubmit

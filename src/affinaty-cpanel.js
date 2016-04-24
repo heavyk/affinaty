@@ -8,6 +8,7 @@
 //   }
 // }
 
+const body = document.body
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
 if (isNaN(domain[0] * 1)) {
@@ -91,86 +92,69 @@ moment.locale('es')
 // debug will be false when code is minified because the comment will be removed
 Ractive.DEBUG = /lala/.test(function(){/*lala*/})
 
-// polyfill map
-// TODO delete me when doing koa polyfills
-if (typeof Map === 'undefined')
-  window.Map = require('es6-map')
-
-Ractive.nexus = {
-  dd: new Map,
-  debate: new Ractive({
-    dd: new Map,
-    text: new Map,
-    opinions: new Map,
-    insert (d) {
-      this.dd.set(d._id, d)
-    },
-    create (d) {
-      d._creator = d.creator._id
-      d._category = d.category._id
-      d._tag = d.tag.map((t) => t._id)
-      if (!d.totals) {
-        if (d.options) {
-          // is poll
-          d.totals = new Array(d.options.length)
-          for (var i = 0; i < d.options.length; i++) {
-            d.totals[i] = 0
-          }
-        } else {
-          // is debate
-          // you automatically agree with what you wrote
-          d.totals = [0,0,0,1]
-        }
-      }
-      if (d.creator !== 'object') d.creator = api.me
-      if (d.category !== 'object') d.category = api.category.get(d.category)
-      if (d.opinion) {
-        api.my.opinion.insert(d.opinion.opinion)
-        delete d.opinion
-      }
-      // this should read:
-      // if (d._tag && d.tag === void 9)
-      if (d.tag && d.tag.length) {
-        for (var i = 0; i < d.tag.length; i++) {
-          d.tag[i] = api.tag.get(d.tag[i])
-        }
-      }
-
-      // Ractive.opinon.create
-      this.fire('+', d)
-    },
-  }),
-  poll: new Ractive({
-    dd: new Map,
-    text: new Map,
-    insert (d) {
-      this.dd.set(d._id, d)
-      search.transform(d.text.toUpperCase()).concat(search.words(d.text.toUpperCase()))
-        // TODO - move to debate
-        .concat(d.options.map((opt) => {
-          return search.transform(opt.text.toUpperCase()).concat(search.words(opt.text.toUpperCase()))
-        }))
-        .forEach((word) => {
-          let m = this.text.get(word) || new Map()
-          m.set(d._id, d)
-          this.text.set(word, m)
-        })
-    },
-    create (d) {
-      // d.totals = [0, 0, 0, 1]
-      if (!d.creator) d.creator = api.me
-      // TODO - this.insert (once db confirms it)
-      this.fire('+', d)
-    },
-  }),
-}
 
 // globals
 // TODO: move router into main
-import router from './router'
+// import router from './router'
+import Router from './lib/router.js'
 
-import header from './partials/header'
-import footer from './partials/footer'
+// header / (no) footer
+import header from './partials/header-cpanel'
+// import footer from './partials/footer'
+
+// views
+import listing from './views/listing'
+import profile from './views/profile'
+import debate from './views/debate'
+import poll from './views/poll'
+import cpanel from './views/cpanel'
+import api_docs from './views/action-docs'
+
+// these are the views which will change the body's class to view-### otherwise view-default
+let classView = {
+  listing,
+  profile,
+  debate,
+  poll,
+}
+
+let router = new Router({ el: 'view' }, function (request) {
+  // TODO better redirects - to a 404 page
+  // maybe should be logging this as well
+  // this.redirect(api.me ? '/home' : '/')
+  console.log('??', request)
+}, function (path, options) {
+  console.log('::', path)
+  // if (path === '/' && api.me)
+  //   return router.dispatch('/home')
+  // if (path !== '/' && !api.me)
+  //   return router.dispatch('/')
+})
+
+// router.addRoute('/:active?/:id?', cpanel)
+// profile
+router.addRoute('/profile/:id?/:active?', profile)
+// debate
+router.addRoute('/debate/:id/:active?', debate)
+// poll
+router.addRoute('/poll/:id/:active?', poll)
+// cpanel
+router.addRoute('/cpanel/:active?/:id?', cpanel)
+// api-docs
+router.addRoute('/action-docs/:active?/:id?', api_docs)
+
+router.on('route', (route) => {
+  let cls = 'default'
+  for (let k in classView) {
+    if (route.view instanceof classView[k])
+      cls = k
+  }
+
+  if (window.isMobile) cls += ' movil'
+
+  body.className = cls
+  route.view.el.className = 'view-' + cls
+})
 
 window.onload = function () {
   window.Ractive = Ractive
@@ -193,9 +177,9 @@ window.onload = function () {
   api.ages = [18, 25, 35, 45]
 
   Ractive.header = new header({ el: 'header' })
-  if (window.isMobile) {
-    Ractive.footer = new footer({ el: 'footer' })
-  }
+  // if (window.isMobile) {
+  //   Ractive.footer = new footer({ el: 'footer' })
+  // }
 
   // router init
   router

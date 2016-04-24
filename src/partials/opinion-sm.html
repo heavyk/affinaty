@@ -159,16 +159,13 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   oninit () {
-    // if (api.yo) api.on('auth')
     api.on('deauth', this.on_deauth = () => {
       this.set('d.pos', null)
-      // console.info('d.pos', null)
     })
 
     api.on('auth', this.on_auth = () => {
       api.my.opinion.until('/', () => {
         this.set('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
-        // console.info('d.pos', api.my.opinion.debate_pos(this.get('d._id') || null))
       })
     })
     if (api.yo) this.on_auth()
@@ -192,8 +189,12 @@ component.exports = {
       // })
       return this.modal('sign-in', {header: false})
     }
-    let p = api.my.opinion.debate_pos(this.get('d._id'))
-    if (pos !== p && !skip) {
+
+    if (!skip) {
+      let id = this.get('d._id')
+      let p = api.my.opinion.debate_pos(id)
+      if (pos === p && pos) pos = 0
+      console.info(p, '->', pos)
       if (!api.me.birthdate || !api.me.c || !api.me.p || api.me.planet == null) {
         this.modal('set-up', {prevote: true, title: 'Muy rápido, antes de opinar'}).once('teardown', () => {
           setTimeout(() => {
@@ -205,7 +206,7 @@ component.exports = {
         })
       } else {
         this.set('d.pos', pos)
-        api.my.opinion.create({debate: this.get('d._id')}, pos)
+        api.my.opinion.create({ debate: id }, pos)
       }
     }
   },

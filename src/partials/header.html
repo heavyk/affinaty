@@ -16,7 +16,7 @@
       <li class="dropdown moar-dropdown">
         <a class="dropdown-toggle moar-toggle">
           <img src="/img/opin.svg" width="26" height="26" class="opin" />
-          <span class="txt_moar"> Opina</span>
+          <span> Opina</span>
         </a>
         <ul class="action-down">
           <li class="moar moar-debate">
@@ -260,15 +260,19 @@
   border: 1px solid #eee;
   border-radius: 6px;
 }
-.conf-mov{
+.conf-mov {
   padding-top: 4px;
   font-size: 25px;
   font-weight: 700;
   position: absolute;
   right: 30px;
 }
-.conf{
+.conf {
   color:#fff;
+}
+.txt_moar {
+  padding: 6px 4px;
+  display: inline-block;
 }
 .settings{
   top: 50px;
@@ -517,8 +521,9 @@ component.exports = {
         this.set('notifications', c)
       })
     })
-    api.on('deauth', () => {
-      if (api.my.notifier) {
+    api.on('deauth', (yo) => {
+      this.set('me', null)
+      if (yo) {
         api.my.notifier.off('msg*', this.on_msg)
         api.my.notifier.off('list*', this.on_not)
       }
@@ -560,14 +565,9 @@ component.exports = {
 
       setTimeout(resizeHandler, 1)
     })
-    api.observe('me', (me) => {
-      console.warn('me', me)
+    api.on('me', (me) => {
       this.set('me', me)
     }, {init: false})
-    api.once('deauth', (yo) => {
-      // debugger
-      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
-    })
     this.set('search_width', 200)
     this.on('toggle-focus', (event) => {
       // this is a stupid hack to prevent the display: none from happening
@@ -595,15 +595,13 @@ component.exports = {
     this.on('category', (category) => {
       if (category) {
         let uri = '/category/'+category._id
-        if (uri !== router.getUri())
+        if (uri !== router.uri.path)
           router.dispatch(uri, {history: false})
         this.fire('set-category', category._id)
         if (window.isMobile) this.set('show_search', false)
         if (!category.title) category = api.category.get(category._id)
         if (category) this.set('category', category.title)
       } else {
-        if (router.getUri().substr(0, 9) === '/category')
-          router.dispatch('/home')
         this.fire('set-category', null)
         this.set('category', null)
       }
@@ -616,20 +614,19 @@ component.exports = {
       let target = e.target
       let pEl = target
       if (pEl.nodeName == 'A') {
-        this.set({show_settings: false})
-        return
-      }
-      else{
+        return this.set({show_settings: false})
+      } else {
         do {
           if (pEl.className && (~pEl.className.indexOf('notification') || ~pEl.className.indexOf('msg-list') || ~pEl.className.indexOf('search') || ~pEl.className.indexOf('settings')))  return
         } while (pEl = pEl.parentNode)
       }
-      //debugger
       this.set({show_n: false, show_m: false, show_settings: false, show_search: false})
-      //this.set('menu', false)
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+    api.once('deauth', (yo) => {
+      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
+    })
   },
   signOut () {
     api.signOut(true)

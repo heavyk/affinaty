@@ -1,4 +1,6 @@
 
+// TODO: use the format link function instead of text.replace
+
 let _markdown = require('markdown-it')
 let md = _markdown({
   breaks: true,

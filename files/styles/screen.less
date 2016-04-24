@@ -694,11 +694,9 @@ img-crop {
 }
 
 .embed-responsive {
-  // position: relative;
   display: block;
-  // height: 0;
   padding: 0;
-  // overflow: hidden;
+  margin-bottom: 10px;
 
   .embed-responsive-item,
   iframe,
@@ -828,10 +826,44 @@ blockquote {
 a.list-text {
   white-space: normal;
 }
+.list-text > img {
+  min-height: 260px;
+}
 
 p, h1, h2, h3, h4, h5, h6 {
   padding: 0 15px 0 0;
   margin: 0 0 10px 0;
+}
+
+.alert {
+  border-radius: 4px;
+  text-align: center;
+  margin: 4px;
+  padding: 4px;
+}
+.alert-fail {
+  border: solid 1px #f00;
+  background: #f2dede;
+}
+.alert-success {
+  border: solid 1px #18a6ec;
+  background: #d9edf7;
+}
+
+
+.alert {
+  border-radius: 4px;
+  text-align: center;
+  margin: 4px;
+  padding: 4px;
+}
+.alert-fail {
+  border: solid 1px #f00;
+  background: #f2dede;
+}
+.alert-success {
+  border: solid 1px #18a6ec;
+  background: #d9edf7;
 }
 
 

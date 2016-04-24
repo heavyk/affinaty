@@ -6,6 +6,7 @@
 import repeat from '../lib/lodash/string/repeat'
 
 let dpr = Math.round(window.devicePixelRatio || 1)
+if (dpr > 4) dpr = 4
 
 component.exports = {
   isolated: true,

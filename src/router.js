@@ -9,6 +9,7 @@ import listing from './views/listing'
 import inbox from './views/inbox'
 import profile from './views/profile'
 import settings from './views/settings'
+import category from './views/category'
 import debate from './views/debate'
 import poll from './views/poll'
 // import opinions from './views/opinions'
@@ -25,6 +26,7 @@ let classView = {
   inbox,
   profile,
   settings,
+  category,
   debate,
   poll,
   // blog,
@@ -37,10 +39,13 @@ let router = new Router({ el: 'view' }, function (request) {
   console.log('??', request)
 }, function (path, options) {
   console.log('::', path)
-  // if (path === '/' && api.me)
-  //   return router.dispatch('/home')
-  // if (path !== '/' && !api.me)
-  //   return router.dispatch('/')
+  if (path === '/' && api.authenticated)
+    return setTimeout(() => {
+      // debugger
+      router.dispatch('/home', {history: false})
+    }, 1)
+  if (path !== '/' && !api.authenticated)
+    return router.dispatch('/')
 })
 
 // implement enter / leave
@@ -48,8 +53,8 @@ let router = new Router({ el: 'view' }, function (request) {
 // probably want to do it as a static method on the component
 
 // landing page
-// router.addRoute('/', landing)
-router.addRoute('/', listing)
+router.addRoute('/', landing)
+// router.addRoute('/', listing)
 // listing (of posts)
 router.addRoute('/home', listing)
 router.addRoute('/mis-top', listing)

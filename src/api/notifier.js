@@ -4,7 +4,7 @@ import assign from '../lib/lodash/object/assign'
 import each from '../lib/lodash/collection/each'
 import isEqual from '../lib/lodash/lang/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
-import { insert_d } from '../lib/ordered-array'
+import { insert_d, remove_d } from '../lib/ordered-array'
 import { affinaty_asc, T_asc } from '../lib/order-by'
 
 class notifier extends Ambition {

@@ -197,7 +197,7 @@ component.exports = {
       let msg = {body, title, creator: id}
       if (ticker.length) msg.ticker = ticker
       this.fire('elastic:adjust')
-      api.action('push-notification', msg, function (data) {
+      api.action('push-notification', msg, (data) => {
         console.info('sent', data)
       }, (error) => {
         console.error('sending error', error)

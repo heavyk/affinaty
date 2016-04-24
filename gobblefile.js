@@ -1,6 +1,14 @@
 'use strict'
 var gobble = require('gobble')
 var babel = require('rollup-plugin-babel')
+var path = require('path')
+var fs = require('fs')
+var crypto = require('crypto')
+
+var FILES = [
+	'app.js',
+	'screen.css',
+]
 
 gobble.cwd(__dirname)
 
@@ -17,13 +25,16 @@ var affinaty = gobble([
 			]
 		})
 		.transform('rollup', {
-			entry: 'main.js',
+			entry: 'affinaty-web.js',
+			// entry: 'affinaty-cpanel.js',
 			dest: 'app.js',
 			format: 'cjs',
 			external: [
 				 'ractive',
 				 'ractive-transitions-fade',
 				 'moment',
+				 'lie',
+				 'crontabjs',
 				 'spin.js',
 				 'gemini-scrollbar',
 				 'masonry-layout',
@@ -63,6 +74,7 @@ var affinaty = gobble([
 						// optional
 						[require('babel-plugin-transform-undefined-to-void')],
 						[require('babel-plugin-transform-strict-mode')],
+						// [require('babel-plugin-transform-es2015-duplicate-keys')],
 						// [require('babel-plugin-transform-minify-booleans')],
 						// [require('babel-plugin-transform-merge-sibling-variables')],
 						[require('babel-plugin-transform-member-expression-literals')],
@@ -109,6 +121,25 @@ var affinaty = gobble([
 	, gobble('files')
 ])
 .transformIf(gobble.env() === 'production', 'uglifyjs')
+.transform(function hashFiles (source, options) {
+	var file = path.basename(this.src)
+	if (file === 'index.html') {
+		var dir = path.dirname(this.src)
+		var list = fs.readdirSync(dir)
+		FILES.forEach(function (file) {
+			if (!~list.indexOf(file)) {
+				throw new Error(`missing file '${file}' in source dir`)
+			}
+		})
+		FILES.forEach(function (file) {
+			var txt = fs.readFileSync(`${dir}/${file}`)
+			var hash = crypto.createHash('sha256').update(txt).digest('hex')
+			console.log(file, '::', hash)
+			source = source.replace(`/${file}`, `/${file}?h=${hash}`)
+		})
+	}
+	return source
+}, { accept: ['.html', '.js', '.css'] })
 
 // var built
 // if (gobble.env() === 'production') {

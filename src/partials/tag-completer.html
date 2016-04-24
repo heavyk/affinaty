@@ -27,7 +27,7 @@
   <ul class="selected-tags wtf">
     {{#each ~/selected : i}}
     <li class="tag" on-tap="removeTag(event, i)">
-      #{{~/title}}
+      #{{.title}}
     </li>
     {{/each ~/selected}}
   </ul>
@@ -86,39 +86,29 @@ li.tag {
 </style>
 
 <script>
-function idx(tags, id, field) {
-  field = field || '_id'
-  for (let i = 0; i < tags.length; i++) {
-    if (tags[i][field] === id) return i
-  }
-  return -1
-}
-
 import assign from '../lib/lodash/object/assign'
 import uniq from '../lib/lodash/array/uniq'
 import compact from '../lib/lodash/array/compact'
 import findIndex from '../lib/lodash/array/findIndex'
 import each from '../lib/lodash/collection/each'
+
 component.exports = {
   isolated: true,
   onconfig () {
     let list = []
     let selected = []
-    let recent = []
-    // let recent = api.tag.recent
-    api.local.getItem('tags:recent', (err, tags) => {
-      if (!tags) return
-      recent.push.apply(recent, uniq(tags, '_id'))
-      for (let i = 0; i < tags.length; i++) {
-        api.tag.insert(tags[i])
-      }
+    // TODO: in api.tag recent, get the changes and save them there, instead of saving them on teardown
+    let recent = api.tag.recent
+    this.once('teardown', () => {
+      let save = api.tag.recent = compact(uniq(selected.concat(recent), '_id'))
+      local.setItem('tag:recent', save, (err) => {
+        console.log('saved recent tags')
+      })
     })
-    this.set('selected', selected)
-    this.set('list', list)
-    this.set('recent', recent)
+    this.set({ recent, selected, list })
     this.on('add', (event) => {
       let i, t = assign({}, event.context)
-      if (~idx(selected, t._id)) return
+      if (~findIndex(selected, '_id', t._id)) return this.set({ taglist: false, title: '' })
       if (~(i = findIndex(recent, 'title', t.title))) {
         selected.push(recent[i])
         recent.splice(i, 1)
@@ -131,8 +121,7 @@ component.exports = {
         }
       })
 
-      this.set('title', '')
-      this.set('taglist', false)
+      this.set({ title: '', taglist: false })
       event.original.stopImmediatePropagation()
     })
     this.removeTag = (event, idx) => {
@@ -160,15 +149,6 @@ component.exports = {
           }
         })
       }
-    })
-    this.once('teardown', () => {
-      // debugger
-      api.local.getItem('tags:recent', (err, _recent) => {
-        let save = compact(uniq(selected.concat(_recent).concat(recent), '_id'))
-        api.local.setItem('tags:recent', save, (err) => {
-          console.log('saved recent tags', save)
-        })
-      })
     })
   },
   events: {

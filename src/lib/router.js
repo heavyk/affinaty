@@ -83,7 +83,7 @@ export default class Router extends EventEmitter {
       // update the view's data frov the route (path/qs/hash variables)
       this.uri = uri
       this.route.update(uri, data)
-      // this.route.view.fire('dispatch')
+      if (this.route.view) this.route.view.fire('dispatch')
       this.emit('dispatch')
     } else if (options.reload || shouldDispatch(this.uri, uri, route)) {
       // destroy existing route

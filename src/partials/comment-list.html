@@ -59,6 +59,9 @@
               <div class="comment-body" decorator="markdown:{{.text}}"></div>
             </div>
           {{/each ~/list}}
+          {{#if ~/load_more}}
+            <button class="load-more" on-click="go()">Cargar más</button>
+          {{/if}}
         {{/if ~/loading}}
       </div>
     </div>
@@ -174,6 +177,15 @@ textarea.animate {
 .submit .fa {
   color: #fd270d;
 }
+
+.load-more {
+  margin: 5px auto;
+  text-align: center;
+  width: 70%;
+  border: 2px solid #ccc;
+  display: block;
+}
+
 </style>
 
 <script>
@@ -187,26 +199,18 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   onconfig () {
-    let query
+    this.set('list', this.list = [])
     this.get('text') || this.set('text', '')
     router.on('dispatch', () => {
       let _query = assign({}, {
         debate: this.get('debate'),
         poll: this.get('poll'),
       })
-      if (isEqual(query, _query)) return
-      else query = _query
-      // this.set('comments', api.action('comment*', assign({sort: '+created'}, query)))
+      if (isEqual(this.query, _query)) return
+      else this.query = _query
+      this.skip = Infinity
       this.set('loading', true)
-      api.action('comment*', assign({sort: '+created'}, query), (data) => {
-        for (var i = 0; i < data.length; i++) {
-          data[i]._canDelete = data[i].creator._id === api.yo
-        }
-        this.set({
-          loading: false,
-          list: data
-        })
-      })
+      this.go()
     })
     this.observe('focused', (focused) => {
       if (focused && !api.yo) {
@@ -232,12 +236,12 @@ component.exports = {
       this.set('saving', true)
       this.set('text', '')
       this.fire('elastic:adjust')
-      api.action('comment+', assign({text: text}, query), (data) => {
-        let list = this.get('list')
+      api.action('comment+', assign({text: text}, this.query), (data) => {
         this.set('saving', false)
         data.creator = api.me
         data._canDelete = true
-        list.unshift(data)
+        this.list.unshift(data)
+        this.find('.gm-scroll-view').scrollTop = 0
       }, (error) => {
         this.set('error', error)
         this.set('saving', false)
@@ -258,14 +262,25 @@ component.exports = {
           modal.teardown()
           if (v) {
             api.action('comment-', {_id: id}, (res) => {
-              if (res) {
-                let list = this.get('list')
-                let idx = findIndex(list, (r) => r._id === id)
-                list.splice(idx, 1)
-              }
+              if (res) this.list.splice(findIndex(this.list, (r) => r._id === id), 1)
             })
           }
         }
+      })
+    })
+  },
+  go () {
+    api.action('comment*', assign({limit: 10, sort: '+created', skip: this.skip === Infinity ? 0 : this.skip}, this.query), (data) => {
+      for (var i = 0; i < data.length; i++) {
+        var d = data[i]
+        d._canDelete = d.creator._id === api.yo
+        if (this.skip > d.created) this.skip = d.created
+        this.list.push(d)
+      }
+      // this.set('loading', false)
+      this.set({
+        loading: false,
+        load_more: data.length === 10
       })
     })
   },

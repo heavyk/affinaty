@@ -218,7 +218,7 @@ component.exports = {
         this.set('list', api.my.affinaties.list)
         // console.profileEnd('set affinaties')
       })
-      api.my.affinaties.on('updated', (updated) => {
+      api.my.affinaties.on('updated', this.on_updated = (updated) => {
         let els = this.findAll('.list')
         clearTimeout(this.timeout)
         for (var i = 0; i < els.length; i++) {
@@ -234,8 +234,8 @@ component.exports = {
     })
     if (api.yo) this.on_auth()
 
-    api.on('deauth', this.on_deauth = () => {
-      console.log('api.my.affinaties', api.my.affinaties)
+    api.on('deauth', this.on_deauth = (yo) => {
+      if (yo) api.my.affinaties.off('updated', this.on_updated)
     })
 
     this.on('send-message', (event) => {

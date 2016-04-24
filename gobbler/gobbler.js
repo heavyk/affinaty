@@ -22,7 +22,7 @@ gobbleProxy.on('error', function (err) {
 })
 
 var gobbler = require('http').createServer(function (req, res) {
-  var url = req.url
+  var url = req.url.split('?')[0]
 
   if (url !== '/'
     // this is mainly for dev purposes until koala-deployer is done
@@ -83,8 +83,10 @@ genny.run(function* (resume) {
   var cfg = yield readJson(cfg_path, resume())
   if (cfg.h_deps !== h_deps) {
     cfg.h_deps = h_deps
-    console.log('deps changed. installing...')
-    yield spawn('npm', ['install'], {cwd: pkg_dir})
+    if (process.env.USER !== 'kenny') {
+      console.log('deps changed. installing...')
+      yield spawn('npm', ['install'], {cwd: pkg_dir})
+    }
     yield fS.outputJson(cfg_path, cfg)
   }
 

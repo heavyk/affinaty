@@ -276,22 +276,17 @@ component.exports = {
 
     api.on('auth', this.on_auth = () => {
       api.my.opinion.on(id + '.' + api.yo, this.on_opinion = (d, _d) => {
-        let pos
-        let totals = this.get('d.totals')
-        if (totals && _d) {
-          pos = _d.pos
-          totals[pos > 0 ? pos + 1 : pos + 2]--
-        }
-
-        if (totals) {
-          if (pos = d.pos)
-            totals[pos > 0 ? pos + 1 : pos + 2]++
+        let pos, totals
+        if (totals = this.get('d.totals')) {
+          if (_d && (pos = _d.pos)) totals[pos > 0 ? pos + 1 : pos + 2]--
+          if (pos = d.pos) totals[pos > 0 ? pos + 1 : pos + 2]++
           this.set('d.totals', totals)
         }
       })
     })
+    if (api.yo) this.on_auth()
     api.on('deauth', this.on_deauth = (yo) => {
-      api.my.opinion.off(id + '.' + yo, this.on_opinion)
+      if (yo) api.my.opinion.off(id + '.' + yo, this.on_opinion)
     })
     this.on('show-stats', () => {
       if (window.isMobile && this.parent) {
@@ -301,21 +296,23 @@ component.exports = {
     })
   },
   oncomplete () {
-    let n
+    let n = this.find('.text')
+    n.querySelectorAll('img').forEach((img) => {
+      img.width = n.clientWidth
+    })
     if (this.get('view') === 'list') {
       n = this.find('a.text')
       this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
   },
   onrender () {
-    let n
-    if (n = this.find('.foto img')) {
-      n.style.height = n.clientWidth + 'px'
-    }
+    let n = this.find('.foto img')
+    if (n) n.style.height = n.clientWidth + 'px'
   },
   onteardown () {
     api.off('auth', this.on_auth)
     api.off('deauth', this.on_deauth)
+    if (this.on_opinion && api.yo) api.my.opinion.off(this.get('id') + '.' + api.yo, this.on_opinion)
   },
   computed: {
     limits () {

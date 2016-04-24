@@ -40,21 +40,11 @@ class opinion_ extends Ambition {
         //   this.insert(data[this.keys[0]][i])
 
         this.skip = this['+created']
-        // if (skip > 1321052100000) this.skip $gt {}
         this.now('/')
       }
 
       this.go()
     })
-    // api.local.getItem('opinion*:' + creator, (err, data) => {
-    //   if (data) {
-    //     for (var i = 0; i < data.length; i++)
-    //       this.insert(data[i])
-    //     this.skip += data.length
-    //   }
-    // })
-
-    // this.go()
   }
   insert (d, silent) {
     let loc = this.exists[d._id]
@@ -62,16 +52,13 @@ class opinion_ extends Ambition {
     if (!this['-created'] || this['-created'] < d.created) this['-created'] = d.created
     if (loc === void 0) {
       insert_d(d, this.list, this.exists, created_asc)
-      // console.info('not found', d._id)
       if (!silent) {
         this.emit(d.debate + '.' + d.creator, d)
         this.emit(d.creator + '.' + d.debate, d)
       }
     } else {
       let _d = this.list[loc]
-      // console.info('found', _d, d._id)
       if (!isEqual(_d, d)) {
-        // console.info('updating', !silent, JSON.stringify(_d), JSON.stringify(d))
         let __d = assign({}, _d)
         assign(_d, d)
         if (!silent) {
@@ -128,8 +115,6 @@ class opinion_ extends Ambition {
   }
 
   debate (debate) {
-    // TODO - I think this can use this.list[this.exists[debate]]
-    // actually, it needs this.exists to be updated on insert / remove
     for (var i = 0; i < this.list.length; i++) {
       if (this.list[i].debate === debate) return this.list[i]
     }
