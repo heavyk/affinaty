@@ -212,17 +212,18 @@ component.exports = {
     })
   },
   oncomplete () {
-    let n
+    let n = this.find('.text')
+    n.querySelectorAll('img').forEach((img) => {
+      img.width = n.clientWidth
+    })
     if (this.get('view') === 'list') {
       n = this.find('a.text')
       this.set('read_more', n.scrollHeight - 10 > n.clientHeight)
     }
   },
   onrender () {
-    let n
-    if (n = this.find('.foto img')) {
-      n.style.height = n.clientWidth + 'px'
-    }
+    let n = this.find('.foto img')
+    if (n) n.style.height = n.clientWidth + 'px'
   },
   onteardown () {
     api.off('auth', this.on_auth)
