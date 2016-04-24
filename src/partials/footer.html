@@ -255,7 +255,7 @@ component.exports = {
       else if (/^\/profile/.test(path)) active = 'profile'
       this.set('active', active)
     })
-    api.observe('me', (me) => {
+    api.on('me', (me) => {
       console.warn('me', me)
       this.set('active', 'home')
     }, {init: false})

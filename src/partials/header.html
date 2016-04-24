@@ -625,7 +625,7 @@ component.exports = {
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
     api.once('deauth', (yo) => {
-      if (!yo && router.uri.path === '/') this.modal('sign-in', {header: false, footer: 'a footer'})
+      if (!yo && router.uri.path === '/') this.modal(isMobile ? 'sign-in-movil' : 'sign-in', {header: false, footer: 'a footer'})
     })
   },
   signOut () {
