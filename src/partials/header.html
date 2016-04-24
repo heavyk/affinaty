@@ -107,32 +107,31 @@
 {{else}}
   <!-- movil -->
   <div class="header-container-mov">
-      <div class="search-mov-icon" on-tap="toggle('show_search')">
-        <i class="fa fa-search"></i>&nbsp; {{~/category}}
-      </div>
-      <div class="search" style="display: {{~/show_search ? 'block' : 'none'}}">
-        <li class="search-text">
-          <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{~/text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
-          <div class="submit">
-            <button type="submit" on-tap="send_text" style="display: {{~/focused ? 'block' : 'none'}}">
-              <i class="fa fa-arrow-right"></i>
-            </button>
-          </div>
-          <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
-        </li>
-      </div>
+    <div class="search-mov-icon" on-tap="toggle('show_search')">
+      <i class="fa fa-search"></i>&nbsp; {{~/category}}
+    </div>
+    <div class="search" style="display: {{~/show_search ? 'block' : 'none'}}">
+      <li class="search-text">
+        <input type="text" class="search-input-mov" placeholder="Buscar publicaciones" value="{{~/text}}" on-keyup="text" on-blur-focus="toggle-focus" style="width: 250px">
+        <div class="submit">
+          <button type="submit" on-tap="send_text" style="display: {{~/focused ? 'block' : 'none'}}">
+            <i class="fa fa-arrow-right"></i>
+          </button>
+        </div>
+        <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
+      </li>
+    </div>
     {{#if ~/me}}
       <div class="logo">
         <h1 onclick="window.scrollTo(0,0)"><a href="/home">Affinaty</a></h1>
       </div>
       <div class="conf-mov conf" on-tap="toggle('show_settings')">
-            <i class="fa fa-cog"></i>
+        <i class="fa fa-cog"></i>
       </div>
-
     {{else}}
       <div class="logo">
         <h1><a href="/">Affinaty</a></h1>
-          <div class="start-session-movil" on-tap="sign-in">Iniciar Sesión</div>
+        <div class="start-session-movil" on-tap="sign-in">Iniciar Sesión</div>
       </div>
     {{/if}}
   </div>
@@ -506,9 +505,10 @@ import onresize from '../lib/dom/element-onresize.js'
 component.exports = {
   isolated: true,
   modal: require('../modal'),
-  el: document.body,
-  append: true,
+  // el: document.body,
+  // append: true,
   onconfig () {
+    this.set('movil', window.isMobile)
     // this.set('show_n', true)
     // this.set('show_m', true)
     // this.set('notifications', 3)
@@ -528,7 +528,7 @@ component.exports = {
         api.my.notifier.off('list*', this.on_not)
       }
     })
-    this.on('close', (e)=> {
+    this.on('close', (e) => {
       this.set('register','')
     })
     this.on('sign-in',(e)=> {
@@ -543,8 +543,6 @@ component.exports = {
         let modalHeight = this.modal.clientHeight
         let verticalSpace = (outerHeight - modalHeight) / 2
         this.modal.style.top = verticalSpace + 'px'
-        // console.log(outerHeight, modalHeight, verticalSpace)
-        // if (this.footer) this.footer.style.top = ((verticalSpace + modalHeight)) + 'px'
       }
 
       this.on('resize', resizeHandler)
@@ -567,7 +565,7 @@ component.exports = {
     })
     api.on('me', (me) => {
       this.set('me', me)
-    }, {init: false})
+    })
     this.set('search_width', 200)
     this.on('toggle-focus', (event) => {
       // this is a stupid hack to prevent the display: none from happening
@@ -577,7 +575,6 @@ component.exports = {
         this.toggle('focused')
       }, 200)
     })
-    this.set('movil', window.isMobile)
   },
   oninit () {
     this.on('send_text', (event) => {
@@ -625,11 +622,14 @@ component.exports = {
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
     api.once('deauth', (yo) => {
-      if (!yo && router.uri.path === '/') this.modal(isMobile ? 'sign-in-movil' : 'sign-in', {header: false, footer: 'a footer'})
+      if (!yo && router.uri.path === '/') {
+        if (isMobile) this.fire('sign-in')
+        else this.modal('sign-in', {header: false, footer: 'a footer'})
+      }
     })
   },
   signOut () {
-    api.signOut(true)
+    api.signOut()
   },
   onrender () {
 

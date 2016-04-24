@@ -259,7 +259,8 @@ component.exports = {
           this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
         }
         if (this.parent && this.parent.teardown) {
-          this.parent.teardown()
+          // this.parent.teardown()
+          this.parent.set('register', '')
         }
       }, 1)
     })

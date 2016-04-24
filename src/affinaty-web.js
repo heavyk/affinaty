@@ -280,9 +280,6 @@ window.onload = function () {
   api.ages = [18, 25, 35, 45]
 
   Ractive.header = new header({ el: 'header' })
-  if (window.isMobile) {
-    Ractive.footer = new footer({ el: 'footer' })
-  }
 
   // router init
   router
@@ -305,5 +302,13 @@ window.onload = function () {
   } else {
     api.signOut(true)
     router.init()
+  }
+  if (window.isMobile) {
+    Ractive.footer = new footer({ el: 'footer' })
+    setTimeout(function(){
+  		// Hide the address bar!
+      console.info('set scroll')
+  		window.scrollTo(0, 1);
+  	}, 0)
   }
 }

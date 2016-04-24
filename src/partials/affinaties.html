@@ -205,9 +205,6 @@ component.exports = {
   modal: modal,
   onconfig () {
     this.set('movil', window.isMobile)
-    this.set('list', this.list = [])
-  },
-  onconfig () {
     api.on('auth', this.on_auth = () => {
       this.set('loading', true)
       api.my.affinaties.until('/', () => {
