@@ -1,5 +1,5 @@
 <link rel='ractive' href='../partials/categories.html'>
-<link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/add-media.html'>
 <link rel='ractive' href='../partials/tag-completer.html'>
 
 <div class="square">
@@ -25,41 +25,8 @@
       </button>
     </div>
     <div class="col-xs-6">
-      {{#if ~/active === 'upload'}}
-        <foto-upload icon="camera" L="{message: 'Sube una foto'}" cropped="{{~/cropped}}" />
-      {{elseif ~/active === 'video'}}
-        <div class="paste-area">
-          <div class="message">
-            <ul class="video-icons">
-              <li class="video-icon"><i class="fa fa-youtube" /></li>
-              <li class="video-icon"><i class="fa fa-vimeo" /></li>
-              <li class="video-icon"><i class="fa fa-vine" /></li>
-            </ul>
-            <div><input type="text" placeholder="{{#if ~/video_added}}Video añadido correctamente{{else}}Pega aquí el enlace{{/if}}" value="{{~/url}}" /></div>
-            <div><button type="button" on-click="add-video">Añadir</button></div>
-          </div>
-        </div>
-      {{elseif ~/active === 'foto'}}
-        <div class="paste-area">
-          <div class="message">
-            <div class="picture-icon"><i class="fa fa-picture-o" /></div>
-            <div><input type="text" placeholder="Pega aquí el enlace de una foto" value="{{~/url}}" /></div>
-            <div><button type="button" on-click="add-foto">Añadir</button></div>
-          </div>
-        </div>
-      {{/if}}
-      <!-- <div class="media-tabs">
-        <button class="add-upload" on-click="add-upload"><i class="fa fa-upload" /></button>
-        <button class="add-video" on-click="add-video"><i class="fa fa-video-camera" /></button>
-        <button class="add-foto" on-click="add-foto"><i class="fa fa-picture-o" /></button>
-      </div> -->
-      <ul class="media-tabs">
-        <li class="media-tab add-upload {{#if ~/active === 'upload'}}active{{/if}}" on-click="set('active', 'upload')"><i class="fa fa-upload" /></li>
-        <li class="media-tab add-video {{#if ~/active === 'video'}}active{{/if}}" on-click="set('active', 'video')"><i class="fa fa-video-camera" /></li>
-        <!-- <li class="media-tab add-foto {{#if ~/active === 'foto'}}active{{/if}}" on-click="set('active', 'foto')"><i class="fa fa-picture-o" /></li> -->
-      </ul>
+      <add-media d="{{~/d}}" />
     </div>
-
   </div>
 </div>
 
@@ -203,6 +170,9 @@ component.exports = {
   oninit () {
     this.set ({
       active: 'upload',
+      // url: `<iframe src="http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-571e3bcee87d1&entry_id=1_a9s8ncyo&flashvars[streamerType]=auto" width="560" height="395" allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0"></iframe>`,
+      // url: `<iframe width="420" height="315" src="https://www.youtube.com/embed/sNPnbI1arSE" frameborder="0" allowfullscreen></iframe>`,
+      // active: 'video',
       menu: false,
       'd.pos': 2,
     })
@@ -220,65 +190,26 @@ component.exports = {
         this.set('errors', form.errors)
       }
     })
-    this.observe('cropped', (v) => {
-      if (v && v.length) this.set('d.foto', v[0])
-    })
     this.observe('tags', (tags) => {
       this.set('d.tag', pluck(tags, '_id'))
     })
-    let after_foto = () => {
-      let form = this.validator.validate(this)
-      this.set('errors', form.errors)
-      if (form.valid) {
-        // TODO spinner
-        this.set('saving', true)
-        api.action('debate+', form.data, (d) => {
-          this.set('saving', false)
-          Ractive.nexus.debate.create(d)
-          this.parent.teardown()
-        })
-      }
-    }
     this.on('submit', (event) => {
       event.original.preventDefault()
       if (this.get('saving')) return
       this.submitted = true
-      if (this.get('active') === 'upload') this.fire('submitting', after_foto)
-      else after_foto()
-    })
-    this.on('add-video', () => {
-      let url = iframe_src(this.get('url'))
-      let id
-      if (id = youtube_id(url)) {
-        id = `@[youtube](${id})`
-      } else if (id = vimeo_id(url)) {
-        id = `@[vimeo](${id})`
-      } else if (id = vine_id(url)) {
-        id = `@[vine](${id})`
-      } else if (id = vertele_id(url)) {
-        id = `@[vertele](${id})`
-      }
-
-      if (id) {
-        let txt = this.get('d.text')
-        this.set('d.text',  (txt.length ? txt + '\n' : '') + id)
-        this.set('video_added', true)
-        this.set('url', '')
-      } else {
-        // TODO: show an error or some message
-      }
-    })
-    this.on('add-foto', () => {
-      let url = this.get('url')
-      let caption = this.get('caption') || 'image'
-      if (url.length > 3) {
-        if (url.substr(0, 4) !== 'http') url = `http://${url}`
-        let txt = this.get('d.text')
-        this.set('d.text',  (txt.length ? txt + '\n' : '') + `![${caption}](${url})`)
-        this.set('url', '')
-      } else {
-        // TODO: show an error or some message
-      }
+      this.fire('submitting', () => {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+        if (form.valid) {
+          // TODO spinner
+          this.set('saving', true)
+          api.action('debate+', form.data, (d) => {
+            this.set('saving', false)
+            Ractive.nexus.debate.create(d)
+            this.parent.teardown()
+          })
+        }
+      })
     })
   },
   events: {

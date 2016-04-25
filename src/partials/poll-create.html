@@ -1,5 +1,5 @@
 <link rel='ractive' href='../partials/categories.html'>
-<link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/add-media.html'>
 <link rel='ractive' href='../partials/tag-completer.html'>
 
 <div class="square">
@@ -66,7 +66,8 @@
     </div>
 
     <div class="col-xs-6" >
-      <foto-upload icon="camera" cropped="{{~/cropped}}" />
+      <!-- <foto-upload icon="camera" cropped="{{~/cropped}}" /> -->
+      <add-media d="{{~/d}}" />
     </div>
   </div>
 </div>
@@ -188,7 +189,8 @@ component.exports = {
   isolated: true,
   data: {},
   oninit () {
-    let options = [{text: ''}, {text: ''}]
+    // let options = [{text: ''}, {text: ''}]
+    let options = [{text: 'eneny'}, {text: 'eonyenyeny'}]
     this.validator = new Validator('d', {
       'text': {required: true, min: 2, max: 2048},
       'category': {required: true, type: 'id'},
@@ -222,13 +224,11 @@ component.exports = {
         options.splice(event.index.i, 1)
       }
     })
-    this.observe('cropped', (v) => {
-      if (v && v.length) this.set('d.foto', v[0])
-    })
     this.observe('tags', (tags) => {
       this.set('d.tag', pluck(tags, '_id'))
     })
     this.set('d.options', options)
+    this.set('d.text', 'eonyeonyoenyeony')
     this.on('submit', (event) => {
       if (this.get('saving')) return
       event.original.preventDefault()

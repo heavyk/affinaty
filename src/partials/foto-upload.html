@@ -132,7 +132,7 @@ component.exports = {
       }
     }, this.get('dropzone-events'))
 
-    this.parent.on('submitting', this.onsubmitting = (cb) => {
+    this.parent.on('submitting', this.on_submitting = (cb) => {
       if (typeof cb === 'function') if (this.get('cropping')) {
         this.fire('finish-cropping', cb)
       } else cb()
@@ -150,7 +150,7 @@ component.exports = {
     })
   },
   onteardown () {
-    this.parent.off('submitting', this.onsubmitting)
+    this.parent.off('submitting', this.on_submitting)
   },
   events: {
     tap: require('../lib/events/tap.js'),

@@ -1,0 +1,209 @@
+<link rel='ractive' href='../partials/foto-upload.html'>
+
+<div class="add-media-container">
+  {{#if ~/active === 'upload'}}
+    <foto-upload icon="camera" L="{message: 'Sube una foto'}" cropped="{{~/cropped}}" />
+  {{elseif ~/active === 'video'}}
+    <div class="paste-area">
+      <div class="message">
+        <ul class="video-icons">
+          <li class="video-icon"><i class="fa fa-youtube" /></li>
+          <li class="video-icon"><i class="fa fa-vimeo" /></li>
+          <li class="video-icon"><i class="fa fa-vine" /></li>
+        </ul>
+        <div><input type="text" placeholder="{{#if ~/video_added}}Video añadido correctamente{{else}}Pega aquí el enlace{{/if}}" value="{{~/url}}" /></div>
+        <div><button type="button" on-click="add-video">Añadir</button></div>
+      </div>
+    </div>
+  {{elseif ~/active === 'foto'}}
+    <div class="paste-area">
+      <div class="message">
+        <div class="picture-icon"><i class="fa fa-picture-o" /></div>
+        <div><input type="text" placeholder="Pega aquí el enlace de una foto" value="{{~/url}}" /></div>
+        <div><button type="button" on-click="add-foto">Añadir</button></div>
+      </div>
+    </div>
+  {{/if}}
+  <ul class="media-tabs">
+    <li class="media-tab add-upload {{#if ~/active === 'upload'}}active{{/if}}" on-click="set('active', 'upload')"><i class="fa fa-upload" /></li>
+    <li class="media-tab add-video {{#if ~/active === 'video'}}active{{/if}}" on-click="set('active', 'video')"><i class="fa fa-video-camera" /></li>
+    <!-- <li class="media-tab add-foto {{#if ~/active === 'foto'}}active{{/if}}" on-click="set('active', 'foto')"><i class="fa fa-picture-o" /></li> -->
+  </ul>
+</div>
+
+<style>
+
+.foto-crop {
+  margin-left: 10px;
+  width: 240px;
+}
+
+.picture-icon {
+  margin-bottom: 20px;
+  font-size: 69px;
+}
+
+.video-icons,
+.media-tabs {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  align-items: center;
+  padding: 0;
+  margin: 10px 5px;
+}
+
+.media-tab {
+  cursor: pointer;
+  height: 35px;
+  /*width: 35px;*/
+  width: 70px;
+  border: solid 1px #ccc;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.video-icon {
+  height: 50px;
+  width: 50px;
+  /*border: solid 1px #ccc;*/
+  padding: 5px;
+  font-size: 40px;
+}
+
+li.active {
+  background-color: #eee;
+  color: #f00;
+}
+
+.paste-area .message,
+.dropzone-area .message {
+  font-size: 16px;
+  position: absolute;
+  left: 50%;
+  margin-left: -120px;
+  width: 240px;
+  top: 160px;
+}
+
+.paste-area .message {
+  top: 30px;
+}
+
+.paste-area input {
+  text-align: center;
+}
+
+
+/*.add-video, .add-foto {
+  width: 40px;
+  height: 40px;
+}*/
+
+.paste-area,
+.dropzone-area {
+  /*color: #fd270d;*/
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
+  display: inline-block;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropzone-area .fa {
+  padding: 50%;
+}
+.categories-button {
+  margin-bottom: 20px;
+}
+</style>
+
+<script>
+import pluck from '../lib/lodash/collection/pluck'
+import Validator from '../validator'
+import { vimeo_id, youtube_id, vine_id, vertele_id, iframe_src } from '../lib/parse/videoUrls'
+
+
+component.exports = {
+  isolated: true,
+  oninit () {
+    this.set ({
+      active: 'upload',
+      // url: `<iframe src="http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-571e3bcee87d1&entry_id=1_a9s8ncyo&flashvars[streamerType]=auto" width="560" height="395" allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0"></iframe>`,
+      // url: `<iframe width="420" height="315" src="https://www.youtube.com/embed/sNPnbI1arSE" frameborder="0" allowfullscreen></iframe>`,
+      // active: 'video',
+    })
+    this.observe('cropped', (v) => {
+      if (v && v.length) this.set('d.foto', v[0])
+    })
+    this.parent.on('submitting', this.on_submitting = (fn) => {
+      let active = this.get('active')
+      if (active === 'video') this.fire('add-video', fn)
+      else if (active === 'foto') this.fire('add-foto', fn)
+      else if (active === 'upload') this.fire('submitting', fn)
+      else if (typeof fn === 'function') fn()
+    })
+    this.on('add-video', (cb) => {
+      let url = iframe_src(this.get('url'))
+      let id
+      if (id = youtube_id(url)) {
+        id = `@[youtube](${id})`
+      } else if (id = vimeo_id(url)) {
+        id = `@[vimeo](${id})`
+      } else if (id = vine_id(url)) {
+        id = `@[vine](${id})`
+      } else if (id = vertele_id(url)) {
+        id = `@[vertele](${id})`
+      }
+
+      if (id) {
+        let txt = this.get('d.text')
+        this.set('d.text',  (txt.length ? txt + '\n' : '') + id)
+        this.set('video_added', true)
+        this.set('url', '')
+      } else {
+        // TODO: show an error or some message
+      }
+      if (typeof cb === 'function') cb()
+    })
+    this.on('add-foto', (cb) => {
+      let url = this.get('url')
+      let caption = this.get('caption') || 'image'
+      if (url.length > 3) {
+        if (url.substr(0, 4) !== 'http') url = `http://${url}`
+        let txt = this.get('d.text')
+        this.set('d.text',  (txt.length ? txt + '\n' : '') + `![${caption}](${url})`)
+        this.set('url', '')
+      } else {
+        // TODO: show an error or some message
+      }
+      if (typeof cb === 'function') cb()
+    })
+  },
+  onteardown () {
+    this.parent.off('submitting', this.on_submitting)
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+  },
+}
+</script>
