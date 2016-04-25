@@ -2,7 +2,7 @@
   <input
     type="text"
     value="{{~/title}}"
-    placeholder="escribe los tags aquí"
+    placeholder="Escribe los tags aquí"
     on-nlSubmit="add"
     on-focus="set('taglist', true)"
     style="display: {{~/selected.length < 3 ? 'block' : 'none'}}"
@@ -108,7 +108,7 @@ component.exports = {
     this.set({ recent, selected, list })
     this.on('add', (event) => {
       let i, t = assign({}, event.context)
-      if (~findIndex(selected, '_id', t._id)) return this.set({ taglist: false, title: '' })
+      if (t._id && ~findIndex(selected, '_id', t._id)) return this.set({ taglist: false, title: '' })
       if (~(i = findIndex(recent, 'title', t.title))) {
         selected.push(recent[i])
         recent.splice(i, 1)
@@ -133,11 +133,13 @@ component.exports = {
       recent.splice(0, 0, t)
     }
     this.on('keyup', (event) => {
-      console.log('TODO up, down, left, right')
-      if (event.original.which === 0x20) {
+      let key = event.original.which
+      console.log('TODO up, down, left, right', key)
+      if (key === 32 || key === 13) {
         // TODO check to see if title is in the list and add it there
         this.fire('add', event)
         this.set('title', '')
+        // this.set({ taglist: false, title: '' })
       }
     })
     this.observe('title', (title) => {
