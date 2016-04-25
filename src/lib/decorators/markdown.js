@@ -11,6 +11,16 @@ let md = _markdown({
 // plugins
 .use(require('markdown-it-emoji'))
 .use(require('markdown-it-video'), {
+  url: function (service, videoID, options) {
+    switch (service) {
+      case 'youtube': return '//www.youtube.com/embed/' + videoID;
+      case 'vimeo': return '//player.vimeo.com/video/' + videoID;
+      case 'vine': return '//vine.co/v/' + videoID + '/embed/' + options.vine.embed;
+      case 'vertele':
+        var id = videoID.split('|')
+        return `http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-${id[0]}&entry_id=${id[1]}&flashvars[streamerType]=auto`;
+    }
+  },
   youtube: {
     width: 250,
     height: 140,
@@ -23,7 +33,11 @@ let md = _markdown({
     width: 250,
     height: 250,
     embed: 'simple?audio=1',
-  }
+  },
+  vertele: {
+    width: 250,
+    height: 140,
+  },
 })
 
 function markdown (node, text) {

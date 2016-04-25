@@ -195,7 +195,7 @@ li.active {
 <script>
 import pluck from '../lib/lodash/collection/pluck'
 import Validator from '../validator'
-import { vimeo_id, youtube_id, vine_id } from '../lib/parse/videoUrls'
+import { vimeo_id, youtube_id, vine_id, vertele_id, iframe_src } from '../lib/parse/videoUrls'
 
 
 component.exports = {
@@ -247,7 +247,7 @@ component.exports = {
       else after_foto()
     })
     this.on('add-video', () => {
-      let url = this.get('url')
+      let url = iframe_src(this.get('url'))
       let id
       if (id = youtube_id(url)) {
         id = `@[youtube](${id})`
@@ -255,6 +255,8 @@ component.exports = {
         id = `@[vimeo](${id})`
       } else if (id = vine_id(url)) {
         id = `@[vine](${id})`
+      } else if (id = vertele_id(url)) {
+        id = `@[vertele](${id})`
       }
 
       if (id) {
