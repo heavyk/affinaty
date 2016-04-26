@@ -25,23 +25,23 @@
 </style>
 
 <script>
-import tap from '../lib/events/tap.js'
-
 component.exports = {
   oninit () {
+    var onkeypress
     this.observe('answer', (v) => {
       if (v !== void 0) this.parent.fire('answer', v)
-    })
-    window.addEventListener('keyup', this.onkeypress = (event) => {
-      if (event.which === 27) api.my.opinion.emit('answer', false)
-      else if (event.which === 13) api.my.opinion.emit('answer', true)
+    }, {init: false})
+    window.addEventListener('keyup', onkeypress = (event) => {
+      let key = event.which
+      if (key === 27) this.parent.fire('answer', false)
+      else if (key === 13) this.parent.fire('answer', true)
     })
     this.once('teardown', () => {
-      window.removeEventListener('keyup', this.onkeypress)
+      window.removeEventListener('keyup', onkeypress)
     })
   },
   events: {
-    tap,
+    tap: require('../lib/events/tap.js'),
   },
 }
 </script>
