@@ -239,6 +239,9 @@ component.exports = {
     this.on('debate',(e)=> {
       this.set('debate',true)
     })
+    this.on('poll',(e)=> {
+      this.set('poll',true)
+    })
     this.on('cancel', () => {
       this.set('debate',false)
     })

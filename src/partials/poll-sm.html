@@ -3,6 +3,7 @@
 <link rel='ractive' href='../partials/social-sm.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
+<link rel='ractive' href='../partials/poll-stats-movil.html'>
 
 <div class="debate">
   <div class="header">
@@ -15,8 +16,20 @@
       <h5 style="width: {{~/view === 'list' ? '90%' : '100%'}}"><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
       <time time="{{~/d.created}}" class="since" />
     </div>
+    <div class='expandable'>
+      {{#if showDetail}}
+      <div class="register-background" style="display: {{showDetail ? 'block' : 'none'}}">
+        <div class="register-outer">
+          <div class="register-box">
+            <poll-stats-movil poll="{{id}}"></poll-stats-movil>
+            <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
+          </div>
+        </div>
+      </div>
 
-    <a class="stats" href="/poll/{{~/d._id}}">
+      {{/if}}
+    </div>
+    <a class="stats" on-tap="show-stats">
       <div class="stats">
         <i class="fa fa-chevron-right"></i>
         <div class="stats-box">
@@ -74,6 +87,74 @@
 </div>
 
 <style>
+.register-background{
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,.5);
+  padding: .5em;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+}
+.register-close {
+  display: block;
+  content: "\00D7";
+  background: #fff;
+  color: #000;
+  width: 30px;
+  height: 30px;
+  padding-right: 12px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 100;
+  line-height: 1px;
+  text-indent: 1px;
+  border-radius: 0 0 0 4px;
+  cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  z-index:999999;
+}
+.register-outer{
+      position: relative;
+      width: 100%;
+height: 100%;
+z-index: 100;
+}
+.register-box{
+  position: relative;
+/*background-color: #fff;*/
+box-shadow: 1px 1px 3px rgba(0,0,0,.1);
+margin: 0 auto;
+max-width: 100%;
+max-height: 100%;
+overflow-y: auto;
+box-sizing: border-box;
+border-radius: 8px;
+/*border: 1px solid #9a9a9a;*/
+}
+.detail{
+  position: absolute;
+  right: 4px;
+  top: 50px;
+  z-index: 99;
+}
+.detail-close {
+  position: absolute;
+  font-size: 24px;
+  top: 0px;
+  height: 50px;
+  right: 2px;
+}
+.expandable {
+  float: right;
+  z-index: 9999999999999;
+  top: 13px;
+  position: fixed;
+  width: 96%;
+}
 .heading {
   width: 100%;
   display: inline-block;
@@ -208,6 +289,12 @@ component.exports = {
         {title: 'jiji', _id: 1155},
       ])
     }
+    this.on('show-stats', () => {
+      if (window.isMobile && this.parent) {
+        this.parent.toggle('showDetail')
+      }
+      this.set('showDetail',true)
+    })
   },
   onrender () {
     let n
