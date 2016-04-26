@@ -8,6 +8,9 @@
 //   }
 // }
 
+// stupid hack for FF
+if (!NodeList.prototype.forEach) NodeList.prototype.forEach = Array.prototype.forEach
+
 const body = document.body
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
