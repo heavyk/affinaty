@@ -1,15 +1,32 @@
 <link rel='ractive' href='../partials/debate-create-movil.html'>
-<link rel='ractive' href='../partials/poll-create.html'>
+<link rel='ractive' href='../partials/poll-create-movil.html'>
+{{#if debate || poll}}
 
-{{#if debate}}
-
-<div class="caja" style="height: {{windowHeight}}px; display: {{debate === true ? 'block' : 'none'}}; ">
-  <debate-create-movil>
+<div class="opina-background">
+  <div class="opina-outer">
+    <div class="opina-box">
+      <div class="opina-close" on-tap="cancel">
+        <i class="fa fa-close"></i>
+      </div>
+      <div class="caja">
+        {{#if debate}}
+          <debate-create-movil>
+        {{/if debate}}
+        {{#if poll}}
+          <poll-create-movil>
+        {{/if poll}}
+      </div>
+    </div>
+  </div>
 </div>
-<div class="cancel" on-tap="cancel">
+
+
+<!-- <div class="cancel" on-tap="cancel">
   <i class="fa fa-times"></i>
-</div>
-{{/if debate}}
+</div> -->
+
+
+{{/if debate || poll}}
 
 <div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
   <!-- HOME -->
@@ -69,7 +86,7 @@
         </a>
       </div>
       <div class="opin-right" on-tap="toggle('show_opina')">
-          <a on-tap="debate">
+          <a on-tap="poll">
             <img src="/img/poll.svg" width="100" height="100" class="opin" />
             <span class="txt_moar">Pide opinión</span>
           </a>
@@ -140,13 +157,13 @@
   border: 1px solid #9a9a9a;
   position: relative;
   position: fixed;
-  top: 60px;
+  /*top: 60px;*/
   left: 0;
   background-color: #eee;
   padding: .5em;
   box-sizing: border-box;
   z-index: 100;
-  height: 350px;
+  height: 100%;
 }
 .cancel{
   width: 10px;
@@ -244,6 +261,7 @@ component.exports = {
     })
     this.on('cancel', () => {
       this.set('debate',false)
+      this.set('poll',false)
     })
     this.on('close', () => {
       this.set('show_opina',false)

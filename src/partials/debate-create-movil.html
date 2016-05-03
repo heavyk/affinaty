@@ -1,57 +1,53 @@
 <link rel='ractive' href='../partials/categories.html'>
-<link rel='ractive' href='../partials/foto-upload.html'>
+<link rel='ractive' href='../partials/add-media.html'>
 <link rel='ractive' href='../partials/tag-completer.html'>
 
 <div class="square">
 
+
       <div class="row-movil">
-        <!-- <categories L="{selector:'Seleccione una categoría', selected: '', show_button: true}" on-select="category" class="{{errors.d.category ? 'invalid' : ''}}" /> -->
-        <select value="{{d.category}}">
+        <!-- <categories L="{selector:'Seleccione una categoría', selected: '', show_button: true}" on-select="category" class="{{~/errors.d.category ? 'invalid' : ''}}" /> -->
+        <select value="{{d.category}}" class="{{errors.d.category ? 'invalid' : ''}}">
           <option >Selecciona una categoria</option>
           {{#each categories}}
             <option value="{{._id}}">{{.title}}</option>
           {{/each}}
         </select>
       </div>
-      <div class="row-movil">
-        <tag-completer selected="{{tags}}" />
+      <div class="row-movil {{~/errors.d.tag ? 'invalid-tag' : ''}}">
+        <tag-completer selected="{{~/tags}}" />
       </div>
       <div class="row-movil">
         <textarea
           placeholder="Escribe tu opinion"
           name="text"
           maxlength="2048"
-          value="{{d.text}}"
-          class="{{errors.d.text ? 'invalid' : ''}}">
+          value="{{~/d.text}}"
+          class="{{~/errors.d.text ? 'invalid' : ''}}">
         </textarea>
       </div>
 
-      <div class="row-movil">
-        <foto-upload icon="camera" cropped="{{cropped}}" />
-      </div>
-      <div class="row-button">
-        <button class="button-opina" on-tap="opinar" >
-          Opinar
-        </button>
-      </div>
+
+    <div class="row-movil">
+      <add-media d="{{~/d}}" />
+    </div>
+    <button on-tap="submit" class="row-movil button-opina-debate">
+      Opinar
+    </button>
 
 </div>
 
 <style>
-.button-opina{
+.button-opina-debate{
   background: #FF4314;
   color: #FFF;
   width: 96%;
   padding: 9px 15px;
   height: 44px;
+
 }
 .row-movil{
   width: 100%;
-}
-.row-button{
-  width: 100%;
-  position: absolute;
-  bottom:20px;
 }
 .categories {
   position: fixed;
@@ -70,44 +66,115 @@
 }
 
 .square {
-  /* margin-top: 30px; */
-width: 100%;
-/* margin-left: 30px; */
-/* margin-right: 30px; */
-margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 24px;
 }
 
+.invalid-tag input,
 .invalid {
   border: solid 1px #f00;
 }
 
+.video-icons {
+
+}
+.picture-icon {
+  margin-bottom: 20px;
+  font-size: 69px;
+}
+.foto-upload {
+  width: 90%;
+}
+.add-media-container {
+  width: 90%;
+}
+
+.video-icons,
+.media-tabs {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  align-items: center;
+  padding: 0;
+  margin: 10px 5px;
+}
+
+.media-tab {
+  cursor: pointer;
+  height: 35px;
+  /*width: 35px;*/
+  width: 70px;
+  border: solid 1px #ccc;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.video-icon {
+  height: 50px;
+  width: 50px;
+  /*border: solid 1px #ccc;*/
+  padding: 5px;
+  font-size: 40px;
+}
+
+li.active {
+  background-color: #eee;
+  color: #f00;
+}
+
+.paste-area .message,
+.dropzone-area .message {
+  font-size: 16px;
+  position: absolute;
+  left: 50%;
+  margin-left: -120px;
+  width: 240px;
+  top: 160px;
+}
+
+.paste-area .message {
+  top: 30px;
+}
+
+.paste-area input {
+  text-align: center;
+}
+
+
+/*.add-video, .add-foto {
+  width: 40px;
+  height: 40px;
+}*/
+
+.paste-area,
 .dropzone-area {
+  /*color: #fd270d;*/
   color: #fd270d;
-  /* border: 1px solid #222; */
-  /* border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25); */
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
   border-radius: 7px;
   text-decoration: none;
   padding: 6px 14px;
   font-size: 40px;
   font-weight: 300;
-  line-height: .8;
+  line-height: 0.8;
   text-align: center;
   white-space: nowrap;
   cursor: pointer;
-  position: absolute;
-  outline: 0;
-  /* text-shadow: 0 -1px 0 rgba(0,0,0,.25); */
-  /* box-shadow: inset 0 1px 0 rgba(255,255,255,.2),0 1px 2px rgba(0,0,0,.05); */
+  position: relative;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
   width: 100%;
-  /*height: 50px;*/
-  /* margin: 0 0 0 12px; */
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
   display: inline-block;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  margin: 0 auto;
-  margin-bottom: 30px;
 }
 .dropzone-area .fa {
   padding: 50%;
@@ -118,18 +185,27 @@ margin: 0 auto;
 </style>
 
 <script>
-let pluck = require('../lib/lodash/collection/pluck')
-let Validator = require('../validator')
+import pluck from '../lib/lodash/collection/pluck'
+import Validator from '../validator'
+import { vimeo_id, youtube_id, vine_id, vertele_id, iframe_src } from '../lib/parse/videoUrls'
+
+
 component.exports = {
   isolated: true,
   oninit () {
-    this.set ('menu', false)
-    this.set('d.pos', 2)
+    this.set ({
+      active: 'upload',
+      // url: `<iframe src="http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-571e3bcee87d1&entry_id=1_a9s8ncyo&flashvars[streamerType]=auto" width="560" height="395" allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0"></iframe>`,
+      // url: `<iframe width="420" height="315" src="https://www.youtube.com/embed/sNPnbI1arSE" frameborder="0" allowfullscreen></iframe>`,
+      // active: 'video',
+      menu: false,
+      'd.pos': 2,
+    })
     this.validator = new Validator('d', {
       'text': {required: true, min: 2, max: 2048},
       'category': {required: true, type: 'id'},
       'pos': {required: true, type: 'integer', min: -2, max: 2},
-      'tag': {required: false, type: 'array', max: 3},
+      'tag': {required: true, type: 'array', min: 1, max: 3},
       'foto': {required: false, type: 'id'},
     })
     this.on('category', (category) => {
@@ -138,12 +214,6 @@ component.exports = {
         let form = this.validator.validate(this)
         this.set('errors', form.errors)
       }
-    })
-    this.observe('cropped', (v) => {
-      if (v && v.length) this.set('d.foto', v[0])
-    })
-    this.observe('tags', (tags) => {
-      this.set('d.tag', pluck(tags, '_id'))
     })
     api.category.until('/', () => {
       let list = api.category.list
@@ -155,24 +225,26 @@ component.exports = {
       this.set('l2', l2)
       this.set('loading', false)
     })
-    this.on('opinar', (event) => {
+    this.observe('tags', (tags) => {
+      this.set('d.tag', pluck(tags, '_id'))
+    })
+    this.on('submit', (event) => {
+      event.original.preventDefault()
       if (this.get('saving')) return
       this.submitted = true
-
+      this.fire('submitting', () => {
         let form = this.validator.validate(this)
         this.set('errors', form.errors)
         if (form.valid) {
-          // api.debate.create(form.data, )
           // TODO spinner
           this.set('saving', true)
           api.action('debate+', form.data, (d) => {
             this.set('saving', false)
             Ractive.nexus.debate.create(d)
-            // TODO: remove CACA
-            this.parent.set({show_opina: false, debate: false})
+            this.parent.teardown()
           })
         }
-
+      })
     })
   },
   events: {

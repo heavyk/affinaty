@@ -5,6 +5,7 @@
 <link rel='ractive' href='../partials/set-up.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/categories.html'>
+<link rel='ractive' href='../partials/categories-movil.html'>
 <link rel='ractive' href='../partials/notification-list.html'>
 <link rel='ractive' href='../partials/debate-create.html'>
 <link rel='ractive' href='../partials/poll-create.html'>
@@ -118,7 +119,7 @@
             <i class="fa fa-arrow-right"></i>
           </button>
         </div>
-        <categories L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
+        <categories-movil L="{selector: 'Categorías', unselect: 'Todas'}" on-select="category" alwaysShow="true" />
       </li>
     </div>
     {{#if ~/me}}
@@ -501,6 +502,7 @@ a.dropdown-toggle.moar-toggle {
 <script>
 import assign from '../lib/lodash/object/assign'
 import onresize from '../lib/dom/element-onresize.js'
+import SmartBanner from 'smart-app-banner'
 
 component.exports = {
   isolated: true,
@@ -627,6 +629,28 @@ component.exports = {
         else this.modal('sign-in', {header: false, footer: 'a footer'})
       }
     })
+    let p = new SmartBanner(
+      {
+          daysHidden: 0,   // days to hide banner after close button is clicked (defaults to 15)
+          daysReminder: 0, // days to hide banner after "VIEW" button is clicked (defaults to 90)
+          appStoreLanguage: 'es', // language code for the App Store (defaults to user's browser language)
+          title: 'Affinaty',
+          author: 'Genlab',
+          button: 'Ver',
+          store: {
+              ios: 'On the App Store',
+              android: 'In Google Play',
+              windows: 'In Windows store'
+          },
+          price: {
+              ios: 'FREE',
+              android: 'FREE',
+              windows: 'FREE'
+          }
+          , force: 'ios' // Uncomment for platform emulation
+      }
+
+    )
   },
   signOut () {
     api.signOut()

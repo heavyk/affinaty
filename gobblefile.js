@@ -43,6 +43,7 @@ var affinaty = gobble([
 				 'chart.js',
 				 'es6-map',
 				 'lie',
+				 'smart-app-banner',
 				 'engine.io-client',
 			],
 			plugins: [

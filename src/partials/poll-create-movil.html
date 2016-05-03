@@ -1,0 +1,298 @@
+<link rel='ractive' href='../partials/categories.html'>
+<link rel='ractive' href='../partials/add-media.html'>
+<link rel='ractive' href='../partials/tag-completer.html'>
+
+<div class="square">
+      <div class="row-movil">
+        <select value="{{d.category}}" class="{{errors.d.category ? 'invalid' : ''}}">
+          <option >Selecciona una categoria</option>
+          {{#each categories}}
+            <option value="{{._id}}">{{.title}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="row-movil {{~/errors.d.tag ? 'invalid-tag' : ''}}">
+        <tag-completer selected="{{~/tags}}" />
+      </div>
+      <div class="row-movil">
+        <textarea
+          placeholder="Escribe texto de tu encuesta..."
+          name="text"
+          maxlength="2048"
+          value="{{~/d.text}}"
+          class="{{~/errors.d.text ? 'invalid' : ''}}">
+        </textarea>
+      </div>
+      <div class="row-movil">
+        {{#each ~/d.options : i}}
+        <div class="row-movil">
+          <div class="text-option col-xs-10">
+            <input type="text" maxlength="50" decorator="focusSelect" placeholder="Escribe una opción" value="{{.text}}" class="{{errors.d.options[i] ? 'invalid' : ''}}" />
+          </div>
+
+          <div class="remove-option col-xs-2 {{#if ~/d.options.length <= 2}}disabled{{/if}}" on-tap="remove-option">
+            <i class="fa fa-minus"></i>
+          </div>
+
+        </div>
+        {{/each}}
+      </div>
+      <div class="row-movil" style="display:{{~/d.options.length < 5 ? 'block' : 'none'}}">
+        <div class="new-poll">
+          <div class="text-option col-xs-10">
+            <input type="text"
+              maxlength="50"
+              decorator="focusSelect"
+              on-focus-blur="toggle('highlight')"
+              placeholder="Escribe más opciones"
+              value="{{~/new_option.text}}"
+              on-nlSubmit="add-option"
+              class="{{~/errors.new_option.text ? 'invalid' : ''}}"
+             />
+          </div>
+
+          <div class="add-option col-xs-2 {{~/highlight ? 'highlight' : ''}}" on-tap="add-option">
+            <a><i class="fa fa-plus"></i></a>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
+      {{#if ~/error}}
+        <div class="alert alert-fail">{{~/error}}</div>
+      {{/if ~/error}}
+
+
+    <div class="row-movil" >
+      <!-- <foto-upload icon="camera" cropped="{{~/cropped}}" /> -->
+      <add-media d="{{~/d}}" />
+    </div>
+    <button on-tap="submit" class="row-movil button-opina-poll">
+      Pide opinión
+    </button>
+</div>
+
+
+<style>
+.button-opina-poll{
+  background: #FF4314;
+  color: #FFF;
+  width: 96%;
+  padding: 9px 15px;
+  height: 44px;
+
+}
+.text-option {
+  float: left;
+}
+
+.remove-option,
+.add-option {
+  width: 40px;
+  height: 40px;
+  float: left;
+  padding: 8px;
+  margin: 6px 0 0 6px;
+  border-radius: 8px;
+}
+
+.disabled {
+  color: #ccc;
+}
+
+.add-option:hover,
+.remove-option:hover {
+  color: #f5a;
+  background-color: #ddd;
+}
+.add-option:hover {
+  color: #5d4;
+}
+.row-movil{
+  width: 100%;
+}
+.highlight {
+  background: rgba(253, 39, 13, 0.29);
+  color: #FD270D;
+  border: solid 1px #FD270D;
+}
+
+.categories {
+  position: fixed;
+  z-index: 100;
+  margin-top: -15px;
+}
+
+.categories-button {
+  float: none;
+  text-align: center;
+}
+
+.foto-crop {
+  margin-left: 10px;
+  width: 240px;
+}
+
+.foto-upload {
+  width: 90%;
+}
+
+.row {
+  padding: 0 5px;
+}
+
+.button-sign-up {
+  padding: 10px;
+}
+
+.square {
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 24px;
+}
+
+.invalid-tag input,
+.invalid {
+  border: solid 1px #f00;
+}
+
+.dropzone-area {
+  /*color: #fd270d;*/
+  color: #fd270d;
+  border: 1px solid #222;
+  border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+  border-radius: 7px;
+  text-decoration: none;
+  padding: 6px 14px;
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 0.8;
+  text-align: center;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  height: 240px;
+  margin: 0;
+  margin-left: 12px;
+  display: inline-block;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropzone-area .fa {
+  padding: 50%;
+}
+.categories-button {
+  margin-bottom: 20px;
+}
+.add-media-container {
+  width: 90%;
+}
+</style>
+
+<script>
+import pluck from '../lib/lodash/collection/pluck'
+import Validator from '../validator'
+
+component.exports = {
+  isolated: true,
+  data: {},
+  oninit () {
+    // let options = [{text: ''}, {text: ''}]
+    let options = [{text: ''}, {text: ''}]
+    this.validator = new Validator('d', {
+      'text': {required: true, min: 2, max: 2048},
+      'category': {required: true, type: 'id'},
+      'options': {required: true, type: 'array', min: 2, max: 5},
+      'tag': {required: true, type: 'array', min: 1, max: 3},
+      'foto': {required: false, type: 'id'},
+    })
+    this.option_validator = new Validator('new_option', {
+      // existing options max length is checked below on submit
+      'text': {required: true, type: 'string', min: 1, max: 50},
+    })
+    this.on('category', (category) => {
+      this.set('d.category', category._id)
+      if (this.submitted) {
+        let form = this.validator.validate(this)
+        this.set('errors', form.errors)
+      }
+    })
+    this.on('add-option', () => {
+      if (options.length < 5) {
+        let form = this.option_validator.validate(this)
+        this.set('errors', form.errors)
+        if (form.valid) {
+          options.push(form.data)
+          this.set('new_option.text', '')
+        }
+      }
+    })
+    this.on('remove-option', (event) => {
+      if (options.length > 2) {
+        options.splice(event.index.i, 1)
+      }
+    })
+    this.observe('tags', (tags) => {
+      this.set('d.tag', pluck(tags, '_id'))
+    })
+    api.category.until('/', () => {
+      let list = api.category.list
+      let len = Math.round(list.length / 2)
+      let l1 = list.slice(0, len)
+      let l2 = list.slice(len)
+      this.set('categories', list)
+      this.set('l1', l1)
+      this.set('l2', l2)
+      this.set('loading', false)
+    })
+    this.set('d.options', options)
+
+    this.on('submit', (event) => {
+      if (this.get('saving')) return
+      event.original.preventDefault()
+      if (this.get('new_option.text')) {
+        this.fire('add-option')
+      }
+      this.submitted = true
+      this.fire('submitting', () => {
+        let form = this.validator.validate(this)
+        for (var i = 0; i < options.length; i++) {
+          let len = options[i].text
+          if (len < 1 || len > 50) {
+            if (!form.errors.d.options) form.errors.d.options = {}
+            form.errors.d.options[i] = 'invalid length'
+          }
+        }
+        this.set('errors', form.errors)
+        if (form.valid) {
+          this.set({saving: true, error: null})
+          api.action('poll+', form.data, (d) => {
+            this.set('saving', false)
+            Ractive.nexus.debate.create(d)
+            this.parent.teardown()
+          }, () => {
+            this.set({saving: false, error: 'se ha producido un error. inténtalo de nuevo'})
+            this.submitting = false
+          })
+        }
+      })
+    })
+  },
+  decorators: {
+    focusSelect: require('../lib/decorators/focusSelect'),
+  },
+  events: {
+    tap: require('../lib/events/tap.js'),
+    nlSubmit: require('../lib/events/nlSubmit')
+  },
+}
+</script>
