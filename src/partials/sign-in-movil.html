@@ -258,7 +258,8 @@ component.exports = {
         if (me.tmp) {
           this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
         }
-        if (this.parent && this.parent.teardown) {
+        if (this.parent && this.parent.teardown && !this.api.me) {
+          debugger
           // this.parent.teardown()
           this.parent.set('register', '')
         }

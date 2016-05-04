@@ -1,11 +1,13 @@
 <link rel='ractive' href='../partials/poll-sm.html'>
+<link rel='ractive' href='../partials/poll-stats-movil.html'>
 <link rel='ractive' href='../partials/poll-stats.html'>
 <link rel='ractive' href='../partials/comment-list.html'>
 <link rel='ractive' href='../partials/spinner.html'>
 
 <div class="container">
   <div class="row">
-    <div class="col-xs-6">
+
+    <div class="{{~/movil ? '' : 'col-xs-6 col-md-7 col-sm-6'}}">
       {{#if ~/loading}}
         <spinner />
       {{/if ~/loading}}
@@ -15,20 +17,35 @@
       {{/if ~/error}}
 
       {{#if ~/poll}}
-        <poll-sm id="{{~/_id}}" d={{~/poll}} />
+        <poll-sm id="{{~/id}}" d={{~/poll}} />
       {{/if ~/poll}}
       <comment-list poll="{{~/id}}" />
     </div>
-    <div class="col-xs-6">
+    {{#unless ~/movil}}
+    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
+      <poll-stats poll="{{~/_id}}" idx="{{~/poll.idx}}" totals="{{~/poll.totals}}" />
+    </div>
+    {{/unless}}
+
+    <!-- {{#unless ~/movil}}
+    <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
       <poll-stats poll="{{~/id}}" idx="{{~/poll.idx}}" totals="{{~/poll.totals}}" />
     </div>
+    {{/unless}} -->
+
   </div>
 </div>
+
+<style>
+
+
+</style>
 
 <script>
 component.exports = {
   isolated: true,
   oninit: function () {
+    this.set('movil', window.isMobile)
     this.set('loading', true)
     api.action('poll', {_id: this.get('id')}, (data) => {
       this.set('loading', false)
@@ -37,6 +54,7 @@ component.exports = {
       this.set('loading', false)
       this.set('error', err)
     })
+
   },
   oncomplete () {
     let comments = this.find('.comments')

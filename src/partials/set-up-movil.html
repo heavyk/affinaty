@@ -207,11 +207,17 @@ import Validator from '../validator'
 component.exports = {
   // isolated: true,
   onconfig () {
-    let me = api.get('me')
+    api.on('me', (me) => {
+      this.set('me', me)
+    })
     this.set('active', 'appearance')
-    api.observe('me', (_me) => {
-      this.set('me', _me)
-      me = _me
+    api.once('auth', (me) => {
+      setTimeout(() => {
+        if (this.parent && this.parent.teardown) {
+          // this.parent.teardown()
+          this.parent.set('register', '')
+        }
+      }, 1)
     })
     this.set('change_foto', true)
     this.observe('cropped', (v) => {

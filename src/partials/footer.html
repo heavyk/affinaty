@@ -269,16 +269,15 @@ component.exports = {
     router.on('dispatch', () => {
       let path = router.uri.path
       let active = null
-      if (path === '/') active = 'landing'
-      else if (path === '/home') active = 'home'
-      else if (path === '/notifications') active = 'notifications'
+      if (path === '/notifications') active = 'notifications'
       else if (/^\/inbox/.test(path)) active = 'inbox'
       else if (/^\/profile/.test(path)) active = 'profile'
+      else active= 'home'
       this.set('active', active)
     })
     api.on('me', (me) => {
       console.warn('me', me)
-      this.set('active', 'home')
+      //this.set('active', 'home')
     }, {init: false})
     api.on('auth', () => {
       api.my.notifier.on('msg*', this.on_msg = (c) => {

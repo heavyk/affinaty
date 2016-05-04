@@ -132,7 +132,9 @@ component.exports = {
           api.signIn(data, true).then(() => {
             //  this.parent.teardown()
             // router.dispatch('/home')
-            this.set('register','setup')
+            this.parent.set('register', 'setup')
+
+            // this.set('register','setup')
             // this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
           })
         }, (err) => {
