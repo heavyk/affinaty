@@ -1,0 +1,172 @@
+<link rel='ractive' href='../partials/spinner.html'>
+{{#if !~/movil || ~/L.show_button}}
+<a class="categories-button {{~/class}}" on-tap="toggle('menu')">
+    {{#if ~/selected}}
+      [[#if typeof ~/L.selected === 'string']]
+        [[~/L.selected]]
+      [[else]]
+        Categoría:&nbsp;
+      [[/if]]
+      {{~/selected.title}}
+    {{else}}
+      {{~/L.selector || 'Categories'}}
+    {{/if}}
+  </a>
+{{/if}}
+  <div class="categories" style="display: {{~/menu ? 'block' : 'none'}}">
+    {{#if ~/loading}}
+      <spinner scale="0.2" />
+    {{/if ~/loading}}
+
+    {{#if ~/error}}
+      ERROR: {{~/error}}
+    {{/if ~/error}}
+
+    {{#if ~/categories}}
+      {{#if ~/L.unselect && ~/selected}}
+        <div class="category" on-tap="clear" style="color: #f55">{{~/L.unselect}}</div>
+      {{/if}}
+      <div class="categories-left">
+        {{#each ~/l1}}
+          <div class="category" on-tap="activate(event, ~/alwaysShow)">{{.title}}</div>
+        {{/each ~/l1}}
+      </div>
+      <div class="categories-right">
+        {{#each ~/l2}}
+          <div class="category" on-tap="activate(event, ~/alwaysShow)">{{.title}}</div>
+        {{/each ~/l2}}
+      </div>
+    {{/if ~/categories}}
+  </div>
+
+
+<style>
+.categories-button {
+  display: block;
+  float: left;
+  text-decoration: none;
+  margin-top: 8px;
+  padding: 2px 10px;
+  cursor: pointer;
+  height: 30px;
+  background-color: #fff;
+  color: #fd270d;
+  font-size: 17px;
+  border: solid 2px #fff;
+  border: 0px solid #000000;
+  font-weight: bold;
+  top: 20px;
+  border-radius: 20px 0px 20px 0px;
+  border: 0px solid #000000;
+  box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
+}
+.categories {
+  border-radius: 30px 9px 30px 9px;
+  background-color: #ffffff;
+  font-size: 13px;
+  padding: 10px 0;
+  width: 90%;
+  box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
+  max-height: 80%;
+  overflow-y: auto;
+}
+@media (min-width: 768px) {
+  .categories {
+    width:350px;
+  }
+}
+div.category {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 400;
+  padding-left: 30px;
+  box-sizing: border-box;
+  color: #000;
+  text-align: left;
+}
+div.category:hover {
+  background-color: #faa;
+}
+.categories-left, .categories-right {
+  width: 50%;
+  float: left;
+}
+@media (min-width: 768px) {
+  div.category {
+    font-size: 14px;
+    padding-left: 20px;
+  }
+}
+</style>
+
+<script>
+// events
+import tap from '../lib/events/tap.js'
+
+component.exports = {
+  isolated: true,
+  oninit () {
+    let movil = window.isMobile
+    this.set({
+      movil: movil,
+      loading: true
+    })
+
+    if (this.get('L.show_button')) {
+      this.set ('menu', false)
+    } else if (movil) {
+      this.set('menu', true)
+    }
+    // TODO make this a decorator
+    // debugger
+    let onclick = (e) => {
+      let menu = this.get('menu')
+      if (menu && movil || !this.el) return
+      let target = e.target
+      let pEl = target
+      do {
+        if (pEl.className && pEl === this.el) return
+      } while (pEl = pEl.parentNode)
+      this.set('menu', false)
+      if (menu || movil) {
+        e.preventDefault()
+        e.stopImmediatePropagation()
+      }
+    }
+    window.addEventListener('click', onclick, true)
+    this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
+    api.category.until('/', () => {
+      let list = api.category.list
+      let len = Math.round(list.length / 2)
+      let l1 = list.slice(0, len)
+      let l2 = list.slice(len)
+      this.set({
+        categories: list,
+        l1: l1,
+        l2: l2,
+        loading: false,
+      })
+    })
+    this.on('clear', () => {
+      this.activate({context: null}, this.get('alwaysShow'))
+    })
+    this.parent.on('set-category', this.onsetCategory = (id) => {
+      api.category.until('/', () => {
+        this.set('selected', id ? api.category.get(id) : null)
+      })
+    })
+  },
+  activate (event, menu) {
+    // this.set('selected', event.context)
+    this.fire('select', event.context)
+    this.set({
+      selected: event.context,
+      menu: menu || false,
+    })
+  },
+  onteardown () {
+    this.parent.off('set-category', this.onsetCategory)
+  },
+  events: { tap },
+}
+</script>

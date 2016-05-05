@@ -1,0 +1,232 @@
+<link rel='ractive' href='../partials/sex-stats-movil.html'>
+<link rel='ractive' href='../partials/age-stats-movil.html'>
+
+<div class="poll-stats">
+  <h4 class="title">Estadísticas</h4>
+  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
+
+  {{#if totals}}
+    <div class="stats-movil--box">
+      {{#totals : i}}
+        <div class="bar">
+          <div class="bar-desc">{{ options[i].text }}</div>
+          <!-- {{#if this === limits.max}}
+            <button class="button-votes {{idx === i ? 'selected' : ''}}">
+              <img src="/img/star.svg"  width="18" height="18" /> -->
+          <!-- {{else}} -->
+              <!-- <img src="/img/check.svg" width="18" height="18" /> -->
+            <!-- </button>
+          {{/if}} -->
+          <span class="num_votes">{{.}}</span>
+          <div style="position: relative">
+            <button class="bar shadow" style="width: {{bar_width}}px"></button>
+            <button class="bar" style="width:{{ percent_total(i, bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === limits.max}}fd270d{{else}}FB7868{{/if}}">
+              {{percent_total(i)}}%
+            </button>
+          </div>
+        </div>
+      {{/totals}}
+    </div>
+  {{/if totals}}
+
+  <sex-stats-movil planets="{{planets}}" percents="{{percents}}" />
+  <age-stats-movil legend="{{legend}}" ranges="{{ranges}}" />
+</div>
+
+<style>
+.bar-desc button img{
+
+    width: 18px;
+    height: 18px;
+}
+h6 {
+  text-align: center;
+  font-size: 160%;
+  margin: 20px 0 0 0;
+  padding: 0 0 5px;
+  font-weight: 300;
+}
+h6.total {
+  color: #fd270d;
+  border-bottom: solid 1px #dadada;
+}
+span.total {
+  position: absolute;
+  text-align: center;
+  right: 10px;
+  padding: 0 5px;
+}
+.num_votes {
+  padding: 3px 0;
+  position: absolute;
+  right: 10px;
+  width: 33px;
+  text-align: center;
+}
+.title {
+  text-align: center;
+  color: #747474;
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+div.bar {
+  height: 55px;
+}
+.stat-text {
+  margin-left: 35px;
+}
+button {
+  padding: 4px 10px;
+}
+button.bar.shadow {
+  background: #f6f6f6;
+}
+.poll-stats {
+  float: left;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 30px 0px 30px 0px;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.sex-stats {
+  margin: 0 20px;
+  /*for some stupid reason, it won't calc the height */
+  height: 130px;
+}
+
+.age-graph {
+  /*margin: 20px;*/
+  height: 220px;
+}
+
+.stats-box {
+  margin: 20px;
+}
+.stats-movil-box {
+  width: 100%;
+}
+button.bar {
+  margin: 5px 0;
+  padding: 0;
+  transition: .3s width;
+  position: absolute;
+  display: inline;
+  height: 18px;
+  left: 35px;
+  background: #fd270d;
+}
+
+button.button-votes {
+  /*color:#dadada;*/
+  color: #fd270d;
+  float: left;
+  padding: 4px 10px;
+  border: solid 1px #ddd;
+  margin-right: 5px;
+  min-width: 30px;
+  height: 30px;
+  padding: 5px;
+  position: relative;
+  background: #f9f9f9;
+  border-bottom: solid 1px #fd270d;
+}
+button.selected {
+  color: #fd270d;
+}
+
+.bar-desc {
+  margin-left: 35px;
+}
+
+</style>
+
+
+<script>
+import pie from 'easy-pie-chart'
+import Chart from 'chart.js'
+import extend from '../lib/lodash/object/assign'
+
+component.exports = {
+  oncomplete () {
+    let id = this.get('id')
+    let num_planets = this.get('S.moarPlanets') ? 4 : 2
+    let ages = api.ages
+    api.action('poll-stats', {_id: id, ages}, (data) => {
+      this.set('options', data.options)
+      let r, rr, i, sum, gender, option, k, t
+      let count = data.options.length
+      let totals = new Array(count)
+      let planets = new Array(num_planets)
+      let total = 0
+      let ages = data.ages.concat('>')
+      let ranges = new Array(ages.length)
+      for (i = 0; i < count; i++) totals[i] = 0
+      for (i = 0; i < num_planets; i++) planets[i] = 0
+      for (i = 0; i < ages.length; i++) {
+        rr = ages[i]
+        r = rr
+        sum = 0
+        for (gender = 0; gender < num_planets; gender++) {
+          for (option = 0; option < count; option++) {
+            k = rr + '-' + gender + option
+            if (t = data[k]) {
+              totals[option] += t
+              planets[gender] += t
+              sum += t
+            }
+          }
+        }
+
+        ranges[i] = sum
+        total += sum
+      }
+
+      let percents = new Array(count)
+      for (gender = 0; gender < num_planets; gender++)
+        percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
+
+      this.set({
+        total: total,
+        totals: totals,
+        percents: percents,
+        planets: planets,
+        ranges: ranges,
+      })
+    })
+    let stats_el = this.find('.poll-stats')
+    // TODO: resize me
+    this.set('bar_width', stats_el.clientWidth - 100)
+  },
+  computed: {
+    limits () {
+      let values = this.get('totals')
+      let r = { sum: 0, max: 0 }
+      for (let i = 0; i < values.length; i++) {
+        let v = values[i]
+        r.sum += v
+        if (v > r.max) r.max = v
+      }
+      return r
+    },
+  },
+  data: {
+    percent (i, px) {
+      let v = this.get('totals.'+i)
+      let c = this.get('limits')
+      return Math.round(v / c.max * (px || 100))
+    },
+    percent_total (i, px) {
+      let v = this.get('totals.'+i)
+      let c = this.get('total')
+      return c ? Math.round(v / c * (px || 100)) : 0
+    },
+    text (i) {
+      return this.get('options.'+i+'.text')
+    }
+  },
+}
+</script>
