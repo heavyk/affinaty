@@ -18,3 +18,7 @@ export function title_dsc(a, b) {
 export function T_asc(a, b) {
   return b.T > a.T ? 1 : b.T < a.T ? -1 : 0
 }
+
+export function active_asc(a, b) {
+  return b.active > a.active ? 1 : b.active < a.active ? -1 : 0
+}

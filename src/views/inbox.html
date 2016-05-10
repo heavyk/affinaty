@@ -1,6 +1,7 @@
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/chat.html'>
 <link rel='ractive' href='../partials/spinner.html'>
+<link rel='ractive' href='../partials/are-you-sure.html'>
 
 <div>
   {{#if !movil}}
@@ -20,12 +21,15 @@
         </div>
         {{#each ~/threads}}
           {{#if .messages > 0}}
-            <div on-tap="activate('thread', ._id)" class="thread {{~/panel === 'thread' && mbox === _id ? 'active' : ''}}">
+            <div on-tap="activate('thread', ._id)" class="thread {{~/panel === 'thread' && ~/mbox === ._id ? 'active' : ''}}">
               <foto src="{{.members.0.foto}}" size="y" />
               <span class="name">{{.members.0.name}}</span>
               {{#if .nm}}
                 <span class="new-msg">{{.nm}}</span>
               {{/if}}
+              <span class="block-button {{#if .blocked && .active === 0}}button-blocked{{/if}}" decorator="tip:'{{.blocked && .active === 0 ? 'desbloquear' : 'bloquear'}}',25" on-click="block">
+                <i class="fa fa-fw fa-ban" />
+              </span>
             </div>
           {{/if .messages > 0}}
         {{else}}
@@ -53,7 +57,7 @@
 
     <!-- thread view -->
     {{#if ~/panel === 'thread'}}
-    <chat members={{~/members}} />
+    <chat members={{~/members}} blocked="{{~/blocked}}" active="{{~/active}}" />
     {{/if}}
 
     {{#if !~/panel || ~/panel === 'encounter'}}
@@ -170,7 +174,7 @@
 
     <!-- thread view -->
     {{#if ~/panel === 'thread'}}
-    <chat members={{~/members}} />
+    <chat members={{~/members}} blocked="{{~/blocked}}" active="{{~/active}}" />
     {{/if}}
 
     {{#if (!~/panel || ~/panel === 'encounter') && ~/search === 'active'}}
@@ -282,18 +286,42 @@
   padding: 10px;
   bottom: 0;
 }
+.block-button,
 .new-msg {
-  /*position: relative;
-  top: 5px;
-  right: 6px;*/
-  background: #5a9727;
-  color: #fff;
-  border-radius: 50%;
   height: 20px;
   width: 20px;
   font-size: 12px;
   text-align: center;
   display: inline-block;
+  /*margin: 11px 0;*/
+  position: absolute;
+}
+.new-msg {
+  border-radius: 50%;
+  color: #fff;
+  background: #5a9727;
+  left: 26px;
+  top: 22px;
+}
+.block-button {
+  color: #888;
+  top: 15px;
+  right: 4px;
+}
+.button-blocked {
+  background: #ca0000;
+  border-radius: 12px;
+  color: #fff;
+}
+.block-button:hover {
+  color: #f00;
+  border: solid 1px #ccc;
+  border-radius: 8px;
+  background: #222;
+}
+.button-blocked:hover {
+  background: #0e7d16;
+  color: #fff;
 }
 .thread,
 .settings,
@@ -305,6 +333,10 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.thread {
+  height: 50px;
+  position: relative;
 }
 .active {
   border-bottom: solid 1px #A0A0A0;
@@ -355,43 +387,16 @@ li.encounter {
   clear: both;
 }
 
+span.name {
+  margin: 11px 0 11px 6px;
+  height: 20px;
+}
 
-.user {
-  padding-bottom: 10px;
-  position: absolute;
-  width: 80%;
+.thread span {
+  display: inline-block;
 }
-.user img {
+.thread img {
   float: left;
-  margin-right: 12px;
-  margin-left: 16px;
-  vertical-align: middle;
-  margin-top: 5px;
-  width: 36px;
-  height: 36px;
-}
-.user h4,
-.user h5 {
-  margin: 0;
-  font-size: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.user h4 {
-  padding-top: 10px;
-}
-.user h4 a {
-  color: #414141;
-  text-decoration: none;
-}
-.user h4 a:hover {
-  color: #fd270d;
-}
-.user h5 {
-  color: #939393;
-  font-size: 12px;
-  /*font-weight: 300;*/
 }
 
 .view_plus {
@@ -467,12 +472,17 @@ import assign from '../lib/lodash/object/assign'
 import each from '../lib/lodash/collection/each'
 import onresize from '../lib/dom/element-onresize'
 
+import { insert, insert_d, remove_d } from '../lib/ordered-array'
+import { active_asc } from '../lib/order-by'
+
 component.exports = {
   isolated: true,
-  // modal: require('../modal'),
+  modal: require('../modal'),
   oninit () {
     this.set('movil', window.isMobile)
     this.set('columactive','left')
+    this.set('threads', this.threads = [])
+    this.exists = {}
     this.on('send_text', (event) => {
       this.fire('search', event.context.text)
     })
@@ -504,11 +514,36 @@ component.exports = {
     this.on('search', (event) => {
       api.action('mundial@', {name: event.context.search_name}, (res) => {
         this.set({search_results: res})
+      })
+    })
+    this.on('block', (event) => {
+      event.original.stopImmediatePropagation()
+      let ctx = event.context
+      let blocked = ctx.blocked
+      let who = ctx.members[0]
+      let modal = this.modal('are-you-sure', {verb: blocked ? 'desbloquear' : 'bloquear', what: who.name})
+      modal.once('answer', (answer) => {
+        if (answer) api.action(`mblock${blocked ? '-' : '+'}`, {other: who._id}, (res) => {
+          console.log(res)
+          modal.teardown()
 
+          let id = ctx._id
+          let idx = this.exists[id]
+          if (~idx) {
+            if (blocked) {
+              this.set(`threads.${idx}.blocked`, 0)
+            } else {
+              let d = this.threads[idx]
+              remove_d(id, this.threads, this.exists, idx)
+              d.blocked = 1
+              d.active = 0
+              insert_d(d, this.threads, this.exists, active_asc)
+            }
+          }
+        })
       })
     })
     api.action('mbox*', {limit: 100, sort: '+active'}, (data) => {
-      let threads = {}
       for (let i = 0; i < data.length; i++) {
         let t = data[i]
         for (let j = 0; j < t.members.length; j++) {
@@ -518,9 +553,8 @@ component.exports = {
           }
         }
         t.nm = api.my.notifier.get_box(t._id)
-        threads[t._id] = t
+        insert_d(t, this.threads, this.exists, active_asc)
       }
-      this.set('threads', threads)
       let mbox = this.get('mbox')
       if (mbox) {
         this.set_members(mbox)
@@ -528,14 +562,13 @@ component.exports = {
     })
 
     api.my.notifier.on('msg*', () => {
-      let threads = this.get('threads')
-      if (threads) each(threads, (t, id) => {
-        let c = api.my.notifier.get_box(id)
-
+      for (var i = 0; i < this.threads.length; i++) {
+        var t = this.threads[i]
+        var c = api.my.notifier.get_box(t._id)
         if (t.nm !== c) {
-          this.set(`threads.${id}.nm`, c)
+          this.set(`threads.${i}.nm`, c)
         }
-      })
+      }
     })
 
     this.observe('mbox', (mbox) => {
@@ -597,18 +630,25 @@ component.exports = {
     router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
   },
   set_members (mbox) {
-    let thread = this.get('threads.' + mbox)
-    if (!thread) return
+    // let thread = this.get('threads.' + mbox)
+    let idx = this.exists[mbox]
+    if (idx === void 0) return
     let members = {}
+    let thread = this.threads[idx]
     members[api.me._id] = members.me = api.me
     for (let i = 0; i < thread.members.length; i++) {
       let m = thread.members[i]
       members[m._id] = m
     }
-    this.set('members', members)
+    // this.set('members', members)
+    this.set({members, blocked: thread.blocked, active: thread.active})
   },
   events: {
     tap: require('../lib/events/tap.js'),
+    nlSubmit: require('../lib/events/nlSubmit'),
   },
+  decorators: {
+    tip: require('../lib/decorators/tip.js')
+  }
 }
 </script>

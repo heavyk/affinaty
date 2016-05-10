@@ -17,8 +17,8 @@ export function insert_d (d, array, exists, comparer) {
   return pos
 }
 
-export function remove_d (id, array, exists) {
-  let pos = exists[id]
+export function remove_d (id, array, exists, _pos) {
+  let pos = _pos === void 0 ? exists[id] : _pos
   if (pos !== void 0) {
     // possible optimization here, if pos == 0, then unshift, else if pos == array.length - 1 then pop, else:
     array.splice(pos, 1)

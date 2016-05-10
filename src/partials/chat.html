@@ -2,7 +2,9 @@
 <link rel='ractive' href='../partials/time.html'>
 
 <div class="messages" style="height: {{~/outerHeight}}px; width: {{~/movil ? '100%' : ~/outerWidth}}px">
+  {{#unless ~/loading}}
   <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{~/movil ? ~/innerHeight-70 : ~/innerHeight}}px">
+    <!-- {{~/blocked}} -- {{~/active}} -->
     {{#each ~/msgs : i}}
     <div class="{{.creator === ~/members.me._id ? 'left' : 'right'}}">
       <div style="float: {{.creator === ~/members.me._id ? 'left' : 'right'}}">
@@ -13,17 +15,30 @@
         <span class="text" decorator="markdown:{{.text}}">{{.text}}</span>
       </div>
     </div>
+    {{elseif !~/blocked}}
+      no messages
     {{/each}}
   </div>
   <form on-submit="add">
-    <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : ~/movil ? '75%' : '88%'}}">
+    <div class="mbox-menu" decorator="tip:'menu',30" on-click="clear">
+      <i class="fa fa-ellipsis-h" />
+    </div>
+    {{#if ~/blocked && ~/active !== 0}}
+    <div class="blocked">
+      <h2>You have been blocked!</h2>
+      {{#if ~/blocked !== 1}}
+        <p class="blocked-text">{{ ~/blocked }}</p>
+      {{/if}}
+    </div>
+    {{else}}
+    <div class="text-container" style="width: {{~/text.length <= 2 ? '100%' : ~/movil ? '75%' : '88%'}}">
       <textarea
         class="animate"
         {{!~/movil ? 'on-blur-focus="toggle-focus"'}}      
         on-nlSubmit="add"
         maxlength="2048"
         value="{{~/text}}"
-        placeholder="Escribe tu comentario"
+        placeholder="Escribe tu mensaje"
         decorator="nlElastic" />
     </div>
     <div class="submit" style="display: {{~/focused && ~/text.length > 2 ? 'block' : 'none'}}">
@@ -31,7 +46,9 @@
         <i class="fa fa-comment-o"></i> Enviar
       </button>
     </div>
+    {{/if}}
   </form>
+  {{/unless}}
 </div>
 
 <style>
@@ -44,6 +61,34 @@
   position: relative;
   padding: 10px;
   text-align: left;
+}
+
+.mbox-menu {
+  position: absolute;
+  top: -30px;
+  color: #66f;
+  right: 20px;
+  border-radius: 8px;
+  width: 28px;
+  text-align: center;
+  border: 1px solid #ccc;
+}
+.mbox-menu:hover {
+  border: 1px solid #66f;
+}
+
+.blocked {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  padding: 20px;
+  background: #ffd9d9;
+  border-radius: 8px;
+}
+.blocked-text {
+  color: #777;
+  font-weight: bold;
 }
 
 span.text {
@@ -139,6 +184,7 @@ component.exports = {
     let messages_el = this.find('.messages')
     let movil = window.isMobile
     this.set('movil', window.isMobile)
+    // this.set('blocked', true)
     setTimeout(() => {
       tbox.focus()
     }, 200)
@@ -165,16 +211,19 @@ component.exports = {
       window.removeEventListener('resize', _resizer)
       this.off('elastic:resize', _resizer)
       this.parent.off('resize', _resizer)
+      if (this.observer) this.observer.cancel()
     })
-    let id = this.parent.get('id')
-    let __mbox = this.parent.get('mbox')
+    let id = this.parent.get('id') // profile chat modal will have this set
+    let __mbox = this.parent.get('mbox') // inbox will have this set
     let msgs = []
     this.set('msgs', msgs)
 
     let on_mbox = (mbox) => { if (mbox) {
       this.set('msgs.length', 0)
+      this.set('loading', true)
       api.action('msg*', {mbox, limit: 100, sort: '-created'}, (data) => {
         this.set('msgs', data)
+        this.set('loading', false)
       })
       api.my.notifier.until('/', () => {
         api.my.notifier.remove_box(mbox)
@@ -184,7 +233,6 @@ component.exports = {
 
     if (id && !__mbox) {
       // profile modal
-      console.info('get mbox!')
       api.action('mbox', {creator: id}, (data) => {
         let members = {}
         members[api.yo] = members.me = api.me
@@ -194,9 +242,15 @@ component.exports = {
         }
         this.parent.set('mbox', data._id)
         this.set('members', members)
+      }, (err) => {
+        this.set('blocked', err.text || 1)
+        this.set('loading', false)
       })
+    } else {
+      console.info('not mbox', __mbox, this.parent.get('blocked'))
+      // this.set(this.parent.get(`threads`))
     }
-    this.parent.observe('mbox', on_mbox)
+    this.observer = this.parent.observe('mbox', on_mbox)
 
     this.on('toggle-focus', () => {
       // this is a stupid hack to prevent the display: none from happening
@@ -204,6 +258,12 @@ component.exports = {
       setTimeout(() => {
         this.toggle('focused')
       }, 200)
+    })
+
+    this.on('clear', () => {
+      api.action('mbox-clear', {mbox: __mbox}, () => {
+        this.set('msgs.length', 0)
+      })
     })
 
     this.on('add', (event) => {
