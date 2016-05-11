@@ -15,9 +15,12 @@ export default function modal(component, opts) {
   // TODO: use @this when upgrading to Ractive-0.8.0
   let o = ''
   for(var i in opts) {
-    o += `${i}=${JSON.stringify(opts[i])} `
+    // var v = opts[i]
+    // if (typeof v !== 'object')
+    o += `${i}={{${JSON.stringify(opts[i])}}} ` //.replace(/"/g, '\\"')
   }
   _modal = new M({
+    // parent: this, // this doesn't work -- tries to resolve references in the parent... which doesn't work
     components: components,
     partials: {
       modalContent: `<${component} ${o}/>`,

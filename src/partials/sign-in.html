@@ -271,7 +271,8 @@ component.exports = {
       }
     })
     this.on('facebook', () => {
-      window.open(`http://${localStorage.host === 'local' ? 'localhost' : document.domain}:1155/auth/facebook`, '_blank', 'width=500,height=500,left=100,top=100')
+      // TODO: open in middle of the window
+      window.open(`http://${localStorage.host === 'local' ? 'localhost' : document.domain}:1155/auth/facebook`, '_blank', 'toolbar=0,status=0,width=500,height=500,left=100,top=100')
     })
   },
   events: {

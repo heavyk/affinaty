@@ -1,0 +1,258 @@
+
+<div class="share-dialog-container">
+  <!-- <p>Compartir a través de:</p> -->
+  <ul class="media-tabs">
+    <li class="media-tab add-email {{#if ~/active === 'email'}}active{{/if}}" on-click="set('active', 'email')"><i class="fa fa-envelope" /></li>
+    <li class="media-tab add-facebook {{#if ~/active === 'facebook'}}active{{/if}}" on-click="set('active', 'facebook')"><i class="fa fa-facebook" /></li>
+    <li class="media-tab add-twitter {{#if ~/active === 'twitter'}}active{{/if}}" on-click="set('active', 'twitter')"><i class="fa fa-twitter" /></li>
+  </ul>
+  {{#if ~/active === 'email'}}
+    <!-- <h5>correo</h5> -->
+    <input type="email" maxlength="100" value="{{ ~/d.email }}" placeholder="Correo electrónico" class="{{ ~/errors.d.email ? 'invalid' : '' }}">
+    <!-- <h5>mensaje</h5> -->
+    <textarea
+      class="animate {{ ~/errors.d.text ? 'invalid' : '' }}"
+      on-blur-focus="toggle-focus"
+      maxlength="2048"
+      value="{{~/d.text}}"
+      placeholder="Escribe tu mensaje (opcional)"
+      decorator="nlElastic" />
+    <div>
+      <button type="button" on-click="send-email" style="width: 100%">Enviar</button>
+    </div>
+  {{elseif ~/active === 'twitter'}}
+    <!-- <p>te va abrir una ventanita donde puedes hacer el tweet</p> -->
+    <!-- <a class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Hello%20world" target="_twitter" data-size="large">Tweet</a> -->
+    <!-- <div class="tweet-button" on-click="tweet"><i />Tweet</div> -->
+    <!-- <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://affinaty.com/debate/xxxx" data-text="affinaty debate test" data-via="hamsternipples" data-size="large" data-dnt="true">Tweet</a> -->
+    <!-- <iframe src="https://twitter.com/intent/tweet?text=Hello%20world" /> -->
+  {{elseif ~/active === 'facebook'}}
+    facebook
+  {{/if}}
+</div>
+
+<style>
+
+.share-dialog-container {
+  min-width: 300px;
+  padding: 0 10px 10px 10px;
+}
+
+.media-tabs {
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none;
+  align-items: center;
+  padding: 0;
+  margin: 10px 5px;
+}
+
+.media-tab {
+  cursor: pointer;
+  height: 35px;
+  color: #fd270d;
+  width: 70px;
+  border: solid 1px #ccc;
+  padding: 5px;
+  border-radius: 6px;
+}
+li.active {
+  background-color: #eee;
+  color: #f00;
+}
+
+.tweet-button {
+  position: relative;
+  height: 28px;
+  padding: 1px 10px 1px 9px;
+  margin: 28px;
+  border-radius: 4px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  background-color: #1b95e0;
+  box-sizing: border-box;
+}
+.add-twitter {
+  color: #fff;
+  background-color: #1b95e0;
+}
+.add-facebook {
+  color: #fff;
+  background-color: #365899;
+}
+
+.tweet-button i {
+  position: relative;
+  top: 4px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background: transparent 0 0 no-repeat;
+  background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsv….038-1.693%202.558-1.847%204.778-4.15%206.532-6.774z%22%2F%3E%3C%2Fsvg%3E");
+}
+
+</style>
+
+<script>
+import Validator from '../validator'
+
+var euc = encodeURIComponent
+var doc = document
+function load_sdk (_id, cb) {
+  var js,
+    s = 'script',
+    id = _id+'-sdk',
+    done = false,
+    fjs = doc.getElementsByTagName(s)[0],
+    p = /^http:/.test(doc.location) ? 'http' : 'https'
+
+  if (doc.getElementById(id)) cb()
+  else {
+    js = doc.createElement(s)
+    js.id = id
+    js.onload = js.onreadystatechange = function () {
+      if (!done && (!this.readyState || this.readyState === 'loaded' || this.readyState === 'complete')) {
+        done = true
+        cb()
+
+        // Handle memory leak in IE
+        // js.onload = js.onreadystatechange = null
+        // if ( head && js.parentNode ) {
+        //     head.removeChild( js )
+        // }
+      }
+    }
+    if (_id === 'tw') js.src = p + '://platform.twitter.com/widgets.js'
+    // else if (id === 'facebook-sdk') js.src = p + '://connect.facebook.net/en_US/sdk.js'
+    else if (_id === 'fb') js.src = p + '://connect.facebook.net/es_ES/sdk.js'
+    fjs.parentNode.insertBefore(js, fjs)
+  }
+}
+
+
+component.exports = {
+  isolated: true,
+  oninit () {
+    this.validator = new Validator('d', {
+      // 'name': {required: true, min: 4, max: 30, type: 'string'},
+      'email': {required: true, min: 4, max: 100, type: 'string', email: true},
+      'text': {required: false, min: 4, max: 100, type: 'string'},
+    })
+    let type = this.get('type')
+    let id = this.get('id')
+    let url = `http://affinaty.com/${type}/${id}`
+    this.set ({
+      // active: 'email',
+      // 'd.email': 'kenny@gatunes.com',
+      // url: `<iframe src="http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-571e3bcee87d1&entry_id=1_a9s8ncyo&flashvars[streamerType]=auto" width="560" height="395" allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0"></iframe>`,
+      // url: `<iframe width="420" height="315" src="https://www.youtube.com/embed/sNPnbI1arSE" frameborder="0" allowfullscreen></iframe>`,
+      // active: 'video',
+//       email_text: `
+// mira este ${type} en affinaty:
+//
+//   ${url}`
+    })
+    // load_sdk('tw', () => {
+    //   console.log('loaded twitter!')
+    //   debugger
+    // })
+
+    this.observe('d', () => {
+      if (this.validator.submitted)
+        this.set('errors', this.validator.validate(this).errors)
+    })
+    this.on('send-email', () => {
+      this.validator.submitted = true
+      let form = this.validator.validate(this)
+      this.set('errors', form.errors)
+      let text = this.get('d.text')
+      let email = this.get('d.email')
+      if (form.valid) api.action('share-email', {type, id, email, text}, (res) => {
+        this.set('success', 'correo enviado correctamente')
+        setTimeout(() => {
+          this.parent.teardown()
+        }, 2000)
+      }, (err) => {
+        this.set('error', 'se ha producido un error al enviar el correo')
+        setTimeout(() => {
+          this.parent.teardown()
+        }, 2000)
+      })
+    })
+    let share_window
+    this.observe('active', (active) => {
+      if (share_window) share_window.close()
+      if (active === 'facebook') {
+        // ...
+        let d = this.parent.get('parent').get('d')
+        var dialog_url = 'http://www.facebook.com/dialog/feed?app_id=' + api.fb_app +
+          '&link=' + euc(url) +
+          // '&picture=' + FBVars.fbShareImg +
+          '&name=' + euc('Compartido desde affinaty.com') +
+          '&caption=' + euc('vente y opina!') +
+          '&description=' + euc(d.text) +
+          // '&redirect_uri=' + FBVars.baseURL + 'PopupClose.html' +
+          '&display=popup';
+        if (d.foto) dialog_url += '&picture=' + euc('http://affinaty.com/i/m/' + d.foto)
+        // load_sdk('fb', () => {
+        //   console.log('loaded facebook!', FB)
+        //   // FB.init()
+        //   // let opts = {
+        //   //   app_id: api.fb_app,
+        //   //   method: 'feed',
+        //   //   link: url,
+        //   //   caption: 'test',
+        //   //   display: 'popup',
+        //   // }
+        //   if (d.foto) opts.picture = api.url + '/i/mm/' + d.foto
+        //   // TODO: parse markdown
+        //   FB.ui(opts, (res) => {
+        //     console.log('shared!')
+        //   })
+        // })
+        share_window = window.open(dialog_url, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
+      } else if (active === 'twitter') {
+        // TODO: calculate the middle of the window (for sign-in also)
+        share_window = window.open(`https://twitter.com/intent/tweet?text=${euc(url)}`, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
+      } else return // skip share_window closing logic
+
+      let i = setInterval(() => {
+        if (!share_window || share_window.closed) {
+          clearInterval(i)
+          this.parent.teardown()
+        }
+      }, 1000)
+    }, {init: false})
+    // this.on('tweet', () => {
+    //   if (share_window) share_window.close()
+    //   // TODO: calculate the middle of the window (for sign-in also)
+    //   share_window = window.open(`https://twitter.com/intent/tweet?text=${euc(url)}`, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
+    //   let i = setInterval(() => {
+    //     if (!share_window || share_window.closed) {
+    //       clearInterval(i)
+    //       this.parent.teardown()
+    //     }
+    //   }, 1000)
+    // })
+    // this.on('fb-share', () => {
+    //   if (share_window) share_window.close()
+    //   // TODO: calculate the middle of the window (for sign-in also)
+    //   // share_window = window.open(`https://twitter.com/intent/tweet?text=${url}`, '_blank', 'width=500,height=300,left=100,top=100')
+    //   // let i = setInterval(() => {
+    //   //   if (!share_window || share_window.closed) {
+    //   //     clearInterval(i)
+    //   //     this.parent.teardown()
+    //   //   }
+    //   // }, 1000)
+    // })
+  },
+  // onteardown () {
+  //   this.parent.off('submitting', this.on_submitting)
+  // },
+  decorators: {
+    nlElastic: require('../lib/decorators/nlElastic'),
+    tip: require('../lib/decorators/tip'),
+  },
+}
+</script>

@@ -1,4 +1,5 @@
 <link rel='ractive' href='../partials/are-you-sure.html'>
+<link rel='ractive' href='../partials/share-dialog.html'>
 
 <div class="social">
   <div class="comm" on-tap="dispatch('comments')" decorator="tip:'Comentar',39">
@@ -7,9 +8,9 @@
       <span class="num-comments">{{~/d.numComments}}</span>
     {{/if}}
   </div>
-  <!-- <div class="share" decorator="tip:'función aún no activa',39">
+  <div class="share" decorator="tip:'Compartir',39" on-tap="share">
     <i class="fa fa-share"></i>
-  </div> -->
+  </div>
   {{#if ~/mine}}
   <div class="others" on-tap="remove" decorator="tip:'Eliminar',39">
     <!-- <i class="fa fa-ellipsis-h"></i> -->
@@ -115,6 +116,9 @@ component.exports = {
     // this.on('remove-debug', () => {
     //   Ractive.nexus.debate.fire('-', id)
     // })
+    this.on('share', () => {
+      this.modal('share-dialog', {title: 'Compartir a través de', type, id, d: this.get('d')})
+    })
   },
   onteardown() {
     api.off('auth', this.on_auth)

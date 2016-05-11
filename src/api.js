@@ -68,6 +68,11 @@ class Api extends Ambition {
       } catch(e) {}
     }())
 
+    this.fb_app = window.localStorage.host === 'local' ?
+      '1503936663269011' : // local
+      '953713761340812' // affinaty.com
+
+
     this.delay = 0 // set this higher to simulate network delay
     this._token = hashCode(this.url + ':token')
     this.token = window.localStorage.getItem(this._token)
