@@ -4,6 +4,12 @@
     ¿Seguro que quieres {{ ~/verb || 'eliminar' }} {{ ~/what || 'esta publicación' }}?
   </div>
 
+  {{#if ~/prompt}}
+  <div class="prompt">
+    <input type="text" value="{{~/text}}" decorator="focusSelect" placeholder="{{~/prompt}}" />
+  </div>
+  {{/if ~/prompt}}
+
   <div>
     <button on-tap="set('answer', true)">
       <i class="fa fa-check" /> Sí
@@ -22,6 +28,9 @@
 .message {
   margin: 10px;
 }
+.prompt {
+  margin: 30px 10px;
+}
 </style>
 
 <script>
@@ -29,16 +38,23 @@ component.exports = {
   oninit () {
     var onkeypress
     this.observe('answer', (v) => {
-      if (v !== void 0) this.parent.fire('answer', v)
+      if (v !== void 0) this.parent.fire('answer', v, this.get('text'))
     }, {init: false})
     window.addEventListener('keyup', onkeypress = (event) => {
       let key = event.which
-      if (key === 27) this.parent.fire('answer', false)
-      else if (key === 13) this.parent.fire('answer', true)
+      let txt = this.get('text')
+      if (key === 27) this.parent.fire('answer', false, txt)
+      else if (key === 13) this.parent.fire('answer', true, txt)
     })
     this.once('teardown', () => {
       window.removeEventListener('keyup', onkeypress)
     })
+  },
+  oncomplete () {
+    if (this.get('prompt')) this.find('input').focus()
+  },
+  decorators: {
+    focusSelect: require('../lib/decorators/focusSelect'),
   },
   events: {
     tap: require('../lib/events/tap.js'),

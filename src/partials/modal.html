@@ -145,8 +145,8 @@ component.exports = {
     this.on('resize', resizeHandler)
 
     this.on('modal-close', function (event) {
-      event.original.stopImmediatePropagation()
       if (!this.modal.contains(event.original.target) || (this.closeButton && this.closeButton.contains(event.original.target))) {
+        event.original.stopImmediatePropagation()
         this.teardown()
       }
     })

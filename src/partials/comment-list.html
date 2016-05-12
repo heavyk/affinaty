@@ -258,14 +258,10 @@ component.exports = {
       let id = event.context._id
       let modal = this.modal('are-you-sure', {title: `¿Eliminar?`, what: 'este comentario'})
       modal.once('answer', (v) => {
-        if (v !== void 0) {
-          modal.teardown()
-          if (v) {
-            api.action('comment-', {_id: id}, (res) => {
-              if (res) this.list.splice(findIndex(this.list, (r) => r._id === id), 1)
-            })
-          }
-        }
+        if (v) api.action('comment-', {_id: id}, (res) => {
+          if (res) this.list.splice(findIndex(this.list, (r) => r._id === id), 1)
+        })
+        modal.teardown()
       })
     })
   },
