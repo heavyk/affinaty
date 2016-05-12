@@ -27,7 +27,7 @@
 
 
 {{/if debate || poll}}
-
+{{#if ~/me}}
 <div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
   <!-- HOME -->
   <div class="footer-item {{active === 'home' ? 'active' : ''}}">
@@ -95,7 +95,7 @@
   </div>
 </div>
 {{/if }}
-
+{{/if ~/me}}
 <style>
 .opina-background{
   position: fixed;
@@ -165,17 +165,7 @@
   z-index: 100;
   height: 100%;
 }
-.cancel{
-  width: 10px;
-  margin-top: -19px;
-  font-size: 23px;
-  position: absolute;
-  top: 60px;
-  /* margin: 0 auto; */
-  /* width: 100%; */
-  z-index: 99999;
-  right: 10px;
-}
+
 .footer-bar {
   bottom: 0;
   position: fixed;
@@ -265,6 +255,7 @@ component.exports = {
     })
     this.on('close', () => {
       this.set('show_opina',false)
+      api.signOut(true)
     })
     router.on('dispatch', () => {
       let path = router.uri.path

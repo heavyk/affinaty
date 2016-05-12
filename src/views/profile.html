@@ -210,7 +210,7 @@
 
   <div class="container-movil">
     <div class="profile" style="display: {{mine && (active === 'follows'|| active === 'following')  ? 'none' : 'block'}}">
-      <div class="cover">
+      <div class="cover-movil">
         <!-- <foto src="{{foto}}"  /> -->
       </div>
       <div class="center-foto" on-tap="modal('foto', {title: name, src: foto, size: 'm', shape: 'sq'})">
@@ -502,6 +502,12 @@
   height: 130px;
   /*background: #d4d2d4;
   background: linear-gradient(to bottom, #d4d2d4 0%, #ffffff 100%);*/
+}
+.cover-movil {
+  margin: 0 auto;
+  position: relative;
+  width: 100%;
+  height: 100px;
 }
 .cover img{
   width: 100%;

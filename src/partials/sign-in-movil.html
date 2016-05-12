@@ -30,13 +30,13 @@
         </button>
       </div>
     </div>
-    <div class="access-prompt">
+    <!-- <div class="access-prompt">
       Entra con tu red social
-    </div>
+    </div> -->
     <div class="access">
       <div class="access-button">
         <div class="face" on-click="facebook">
-          <i class="fa fa-facebook-official"></i>
+          <i class="fa fa-facebook-official"><span class="facebook-text">Continuar con Facebook</span></i>
         </div>
       </div>
       <!-- <div class="access-button">
@@ -135,6 +135,7 @@ img.logo2 {
   padding-left: 10px;
   /*border-top: solid 1px #ddd;*/
   color: #888;
+  text-align: center;
 }
 .form {
   /*padding: 28px 28px 0;
@@ -179,11 +180,18 @@ img.logo2 {
 .access-button .face {
   background-color: #2372A6;
   /*width: 80%;*/
-  width: 50%;
+  width: 60%;
   /*float: right;*/
   border-radius: 5px;
   padding: 4px;
   margin: 0 auto;
+  text-align: center;
+  height: 46px;
+  margin-top: 2px;
+}
+.facebook-text{
+  font-size: 11px;
+  padding-left: 12px;
 }
 .access-button .twitter {
   background-color: #259FD8;
@@ -245,9 +253,7 @@ component.exports = {
   // isolated: true,
   modal: require('../modal'),
   onconfig () {
-    this.on('sign-up', (e)=> {
-      this.set('register','signup')
-    })
+
     let email = ls.getItem('email') || ''
     let password = ls.getItem('password') || ''
     this.set('email', email)
@@ -258,12 +264,11 @@ component.exports = {
         if (me.tmp) {
           this.modal('change-password', {title: 'Cambia la contraseña', oldPassword: password})
         }
-        if (this.parent && this.parent.teardown && !this.api.me) {
-          debugger
-          // this.parent.teardown()
-          this.parent.set('register', '')
-        }
+
       }, 1)
+    })
+    this.on('sign-up', (e)=> {
+      this.set('register','signup')
     })
     this.on('submit', (e) => {
       e.original.preventDefault()
@@ -274,6 +279,7 @@ component.exports = {
       if (remember) opts.ttl = 365 * 24 * 3600
       api.action('sign-in', opts, (data) => {
         api.signIn(data)
+        this.set('register','')
       }, (error) => {
         this.set('error', 'correo o contraseña incorrectos')
         api.signOut()

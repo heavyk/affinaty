@@ -19,7 +19,7 @@
     <div class="text-container" style="width: {{~/text.length < 2 ? '100%' : ~/movil ? '75%' : '88%'}}">
       <textarea
         class="animate"
-        on-blur-focus="toggle-focus"
+        {{!~/movil ? 'on-blur-focus="toggle-focus"'}}      
         on-nlSubmit="add"
         maxlength="2048"
         value="{{~/text}}"

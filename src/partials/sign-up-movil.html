@@ -2,7 +2,6 @@
 
 <div class="square container">
   {{#if register==='signup'}}
-
     <form on-submit="submit">
       <div>
         <input type="text" maxlength="100" value="{{ ~/d.name }}" placeholder="Nombre de usuario" class="{{ ~/errors.d.name ? 'invalid' : '' }}">
@@ -32,7 +31,7 @@
       Al registrarte, aceptas las Condiciones del servicio y la Política de privacidad
     </div>
 
-  {{/if }}
+  {{/if}}
 </div>
 
 <style>
@@ -62,6 +61,7 @@
 div.square {
   /*width: 500px;*/
   padding: 20px;
+  margin-top: 10px;
 }
 
 .button-sign-up {
@@ -130,12 +130,7 @@ component.exports = {
         api.action('sign-up', form.data, (data) => {
           this.set('saving', false)
           api.signIn(data, true).then(() => {
-            //  this.parent.teardown()
-            // router.dispatch('/home')
-            this.parent.set('register', 'setup')
-
-            // this.set('register','setup')
-            // this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
+            this.set('register', 'setup')
           })
         }, (err) => {
           this.set('error', err.split('\n')[0].substr(7, 31).trim())

@@ -16,7 +16,7 @@
         {{#if ~/change_foto}}
         <foto-upload L="{message: 'Sube tu foto de perfil'}" icon="camera" shape="circle" cropped="{{~/cropped}}" />
         {{else}}
-        <foto src="{{~/me.foto}}" size="t" />
+        <foto src="{{~/me.foto}}" size="a" />
         {{/if}}
       </div>
       <div class="field localization">
@@ -70,8 +70,12 @@
 
 <style>
 div.square {
-  width: 350px;
+  width: 100%;
   padding: 20px;
+}
+.cancel{
+  color: #000;
+  font-size: 22px;
 }
 div.rectangle {
   width: 100%;
@@ -115,8 +119,16 @@ div.foto {
   position: relative;
   width: 248px;
   padding: 2px;
+  text-align: center;
 }
-
+canvas{
+  margin: 0 auto;
+}
+button.done {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+}
 .invalid {
   border: solid 1px #f00;
   border-radius: 8px;
@@ -215,7 +227,8 @@ component.exports = {
       setTimeout(() => {
         if (this.parent && this.parent.teardown) {
           // this.parent.teardown()
-          this.parent.set('register', '')
+          // debugger
+          // this.parent.set('register', '')
         }
       }, 1)
     })
@@ -295,7 +308,8 @@ component.exports = {
         if (form.valid) api.action('change-appearance', form.data, (data) => {
           if (data) {
             api.whoIaM(data)
-            this.parent.teardown()
+            //this.parent.teardown()
+            this.parent.set('register', '')
           }
         })
       })
