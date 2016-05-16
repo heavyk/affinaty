@@ -153,7 +153,11 @@ function nlElastic (node, keypath, padding) {
       if (taHeight !== mirrorHeight) {
         console.log('h:', mirrorHeight)
         ta.style.height = mirrorHeight + 'px'
-        ractive.fire('elastic:resize', $ta)
+        // setTimeout(function () {
+        window.requestAnimationFrame(function () {
+          console.log('elastic:resize')
+          ractive.fire('elastic:resize', $ta)
+        }, 16)
       }
 
       // small delay to prevent an infinite loop

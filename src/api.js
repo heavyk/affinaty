@@ -99,8 +99,8 @@ class Api extends Ambition {
     })
 
     this.client = new ActionheroClient({ url: this.url })
-    this.client.on('connected', () => { this.connected = Date.now() })
-    this.client.on('disconnected', () => { this.connected = 0 })
+    this.client.on('connected', () => { console.log('connected'); this.connected = Date.now() })
+    this.client.on('disconnected', () => { console.log('disconnected'); this.connected = 0 })
 
     // reconnecting logic?
     this.client.connect(() => {

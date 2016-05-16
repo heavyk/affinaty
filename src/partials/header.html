@@ -134,7 +134,7 @@
     {{else}}
       <div class="logo">
         <h1><a href="/">Affinaty</a></h1>
-        <div class="start-session-movil" on-tap="sign-in">Iniciar Sesión</div>
+        <div class="start-session" style="float:right" on-tap="sign-in">Iniciar Sesión</div>
       </div>
     {{/if}}
   </div>
@@ -153,7 +153,7 @@
     <div class="register-outer">
       <div class="register-box">
         <div class="register-close" on-tap="close">
-          <i class="fa fa-close"><span class="close-text">Cerrar</span></i>
+          <i class="fa fa-close" /><span class="close-text">Cerrar</span>
         </div>
         {{#if register==='signin'}}
           <sign-in-movil register={{register}} >
@@ -337,13 +337,12 @@ span.name {
   text-align: center;
 }
 .start-session {
-  color: #000;
-  margin-top: 10px;
-}
-.start-session-movil {
-  color: #000;
-  margin-top: 10px;
+  margin: 10px 4px 0 0;
   float: right;
+  color: #fff;
+  border: solid 1px;
+  padding: 4px;
+  border-radius: 8px;
 }
 img {
   vertical-align: middle;

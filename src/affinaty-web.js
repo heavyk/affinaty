@@ -91,6 +91,7 @@ moment.locale('es', {
 
 // moment.locale(window.navigator.language)
 moment.locale('es')
+// window.moment = moment
 
 // debug will be false when code is minified because the comment will be removed
 Ractive.DEBUG = /lala/.test(function(){/*lala*/})
