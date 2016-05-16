@@ -11,10 +11,10 @@
       <h4>Mensajería</h4>
       <div>
         <!-- <input type="text" value="{{~/search}}" placeholder="Busca para enviar mensaje" /> -->
-        <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
+        <!-- <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
           <i class="fa fa-toggle-on"></i>
           Preferencias
-        </div>
+        </div> -->
         <div on-tap="activate('encounter')" class="encounter {{~/panel === 'encounter' ? 'active' : ''}}">
           <i class="fa fa-users"></i>
           Buscador
@@ -27,7 +27,7 @@
               {{#if .nm}}
                 <span class="new-msg">{{.nm}}</span>
               {{/if}}
-              <span class="block-button {{#if .blocked && .active === 0}}button-blocked{{/if}}" decorator="tip:'{{.blocked && .active === 0 ? 'desbloquear' : 'bloquear'}}',25" on-click="block">
+              <span class="block-button {{#if .cblocked }}button-blocked{{/if}}" decorator="tip:'{{.cblocked ? 'desbloquear' : 'bloquear'}}',25" on-click="block">
                 <i class="fa fa-fw fa-ban" />
               </span>
             </div>
@@ -57,18 +57,18 @@
 
     <!-- thread view -->
     {{#if ~/panel === 'thread'}}
-    <chat members={{~/members}} blocked="{{~/blocked}}" active="{{~/active}}" />
+    <chat members={{~/members}} cblocked="{{~/cblocked}}" mblocked="{{~/mblocked}}" />
     {{/if}}
 
     {{#if !~/panel || ~/panel === 'encounter'}}
     <div class="messages summary">
-      <h3>Buscador</h3>
+      <h3>Buscador de usuarios</h3>
       <div class="search">
         <div class="txt_search">
           <input
             type="text"
             value="{{~/search_name}}"
-            placeholder="busca una por su nombre"
+            placeholder="Busca por su nombre"
             on-nlSubmit="search"
             on-keyup="keyup"
             />
@@ -118,7 +118,7 @@
     </div>
     {{/if}}
   </div>
-  {{else}}
+{{else}}
   <!-- Parte movil -->
   <!-- left column -->
   {{#if ~/columactive === 'right'}}
@@ -131,10 +131,10 @@
       <h4>Mensajería</h4>
       <div>
         <!-- <input type="text" value="{{~/search}}" placeholder="Busca para enviar mensaje" /> -->
-        <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
+        <!-- <div on-tap="activate('settings')" class="settings {{~/panel === 'settings' ? 'active' : ''}}">
           <i class="fa fa-toggle-on"></i>
           Preferencias
-        </div>
+        </div> -->
         <div on-tap="activate('encounter')" class="encounter {{~/panel === 'encounter' ? 'active' : ''}}">
           <i class="fa fa-users"></i>
           Buscador
@@ -174,18 +174,18 @@
 
     <!-- thread view -->
     {{#if ~/panel === 'thread'}}
-    <chat members={{~/members}} blocked="{{~/blocked}}" active="{{~/active}}" />
+    <chat members={{~/members}} mblocked="{{~/mblocked}}" cblocked="{{~/cblocked}}" />
     {{/if}}
 
     {{#if (!~/panel || ~/panel === 'encounter') && ~/search === 'active'}}
     <div class="messages summary">
-      <h3>Buscador</h3>
+      <h3>Buscador de usuarios</h3>
       <div class="search">
         <div class="txt_search">
           <input
             type="text"
             value="{{~/search_name}}"
-            placeholder="busca una por su nombre"
+            placeholder="Busca por su nombre"
             on-nlSubmit="search"
             on-keyup="keyup"
             />
@@ -356,7 +356,7 @@ nav .fa {
 }
 .col-left, .col-right {
   position: absolute;
-  height: 100%;
+  /*height: 100%;*/
 }
 .col-left {
   left: 10px;
@@ -519,28 +519,37 @@ component.exports = {
     this.on('block', (event) => {
       event.original.stopImmediatePropagation()
       let ctx = event.context
-      let blocked = ctx.blocked
+      let blocked = ctx.cblocked
       let who = ctx.members[0]
-      let modal = this.modal('are-you-sure', {verb: blocked ? 'desbloquear' : 'bloquear', what: who.name})
-      modal.once('answer', (answer) => {
-        if (answer) api.action(`mblock${blocked ? '-' : '+'}`, {other: who._id}, (res) => {
-          console.log(res)
-          modal.teardown()
+      let options = { what: who.name }
+      if (blocked) {
+        options.verb = 'desbloquear a'
+      } else {
+        options.verb = 'bloquear a'
+        options.prompt = 'Incluir mensaje (opcional)'
+      }
+      let modal = this.modal('are-you-sure', options)
+      modal.once('answer', (answer, text) => {
+        let options = { other: who._id }
+        if (text) options.text = text
+        if (answer) api.action(`mblock${ blocked ? '-' : '+' }`, options, (res) => {
+          this.set('cblocked', blocked ? 0 : text || 1)
 
           let id = ctx._id
           let idx = this.exists[id]
           if (~idx) {
             if (blocked) {
-              this.set(`threads.${idx}.blocked`, 0)
+              this.set(`threads.${idx}.cblocked`, 0)
             } else {
               let d = this.threads[idx]
               remove_d(id, this.threads, this.exists, idx)
-              d.blocked = 1
+              d.cblocked = text || 1
               d.active = 0
               insert_d(d, this.threads, this.exists, active_asc)
             }
           }
         })
+        modal.teardown()
       })
     })
     api.action('mbox*', {limit: 100, sort: '+active'}, (data) => {
@@ -606,11 +615,14 @@ component.exports = {
     })
   },
   oncomplete () {
-    let resizer, _resizer
     let title = this.find('.title')
     let movil = window.isMobile
     let container = this.find('div')
-    resizer = require('../lib/lodash/function/throttle')(_resizer = () => {
+    // clear previous resize listeners
+    this.onteardown()
+    // re-add resize listener
+    let resizer
+    this.resizer = require('../lib/lodash/function/throttle')(resizer = () => {
       let iw = window.innerWidth
       let left = Math.min((iw / 3), 200)
       let right = iw - left - 40
@@ -619,18 +631,24 @@ component.exports = {
       this.set('rightWidth', (movil ? right : right/1.5) + 'px')
       let outer = window.innerHeight - (movil ? 120 : 100)
       this.set('outerHeight', outer)
-
     }, true)
-    onresize.addResizeListener(container, resizer)
+    window.addEventListener('resize', this.resizer)
     resizer()
+  },
+  onteardown () {
+    if (this.resizer) window.removeEventListener('resize', this.resizer)
   },
   activate (sub, mbox) {
     this.set('columactive','right')
     if (mbox && mbox !== this.get('mbox')) this.set('msgs', [])
     router.dispatch('/inbox/' + sub + (mbox ? '/' + mbox : ''), { history: false })
+    // this.fire('oncomplete')
+    if (this.resizer) this.resizer()
+    console.log('complete??')
   },
   set_members (mbox) {
     // let thread = this.get('threads.' + mbox)
+    console.info('set members')
     let idx = this.exists[mbox]
     if (idx === void 0) return
     let members = {}
@@ -641,7 +659,7 @@ component.exports = {
       members[m._id] = m
     }
     // this.set('members', members)
-    this.set({members, blocked: thread.blocked, active: thread.active})
+    this.set({members, mblocked: thread.mblocked, cblocked: thread.cblocked})
   },
   events: {
     tap: require('../lib/events/tap.js'),

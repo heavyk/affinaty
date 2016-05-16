@@ -2,32 +2,34 @@
 <link rel='ractive' href='../partials/time.html'>
 
 <div class="messages" style="height: {{~/outerHeight}}px; width: {{~/movil ? '100%' : ~/outerWidth}}px">
-  {{#unless ~/loading}}
   <div class="wrapper" decorator="scrollGlue:'msgs'" style="height: {{~/movil ? ~/innerHeight-70 : ~/innerHeight}}px">
-    <!-- {{~/blocked}} -- {{~/active}} -->
-    {{#each ~/msgs : i}}
-    <div class="{{.creator === ~/members.me._id ? 'left' : 'right'}}">
-      <div style="float: {{.creator === ~/members.me._id ? 'left' : 'right'}}">
-        <foto src="{{~/members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
+    {{#unless ~/loading}}
+      <!-- {{~/cblocked}} -- {{~/mblocked}} -- {{~/active}} -->
+      {{#each ~/msgs : i}}
+      <div class="{{.creator === ~/members.me._id ? 'left' : 'right'}}">
+        <div style="float: {{.creator === ~/members.me._id ? 'left' : 'right'}}">
+          <foto src="{{~/members[.creator].foto}}" size="y" class="col-y" style="float: left; margin: 0 10px;" />
+        </div>
+        <div class="message" style="max-width: {{~/messageWidth}}">
+          <time time="{{.created}}" class="since" />
+          <span class="text" decorator="markdown:{{.text}}">{{.text}}</span>
+        </div>
       </div>
-      <div class="message" style="max-width: {{~/messageWidth}}">
-        <time time="{{.created}}" class="since" />
-        <span class="text" decorator="markdown:{{.text}}">{{.text}}</span>
-      </div>
-    </div>
-    {{elseif !~/blocked}}
-      no messages
-    {{/each}}
+      {{elseif !~/blocked}}
+        no messages
+      {{/each}}
+    {{/unless ~/loading}}
   </div>
   <form on-submit="add">
+    <!-- {{#unless ~/loading}} -->
     <div class="mbox-menu" decorator="tip:'menu',30" on-click="clear">
       <i class="fa fa-ellipsis-h" />
     </div>
-    {{#if ~/blocked && ~/active !== 0}}
+    {{#if ~/mblocked}}
     <div class="blocked">
-      <h2>You have been blocked!</h2>
-      {{#if ~/blocked !== 1}}
-        <p class="blocked-text">{{ ~/blocked }}</p>
+      <h2>No puedes enviar mensajes a este usuario</h2>
+      {{#if ~/mblocked !== 1}}
+        <p class="blocked-text">{{ ~/mblocked }}</p>
       {{/if}}
     </div>
     {{else}}
@@ -47,8 +49,8 @@
       </button>
     </div>
     {{/if}}
+    <!-- {{/unless}} -->
   </form>
-  {{/unless}}
 </div>
 
 <style>
@@ -72,6 +74,7 @@
   width: 28px;
   text-align: center;
   border: 1px solid #ccc;
+  background: #fff;
 }
 .mbox-menu:hover {
   border: 1px solid #66f;
@@ -79,7 +82,7 @@
 
 .blocked {
   position: absolute;
-  bottom: 0;
+  top: 0;
   width: 100%;
   text-align: center;
   padding: 20px;
@@ -165,6 +168,7 @@ textarea.animate {
 
 form {
   position: relative;
+  bottom: 0;
 }
 
 .left .message {
@@ -180,16 +184,15 @@ import throttle from '../lib/lodash/function/throttle'
 component.exports = {
   isolated: true,
   oncomplete () {
-    let tbox = this.find('textarea')
+    // let tbox = this.find('textarea') || this.find('.blocked')
     let messages_el = this.find('.messages')
     let movil = window.isMobile
     this.set('movil', window.isMobile)
-    // this.set('blocked', true)
-    setTimeout(() => {
-      tbox.focus()
-    }, 200)
+    // this.set('mblocked', true)
+    setTimeout(() => { if (!this.get('mblocked')) this.find('textarea').focus() }, 200)
     let _outer
     let resizer = () => {
+      let tbox = this.get('mblocked') ? this.find('.blocked') : this.find('textarea')
       let iw = window.innerWidth
       let left = Math.min((iw / 3), 200)
       let right = iw - left - 40
@@ -198,12 +201,15 @@ component.exports = {
       let messageWidth = (movil ? '65%' : '65%')
       this.set('messageWidth', messageWidth)
       this.set('outerHeight', outer)
-      this.set('innerHeight', outer - tbox.clientHeight - 25)
-      if (_outer !== outer) this.parent.fire('resize')
+      this.set('innerHeight', tbox ? outer - tbox.clientHeight - 25 : outer - 20)
+      // console.log('innerHeight', tbox ? outer - tbox.clientHeight - 25 : outer - 20, tbox, this.get('mblocked'))
+      // if (!this.get('mblocked')) debugger
       this.set('outerWidth', (movil ? right : right/1.5))
+      if (_outer !== outer) this.parent.fire('resize')
       _outer = outer
     }
     let _resizer = throttle(resizer, 500, true, true)
+    window.resizer = resizer
     this.parent.on('resize', _resizer)
     window.addEventListener('resize', _resizer)
     this.on('elastic:resize', _resizer)
@@ -215,21 +221,30 @@ component.exports = {
     })
     let id = this.parent.get('id') // profile chat modal will have this set
     let __mbox = this.parent.get('mbox') // inbox will have this set
-    let msgs = []
-    this.set('msgs', msgs)
+    this.set('msgs', [])
 
-    let on_mbox = (mbox) => { if (mbox) {
+    this.observe('mblocked', (v) => {
+      // console.log('mblocked', v)
+      resizer()
+    }, {init: false, defer: true})
+
+    let on_mbox = (mbox) => {
       this.set('msgs.length', 0)
-      this.set('loading', true)
-      api.action('msg*', {mbox, limit: 100, sort: '-created'}, (data) => {
-        this.set('msgs', data)
-        this.set('loading', false)
-      })
-      api.my.notifier.until('/', () => {
-        api.my.notifier.remove_box(mbox)
-      })
-      __mbox = mbox
-    }}
+      if (mbox) {
+        this.set('loading', true)
+        // debugger
+        api.action('msg*', {mbox, limit: 100, sort: '-created'}, (data) => {
+          console.info('set msgs')
+          this.set('msgs', data)
+          this.set('loading', false)
+          resizer()
+        })
+        api.my.notifier.until('/', () => {
+          api.my.notifier.remove_box(mbox)
+        })
+        __mbox = mbox
+      }
+    }
 
     if (id && !__mbox) {
       // profile modal
@@ -243,12 +258,15 @@ component.exports = {
         this.parent.set('mbox', data._id)
         this.set('members', members)
       }, (err) => {
-        this.set('blocked', err.text || 1)
-        this.set('loading', false)
+        // this.set('blocked', err.text || 1)
+        // this.set('loading', false)
+        debugger
+        resizer()
       })
-    } else {
-      console.info('not mbox', __mbox, this.parent.get('blocked'))
-      // this.set(this.parent.get(`threads`))
+    // } else {
+    //   console.info('not mbox', __mbox)
+    //   // this.set(this.parent.get(`threads`))
+    //   on_mbox(__mbox)
     }
     this.observer = this.parent.observe('mbox', on_mbox)
 
