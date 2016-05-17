@@ -22,6 +22,7 @@ class tag_ extends Ambition {
     this['+created'] = this['-created'] = 0
     this.list = []
     this.exists = {}
+    this.recent = []
 
     local.getItems(['tag', 'tag:recent'], (err, data) => {
       if (data) {
@@ -29,8 +30,9 @@ class tag_ extends Ambition {
           for (var i = 0; i < data.tag.length; i++)
             this.insert(data.tag[i])
 
-        if (data['tag:recent']) {
-          this.recent = data['tag:recent']
+        let recent = data['tag:recent']
+        if (Array.isArray(recent)) {
+          this.recent = this.recent.push(this.recent, recent)
           for (var i = 0; i < this.recent.length; i++)
             this.insert(this.recent[i])
         }

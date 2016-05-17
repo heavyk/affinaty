@@ -5,7 +5,7 @@ export default function nlSubmit (node, fire) {
   // var submit = 'submit'
   var ractive = Ractive.getNodeInfo(node).ractive
   var not_ta = node.nodeName !== 'TEXTAREA'
-  node.addEventListener('keydown', handler)
+  node.addEventListener('keyup', handler)
   function handler (e) {
     var code = e.keyCode || e.which
     if (code === 13) {
@@ -32,7 +32,7 @@ export default function nlSubmit (node, fire) {
 
   return {
     teardown: function () {
-      node.removeEventListener('keydown', handler)
+      node.removeEventListener('keyup', handler)
     }
   };
 }
