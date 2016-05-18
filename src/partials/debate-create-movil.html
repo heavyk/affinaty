@@ -255,7 +255,7 @@ component.exports = {
           api.action('debate+', form.data, (d) => {
             this.set('saving', false)
             Ractive.nexus.debate.create(d)
-            this.parent.teardown()
+            this.parent.set('debate', false)
           })
         }
       })

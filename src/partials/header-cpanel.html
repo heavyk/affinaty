@@ -343,7 +343,7 @@ component.exports = {
         api.my.notifier.off('list*', this.on_not)
       }
     })
-    api.observe('me', (me) => {
+    api.on('me', (me) => {
       console.warn('me', me)
       this.set('me', me)
     }, {init: false})

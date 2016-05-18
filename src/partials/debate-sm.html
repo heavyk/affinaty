@@ -26,7 +26,6 @@
           </div>
         </div>
       </div>
-
       {{/if}}
     </div>
     <a class="stats" on-tap="show-stats">
@@ -290,10 +289,12 @@ component.exports = {
       if (yo) api.my.opinion.off(id + '.' + yo, this.on_opinion)
     })
     this.on('show-stats', () => {
-      if (window.isMobile && this.parent) {
-        this.parent.toggle('showDetail')
+      if (window.isMobile) {
+        if (this.parent) this.parent.toggle('showDetail')
+        this.set('showDetail',true)
+      } else {
+        router.dispatch(`/debate/${d._id}`)
       }
-      this.set('showDetail',true)
     })
   },
   oncomplete () {

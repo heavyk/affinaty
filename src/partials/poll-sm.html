@@ -291,10 +291,12 @@ component.exports = {
       ])
     }
     this.on('show-stats', () => {
-      if (window.isMobile && this.parent) {
-        this.parent.toggle('showDetail')
+      if (window.isMobile) {
+        if (this.parent) this.parent.toggle('showDetail')
+        this.set('showDetail',true)
+      } else {
+        router.dispatch(`/debate/${d._id}`)
       }
-      this.set('showDetail',true)
     })
   },
   onrender () {

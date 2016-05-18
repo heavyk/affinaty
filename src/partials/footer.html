@@ -80,13 +80,13 @@
         <i class="fa fa-close"></i>
       </div>
       <div class="opin-left" on-tap="toggle('show_opina')">
-        <a on-tap="debate">
+        <a on-tap="set('debate',true)">
           <img src="/img/opinion.svg" width="100" height="100" class="opin" />
           <span class="txt_moar">Da tu opinión</span>
         </a>
       </div>
       <div class="opin-right" on-tap="toggle('show_opina')">
-          <a on-tap="poll">
+          <a on-tap="set('poll',true)">
             <img src="/img/poll.svg" width="100" height="100" class="opin" />
             <span class="txt_moar">Pide opinión</span>
           </a>
@@ -243,12 +243,7 @@ component.exports = {
     this.set('windowHeight',windowHeight-130)
     this.set('debate',false)
     this.set('movil', window.isMobile)
-    this.on('debate',(e)=> {
-      this.set('debate',true)
-    })
-    this.on('poll',(e)=> {
-      this.set('poll',true)
-    })
+    
     this.on('cancel', () => {
       this.set('debate',false)
       this.set('poll',false)

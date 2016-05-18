@@ -16,6 +16,8 @@
 canvas {
   float: right;
   margin-right: 20px;
+  width: 200px;
+  height: 200px;
 }
 
 .legend {
@@ -69,7 +71,8 @@ component.exports = {
     let chart = new Chart(ctx).Doughnut(ranges, {
       responsive: false,
       segmentShowStroke: true,
-      animation: false,
+      // animation: false,
+      animateRotate: false,
       scaleColor: false,
       lineWidth: 10,
       rotate: 0,

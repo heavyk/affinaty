@@ -291,7 +291,7 @@ component.exports = {
           api.action('poll+', form.data, (d) => {
             this.set('saving', false)
             Ractive.nexus.debate.create(d)
-            this.parent.teardown()
+            this.parent.set('poll', false)
           }, () => {
             this.set({saving: false, error: 'se ha producido un error. inténtalo de nuevo'})
             this.submitting = false

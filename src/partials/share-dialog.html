@@ -184,11 +184,9 @@ component.exports = {
     this.observe('active', (active) => {
       if (share_window) share_window.close()
       if (active === 'facebook') {
-        // ...
         let d = this.parent.get('parent').get('d')
         var dialog_url = 'http://www.facebook.com/dialog/feed?app_id=' + api.fb_app +
           '&link=' + euc(url) +
-          // '&picture=' + FBVars.fbShareImg +
           '&name=' + euc('Compartido desde affinaty.com') +
           '&caption=' + euc('vente y opina!') +
           '&description=' + euc(d.text) +

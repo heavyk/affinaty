@@ -65,7 +65,6 @@
   background-color: #ffffff;
   font-size: 13px;
   padding: 10px 0;
-  width: 90%;
   box-shadow: 5px 11px 20px -4px rgba(41, 41, 41, 0.53);
   max-height: 80%;
   overflow-y: auto;
@@ -83,6 +82,9 @@ div.category {
   box-sizing: border-box;
   color: #000;
   text-align: left;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 div.category:hover {
   background-color: #faa;

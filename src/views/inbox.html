@@ -493,11 +493,11 @@ component.exports = {
       // this.modal('chat', {title: event.context.name, minimize: true, id: event.context._id})
       api.action('mbox', {creator: event.context._id}, (data) => {
         let members = {}
-        members[api.me._id] = members.me = api.me
+        members[api.yo] = members.me = api.me
         for (let i = 0; i < data.members.length; i++) {
           let m = data.members[i]
           members[m._id] = m
-          if (m === api.me._id) {
+          if (m === api.yo) {
             data.members.splice(i, 1)
           }
         }
@@ -557,7 +557,7 @@ component.exports = {
         let t = data[i]
         for (let j = 0; j < t.members.length; j++) {
           let m = t.members[j]
-          if (m === api.me._id) {
+          if (m === api.yo) {
             t.members.splice(j, 1)
           }
         }
@@ -593,7 +593,7 @@ component.exports = {
       this.fire('elastic:adjust')
       let msg = {
         text: text,
-        creator: api.me._id,
+        creator: api.yo,
         created: Date.now(),
         saving: true
       }
@@ -653,7 +653,7 @@ component.exports = {
     if (idx === void 0) return
     let members = {}
     let thread = this.threads[idx]
-    members[api.me._id] = members.me = api.me
+    members[api.yo] = members.me = api.me
     for (let i = 0; i < thread.members.length; i++) {
       let m = thread.members[i]
       members[m._id] = m

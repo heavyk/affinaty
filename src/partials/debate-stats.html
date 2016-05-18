@@ -241,22 +241,6 @@ component.exports = {
       let p = new pie(els[i], assign({}, options, {barColor: barColors[i]}))
       this.observe('percents.'+i, function (v) { p.update(v) })
     }
-
-    let ctx = this.find('canvas').getContext('2d')
-    let chart = new Chart(ctx).Doughnut(ranges, {
-      responsive: false,
-      segmentShowStroke: true,
-      animateRotate: false,
-    })
-    this.observe('ranges', (r) => {
-      if (r) for (let i = 0; i < r.length; i++) {
-        chart.segments[i].value = r[i]
-        // this is a stupid hack to remove NaN values on initial 0
-        chart.segments[i].circumference = 3
-        this.set('legend.'+i+'.value', r[i])
-      }
-      chart.update()
-    })
   },
   calc (data) {
     let num_planets = 2
