@@ -2,10 +2,14 @@
 <div class="modal-background" on-click="modal-close" intro="fade" outro="fade">
   <div class="modal-outer {{~/modalName}}">
     <div class="modal">
-      {{#if ~/header !== false}}
+      {{#if ~/header === false}}
+      <div class="close-headerless close" on-tap="modal-close">
+        <i class="fa fa-close" />
+      </div>
+      {{else}}
       <h1>
         {{~/title}}
-        <div class="modal-close" on-tap="modal-close">
+        <div class="modal-close close" on-tap="modal-close">
           <i class="fa fa-close"></i>
         </div>
       </h1>
@@ -22,6 +26,11 @@
 </div>
 
 <style>
+.close-headerless {
+  position: absolute;
+  top: 0;
+  right: 10px;
+}
 .button-sign-up {
   width: 110%;
   border-radius: 10px 0px 10px 0px;
@@ -131,7 +140,7 @@ component.exports = {
     this.outer = this.find('.modal-outer')
     this.modal = this.find('.modal')
     // this.footer = this.find('.modal-footer')
-    this.closeButton = this.find('.modal-close')
+    this.closeButton = this.find('.close')
 
     let resizeHandler = () => {
       let outerHeight = this.outer.clientHeight

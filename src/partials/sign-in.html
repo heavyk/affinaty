@@ -2,7 +2,7 @@
 <link rel='ractive' href='../partials/remember-password.html'>
 <link rel='ractive' href='../partials/change-password.html'>
 <div class="sign-in">
-  <img class="logo" width="80%" height="100" src="/img/landing.svg" />
+  <img class="logo" src="/img/landing.svg" />
   <form on-submit="submit">
     <div class="form">
       <input type="email" value="{{~/email}}" placeholder="Correo Electrónico">
@@ -26,26 +26,26 @@
           Entrar
         </button>
       </div>
-    </div>
-    <div class="access-prompt">
-      Entra con tu red social
-    </div>
-    <div class="access">
       <div class="access-button">
-        <div class="face" on-click="facebook">
+        <button class="face" on-click="facebook">
           <i class="fa fa-facebook-official"></i>
-        </div>
+          <span class="facebook-text">Continuar con Facebook</span>
+        </button>
       </div>
-      <!-- <div class="access-button">
-        <div class="twitter" decorator="tip:'función aún no disponible'">
-          <i class="fa fa-twitter-square"></i>
-        </div>
+      <!-- <div class="register">
+        ¿No tienes cuenta?
+        <button class="button-register" on-tap="modal('sign-up', {title: 'Regístrate'})">
+          Vente y opina!
+        </button>
       </div> -->
     </div>
+    <!-- <div class="access-prompt">
+      Entra con tu red social
+    </div> -->
   </form>
-  <div class="register row">
+  <div class="register">
     ¿No tienes cuenta?
-    <button class="button-register" on-tap="modal('sign-up', {title: 'Regístrate'})">
+    <button class="button-register" on-tap="modal('sign-up', {header: false})">
       Vente y opina!
     </button>
   </div>
@@ -54,7 +54,9 @@
 <style>
 
 img.logo {
-  margin: 20px;
+  margin: 20px 0 10px 0;
+  width: 80%;
+  max-height: 35px;
 }
 
 .remember-check .fa {
@@ -100,7 +102,7 @@ img.logo {
   color: #F30;
   float: right;
   letter-spacing: -.02em;
-  font-size: 120%;
+  /*font-size: 120%;*/
 }
 .button-remember:hover {
   color: #F30;
@@ -114,12 +116,13 @@ img.logo {
 }
 
 .register {
-  border-radius: 0 0 30px 11px;
+  /*border-radius: 0 0 30px 11px;*/
   background-color: #EFEFEF;
   width: 100%;
   margin-left: 0px;
   height: 50px;
   padding-top: 5px;
+  margin-top: 16px;
   /*border-top: solid 1px #ddd;*/
   color: #888;
 }
@@ -137,6 +140,7 @@ img.logo {
   margin-top: 10px;
   padding-top: 10px;
 }
+.access-button button,
 .submit button {
   width: 100%;
   height: 44px;
@@ -153,26 +157,17 @@ img.logo {
   padding: 14px 0;
   height: 92px;
 }
-.access div.access-button {
-  float: left;
-  width: 100%;
-  /*height: 30px;*/
-  padding: 0 8px;
-  /*width: 50%;*/
-}
-.access div.access-button .fa {
-  vertical-align: baseline;
+div.access-button .fa {
+  vertical-align: bottom;
+  font-size: 24px;
 }
 .access-button .face {
   background-color: #2372A6;
-  /*width: 80%;*/
-  width: 50%;
-  /*float: right;*/
   border-radius: 5px;
   padding: 4px;
   margin: 0 auto;
 }
-.access-button .twitter {
+/*.access-button .twitter {
   background-color: #259FD8;
   width: 80%;
   float: left;
@@ -181,7 +176,8 @@ img.logo {
 }
 .access-button .googleplus {
   background-color: #C33626;
-}
+}*/
+
 button,
 .btn {
   color: #ffffff;
@@ -214,6 +210,7 @@ button.danger:hover,
 .btn.danger:hover {
   background: #bd362f;
 }
+
 @media (max-width: 768px) {
   .access-prompt {
     margin-top: 0px;
@@ -236,7 +233,7 @@ component.exports = {
     let password = ls.getItem('password') || ''
     this.set('email', email)
     this.set('password', password)
-    this.set('remember', email || password ? true : false)
+    this.set('remember', true)
     api.once('auth', (me) => {
       setTimeout(() => {
         if (me.tmp) {

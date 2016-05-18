@@ -2,7 +2,7 @@
 <link rel='ractive' href='../partials/foto-upload.html'>
 <link rel='ractive' href='../partials/date-select.html'>
 
-<div class="{{~/prevote ? 'square' : 'rectangle'}} container">
+<div class="{{~/prevote ? 'square container' : ''}}">
   {{#if ~/prevote}}
   <div class="notice">
     Para que funcionen bien las estadisticas, necesitamos que rellenes los datos indicados antes de opinar.
@@ -10,7 +10,7 @@
   {{/if}}
   <form on-submit="submit">
 
-    <div class="{{~/prevote ? '' : 'left-column'}}">
+    <div class="{{~/prevote ? '' : 'square'}}" style="display: {{~/active === 'foto' ? 'none' : 'block'}}">
 
       <div class="field localization">
         <div class="left-column">
@@ -34,11 +34,11 @@
       </div>
 
       <div class="field planet">
-        <div class="left-column {{~/errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 0)">
-          <input type="radio" name="{{~/me.planet}}" value="0"> Mujer
+        <div class="left-column {{~/errors.me.planet ? 'invalid' : ~/me.planet === 0 ? 'selected' : ''}} planet-button" on-tap="set('me.planet', 0)">
+          Mujer
         </div>
-        <div class="col-right {{~/errors.me.planet ? 'invalid' : ''}}" on-tap="set('me.planet', 1)">
-          <input type="radio" name="{{~/me.planet}}" value="1"> Hombre
+        <div class="col-right {{~/errors.me.planet ? 'invalid' : ~/me.planet === 1 ? 'selected' : ''}} planet-button" on-tap="set('me.planet', 1)">
+          Hombre
         </div>
       </div>
 
@@ -46,7 +46,15 @@
         <date-select value="{{~/me.birthdate}}" />
       </div>
 
-      <button on-tap="change-appearance" class="button-sign-up">
+      {{#unless ~/me.foto}}
+      <button on-tap="set('active', 'foto')" class="button-sign-up" style="background: #fff; color: #333">
+        <img src="/img/icon-foto.svg" width="30" height="30" style="margin: 0 10px -8px 0">
+        Elige una foto
+        <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
+      </button>
+      {{/unless}}
+
+      <button on-tap="submit" class="button-sign-up">
         {{#if ~/prevote}}
         Votar
         {{else}}
@@ -57,7 +65,7 @@
     </div>
 
     <!-- right column -->
-    <div class="col-right" style="display: {{~/prevote ? 'none' : 'block'}}">
+    <div class="{{~/active === 'foto' ? 'square' : 'col-right'}}" style="display: {{~/prevote || ~/active !== 'foto' ? 'none' : 'block'}}">
       <div class="foto {{~/errors.me.foto ? 'invalid' : ''}}">
         <!-- Sí, quiero esta foto -->
         {{#if ~/change_foto}}
@@ -66,6 +74,10 @@
         <foto src="{{~/me.foto}}" size="t" />
         {{/if}}
       </div>
+
+      <button on-tap="set('active', '')" class="button-sign-up">
+        Continuar <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
+      </button>
     </div>
   </form>
 </div>
@@ -73,8 +85,14 @@
 
 <style>
 div.square {
-  width: 350px;
-  padding: 20px;
+  /*width: 350px;*/
+  padding: 20px 6px;
+}
+
+@media (min-width: 340px) {
+  div.square {
+    padding: 20px;
+  }
 }
 div.rectangle {
   width: 700px;
@@ -89,6 +107,22 @@ div.rectangle {
 
 .col-right {
   float: right;
+}
+
+.planet-button {
+  border: 1px solid #eee;
+  width: 40%;
+  margin: 0 10px;
+  cursor: pointer;
+  background: #efefef;
+  border-radius: 4px;
+  color: #999;
+}
+
+.selected {
+  color: #f00;
+  background: #fff;
+  border-color: #666;
 }
 
 .field {
@@ -124,7 +158,7 @@ div.foto {
 }
 
 button.button-sign-up {
-  margin-top: 40px;
+  margin-top: 8px;
   width: 100%;
   border-radius: 4px;
 }

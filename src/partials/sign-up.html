@@ -115,7 +115,8 @@ component.exports = {
           api.signIn(data, true).then(() => {
             this.parent.teardown()
             // router.dispatch('/home')
-            this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
+            // this.modal('set-up', {title: 'Tranquilo, este es el último paso'})
+            this.modal('set-up', {header: false})
           })
         }, (err) => {
           this.set('error', err.split('\n')[0].substr(7, 31).trim())
