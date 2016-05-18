@@ -8,9 +8,13 @@
       <span class="num-comments">{{~/d.numComments}}</span>
     {{/if}}
   </div>
+
+  {{#if ~/auth}}
   <div class="share" decorator="tip:'Compartir',39" on-tap="share">
     <i class="fa fa-share"></i>
   </div>
+  {{/if}}
+
   {{#if ~/mine}}
   <div class="others" on-tap="remove" decorator="tip:'Eliminar',39">
     <!-- <i class="fa fa-ellipsis-h"></i> -->
@@ -87,11 +91,11 @@ component.exports = {
     let creator = this.get('d.creator')
 
     api.on('deauth', this.on_deauth = () => {
-      this.set('mine', false)
+      this.set({auth: false, mine: false})
     })
 
     api.on('auth', this.on_auth = () => {
-      this.set('mine', (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo)
+      this.set({auth: true, mine: (typeof creator === 'object' && creator._id == api.yo) || creator === api.yo})
     })
     if (api.yo) this.on_auth()
 
