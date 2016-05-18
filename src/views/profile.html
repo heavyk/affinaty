@@ -831,19 +831,15 @@ component.exports = {
     let complete_screen
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
-      api.my.notifier.remove_box(id)
-      // if (api.me && api.me._id === id && false) {
-      //   this.set(assign({ mine: true, }, api.me))
-      // } else {
-        this.set({ mine: api.me._id === id, loading: true })
-        this.opinion = new opinion_(id)
-        this.opinion.until('/', () => {
-          this.refresh()
-        })
-        api.action('creator', {_id: id}, (data) => {
-          this.set(assign({ loading: false, foto: null, networks: null }, data))
-        })
-      // }
+      if (api.yo) api.my.notifier.remove_box(id)
+      this.set({ mine: api.yo === id, loading: true })
+      this.opinion = new opinion_(id)
+      this.opinion.until('/', () => {
+        this.refresh()
+      })
+      api.action('creator', {_id: id}, (data) => {
+        this.set(assign({ loading: false, foto: null, networks: null }, data))
+      })
 
       this.on('send-message', () => {
         this.modal('chat', {title: this.get('name'), minimize: true, id: this.get('id')})
@@ -853,7 +849,7 @@ component.exports = {
         let following = this.get('following')
         api.action('relation' + (following ? '-' : '+'), {
           other: id,
-          creator: api.me._id
+          creator: api.yo
         }, (data) => {
           this.set('following', following ? false : data)
         })
@@ -869,10 +865,10 @@ component.exports = {
       this.set('affinaty_update', 1 + this.get('affinaty_update') || 0)
     }, 200, false)
     this.set('affinaty_update', 0)
-    api.my.opinion.on([api.me._id, '*'], () => {
+    if (api.yo) api.my.opinion.on([api.yo, '*'], () => {
       this.refresh()
     })
-    api.my.opinion.until('/', () => {
+    if (api.yo) api.my.opinion.until('/', () => {
       this.refresh()
     })
   },
