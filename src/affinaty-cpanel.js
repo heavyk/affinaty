@@ -11,7 +11,7 @@
 const body = document.body
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
-if (isNaN(domain[0] * 1)) {
+if (isNaN(domain[0] * 1) && domain[0] !== 'localhost') {
   // skip ip address domains like 192.168.x.x
   while (domain.length > 2) domain.shift()
   document.domain = domain.join('.')
@@ -120,7 +120,7 @@ window.onload = function () {
     .watchState()
 
   if (api.token) {
-    api.observe('me', function (me, _me) {
+    api.on('me', function (me, _me) {
       // console.log('me:', me, _me)
       if (me) {
         if (!_me) router.init()

@@ -14,7 +14,7 @@ if (!NodeList.prototype.forEach) NodeList.prototype.forEach = Array.prototype.fo
 const body = document.body
 // this is to allow any subdomain (or port) of affinaty to access this frame
 let domain = document.domain.split('.')
-if (isNaN(domain[0] * 1)) {
+if (isNaN(domain[0] * 1) && domain[0] !== 'localhost') {
   // skip ip address domains like 192.168.x.x
   while (domain.length > 2) domain.shift()
   document.domain = domain.join('.')
@@ -22,7 +22,6 @@ if (isNaN(domain[0] * 1)) {
 
 import Api from './api'
 import Ractive from 'ractive'
-import moment from 'moment'
 import local from './local'
 import moment from './moment'
 

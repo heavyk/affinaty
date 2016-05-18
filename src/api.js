@@ -45,7 +45,7 @@ class Api extends Ambition {
   }
 
   pregage () {
-    this.yo = null
+    // this.yo = null
     this.my = {}
     this.url = (function() {
       try {
@@ -62,9 +62,10 @@ class Api extends Ambition {
         return ( host === '127.0.0.1'
           || host.substr(-10) === 'c9users.io'
           || host.indexOf('localhost') === 0
-          || host.indexOf('192.168') === 0
+          // || host.indexOf('192.168') === 0
         ) ? 'http://5.9.94.75:1155'
-          : window.location.origin
+          // : window.location.origin
+          : `http://${window.location.hostname}:1155`
       } catch(e) {}
     }())
 

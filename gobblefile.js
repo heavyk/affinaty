@@ -100,6 +100,7 @@ var affinaty = gobble([
 				? source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 				: source
 		})
+		// .moveTo( 'js' )
 		// .transformIf(gobble.env() === 'production', 'uglifyjs')
 
 	, gobble('files/styles')
@@ -118,6 +119,7 @@ var affinaty = gobble([
 			] : []),
 			src: 'screen.css'
 		})
+		// .moveTo( 'css' )
 
 	, gobble('files')
 ])
