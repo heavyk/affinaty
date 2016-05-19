@@ -90,12 +90,13 @@ EventEmitter.prototype.once = common.once
  */
 
 EventEmitter.prototype.off = EventEmitter.prototype.removeListener = EventEmitter.prototype.removeAllListeners = function (ev, fn) {
-  if (!this._events || arguments.length == 0) {
+  var argc = arguments.length
+  if (!this._events || argc === 0) {
     this._events = {}
     return this
   }
 
-  if (!fn) {
+  if (argc === 1) {
     this._events[ev] = null
     return this
   }

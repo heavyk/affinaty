@@ -102,7 +102,8 @@ EnhancedEmitter.prototype.once = common.once
  */
 
 EnhancedEmitter.prototype.off = EnhancedEmitter.prototype.removeListener = EnhancedEmitter.prototype.removeAllListeners = function (ev, fn) {
-  if (!this._events || arguments.length === 0) {
+  var argc = arguments.length
+  if (!this._events || argc === 0) {
     this._events = {}
     return this
   }
@@ -139,7 +140,7 @@ EnhancedEmitter.prototype.off = EnhancedEmitter.prototype.removeListener = Enhan
 
   var evs = Array.isArray(ev) ? ev.slice(0) : ev.split(this._drip.delimeter)
 
-  if (evs.length === 1 && !fn) {
+  if (evs.length === 1 && argc === 1) {
     if (this._events[ev]) this._events[ev]._ = null
     return this
   } else {
