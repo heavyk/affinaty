@@ -29,7 +29,8 @@
 
 
     <div class="row-movil">
-      <add-media d="{{~/d}}" />
+      <!--  style="display: {{~/}}" -->
+      <add-media d="{{~/d}}" popup="{{true}}" />
     </div>
     <button on-tap="submit" class="row-movil button-opina-debate">
       Opinar
@@ -86,11 +87,11 @@
   font-size: 69px;
 }
 .foto-upload {
-  width: 90%;
+  margin: auto;
 }
-.add-media-container {
+/*.add-media-container {
   width: 90%;
-}
+}*/
 
 .video-icons,
 .media-tabs {
@@ -171,7 +172,6 @@ li.active {
   width: 100%;
   height: 240px;
   margin: 0;
-  margin-left: 12px;
   display: inline-block;
 
   display: flex;

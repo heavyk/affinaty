@@ -68,7 +68,7 @@
 
     <div class="row-movil" >
       <!-- <foto-upload icon="camera" cropped="{{~/cropped}}" /> -->
-      <add-media d="{{~/d}}" />
+      <add-media d="{{~/d}}" popup="{{ true }}" />
     </div>
     <button on-tap="submit" class="row-movil button-opina-poll">
       Pide opinión
@@ -113,6 +113,10 @@
 }
 .row-movil{
   width: 100%;
+  display: inline-block;
+}
+input[type="text"] {
+  margin-bottom: 2px;
 }
 .highlight {
   background: rgba(253, 39, 13, 0.29);
@@ -181,7 +185,6 @@
   width: 100%;
   height: 240px;
   margin: 0;
-  margin-left: 12px;
   display: inline-block;
 
   display: flex;
@@ -193,9 +196,6 @@
 }
 .categories-button {
   margin-bottom: 20px;
-}
-.add-media-container {
-  width: 90%;
 }
 .cancel {
   width: 10px;
@@ -219,8 +219,8 @@ component.exports = {
   isolated: true,
   data: {},
   oninit () {
-    // let options = [{text: ''}, {text: ''}]
     let options = [{text: ''}, {text: ''}]
+    // let options = [{text: 'si'}, {text: 'no'}]
     this.validator = new Validator('d', {
       'text': {required: true, min: 2, max: 2048},
       'category': {required: true, type: 'id'},

@@ -124,7 +124,7 @@
 }
 
 .foto-upload {
-  width: 330px;
+  margin: 0 auto;
 }
 
 .row {
@@ -190,8 +190,8 @@ component.exports = {
   isolated: true,
   data: {},
   oninit () {
-    // let options = [{text: ''}, {text: ''}]
-    let options = [{text: 'eneny'}, {text: 'eonyenyeny'}]
+    let options = [{text: ''}, {text: ''}]
+    // let options = [{text: 'eneny'}, {text: 'eonyenyeny'}]
     this.validator = new Validator('d', {
       'text': {required: true, min: 2, max: 2048},
       'category': {required: true, type: 'id'},
@@ -229,7 +229,7 @@ component.exports = {
       this.set('d.tag', pluck(tags, '_id'))
     })
     this.set('d.options', options)
-    this.set('d.text', 'eonyeonyoenyeony')
+    // this.set('d.text', 'eonyeonyoenyeony')
     this.on('submit', (event) => {
       if (this.get('saving')) return
       event.original.preventDefault()

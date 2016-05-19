@@ -1,6 +1,7 @@
 <link rel='ractive' href='../partials/foto-upload.html'>
 
 <div class="add-media-container">
+  <div class="popup" style="display: {{~/active ? '' : 'none'}}">
   {{#if ~/active === 'upload'}}
     <foto-upload icon="camera" L="{message: 'Sube una foto'}" cropped="{{~/cropped}}" />
   {{elseif ~/active === 'video'}}
@@ -24,9 +25,18 @@
       </div>
     </div>
   {{/if}}
+  </div>
   <ul class="media-tabs">
-    <li class="media-tab add-upload {{#if ~/active === 'upload'}}active{{/if}}" on-click="set('active', 'upload')"><i class="fa fa-upload" /></li>
-    <li class="media-tab add-video {{#if ~/active === 'video'}}active{{/if}}" on-click="set('active', 'video')"><i class="fa fa-video-camera" /></li>
+    <li class="media-tab add-upload {{#if ~/active === 'upload'}}active{{/if}}" on-click="set('active', 'upload')">
+      {{#if ~/popup}}
+      <img src="/img/icon-foto.svg" width="20" height="20" />
+      {{else}}
+      <i class="fa fa-upload" />
+      {{/if}}
+    </li>
+    <li class="media-tab add-video {{#if ~/active === 'video'}}active{{/if}}" on-click="set('active', 'video')" style="color: {{~/popup ? '#f00' : ''}}">
+      <i class="fa fa-video-camera" />
+    </li>
     <!-- <li class="media-tab add-foto {{#if ~/active === 'foto'}}active{{/if}}" on-click="set('active', 'foto')"><i class="fa fa-picture-o" /></li> -->
   </ul>
 </div>
@@ -61,6 +71,8 @@
   border: solid 1px #ccc;
   padding: 5px;
   border-radius: 6px;
+  text-align: center;
+  background: #fff;
 }
 
 .video-icon {
@@ -122,7 +134,6 @@ li.active {
   width: 100%;
   height: 240px;
   margin: 0;
-  margin-left: 12px;
   display: inline-block;
 
   display: flex;
@@ -141,8 +152,9 @@ import { vimeo_id, youtube_id, vine_id, vertele_id, iframe_src } from '../lib/pa
 component.exports = {
   isolated: true,
   oninit () {
+    let popup = this.get('popup')
     this.set ({
-      active: 'upload',
+      active: popup ? '' : 'upload',
       // url: `<iframe src="http://cdnapi.kaltura.com/p/1910301/sp/191030100/embedIframeJs/uiconf_id/28928951/partner_id/1910301?iframeembed=true&playerId=verteletv-main-clip-571e3bcee87d1&entry_id=1_a9s8ncyo&flashvars[streamerType]=auto" width="560" height="395" allowfullscreen webkitallowfullscreen mozAllowFullScreen frameborder="0"></iframe>`,
       // url: `<iframe width="420" height="315" src="https://www.youtube.com/embed/sNPnbI1arSE" frameborder="0" allowfullscreen></iframe>`,
       // active: 'video',
@@ -175,6 +187,7 @@ component.exports = {
         this.set('d.text',  (txt.length ? txt + '\n' : '') + id)
         this.set('video_added', true)
         this.set('url', '')
+        if (popup) this.set('active', '')
       } else {
         // TODO: show an error or some message
       }
