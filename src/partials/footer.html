@@ -1,7 +1,7 @@
 <link rel='ractive' href='../partials/debate-create-movil.html'>
 <link rel='ractive' href='../partials/poll-create-movil.html'>
-{{#if debate || poll}}
 
+{{#if ~/debate || ~/poll}}
 <div class="opina-background">
   <div class="opina-outer">
     <div class="opina-box">
@@ -9,44 +9,38 @@
         <i class="fa fa-close"></i>
       </div>
       <div class="caja">
-        {{#if debate}}
+        {{#if ~/debate}}
           <debate-create-movil>
-        {{/if debate}}
-        {{#if poll}}
+        {{/if ~/debate}}
+        {{#if ~/poll}}
           <poll-create-movil>
-        {{/if poll}}
+        {{/if ~/poll}}
       </div>
     </div>
   </div>
 </div>
+{{/if ~/debate || ~/poll}}
 
-
-<!-- <div class="cancel" on-tap="cancel">
-  <i class="fa fa-times"></i>
-</div> -->
-
-
-{{/if debate || poll}}
 {{#if ~/me}}
-<div class="footer-bar" style="display: {{active === 'landing' ? 'none' : ''}}">
+<div class="footer-bar" style="display: {{~/active === 'landing' ? 'none' : ''}}">
   <!-- HOME -->
-  <div class="footer-item {{active === 'home' ? 'active' : ''}}">
+  <div class="footer-item {{~/active === 'home' ? 'active' : ''}}">
     <a class="home" href="/home">
       <img src="/img/home-grey.svg" width="42" height="42" />
     </a>
   </div>
   <!-- NOTIFICACIONES -->
-  <div class="footer-item {{active === 'notifications' ? 'active' : ''}}">
-    <li class="button-head-noti-mov {{show_n ? 'selected' : ''}}">
+  <div class="footer-item {{~/active === 'notifications' ? 'active' : ''}}">
+    <li class="button-head-noti-mov {{~/show_n ? 'selected' : ''}}">
       <!-- <a class="notifications" on-tap="toggle('show_n')"> -->
       <a class="notifications" href="/notifications">
         <img src="/img/notifications-grey.svg" width="42" height="42" />
-        {{#if notifications}}
-          <span class="count">{{notifications}}</span>
+        {{#if ~/notifications}}
+          <span class="count">{{~/notifications}}</span>
         {{/if}}
       </a>
     </li>
-    <div class="notification-list" style="display: {{show_n ? 'block' : 'none'}}">
+    <div class="notification-list" style="display: {{~/show_n ? 'block' : 'none'}}">
       <notification-list />
     </div>
   </div>
@@ -57,26 +51,26 @@
     </div>
   </div>
   <!-- MENSAJES -->
-  <div class="footer-item {{active === 'inbox' ? 'active' : ''}}">
-      <a class="notifications" href="/inbox">
-        <img src="/img/inbox-grey.svg" width="42" height="42" />
-        {{#if new_msgs}}
-          <span class="count">{{new_msgs}}</span>
-        {{/if}}
-      </a>
+  <div class="footer-item {{~/active === 'inbox' ? 'active' : ''}}">
+    <a class="notifications" href="/inbox">
+      <img src="/img/inbox-grey.svg" width="42" height="42" />
+      {{#if ~/new_msgs}}
+        <span class="count">{{~/new_msgs}}</span>
+      {{/if}}
+    </a>
   </div>
   <!-- PERFIL -->
-  <div class="footer-item {{active === 'profile' ? 'active' : ''}}">
-    <a href="/profile/{{me._id}}">
+  <div class="footer-item {{~/active === 'profile' ? 'active' : ''}}">
+    <a href="/profile/{{~/me._id}}">
       <img src="/img/profile-grey.svg" width="42" height="42" />
     </a>
   </div>
 </div>
-{{#if show_opina}}
+{{#if ~/show_opina}}
 <div class="opina-background">
   <div class="opina-outer">
     <div class="opina-box">
-      <div class="opina-close" on-tap="close">
+      <div class="opina-close" on-tap="cancel">
         <i class="fa fa-close"></i>
       </div>
       <div class="opin-left" on-tap="toggle('show_opina')">
@@ -96,6 +90,7 @@
 </div>
 {{/if }}
 {{/if ~/me}}
+
 <style>
 .opina-background{
   position: fixed;
@@ -106,7 +101,7 @@
   box-sizing: border-box;
   height: 100%;
   width: 100%;
-      z-index: 9999999999;
+  z-index: 9999999999;
 }
 .opina-close {
   display: block;
@@ -243,28 +238,25 @@ component.exports = {
     this.set('windowHeight',windowHeight-130)
     this.set('debate',false)
     this.set('movil', window.isMobile)
-    
+
     this.on('cancel', () => {
-      this.set('debate',false)
-      this.set('poll',false)
-    })
-    this.on('close', () => {
-      this.set('show_opina',false)
-      api.signOut(true)
+      this.set({ debate: false, poll: false, show_opina: false })
     })
     router.on('dispatch', () => {
+      
       let path = router.uri.path
       let active = null
       if (path === '/notifications') active = 'notifications'
       else if (/^\/inbox/.test(path)) active = 'inbox'
       else if (/^\/profile/.test(path)) active = 'profile'
       else active= 'home'
+      console.log('path', path, 'active', active)
       this.set('active', active)
     })
-    api.on('me', (me) => {
-      console.warn('me', me)
-      //this.set('active', 'home')
-    }, {init: false})
+    // api.on('me', (me) => {
+    //   console.warn('me', me)
+    //   //this.set('active', 'home')
+    // }, {init: false})
     api.on('auth', () => {
       api.my.notifier.on('msg*', this.on_msg = (c) => {
         this.set('new_msgs', c)
