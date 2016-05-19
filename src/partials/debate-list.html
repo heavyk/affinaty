@@ -80,7 +80,7 @@ component.exports = {
     //   t_debates: this.t_debates,
     // })
 
-    Ractive.header.on('category', (category) => {
+    Ractive.header.on('category', this.on_category = (category) => {
       this.set('category', (this.category = category ? category._id : null))
     })
 
@@ -140,21 +140,24 @@ component.exports = {
       Ractive.header.fire('search', '')
     })
 
-    Ractive.header.on('search', (_txt) => {
+    Ractive.header.on('search', this.on_search = (_txt) => {
       this.set('query.text', _txt)
       this.clear()
       this.go()
     })
 
-    Ractive.nexus.debate.on('+', (d) => {
+    Ractive.nexus.debate.on('+', this.on_add = (d) => {
       this.add(d)
     })
 
-    Ractive.nexus.debate.on('-', (id) => this.remove(id))
+    Ractive.nexus.debate.on('-', this.on_remove = (id) => this.remove(id))
   },
 
   onteardown () {
-    router.off('dispatch', this.on_dispatch)
+    Ractive.header.off('search', this.on_search)
+    Ractive.header.off('category', this.on_category)
+    Ractive.nexus.debate.off('+', this.on_add)
+    Ractive.nexus.debate.off('-', this.on_remove)
   },
 
   clear () {
