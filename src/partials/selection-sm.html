@@ -98,6 +98,7 @@ component.exports = {
             this.subtract('d.totals.'+idx, 1)
           this.set('d.idx', d.idx)
           this.add('d.totals.'+d.idx, 1)
+          api.my.selection.insert(d)
         })
       }
     }

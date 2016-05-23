@@ -181,8 +181,9 @@ component.exports = {
       for (gender = 0; gender < num_planets; gender++)
         percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
 
+      // need total set first... (objects are not necessarily ordered, so there's no guarantee that total will be set to calculate the percents)
+      this.set('total', total)
       this.set({
-        total: total,
         totals: totals,
         percents: percents,
         planets: planets,
