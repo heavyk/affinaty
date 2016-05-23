@@ -243,20 +243,14 @@ component.exports = {
       this.set({ debate: false, poll: false, show_opina: false })
     })
     router.on('dispatch', () => {
-      
       let path = router.uri.path
       let active = null
       if (path === '/notifications') active = 'notifications'
       else if (/^\/inbox/.test(path)) active = 'inbox'
       else if (/^\/profile/.test(path)) active = 'profile'
       else active= 'home'
-      console.log('path', path, 'active', active)
       this.set('active', active)
     })
-    // api.on('me', (me) => {
-    //   console.warn('me', me)
-    //   //this.set('active', 'home')
-    // }, {init: false})
     api.on('auth', () => {
       api.my.notifier.on('msg*', this.on_msg = (c) => {
         this.set('new_msgs', c)
@@ -274,15 +268,6 @@ component.exports = {
     api.on('me', (me) => {
       this.set('me', me)
     }, {init: false})
-    this.set('search_width', 200)
-    this.on('toggle-focus', (event) => {
-      // this is a stupid hack to prevent the display: none from happening
-      // before the event has propagated to the form
-      setTimeout(() => {
-        this.set('search_width', event.context.focused ? 200 : 300)
-        this.toggle('focused')
-      }, 200)
-    })
   },
   oncomplete () {
     let onclick = (e) => {

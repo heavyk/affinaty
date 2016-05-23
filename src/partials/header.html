@@ -570,6 +570,7 @@ component.exports = {
         // else
         // this.modal('sign-in', {header: false})
       }
+      // if (yo && !api.me.birthdate) this.modal('set-up', {header: false})
     })
     api.once('auth', (me) => {
       if (!me.birthdate) this.modal('set-up', {header: false})
@@ -593,7 +594,7 @@ component.exports = {
                 android: 'FREE',
                 windows: 'FREE'
             }
-            , force: 'ios' // Uncomment for platform emulation
+            // , force: 'ios' // Uncomment for platform emulation
         }
 
       )

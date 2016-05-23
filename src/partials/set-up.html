@@ -46,13 +46,13 @@
         <date-select value="{{~/me.birthdate}}" />
       </div>
 
-      {{#unless ~/me.foto}}
+      {{#if !~/prevote && !~/me.foto}}
       <button on-tap="set('active', 'foto')" class="button-sign-up" style="background: #fff; color: #333">
         <img src="/img/icon-foto.svg" width="30" height="30" style="margin: 0 10px -8px 0">
         Elige una foto
         <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
       </button>
-      {{/unless}}
+      {{/if}}
 
       <button on-tap="submit" class="button-sign-up">
         {{#if ~/prevote}}
@@ -92,6 +92,7 @@ div.square {
 @media (min-width: 340px) {
   div.square {
     padding: 20px;
+    max-width: 600px;
   }
 }
 div.rectangle {
