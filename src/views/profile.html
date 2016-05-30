@@ -12,7 +12,7 @@
       <div class="cover">
         <!-- <foto src="{{~/foto}}"  /> -->
       </div>
-      <div class="center-foto" on-tap="modal('foto', {title: ~/name, src: ~/foto, size: 'm', shape: 'sq'})">
+      <div class="center-foto" on-tap="modal('foto', {title: ~/name, src: ~/foto, size: 'm', shape: 'sq', header: false})">
         {{#if ~/loading}}
           <spinner />
         {{else}}
