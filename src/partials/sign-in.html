@@ -37,7 +37,6 @@
   <div class="register">
     {{#unless ~/movil}}
     <span class="register-left">
-      <!-- Descarga la app en: -->
       <a href="/download/ios" class="btn-app btn-app-store">Descarga la app para iOS</a>
       <a href="/download/android" class="btn-app btn-google-play">Descarga la app para android</a>
     </span>
@@ -293,15 +292,6 @@ component.exports = {
         this.set('error', 'correo o contraseña incorrectos')
         api.signOut()
       })
-      if (remember) {
-        ls.setItem('email', email)
-        // ls.setItem('password', password)
-        ls.setItem('remember', true)
-      } else {
-        ls.removeItem('email')
-        ls.removeItem('password')
-        ls.removeItem('remember')
-      }
     })
     this.on('facebook', () => {
       // TODO: open in middle of the window

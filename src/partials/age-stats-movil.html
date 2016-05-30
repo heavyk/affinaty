@@ -11,7 +11,7 @@
     </ul>
   </div>
   <div style="width: 50%;float: left;">
-    <canvas width="200" height="200"></canvas>
+    <canvas width="150" height="150"></canvas>
   </div>
 </div>
 
@@ -22,7 +22,6 @@ ul{
 canvas {
   max-width: 200px;
   max-height: 200px;
-  padding-top: 20px;
 }
 
 .legend {
@@ -76,7 +75,8 @@ component.exports = {
     let chart = new Chart(ctx).Doughnut(ranges, {
       responsive: false,
       segmentShowStroke: true,
-      animation: false,
+      // animation: false,
+      animateRotate: false,
       scaleColor: false,
       lineWidth: 10,
       rotate: 0,

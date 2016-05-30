@@ -5,15 +5,6 @@
 
 <div class="container">
   <div class="row">
-    <div class='expandable'>
-      {{#if ~/showDetail}}
-        <div class='detail' style="display: {{~/showDetail ? '' : 'none'}}">
-          <debate-stats debate="{{~/id}}"></debate-stats>
-          <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
-        </div>
-      {{/if}}
-    </div>
-
     <div class="{{~/movil ? '' : 'col-xs-6 col-md-7 col-sm-6'}}">
       {{#if ~/loading}}
         <spinner />
@@ -47,7 +38,7 @@
   position: absolute;
   font-size: 24px;
   top: 0px;
-  height: 64px;
+  height: 40px;
   right: 2px;
 }
 .expandable {
@@ -83,7 +74,7 @@
 <script>
 component.exports = {
   isolated: true,
-  oninit: function () {
+  oninit () {
     let __id
     this.observe('id', (_id) => {
       this.set('loading', true)

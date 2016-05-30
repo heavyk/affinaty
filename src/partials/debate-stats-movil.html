@@ -186,14 +186,7 @@ component.exports = {
       // really I should do this in stats ... for now, this is fine
       let onloaded = after(2, () => {
         let stats = this.stats.data
-        // let d = api.my.opinion.debate(id)
-        let calc = this.calc(stats)
-        this.set('totals', calc.totals)
-        this.set('totals_p', calc.totals_p)
-        this.set('total', calc.total)
-        this.set('percents', calc.percents)
-        this.set('planets', calc.planets)
-        this.set('ranges', calc.ranges)
+        this.set(this.calc(stats))
       })
       this.stats.until('/', onloaded)
       if (api.my.opinion) {
@@ -205,13 +198,7 @@ component.exports = {
           if (stats) {
             if (_d) ageStats.subtract(api.me, stats, _d)
             ageStats.add(api.me, stats, d)
-            let calc = this.calc(stats)
-            this.set('totals', calc.totals)
-            this.set('totals_p', calc.totals_p)
-            this.set('total', calc.total)
-            this.set('percents', calc.percents)
-            this.set('planets', calc.planets)
-            this.set('ranges', calc.ranges)
+            this.set(this.calc(stats))
           }
         })
       } else onloaded()
@@ -255,22 +242,6 @@ component.exports = {
       let p = new pie(els[i], assign({}, options, {barColor: barColors[i]}))
       this.observe('percents.'+i, function (v) { p.update(v) })
     }
-
-    let ctx = this.find('canvas').getContext('2d')
-    let chart = new Chart(ctx).Doughnut(ranges, {
-      responsive: false,
-      segmentShowStroke: true,
-      animateRotate: false,
-    })
-    this.observe('ranges', (r) => {
-      if (r) for (let i = 0; i < r.length; i++) {
-        chart.segments[i].value = r[i]
-        // this is a stupid hack to remove NaN values on initial 0
-        chart.segments[i].circumference = 3
-        this.set('legend.'+i+'.value', r[i])
-      }
-      chart.update()
-    })
   },
   calc (data) {
     let num_planets = 2
@@ -303,10 +274,10 @@ component.exports = {
     }
 
     for (gender = 0; gender < num_planets; gender++)
-      percents[gender] = planets[gender] / total * 100
+      percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
 
     for (i = 0; i < 4; i++) {
-      totals_p[i] = Math.round(totals[i] / total * 100)
+      totals_p[i] = total > 0 ? Math.round(totals[i] / total * 100) : 0
     }
 
     return {

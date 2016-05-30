@@ -140,7 +140,7 @@ border-radius: 8px;
   position: absolute;
   font-size: 24px;
   top: 0px;
-  height: 50px;
+  height: 40px;
   right: 2px;
 }
 .expandable {
@@ -290,8 +290,8 @@ component.exports = {
     })
     this.on('show-stats', () => {
       if (window.isMobile) {
-        if (this.parent) this.parent.toggle('showDetail')
-        this.set('showDetail',true)
+        // if (this.parent) this.parent.toggle('showDetail')
+        this.toggle('showDetail')
       } else {
         router.dispatch(`/debate/${d._id}`)
       }
