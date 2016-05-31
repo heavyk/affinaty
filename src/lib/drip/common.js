@@ -18,7 +18,8 @@ function many (ev, times, fn) {
   var self = this
 
   function wrap () {
-    if (--times === 0) self.off(ev, wrap)
+    // wrap this in a timeout, because the off function splices the function out of the array, skipping a listener in the for-loop of the .emit function
+    if (--times === 0) setTimeout(function () { self.off(ev, wrap) }, 0)
     fn.apply(null, arguments)
   }
 

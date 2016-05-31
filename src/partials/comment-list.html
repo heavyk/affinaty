@@ -201,7 +201,7 @@ component.exports = {
   onconfig () {
     this.set('list', this.list = [])
     this.get('text') || this.set('text', '')
-    router.on('dispatch', () => {
+    router.on('dispatch', this.on_dispatch = () => {
       let _query = assign({}, {
         debate: this.get('debate'),
         poll: this.get('poll'),
@@ -303,6 +303,7 @@ component.exports = {
     this.once('teardown', () => {
       gemini.destroy()
       onresize.removeResizeListener(container, resizer)
+      router.off('dispatch', this.on_dispatch)
     })
   },
   decorators: {
