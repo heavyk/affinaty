@@ -6,7 +6,7 @@
 .tmp
 .config.json
 build/
-affinaty-web*
+affinaty-web/*
 /test-dir
 /gobbler/.state.json
 

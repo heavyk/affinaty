@@ -177,7 +177,7 @@
     <chat members={{~/members}} mblocked="{{~/mblocked}}" cblocked="{{~/cblocked}}" />
     {{/if}}
 
-    {{#if (!~/panel || ~/panel === 'encounter') && ~/search === 'active'}}
+    {{#if !~/panel || ~/panel === 'encounter'}}
     <div class="messages summary">
       <h3>Buscador de usuarios</h3>
       <div class="search">
@@ -255,9 +255,10 @@
   border-radius: 0 0 0 4px;
   cursor: pointer;
   position: absolute;
-  top: 0px;
+  top: 50px;
   right: 0px;
   z-index:999999;
+  padding-top: 5px;
 }
 .threads {
   /*position: fixed;*/
@@ -382,9 +383,24 @@ li.encounter {
   width: 100%;
   height: 50px;
   background-color: #ffffff;
-  transition: background-color 333ms ease-in-out;
+  /*transition: background-color 333ms ease-in-out;*/
   border-bottom: 1px solid #dadada;
-  clear: both;
+}
+.user {
+  /* a stupid hack to force the ellipsis TODO: find a better way */
+  width: 101%;
+}
+
+.user img {
+  margin: 5px;
+}
+.user h5 {
+  color: #939393;
+  font-size: 12px;
+}
+
+.ellipsis {
+  display: inline-block;
 }
 
 span.name {
@@ -441,11 +457,6 @@ span.name {
   position: absolute;
   left: 0px;
   width: 80%;
-}
-.submit {
-  /*position: absolute;
-  right: 44px;
-  top: 15px;*/
 }
 .submit .fa {
   right: 2px;
