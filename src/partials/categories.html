@@ -144,7 +144,7 @@ component.exports = {
     }
     window.addEventListener('click', onclick, true)
     this.once('teardown', () => { window.removeEventListener('click', onclick, true) })
-    api.category.until('/', () => {
+    api.category.until('/', this.on_update = () => {
       let list = api.category.list
       let len = Math.round(list.length / 2)
       let l1 = list.slice(0, len)
@@ -156,6 +156,7 @@ component.exports = {
         loading: false,
       })
     })
+    api.category.on('update', this.on_update)
     this.on('clear', () => {
       this.activate({context: null}, this.get('alwaysShow'))
     })
@@ -175,6 +176,7 @@ component.exports = {
   },
   onteardown () {
     this.parent.off('set-category', this.onsetCategory)
+    api.category.off('update', this.on_update)
   },
   events: {
     tap: require('../lib/events/tap.js')

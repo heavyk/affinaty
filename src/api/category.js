@@ -86,7 +86,8 @@ class category_ extends Ambition {
 
       if (next) next()
       if (data.length === this.query.limit) setTimeout(() => this.go(), 100)
-      else this.now('/')
+      else if (this.situation !== '/') this.now('/')
+      else if (data.length) this.emit('update')
 
       if (data.length) local.setItems({
         'category': this.list,
