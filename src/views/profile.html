@@ -126,10 +126,16 @@
             <span class="affin-gradient">
               <div class="gradient-pos" style="">
                 <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                  <i class="fa fa-circle"></i>
+                  {{#if ~/affinaty_loading}}
+                    <spinner scale=".1" opacity="1" color="#FFEF00" />
+                  {{else}}
+                    <i class="fa fa-circle"></i>
+                  {{/if}}
                 </span>
                 <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                  {{Math.round(~/affinaty_percent)}}%
+                  {{#unless ~/affinaty_loading}}
+                    {{Math.round(~/affinaty_percent)}}%
+                  {{/unless}}
                 </span>
               </div>
             </span>
@@ -159,10 +165,16 @@
           <span class="affin-gradient">
             <div class="gradient-pos" style="">
               <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                <i class="fa fa-circle"></i>
+                {{#if ~/affinaty_loading}}
+                  <spinner scale=".1" opacity="1" color="#FFEF00" />
+                {{else}}
+                  <i class="fa fa-circle"></i>
+                {{/if}}
               </span>
               <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                {{Math.round(~/affinaty_percent)}}%
+                {{#unless ~/affinaty_loading}}
+                  {{Math.round(~/affinaty_percent)}}%
+                {{/unless}}
               </span>
             </div>
           </span>
@@ -336,10 +348,16 @@
             <span class="affin-gradient">
               <div class="gradient-pos" style="">
                 <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                  <i class="fa fa-circle"></i>
+                  {{#if ~/affinaty_loading}}
+                    <spinner scale=".1" opacity="1" color="#FFEF00" />
+                  {{else}}
+                    <i class="fa fa-circle"></i>
+                  {{/if}}
                 </span>
                 <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                  {{Math.round(~/affinaty_percent)}}%
+                  {{#unless ~/affinaty_loading}}
+                    {{Math.round(~/affinaty_percent)}}%
+                  {{/unless}}
                 </span>
               </div>
             </span>
@@ -353,10 +371,16 @@
           <span class="affin-gradient-movil">
             <div class="gradient-pos" style="">
               <span class="gradient-point" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                <i class="fa fa-circle"></i>
+                {{#if ~/affinaty_loading}}
+                  <spinner scale=".1" opacity="1" color="#FFEF00" />
+                {{else}}
+                  <i class="fa fa-circle"></i>
+                {{/if}}
               </span>
               <span class="gradient-point gradient-percent" style="left: {{50 + (~/affinaty_percent / 2)}}%">
-                {{Math.round(~/affinaty_percent)}}%
+                {{#unless ~/affinaty_loading}}
+                  {{Math.round(~/affinaty_percent)}}%
+                {{/unless}}
               </span>
             </div>
           </span>
@@ -867,17 +891,19 @@ let opinion_ = require('../api/opinion')
 component.exports = {
   isolated: true,
   modal: require('../modal'),
-  oninit () {
+  onconfig () {
     this.set('movil', window.isMobile)
     let __id
     let complete_screen
     this.observe('id', (id) => { if (id && id !== __id) {
       __id = id
+      this.set('affinaty_loading', true)
       if (api.yo) api.my.notifier.remove_box(id)
       this.set({ mine: api.yo === id, loading: true })
       this.opinion = new opinion_(id)
       this.opinion.until('/', () => {
         this.refresh()
+        this.set('affinaty_loading', false)
       })
       api.action('creator', {_id: id}, (data) => {
         this.set(assign({ loading: false, foto: null, networks: null }, data))
