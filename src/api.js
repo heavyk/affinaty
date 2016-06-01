@@ -79,22 +79,14 @@ class Api extends Ambition {
     this.token = window.localStorage.getItem(this._token)
     this.rolex = new CronTab(20000)
     let store = 'affinaty_'+hashCode(this.url)
-    this.local = local.createInstance({
-      name: store,
-      storeName: store,
-    })
 
     let version = window.localStorage.affinaty_version
-    if (version !== VERSION) this.local.clear(() => {
+    if (version !== VERSION) local.clear(() => {
       console.warn(`upgraded from version ${version} -> ${VERSION}`)
       window.localStorage.affinaty_version = VERSION
     })
 
-    // this.on('me', (me, _me) => {
-    //   this.initialize(me, _me)
-    // })
-
-    this.local.getItem('me', (err, val) => {
+    local.getItem('me', (err, val) => {
       if (err || !this.token) this.signOut()
       else this.initialize(val)
     })
@@ -154,7 +146,7 @@ class Api extends Ambition {
   }
 
   whoIaM(me) {
-    return this.local.setItem('me', me, (err) => {
+    return local.setItem('me', me, (err) => {
       if (!err) this.initialize(me)
     })
   }
@@ -162,7 +154,7 @@ class Api extends Ambition {
   signOut (redirect) {
     let yo = api.yo
     window.localStorage.removeItem(this._token)
-    this.local.removeItem('me')
+    local.removeItem('me')
     if (redirect) router.dispatch('/')
     this.authenticated = false
     this.yo = null

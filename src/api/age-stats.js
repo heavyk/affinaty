@@ -14,9 +14,9 @@ class Stats extends Ambition {
           api.action(this.type+'-stats', assign({}, this.query), (data) => {
             // eg. get all >= created
             this.now('/', data)
-            api.local.setItems({
-              [this.key]: data
-            }).then(() => {
+            let items = {}
+            items[this.key] = data
+            local.setItems(items).then(() => {
               console.log('saved stats into local')
             }).catch((err) => {
               console.error('setItems error', err)
@@ -39,7 +39,7 @@ class Stats extends Ambition {
       _id: id,
     }
 
-    api.local.getItem(this.key, (err, data) => {
+    local.getItem(this.key, (err, data) => {
       // later, need to check the last stats time to see if a refresh is needed
       if (data) {
         // this.now('/', data)
@@ -62,9 +62,9 @@ class Stats extends Ambition {
       if (data.length === this.query.limit) setTimeout(() => { this.go() }, 100)
       else this.now('/', data)
 
-      api.local.setItems({
-        ['stats*:'+this.creator]: list
-      }).then(() => {
+      let items = {}
+      items['stats*:'+this.creator] = list
+      local.setItems(items).then(() => {
         console.log('saved statss into local')
       }).catch((err) => {
         console.error('setItems error', err)

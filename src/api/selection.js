@@ -103,9 +103,9 @@ class selection_ extends Ambition {
       if (data.length === this.query.limit) setTimeout(() => { this.go() }, 100)
       else this.now('/')
 
-      api.local.setItems({
-        ['selection*:'+this.creator]: list
-      }).then(() => {
+      let items = {}
+      items['selection*:'+this.creator] = list
+      local.setItems(items).then(() => {
         console.log('saved selections into local')
       }).catch((err) => {
         console.error('setItems error', err)

@@ -33,7 +33,7 @@ class opinion_ extends Ambition {
       creator: creator,
     })
 
-    api.local.getItems(this.keys, (err, data) => {
+    local.getItems(this.keys, (err, data) => {
       if (data && data[this.keys[0]]) {
         // PUT ME BACK KENNY
         // for (var i = 0; i < data[this.keys[0]].length; i++)
@@ -90,9 +90,9 @@ class opinion_ extends Ambition {
       if (data.length === this.query.limit) setTimeout(() => { this.go() }, 100)
       else this.now('/')
 
-      api.local.setItems({
-        ['opinion*:'+this.creator]: list
-      }).then(() => {
+      let items = {}
+      items['opinion*:'+this.creator] = list
+      local.setItems(items).then(() => {
         console.log('saved opinions into local')
       }).catch((err) => {
         console.error('setItems error', err)
