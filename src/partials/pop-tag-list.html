@@ -90,6 +90,7 @@ import debounce from '../lib/lodash/function/debounce'
 import onresize from '../lib/dom/element-onresize'
 
 component.exports = {
+  isolated: true,
   onconfig () {
     let list = []
     this.set('list', this.list = list)
@@ -120,7 +121,8 @@ component.exports = {
   },
   go () {
     this.set('loading', true)
-    api.action('pop:tag*', this.get('query'), (data) => {
+    let query = this.get('query') || {}
+    api.action('pop:tag*', query, (data) => {
       this.set('loading', false)
 
       each(data.score, (v, id) => {

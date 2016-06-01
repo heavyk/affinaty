@@ -21,7 +21,7 @@
       <div class="register-background" style="display: {{showDetail ? 'block' : 'none'}}">
         <div class="register-outer">
           <div class="register-box">
-            <poll-stats-movil poll="{{id}}"></poll-stats-movil>
+            <poll-stats-movil id="{{~/id}}" />
             <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
           </div>
         </div>

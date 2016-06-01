@@ -1,5 +1,4 @@
 <link rel='ractive' href='../partials/poll-sm.html'>
-<link rel='ractive' href='../partials/poll-stats-movil.html'>
 <link rel='ractive' href='../partials/poll-stats.html'>
 <link rel='ractive' href='../partials/comment-list.html'>
 <link rel='ractive' href='../partials/spinner.html'>
@@ -23,7 +22,7 @@
     </div>
     {{#unless ~/movil}}
     <div class="col-lg-5 col-md-5 col-sm-6 col-xs-6">
-      <poll-stats poll="{{~/_id}}" idx="{{~/poll.idx}}" totals="{{~/poll.totals}}" />
+      <poll-stats id="{{~/id}}" idx="{{~/poll.idx}}" totals="{{~/poll.totals}}" />
     </div>
     {{/unless}}
 

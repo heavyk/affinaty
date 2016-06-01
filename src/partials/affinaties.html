@@ -202,6 +202,7 @@ import throttle from '../lib/lodash/function/throttle'
 import tap from '../lib/events/tap.js'
 
 component.exports = {
+  isolated: true,
   modal: modal,
   onconfig () {
     this.set('movil', window.isMobile)

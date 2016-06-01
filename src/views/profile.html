@@ -865,6 +865,7 @@ let assign = require('../lib/lodash/object/assign')
 let debounce = require('../lib/lodash/function/debounce')
 let opinion_ = require('../api/opinion')
 component.exports = {
+  isolated: true,
   modal: require('../modal'),
   oninit () {
     this.set('movil', window.isMobile)
