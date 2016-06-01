@@ -9,13 +9,19 @@
 // }
 
 const body = document.body
+
 // this is to allow any subdomain (or port) of affinaty to access this frame
-let domain = document.domain.split('.')
+var domain = document.domain.split('.')
 if (isNaN(domain[0] * 1) && domain[0] !== 'localhost') {
-  // skip ip address domains like 192.168.x.x
+  // skip ip address domains like 192.168.x.x and localhost
   while (domain.length > 2) domain.shift()
-  document.domain = domain.join('.')
+  domain = domain.join('.')
+} else {
+  domain = document.domain
 }
+
+document.domain = domain
+console.info('set affinaty-cpanel domain to ' + domain)
 
 import Api from './api'
 import Ractive from 'ractive'
