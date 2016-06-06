@@ -1,5 +1,5 @@
-<link rel='ractive' href='../partials/sex-stats-movil.html'>
-<link rel='ractive' href='../partials/age-stats-movil.html'>
+<link rel='ractive' href='../partials/sex-stats-svg.html'>
+<link rel='ractive' href='../partials/age-stats-svg.html'>
 
 <div class="poll-stats">
   <h4 class="title">Estadísticas</h4>
@@ -29,8 +29,8 @@
     </div>
   {{/if totals}}
 
-  <sex-stats-movil planets="{{planets}}" percents="{{percents}}" />
-  <age-stats-movil legend="{{legend}}" ranges="{{ranges}}" />
+  <sex-stats-svg planets="{{~/planets}}" percents="{{~percents}}" />
+  <age-stats-svg legend="{{~/legend}}" ranges="{{~/ranges}}" />
 </div>
 
 <style>
@@ -146,9 +146,6 @@ button.selected {
 
 
 <script>
-import pie from 'easy-pie-chart'
-import Chart from 'chart.js'
-import extend from '../lib/lodash/object/assign'
 
 component.exports = {
   isolated: true,

@@ -1,17 +1,17 @@
-<link rel='ractive' href='../partials/sex-stats.html'>
-<link rel='ractive' href='../partials/age-stats.html'>
+<link rel='ractive' href='../partials/sex-stats-svg.html'>
+<link rel='ractive' href='../partials/age-stats-svg.html'>
 
 <div class="poll-stats">
   <h4 class="title">Estadísticas</h4>
-  <h6 class="total">Total opiniones <span class="total">{{total}}</span></h6>
+  <h6 class="total">Total opiniones <span class="total">{{~/total}}</span></h6>
 
-  {{#if totals}}
+  {{#if ~/totals}}
     <div class="stats-box">
-      {{#totals : i}}
+      {{#each ~/totals : i}}
         <div class="bar">
-          <div class="bar-desc">{{ options[i].text }}</div>
-          {{#if this === limits.max}}
-            <button class="button-votes {{idx === i ? 'selected' : ''}}">
+          <div class="bar-desc">{{ ~/options[i].text }}</div>
+          {{#if this === ~/limits.max}}
+            <button class="button-votes {{~/idx === i ? 'selected' : ''}}">
               <img src="/img/star.svg" width="18" height="18" />
           <!-- {{else}} -->
               <!-- <img src="/img/check.svg" width="18" height="18" /> -->
@@ -19,18 +19,18 @@
           {{/if}}
           <span class="num_votes">{{.}}</span>
           <div style="position: relative">
-            <button class="bar shadow" style="width: {{bar_width}}px"></button>
-            <button class="bar" style="width:{{ percent_total(i, bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === limits.max}}fd270d{{else}}FB7868{{/if}}">
-              {{percent_total(i)}}%
+            <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+            <button class="bar" style="width:{{ ~/percent_total(i, ~/bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === ~/limits.max}}fd270d{{else}}FB7868{{/if}}">
+              {{~/percent_total(i)}}%
             </button>
           </div>
         </div>
-      {{/totals}}
+      {{/each}}
     </div>
   {{/if totals}}
 
-  <sex-stats planets="{{planets}}" percents="{{percents}}" />
-  <age-stats legend="{{legend}}" ranges="{{ranges}}" />
+  <sex-stats-svg planets="{{planets}}" percents="{{percents}}" />
+  <age-stats-svg legend="{{legend}}" ranges="{{ranges}}" />
 </div>
 
 <style>
@@ -138,8 +138,6 @@ button.selected {
 
 
 <script>
-import pie from 'easy-pie-chart'
-import Chart from 'chart.js'
 import extend from '../lib/lodash/object/assign'
 
 component.exports = {

@@ -1,5 +1,5 @@
-<link rel='ractive' href='../partials/sex-stats.html'>
-<link rel='ractive' href='../partials/age-stats.html'>
+<link rel='ractive' href='../partials/sex-stats-svg.html'>
+<link rel='ractive' href='../partials/age-stats-svg.html'>
 
 <div class="debate-stats">
   <h4 class="title">Estadísticas</h4>
@@ -56,8 +56,8 @@
     </div>
   {{/if ~/totals}}
 
-  <sex-stats planets="{{~/planets}}" percents="{{~/percents}}" />
-  <age-stats legend="{{~/legend}}" ranges="{{~/ranges}}" />
+  <sex-stats-svg planets="{{~/planets}}" percents="{{~/percents}}" />
+  <age-stats-svg legend="{{~/legend}}" ranges="{{~/ranges}}" />
 </div>
 
 
@@ -167,8 +167,6 @@ button {
 // TODO delete me when doing koa polyfills
 if (typeof Map === 'undefined')
   window.Map = require('es6-map')
-import pie from 'easy-pie-chart'
-import Chart from 'chart.js'
 import assign from '../lib/lodash/object/assign'
 import after from '../lib/lodash/function/after'
 import ageStats from '../lib/calc/age-stats'
@@ -207,40 +205,6 @@ component.exports = {
     let stats_el = this.find('.debate-stats')
     // TODO: resize me
     this.set('bar_width', stats_el.clientWidth - 100)
-    let num_planets = this.get('S.moarPlanets') ? 4 : 2
-    let colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18', '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
-    let barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
-    let options = {
-      animate: {
-        duration: 0,
-        enabled: false
-      },
-      scaleColor: false,
-      lineWidth: 10,
-      rotate: 0,
-      lineCap: 'butt'
-    }
-
-    let ranges = []
-    let mages = api.ages.concat('>')
-    let r, pr, a
-    for (a = 0; a < mages.length; a++) {
-      let rr = mages[a]
-      if (a) pr = r
-      r = rr
-      ranges.push({
-        label: (r === '>' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' years',
-        value: 0, // s
-        color: colors[a]
-      })
-    }
-    this.set('legend', ranges)
-
-    let els = this.findAll('.sex-graph')
-    for (let i = 0; i < num_planets; i++) {
-      let p = new pie(els[i], assign({}, options, {barColor: barColors[i]}))
-      this.observe('percents.'+i, function (v) { p.update(v) })
-    }
   },
   calc (data) {
     let num_planets = 2

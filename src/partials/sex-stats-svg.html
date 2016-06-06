@@ -1,0 +1,137 @@
+
+<div class="sex-stats" style="display: {{~/planets ? 'block' : 'none'}}">
+  <div class="sex-graph-container venus">
+    <div class="sex-graph" title="{{Math.round(~/percents.0)}}%">
+      <div class="percent-gauge venus">
+        <i class="fa fa-venus"></i>{{~/planets.0}}
+      </div>
+      <svg><path class="gauge-empty" /><path class="gauge" /><path class="gauge-empty" /></svg>
+    </div>
+    <h6 class="sex-stat">Mujeres</h6>
+  </div>
+  <div class="sex-graph-container mars">
+    <div class="sex-graph" title="{{Math.round(~/percents.1)}}%">
+      <div class="percent-gauge mars">
+        <i class="fa fa-mars"></i>{{~/planets.1}}
+      </div>
+      <svg><path class="gauge-empty" /><path class="gauge" /><path class="gauge-empty" /></svg>
+    </div>
+    <h6 class="sex-stat">Hombres</h6>
+  </div>
+  [[#if ~/S.moarPlanets]]
+  <div class="sex-graph-container">
+    <div class="sex-graph" title="{{Math.round(~/percents.2)}}%">
+      <div class="percent-gauge earth">
+        <i class="fa fa-circle-thin"></i>{{~/planets.2}}
+      </div>
+    </div>
+  </div>
+  <div class="sex-graph-container">
+    <div class="sex-graph" title="{{Math.round(~/percents.3)}}%">
+      <div class="percent-gauge mercury">
+        <i class="fa fa-mercury"></i>{{~/planets.3}}
+      </div>
+    </div>
+  </div>
+  [[/if]]
+</div>
+
+<style>
+
+.sex-graph-container {
+  float: left;
+  width: 50%;
+}
+
+.sex-graph {
+  width: 50%;
+  position: relative;
+  display: block;
+  width: 110px;
+  height: 110px;
+  margin: 10px auto;
+  text-align: center;
+}
+.sex-stat {
+  font-family: 'Pacifico';
+}
+
+.percent-gauge {
+  display: inline-block;
+  z-index: 2;
+  /*position: absolute;
+  top: 27px;
+  left: 27px;*/
+  margin-top: 27px;
+  font-size: 33px;
+  font-weight: 900;
+}
+
+.venus   { color: #D41A79; }
+.mars    { color: #3CA0BB; }
+.earth   { color: #4B9655; }
+.mercury { color: #812698; }
+
+svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@media (max-width: 768px) {
+  .sex-graph {
+    width: 80px;
+    height: 80px;
+  }
+  .percent-gauge {
+    margin-top: 20px;
+    font-size: 24px;
+  }
+}
+
+</style>
+
+
+<script>
+// import polarToCartesian from '../lib/calc/polarToCartesian'
+import describeConeSection from '../lib/svg/describeConeSection'
+
+component.exports = {
+  isolated: true,
+  oncomplete () {
+    const num_planets = this.get('S.moarPlanets') ? 4 : 2
+    const barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
+
+    let movil = window.isMobile
+    let mid = movil ? 40 : 55
+    // let start =
+    let _g = this.findAll('svg')
+    let start_pos = new Array(num_planets)
+    let percents = this.get('percents')
+    for (var i = 0; i < num_planets; i++) {
+      let el = _g[i]
+      let n = el.childNodes
+      n[0].setAttribute('fill', '#f9f9f9')
+      n[1].setAttribute('fill', barColors[i])
+      n[2].setAttribute('fill', '#f9f9f9')
+      el.setAttribute('width', movil ? 80 : 110)
+      el.setAttribute('height', movil ? 80 : 110)
+    }
+
+    this.observe('percents', function (percents) {
+      let prev = 0
+      for (var i = 0; i < num_planets; i++) {
+        var v = percents[i]
+        let el = _g[i]
+        var n = el.childNodes
+        var deg = v ? v / 100 * 360 : 0
+        n[0].style.display = prev === 0 ? 'none' : ''
+        n[0].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, 0, prev))
+        n[1].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, prev, prev += deg))
+        n[2].style.display = prev === 360 ? 'none' : ''
+        n[2].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, prev, 360))
+      }
+    }, { defer: true, init: false })
+  },
+}
+</script>

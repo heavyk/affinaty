@@ -1,0 +1,126 @@
+
+<div class="age-graph">
+  <ul class="legend">
+    {{#each ~/legend}}
+      <li>
+        <span style="background-color: {{.color}}"></span>
+        {{.label}}: {{.value}}
+      </li>
+    {{/each ~/legend}}
+  </ul>
+  <!-- <canvas width="200" height="200"></canvas> -->
+  <svg>
+    {{#each ~/legend}}
+      <path class="gauge" title="{{.label}}" fill="{{.color}}" stroke="{{.stroke || '#fff'}}" stroke-width="1" stroke-linecap="square" decorator="tip:{{.label}}" />
+    {{/each}}
+  </svg>
+</div>
+
+<style>
+
+svg {
+  float: right;
+  margin: 0 20px 0 0;
+  /*width: 200px;*/
+  /*height: 200px;*/
+}
+
+.legend {
+  list-style-type: none;
+  float: left;
+}
+
+.legend li {
+  display: block;
+  float: left;
+  clear: both;
+  padding: 5px;
+}
+
+.legend li span {
+  width: 25px;
+  height: 25px;
+  display: block;
+  float: left;
+  margin-right: 10px;
+}
+
+
+@media (max-width: 768px) {
+  ul {
+    padding-left: 0px;
+  }
+  .legend li {
+    padding: 3px;
+  }
+
+  .legend li span {
+    width: 15px;
+    height: 15px;
+  }
+  svg {
+    margin: 0;
+    /*width: 80px;*/
+    /*height: 80px;*/
+  }
+}
+
+</style>
+
+
+<script>
+import describeConeSection from '../lib/svg/describeConeSection'
+
+component.exports = {
+  isolated: true,
+  oncomplete () {
+    const colors = ['#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18'] //, '#f2d767', '#58176e', '#5e8cb4', '#d53084', '#e96b18']
+    const mages = api.ages.concat('<')
+    const movil = window.isMobile
+
+    let ranges = []
+    let r, pr, a
+    for (a = 0; a < mages.length; a++) {
+      let rr = mages[a]
+      if (a) pr = r
+      r = rr
+      ranges.push({
+        label: (r === '<' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' years',
+        value: 0, // s
+        color: colors[a]
+      })
+    }
+    this.set('legend', ranges)
+
+    let svg = this.find('svg')
+    let n = svg.childNodes
+    let width = movil ? 120 : 200
+    svg.setAttribute('width', width)
+    svg.setAttribute('height', width)
+    const mid = width / 2
+    const r1 = mid - (movil ? 30 : 55)
+    const r2 = mid - 5
+
+    this.observe('ranges', (r, _r) => {
+      let total = 0
+      for (let i = 0; i < r.length; i++) total += r[i]
+
+      let prev = 0
+      for (let i = 0; i < r.length; i++) {
+        let v = r[i]
+        let deg = v / total * 360
+        // n[i].setAttribute('d', describeConeSection(mid, mid, mid - 55, mid - 5, prev, prev + deg))
+        // console.log(ranges[i].label, v, Math.round(prev), Math.round(prev + deg))
+        // prev += deg
+
+        n[i].setAttribute('d', describeConeSection(mid, mid, r1, r2, prev, prev += deg))
+        this.set('legend.'+i+'.value', v)
+        // this.set('legend.'+i+'.label', v)
+      }
+    }, { defer: true, init: false })
+  },
+  decorators: {
+    tip: require('../lib/decorators/floating-tip')
+  }
+}
+</script>

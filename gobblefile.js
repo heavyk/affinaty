@@ -39,10 +39,11 @@ var affinaty = gobble([
 				 'gemini-scrollbar',
 				 'masonry-layout',
 				 'dropzone', // this needs to be replaced by generic code
-				 'easy-pie-chart',
 				 'chart.js',
 				 'es6-map',
 				 'lie',
+				 'url',
+				 'querystring',
 				 'smart-app-banner',
 				 'engine.io-client',
 			],
