@@ -25,14 +25,11 @@
       <button class="cancel" style="background-color:{{~/params_vote.color}}" on-tap="cancel" decorator="tip:'Cancelar',35">
         {{~/params_vote.text}}
       </button>
-    {{/if ~/d.pos}}
-  </div>
-  <div class="status">
-    {{#unless ~/d.pos}}
+    {{else}}
       <a class="button_opina" href="/debate/{{~/d._id}}">
         Opina
       </a>
-    {{/unless ~/d.pos}}
+    {{/if ~/d.pos}}
   </div>
 </div>
 
@@ -96,6 +93,7 @@ button:hover {
 }
 div.cancel {
   text-align: center;
+  height: 32px;
 }
 .left {
   float: left;
