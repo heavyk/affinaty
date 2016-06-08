@@ -1,7 +1,7 @@
 
 <div class="sex-stats" style="display: {{~/planets ? 'block' : 'none'}}">
   <div class="sex-graph-container venus">
-    <div class="sex-graph" decorator="tip:{{cacas(0)}}">
+    <div class="sex-graph" decorator="tip:{{percent(0)}}">
       <div class="percent-gauge venus">
         <!-- <i class="fa fa-venus" /> -->
         {{~/planets.0}}
@@ -11,7 +11,7 @@
     <h6 class="sex-stat"><i class="fa fa-venus" /> Mujeres</h6>
   </div>
   <div class="sex-graph-container mars">
-    <div class="sex-graph" decorator="tip:{{cacas(1)}}">
+    <div class="sex-graph" decorator="tip:{{percent(1)}}">
       <div class="percent-gauge mars">
         <!-- <i class="fa fa-mars" /> -->
         {{~/planets.1}}
@@ -99,17 +99,10 @@ svg {
 
 
 <script>
-// import polarToCartesian from '../lib/calc/polarToCartesian'
 import describeConeSection from '../lib/svg/describeConeSection'
 
 component.exports = {
   isolated: true,
-  // onconfig () {
-  //   this.set('cacas', (i) => {
-  //     console.log('cacas', i)
-  //     return this.get('percents.0')
-  //   })
-  // },
   oncomplete () {
     const num_planets = this.get('S.moarPlanets') ? 4 : 2
     const barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
@@ -146,10 +139,9 @@ component.exports = {
     }, { defer: true, init: false })
   },
   data: {
-    cacas (i) {
-      console.log('cacas', i)
+    percent (i) {
       var v = this.get('percents.'+i)
-      if (v) return v + '%'
+      if (typeof v === 'number') return v.toFixed(1) + '%'
     }
   },
   decorators: {
