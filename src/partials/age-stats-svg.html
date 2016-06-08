@@ -103,12 +103,12 @@ component.exports = {
 
     this.observe('ranges', (r, _r) => {
       let total = 0
-      for (let i = 0; i < r.length; i++) total += r[i]
+      for (var i = 0; i < r.length; i++) total += r[i]
 
       let prev = 0
       for (let i = 0; i < r.length; i++) {
         let v = r[i]
-        let deg = v / total * 360
+        let deg = total > 0 ? v / total * 360 : 0
         // n[i].setAttribute('d', describeConeSection(mid, mid, mid - 55, mid - 5, prev, prev + deg))
         // console.log(ranges[i].label, v, Math.round(prev), Math.round(prev + deg))
         // prev += deg
@@ -121,6 +121,6 @@ component.exports = {
   },
   decorators: {
     tip: require('../lib/decorators/floating-tip')
-  }
+  },
 }
 </script>

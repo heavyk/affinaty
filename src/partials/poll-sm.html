@@ -3,7 +3,7 @@
 <link rel='ractive' href='../partials/social-sm.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
-<link rel='ractive' href='../partials/poll-stats-movil.html'>
+<link rel='ractive' href='../partials/poll-stats.html'>
 
 <div class="debate">
   <div class="header">
@@ -16,19 +16,7 @@
       <h5 style="width: {{~/view === 'list' ? '90%' : '100%'}}"><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
       <time time="{{~/d.created}}" class="since" />
     </div>
-    <div class='expandable'>
-      {{#if showDetail}}
-      <div class="register-background" style="display: {{showDetail ? 'block' : 'none'}}">
-        <div class="register-outer">
-          <div class="register-box">
-            <poll-stats-movil id="{{~/id}}" />
-            <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
-          </div>
-        </div>
-      </div>
 
-      {{/if}}
-    </div>
     <a class="stats" on-tap="show-stats">
       <div class="stats">
         <i class="fa fa-chevron-right"></i>
@@ -270,6 +258,8 @@ component.exports = {
   isolated: true,
   modal: require('../modal'),
   onconfig () {
+    // TODO: use an observer??
+    let id = this.get('id')
     this.set('bar', (i, px) => {
       let v = this.get('d.totals.'+i)
       let c = this.get('limits')
@@ -278,22 +268,11 @@ component.exports = {
     this.set('bar_txt', (i) => {
       return this.get('d.options.'+i+'.text')
     })
-  },
-  oninit () {
-    let tags = this.get('d.tags')
-    if (!tags || !tags.length) {
-      this.set('d.tags', [
-        {title: 'lala', _id: 1234},
-        {title: 'hehe', _id: 1111},
-        {title: 'jiji', _id: 1155},
-      ])
-    }
     this.on('show-stats', () => {
       if (window.isMobile) {
-        // if (this.parent) this.parent.toggle('showDetail')
-        this.toggle('showDetail')
+        this.modal('poll-stats', {header: false, id})
       } else {
-        router.dispatch(`/poll/${this.get('d._id')}`)
+        router.dispatch(`/poll/${id}`)
       }
     })
   },

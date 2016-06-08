@@ -2,7 +2,7 @@
 <link rel='ractive' href='../partials/social-sm.html'>
 <link rel='ractive' href='../partials/foto.html'>
 <link rel='ractive' href='../partials/time.html'>
-<link rel='ractive' href='../partials/debate-stats-movil.html'>
+<link rel='ractive' href='../partials/debate-stats.html'>
 <link rel='ractive' href='../partials/comment-list.html'>
 
 <div class="debate">
@@ -16,18 +16,7 @@
       <h5 style="width: {{~/view === 'list' ? '90%' : '100%'}}"><a href="/category/{{~/d.category._id}}">{{~/d.category.title}}</a></h5>
       <time time="{{~/d.created}}" class="since" />
     </div>
-    <div class='expandable'>
-      {{#if ~/showDetail}}
-      <div class="register-background" style="display: {{showDetail ? 'block' : 'none'}}">
-        <div class="register-outer">
-          <div class="register-box">
-            <debate-stats-movil debate="{{id}}" />
-            <button class="detail-close" on-tap="set('showDetail',false)">Cerrar</button>
-          </div>
-        </div>
-      </div>
-      {{/if ~/showDetail}}
-    </div>
+
     <a class="stats" on-tap="show-stats">
       <div class="stats">
         <div class="stats-box">
@@ -290,10 +279,9 @@ component.exports = {
     })
     this.on('show-stats', () => {
       if (window.isMobile) {
-        // if (this.parent) this.parent.toggle('showDetail')
-        this.toggle('showDetail')
+        this.modal('debate-stats', {header: false, debate: id})
       } else {
-        router.dispatch(`/debate/${d._id}`)
+        router.dispatch(`/debate/${id}`)
       }
     })
   },

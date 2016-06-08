@@ -1,0 +1,265 @@
+<div class="percent-stats">
+  <svg>
+    <defs>
+      <filter id="f1" x="-1" y="-1" width="300%" height="300%">
+        <feOffset result="offOut" in="SourceGraphic" dx="0" dy="2" />
+        <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+        <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+      </filter>
+      <path id="star"
+        transform="scale(.3)  translate(-6 0)"
+        d="M19.93 38.12c.07-.354-.054-.718-.312-.972L7.84 25.664 24.11 23.3c.36-.05.67-.273.83-.597l7.28-14.75 7.277 14.75c.164.324.473.547.825.598L56.6 25.665 44.813 37.148c-.25.254-.375.618-.31.973l2.782 16.204-14.558-7.644c-.156-.086-.336-.133-.508-.133-.176 0-.352.047-.512.133l-14.554 7.644zm44.24-14.913c-.64-1.96-2.38-3.426-4.427-3.727l-15.62-2.27-6.99-14.15C36.204 1.17 34.324 0 32.22 0c-2.102 0-3.992 1.172-4.914 3.055L20.318 17.21l-15.63 2.27c-2.038.3-3.78 1.766-4.417 3.727-.644 2.004-.12 4.152 1.387 5.617l11.31 11.02-2.67 15.558c-.35 2.04.505 4.145 2.18 5.364 1.665 1.195 3.95 1.375 5.77.418l13.973-7.348 13.965 7.348c.793.41 1.676.625 2.554.625 1.16 0 2.273-.36 3.226-1.044 1.668-1.22 2.523-3.325 2.172-5.364l-2.664-15.558 11.305-11.02c1.502-1.465 2.03-3.613 1.39-5.617" fill="#ff3000"/>
+      <path id="check"
+        transform="scale(-.01 .01) rotate(180) translate(-200 -1600)"
+        d="M1671 970q0 -40 -28 -68l-724 -724l-136 -136q-28 -28 -68 -28t-68 28l-136 136l-362 362q-28 28 -28 68t28 68l136 136q28 28 68 28t68 -28l294 -295l656 657q28 28 68 28t68 -28l136 -136q28 -28 28 -68z" />
+      <path id="xx"
+        transform="scale(-.009 .009) rotate(180) translate(200 -1700)"
+        d="M1298 214q0 -40 -28 -68l-136 -136q-28 -28 -68 -28t-68 28l-294 294l-294 -294q-28 -28 -68 -28t-68 28l-136 136q-28 28 -28 68t28 68l294 294l-294 294q-28 28 -28 68t28 68l136 136q28 28 68 28t68 -28l294 -294l294 294q28 28 68 28t68 -28l136 -136q28 -28 28 -68 t-28 -68l-294 -294l294 -294q28 -28 28 -68z" />
+    </defs>
+    <!-- <use xlink:href="#star" />
+    <use xlink:href="#check" transform="translate(10 10)" /> -->
+
+    <!-- <rect class="icon" stroke="#ccc" fill="#fff" stroke-width="1"  filter="url(#f1)" /><text class="option-text" /><rect class="bar-shadow" /><rect class="bar" /><text class="total" /> -->
+    {{#each ~/options : i}}
+      <g class="icon">
+        <rect stroke="#ccc" fill="#fff" stroke-width="1" filter="url(#f1)" />
+      </g>
+      <text class="option-text" />
+      <rect class="bar-shadow" />
+      <rect class="bar" />
+      <text class="bar-label" />
+      <text class="total" />
+    {{/each}}
+    <!-- {{#if ~/totals}}
+      <div class="stats-box">
+          <div class="bar">
+            <div class="bar-desc">{{ ~/options[i].text }}</div>
+            {{#if this === ~/limits.max}}
+              <button class="button-votes {{~/idx === i ? 'selected' : ''}}">
+                <img src="/img/star.svg" width="18" height="18" />
+              </button>
+            {{/if}}
+            <span class="num_votes">{{.}}</span>
+            <div style="position: relative">
+              <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
+              <button class="bar" style="width:{{ ~/percent_total(i, ~/bar_width) }}px{{#if this > 0}};color: #fff{{/if}};background:#{{#if this === ~/limits.max}}fd270d{{else}}FB7868{{/if}}">
+                {{~/percent_total(i)}}%
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/if totals}} -->
+  </svg>
+
+</div>
+
+<style>
+svg {
+  margin-left: 10px;
+}
+text.bar-label {
+  /*fill: #fff;*/
+  /*stroke: #333;
+  stroke-width: .3px;*/
+  text-anchor: middle;
+}
+text.option-text,
+text.total {
+  fill: #333;
+}
+text.total {
+  text-anchor: end;
+}
+
+</style>
+
+
+<script>
+// import describeConeSection from '../lib/svg/describeConeSection'
+
+// TODO: ployfill classList if it's a shitty browser
+
+component.exports = {
+  isolated: true,
+  oncomplete () {
+    const movil = window.isMobile
+    const config = this.get('config') || {}
+    const bar_prefs = config.bar || {}
+
+    const bar_height = bar_prefs.height || 20
+    const bar_rounding = bar_prefs.rounding || 5
+    const option_height = config.option_height || 50
+    const icon_size = config.icon_size || 30
+    const icon_padding = config.icon_padding || 5
+    const fg = bar_prefs.fg || '#FB7868'
+    const bg = bar_prefs.bg || '#ccc'
+    const winning = bar_prefs.winning
+    const winning_icon = config.winning_icon
+
+    const bar_x = icon_size + (icon_padding * 2)
+
+    let width = this.el.clientWidth - 30
+    let svg = this.find('svg')
+    svg.setAttribute('width', width)
+    let otxt, total, icon, bar, label, bar_s
+    let len, sum, max
+
+    let set_icon = (i, o, ico) => {
+      let _icon = icon[i]
+      _icon.style.display = ico ? '' : 'none'
+      if (ico) {
+        let use_el
+        let ic = _icon.classList
+        if (!ic.contains(ico)) {
+          ic.add(ico)
+          // remove all previous icon elements
+          while (_icon.childNodes > 1) _icon.removeChild(_icon.childNodes[1])
+          // put new icon elements
+          switch (ico) {
+            case 'mas-mas':
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#check')
+            use_el.setAttribute('transform', `translate(7 0)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#check')
+            use_el.setAttribute('transform', `translate(7 10)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            break
+            case 'mas':
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#check')
+            use_el.setAttribute('transform', `translate(7 5)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            break;
+            case 'woa':
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#xx')
+            use_el.setAttribute('transform', `translate(7 5)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            break;
+            case 'woa-woa':
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#xx')
+            use_el.setAttribute('transform', `translate(7 -1)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#xx')
+            use_el.setAttribute('transform', `translate(7 11)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            break
+            case 'star':
+            use_el = document.createElementNS('http://www.w3.org/2000/svg', 'use')
+            use_el.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#star')
+            use_el.setAttribute('transform', `translate(7 5)`)
+            use_el.setAttribute('fill', o.fg || '#fcc')
+            _icon.appendChild(use_el)
+            break;
+            default:
+            console.warn(`unknown icon '${ico}' for option ${i}`)
+          }
+        }
+      }
+    }
+
+    this.observe('options', (options) => {
+      // console.info('options', options)
+      if (!options || options.length === len) return
+      var i, icon_rect, totals = this.get('totals')
+      var last_y = -option_height / 2
+
+      otxt = this.findAll('.option-text')
+      total = this.findAll('.total')
+      icon = this.findAll('.icon')
+      bar = this.findAll('.bar')
+      label = this.findAll('.bar-label')
+      bar_s = this.findAll('.bar-shadow')
+      len = options.length
+      for (i = 0; i < bar_s.length; i++) {
+        otxt[i].setAttribute('x', bar_x)
+
+        icon_rect = icon[i].childNodes[0]
+        icon_rect.setAttribute('width', icon_size)
+        icon_rect.setAttribute('height', icon_size)
+        icon_rect.setAttribute('rx', bar_rounding)
+        icon_rect.setAttribute('ry', bar_rounding)
+
+        bar_s[i].setAttribute('width', width - bar_x)
+        bar_s[i].setAttribute('height', bar_height)
+        bar_s[i].setAttribute('x', bar_x)
+        bar_s[i].setAttribute('rx', bar_rounding)
+        bar_s[i].setAttribute('ry', bar_rounding)
+
+        bar[i].setAttribute('height', bar_height)
+        bar[i].setAttribute('x', bar_x)
+        bar[i].setAttribute('rx', bar_rounding)
+        bar[i].setAttribute('ry', bar_rounding)
+      }
+
+      svg.setAttribute('height', ((len+1) * option_height) + last_y)
+
+      if (totals) for (i = 0, sum = 0, max = 0; i < totals.length; i++) {
+        v = totals[i]
+        sum += v
+        if (v > max) max = v
+      }
+      for (i = 0; i < len; i++) {
+        var o = options[i]
+        var v = totals ? totals[i] : null
+        otxt[i].innerHTML = o.text
+        otxt[i].setAttribute('y', last_y += option_height)
+        o.y = last_y
+        total[i].setAttribute('y', last_y)
+        total[i].setAttribute('x', width - 5)
+        total[i].innerHTML = v || '-'
+
+        bar[i].setAttribute('fill', o.fg || fg)
+        bar[i].setAttribute('y', last_y + 10)
+
+        bar_s[i].setAttribute('fill', o.bg || bg)
+        bar_s[i].setAttribute('y', last_y + 10)
+
+        label[i].setAttribute('fill', v ? '#fff' : '#333')
+        label[i].setAttribute('y', last_y + 25)
+
+        icon[i].setAttribute('transform', `translate(${icon_padding} ${last_y + 6})`)
+        set_icon(i, o, winning_icon && v === max ? winning_icon : o.icon)
+      }
+    }, { defer: true })
+
+    this.observe('totals', (totals) => {
+      // console.info('totals', totals)
+      if (!totals || !len) return
+      let options = this.get('options')
+      var i, v, px, max_px = width - bar_x
+      for (i = 0, sum = 0, max = 0; i < totals.length; i++) {
+        v = totals[i]
+        sum += v
+        if (v > max) max = v
+      }
+      for (i = 0; i < totals.length; i++) {
+        v = totals[i]
+        total[i].innerHTML = v
+        // px = Math.max(v / max * (width - bar_x), 25)
+        px = v / max * max_px
+        var bar_percent = px / max_px
+        bar[i].setAttribute('width', px)
+        bar[i].setAttribute('fill', winning && options && v === max ? winning : options[i].fg || fg)
+        // label[i].setAttribute('x', 0 + bar_x + (px / 2))
+        // label[i].setAttribute('x', 10 + bar_x + (px / 2))
+        label[i].setAttribute('x', bar_percent > 0.07 ? 0 + bar_x + (px / 2) : 15 + bar_x + px)
+        label[i].innerHTML = Math.round(v / sum * 100) + '%'
+        label[i].setAttribute('fill', bar_percent > 0.07 ? '#fff' : '#000')
+        if (options) set_icon(i, options[i], winning_icon && v === max ? winning_icon : options[i].icon)
+      }
+    }, { defer: true })
+  },
+}
+</script>

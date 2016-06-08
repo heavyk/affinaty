@@ -1,35 +1,37 @@
 
 <div class="sex-stats" style="display: {{~/planets ? 'block' : 'none'}}">
   <div class="sex-graph-container venus">
-    <div class="sex-graph" title="{{Math.round(~/percents.0)}}%">
+    <div class="sex-graph" decorator="tip:{{cacas(0)}}">
       <div class="percent-gauge venus">
-        <i class="fa fa-venus"></i>{{~/planets.0}}
+        <!-- <i class="fa fa-venus" /> -->
+        {{~/planets.0}}
       </div>
       <svg><path class="gauge-empty" /><path class="gauge" /><path class="gauge-empty" /></svg>
     </div>
-    <h6 class="sex-stat">Mujeres</h6>
+    <h6 class="sex-stat"><i class="fa fa-venus" /> Mujeres</h6>
   </div>
   <div class="sex-graph-container mars">
-    <div class="sex-graph" title="{{Math.round(~/percents.1)}}%">
+    <div class="sex-graph" decorator="tip:{{cacas(1)}}">
       <div class="percent-gauge mars">
-        <i class="fa fa-mars"></i>{{~/planets.1}}
+        <!-- <i class="fa fa-mars" /> -->
+        {{~/planets.1}}
       </div>
       <svg><path class="gauge-empty" /><path class="gauge" /><path class="gauge-empty" /></svg>
     </div>
-    <h6 class="sex-stat">Hombres</h6>
+    <h6 class="sex-stat"><i class="fa fa-mars" /> Hombres</h6>
   </div>
   [[#if ~/S.moarPlanets]]
   <div class="sex-graph-container">
     <div class="sex-graph" title="{{Math.round(~/percents.2)}}%">
       <div class="percent-gauge earth">
-        <i class="fa fa-circle-thin"></i>{{~/planets.2}}
+        <i class="fa fa-circle-thin" />{{~/planets.2}}
       </div>
     </div>
   </div>
   <div class="sex-graph-container">
     <div class="sex-graph" title="{{Math.round(~/percents.3)}}%">
       <div class="percent-gauge mercury">
-        <i class="fa fa-mercury"></i>{{~/planets.3}}
+        <i class="fa fa-mercury" />{{~/planets.3}}
       </div>
     </div>
   </div>
@@ -39,8 +41,9 @@
 <style>
 
 .sex-graph-container {
-  float: left;
-  width: 50%;
+  /*float: left;*/
+  width: 49%;
+  display: inline-block;
 }
 
 .sex-graph {
@@ -54,6 +57,9 @@
 }
 .sex-stat {
   font-family: 'Pacifico';
+}
+.fa {
+  font-size: 33px;
 }
 
 .percent-gauge {
@@ -98,6 +104,12 @@ import describeConeSection from '../lib/svg/describeConeSection'
 
 component.exports = {
   isolated: true,
+  // onconfig () {
+  //   this.set('cacas', (i) => {
+  //     console.log('cacas', i)
+  //     return this.get('percents.0')
+  //   })
+  // },
   oncomplete () {
     const num_planets = this.get('S.moarPlanets') ? 4 : 2
     const barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
@@ -111,9 +123,9 @@ component.exports = {
     for (var i = 0; i < num_planets; i++) {
       let el = _g[i]
       let n = el.childNodes
-      n[0].setAttribute('fill', '#f9f9f9')
+      n[0].setAttribute('fill', '#ddd')
       n[1].setAttribute('fill', barColors[i])
-      n[2].setAttribute('fill', '#f9f9f9')
+      n[2].setAttribute('fill', '#ddd')
       el.setAttribute('width', movil ? 80 : 110)
       el.setAttribute('height', movil ? 80 : 110)
     }
@@ -126,12 +138,22 @@ component.exports = {
         var n = el.childNodes
         var deg = v ? v / 100 * 360 : 0
         n[0].style.display = prev === 0 ? 'none' : ''
-        n[0].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, 0, prev))
+        n[0].setAttribute('d', describeConeSection(mid, mid, mid - 13, mid - 7, 0, prev))
         n[1].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, prev, prev += deg))
         n[2].style.display = prev === 360 ? 'none' : ''
-        n[2].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, prev, 360))
+        n[2].setAttribute('d', describeConeSection(mid, mid, mid - 13, mid - 7, prev, 360))
       }
     }, { defer: true, init: false })
+  },
+  data: {
+    cacas (i) {
+      console.log('cacas', i)
+      var v = this.get('percents.'+i)
+      if (v) return v + '%'
+    }
+  },
+  decorators: {
+    tip: require('../lib/decorators/floating-tip')
   },
 }
 </script>

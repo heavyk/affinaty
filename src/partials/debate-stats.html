@@ -1,61 +1,12 @@
 <link rel='ractive' href='../partials/sex-stats-svg.html'>
 <link rel='ractive' href='../partials/age-stats-svg.html'>
+<link rel='ractive' href='../partials/percent-stats-svg.html'>
 
 <div class="debate-stats">
   <h4 class="title">Estadísticas</h4>
   <h6 class="total">Total opiniones <span class="total">{{~/total}}</span></h6>
 
-  {{#if ~/totals}}
-    <div class="stats-box">
-      <div class="bar">
-        <div class="stat-text">Muy de acuerdo</div>
-        <button class="button-mas-mas {{~/d.pos === 2 ? 'active' : ''}}">
-          <i class="fa fa-check"></i>
-          <i class="fa fa-check"></i>
-        </button>
-        <span class="num_votes">{{~/totals.3}}</span>
-        <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
-          <button class="bar mas-mas" style="{{#if ~/totals.3}}color:#fff;width:{{~/muyDeAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.3}}%</button>
-        </div>
-      </div>
-      <div class="bar">
-        <div class="stat-text">De acuerdo</div>
-        <button class="button-mas {{~/d.pos === 1 ? 'active' : ''}} single">
-          <i class="fa fa-check"></i>
-        </button>
-        <span class="num_votes">{{~/totals.2}}</span>
-        <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
-          <button class="bar mas" style="{{#if ~/totals.2}}color:#fff;width:{{~/deAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.2}}%</button>
-        </div>
-      </div>
-      <div class="bar">
-        <div class="stat-text">En desacuerdo</div>
-        <button class="button-woa {{~/d.pos === -1 ? 'active' : ''}} single">
-          <i class="fa fa-times"></i>
-        </button>
-        <span class="num_votes">{{~/totals.1}}</span>
-        <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
-          <button class="bar woa" style="{{#if ~/totals.1}}color:#fff;width:{{~/desAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.1}}%</button>
-        </div>
-      </div>
-      <div class="bar">
-        <div class="stat-text">Muy en desacuerdo</div>
-        <button class="button-woa-woa {{~/d.pos === -2 ? 'active' : ''}}">
-          <i class="fa fa-times"></i>
-          <i class="fa fa-times"></i>
-        </button>
-        <span class="num_votes">{{~/totals.0}}</span>
-        <div style="position: relative; padding-top: 24px;">
-          <button class="bar shadow" style="width: {{~/bar_width}}px"></button>
-          <button class="bar woa-woa" style="{{#if ~/totals.0}}color:#fff;width:{{~/muyDesAcuerdo}}px{{else}}width:0{{/if}}">{{~/totals_p.0}}%</button>
-        </div>
-      </div>
-    </div>
-  {{/if ~/totals}}
-
+  <percent-stats-svg totals="{{~/totals}}" options="{{~/options}}" />
   <sex-stats-svg planets="{{~/planets}}" percents="{{~/percents}}" />
   <age-stats-svg legend="{{~/legend}}" ranges="{{~/ranges}}" />
 </div>
@@ -79,25 +30,12 @@ span.total {
   right: 10px;
   padding: 0 5px;
 }
-.num_votes {
-  padding: 3px 0;
-  position: absolute;
-  right: 18px;
-}
 .title {
   text-align: center;
   color: #747474;
   font-size: 24px;
   font-weight: 400;
   margin-bottom: 10px;
-}
-div.bar {
-  height: 55px;
-  margin-left: 8px;
-}
-
-.stat-text {
-  margin-left: 35px;
 }
 
 .debate-stats {
@@ -110,12 +48,6 @@ div.bar {
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
 
-.sex-stats {
-  margin: 20px 0;
-  /*for some stupid reason, it won't calc the height */
-  height: 180px;
-}
-
 .age-graph {
   margin: 20px;
   height: 220px;
@@ -124,41 +56,6 @@ div.bar {
 .stats-box {
   margin: 20px;
 }
-button.bar {
-  margin: 5px 0;
-  padding: 0;
-  transition: .3s width;
-  display: inline;
-  position: absolute;
-  height: 20px;
-  left: 35px;
-}
-.stats-box .mas-mas {
-  background: #2e8034;
-}
-.stats-box .mas {
-  background: #5a9727;
-}
-.stats-box .woa {
-  background: #cc4d41;
-}
-.stats-box .woa-woa {
-  background: #bb0217;
-}
-button.shadow {
-  background: #f6f6f6;
-}
-
-button {
-  padding: 4px 10px;
-}
-.active {
-  background-color: #333;
-}
-.fa {
-  margin: 0;
-}
-
 
 </style>
 
@@ -176,6 +73,13 @@ component.exports = {
   isolated: true,
   dd: new Map,
   onconfig () {
+    this.set('options', [
+      {bg: '#f6f6f6', fg: '#2e8034', text: "Muy de acuerdo", icon: 'mas-mas'},
+      {bg: '#f6f6f6', fg: '#5a9727', text: "De acuerdo", icon: 'mas'},
+      {bg: '#f6f6f6', fg: '#cc4d41', text: "En desacuerdo", icon: 'woa'},
+      {bg: '#f6f6f6', fg: '#bb0217', text: "Muy en desacuerdo", icon: 'woa-woa'},
+      // {bg: '#f6f6f6', fg: '#ff3000', text: "star test", icon: 'star'},
+    ])
     this.observe('debate', (id, __id) => {
       if (!id) return
 
@@ -200,11 +104,6 @@ component.exports = {
         })
       } else onloaded()
     })
-  },
-  oncomplete () {
-    let stats_el = this.find('.debate-stats')
-    // TODO: resize me
-    this.set('bar_width', stats_el.clientWidth - 100)
   },
   calc (data) {
     let num_planets = 2
@@ -236,6 +135,8 @@ component.exports = {
       total += sum
     }
 
+    totals.reverse()
+
     for (gender = 0; gender < num_planets; gender++)
       percents[gender] = total > 0 ? planets[gender] / total * 100 : 0
 
@@ -251,42 +152,6 @@ component.exports = {
       totals: totals,
       totals_p: totals_p,
       stats: data,
-    }
-  },
-  computed: {
-    limits () {
-      let r = { sum: 0, max: 0 }
-      let values = this.get('totals')
-      if (values) for (let i = 0; i < values.length; i++) {
-        let v = values[i]
-        r.sum += v
-        if (v > r.max) r.max = v
-      }
-      return r
-    },
-    muyDeAcuerdo () {
-      let v = this.get('totals.3')
-      let c = this.get('limits')
-      let px = this.get('bar_width')
-      return (v / c.max * px).toFixed(2)
-    },
-    deAcuerdo () {
-      let v = this.get('totals.2')
-      let c = this.get('limits')
-      let px = this.get('bar_width')
-      return (v / c.max * px).toFixed(2)
-    },
-    desAcuerdo () {
-      let v = this.get('totals.1')
-      let c = this.get('limits')
-      let px = this.get('bar_width')
-      return (v / c.max * px).toFixed(2)
-    },
-    muyDesAcuerdo () {
-      let v = this.get('totals.0')
-      let c = this.get('limits')
-      let px = this.get('bar_width')
-      return (v / c.max * px).toFixed(2)
     }
   },
 }
