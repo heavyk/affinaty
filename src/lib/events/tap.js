@@ -1,6 +1,15 @@
 const DISTANCE_THRESHOLD = 5; // maximum pixels pointer can move before cancel
 const TIME_THRESHOLD = 400;   // maximum milliseconds between down and up before cancel
 
+var supportsPassive = false
+// disabled, for now...
+// try {
+//   var opts = Object.defineProperty({}, 'passive', {
+//     get: function() { supportsPassive = true }
+//   })
+//   window.addEventListener("test", null, opts)
+// } catch (e) {}
+
 export default function tap ( node, callback ) {
 	return new TapHandler( node, callback );
 }
@@ -22,16 +31,16 @@ TapHandler.prototype = {
 		} else if ( window.navigator.msPointerEnabled ) {
 			node.addEventListener( 'MSPointerDown', handleMousedown, false );
 		} else {
-			node.addEventListener( 'mousedown', handleMousedown, false );
+			node.addEventListener( 'mousedown', handleMousedown, supportsPassive ? { passive: true } : false );
 		}
 
 		// ...and touch events
-		node.addEventListener( 'touchstart', handleTouchstart, false );
+		node.addEventListener( 'touchstart', handleTouchstart, supportsPassive ? { passive: true } : false );
 
 		// native buttons, and <input type='button'> elements, should fire a tap event
 		// when the space key is pressed
 		if ( node.tagName === 'BUTTON' || node.type === 'button' ) {
-			node.addEventListener( 'focus', handleFocus, false );
+			node.addEventListener( 'focus', handleFocus, supportsPassive ? { passive: true } : false );
 		}
 
 		node.__tap_handler__ = this;
@@ -100,8 +109,8 @@ TapHandler.prototype = {
 			document.addEventListener( 'MSPointerMove', handleMousemove, false );
 			document.addEventListener( 'MSPointerCancel', cancel, false );
 		} else {
-			this.node.addEventListener( 'click', handleMouseup, false );
-			document.addEventListener( 'mousemove', handleMousemove, false );
+			this.node.addEventListener( 'click', handleMouseup, supportsPassive ? { passive: true } : false );
+			document.addEventListener( 'mousemove', handleMousemove, supportsPassive ? { passive: true } : false );
 		}
 
 		setTimeout( cancel, TIME_THRESHOLD );
@@ -156,9 +165,9 @@ TapHandler.prototype = {
 			window.removeEventListener( 'touchcancel', cancel, false );
 		};
 
-		this.node.addEventListener( 'touchend', handleTouchup, false );
-		window.addEventListener( 'touchmove', handleTouchmove, false );
-		window.addEventListener( 'touchcancel', cancel, false );
+		this.node.addEventListener( 'touchend', handleTouchup, supportsPassive ? { passive: true } : false );
+		window.addEventListener( 'touchmove', handleTouchmove, supportsPassive ? { passive: true } : false );
+		window.addEventListener( 'touchcancel', cancel, supportsPassive ? { passive: true } : false );
 
 		setTimeout( cancel, TIME_THRESHOLD );
 	},

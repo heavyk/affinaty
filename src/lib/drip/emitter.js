@@ -50,6 +50,10 @@ EventEmitter.prototype.on = EventEmitter.prototype.addListener = function (ev, f
   } else if ('function' === typeof map[ev]) {
     map[ev] = [ map[ev], fn ]
   } else {
+    // if (map[ev].length > 5) {
+    //   console.log(ev, map[ev].length)
+    //   if (map[ev].length > 9) debugger
+    // }
     map[ev].push(fn)
   }
 

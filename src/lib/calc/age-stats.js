@@ -21,7 +21,7 @@ function subtract(me, stats, d) {
   }
 
   k = k + '-' + me.planet + pos
-  console.info('subtract', pos, k)
+  // console.info('subtract', pos, k)
   stats[k]--
 }
 
@@ -43,7 +43,7 @@ function add(me, stats, d) {
   }
 
   k = k + '-' + me.planet + pos
-  console.info('add', pos, k)
+  // console.info('add', pos, k)
   stats[k] = (stats[k] + 1) || 1
 }
 

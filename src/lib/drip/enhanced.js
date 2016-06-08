@@ -58,7 +58,14 @@ EnhancedEmitter.prototype.on = EnhancedEmitter.prototype.addListener = function 
       iterate(events, map[event])
     } else {
       if (!map[event]._) map[event]._ = [ fn ]
-      else map[event]._.push(fn)
+      else {
+        map[event]._.push(fn)
+        // if (map[event]._.length > 5) {
+        //   console.log(event, map[event]._.length)
+        //   if (event !== 'deauth' && event !== 'auth')
+        //   if (map[event]._.length > 9) debugger
+        // }
+      }
     }
   }
 
