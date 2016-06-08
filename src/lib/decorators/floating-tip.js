@@ -1,33 +1,7 @@
 import h from '../dom/hyper-hermes'
 
-function tip (node, text, offset) {
-  offset = offset || 5
-  let el, body = document.body
-  let onmouseout = (event) => {
-    console.log(event.toElement)
-    if (el && !el.contains(event.toElement)) el.style.display = 'none'
-  }
-  let onmouseover = () => {
-    let r = body.getBoundingClientRect()
-    let rect = node.getBoundingClientRect()
-    if (!el) {
-      body.appendChild(el =
-        h('div', {c: 'tooltip-outer', s: {position: 'absolute', onmouseout}},
-          h('div', {c: 'tooltip-arrow'}),
-          h('div', {c: 'tooltip-inner'}, text)
-      )
-      )
-    }
-    el.style.display = 'block'
-    el.style.top = offset + rect.top - r.top + 'px'
-    el.style.left = Math.ceil(rect.right - (rect.width / 2)) + 'px'
-    el.style.marginLeft = -Math.ceil((el.clientWidth - 4) / 2) + 'px'
-  }
-  node.addEventListener('mouseover', onmouseover)
-  node.addEventListener('mouseout', onmouseout)
-}
-
 function floatingTip (node, text, width) {
+  if (text === undefined) return { teardown () {} }
   var top = 3
   var left = 3
   var maxw = 300
