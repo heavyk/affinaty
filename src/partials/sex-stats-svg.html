@@ -106,10 +106,10 @@ component.exports = {
   oncomplete () {
     const num_planets = this.get('S.moarPlanets') ? 4 : 2
     const barColors = ['#D41A79', '#3CA0BB', '#118a21', '#9614b0']
+    const start_angle = 45
 
     let movil = window.isMobile
     let mid = movil ? 40 : 55
-    // let start =
     let _g = this.findAll('svg')
     let start_pos = new Array(num_planets)
     let percents = this.get('percents')
@@ -130,11 +130,11 @@ component.exports = {
         let el = _g[i]
         var n = el.childNodes
         var deg = v ? v / 100 * 360 : 0
-        n[0].style.display = prev === 0 ? 'none' : ''
-        n[0].setAttribute('d', describeConeSection(mid, mid, mid - 13, mid - 7, 0, prev))
-        n[1].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, prev, prev += deg))
+        n[0].style.display = start_angle + prev === 0 ? 'none' : ''
+        n[0].setAttribute('d', describeConeSection(mid, mid, mid - 11, mid - 9, 0, start_angle + prev))
+        n[1].setAttribute('d', describeConeSection(mid, mid, mid - 15, mid - 5, start_angle + prev, start_angle + (prev += deg)))
         n[2].style.display = prev === 360 ? 'none' : ''
-        n[2].setAttribute('d', describeConeSection(mid, mid, mid - 13, mid - 7, prev, 360))
+        n[2].setAttribute('d', describeConeSection(mid, mid, mid - 11, mid - 9, start_angle + prev, 360))
       }
     }, { defer: true, init: false })
   },

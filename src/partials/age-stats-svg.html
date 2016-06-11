@@ -109,13 +109,8 @@ component.exports = {
       for (let i = 0; i < r.length; i++) {
         let v = r[i]
         let deg = total > 0 ? v / total * 360 : 0
-        // n[i].setAttribute('d', describeConeSection(mid, mid, mid - 55, mid - 5, prev, prev + deg))
-        // console.log(ranges[i].label, v, Math.round(prev), Math.round(prev + deg))
-        // prev += deg
-
         n[i].setAttribute('d', describeConeSection(mid, mid, r1, r2, prev, prev += deg))
         this.set('legend.'+i+'.value', v)
-        // this.set('legend.'+i+'.label', v)
       }
     }, { defer: true, init: false })
   },
