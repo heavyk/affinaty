@@ -2,6 +2,8 @@ import isObject from './isObject.js';
 import now from './now.js';
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

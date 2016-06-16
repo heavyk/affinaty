@@ -4,6 +4,8 @@ import baseIndexOfWith from './_baseIndexOfWith.js';
 import baseUnary from './_baseUnary.js';
 import copyArray from './_copyArray.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
 

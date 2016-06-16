@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Enables the wrapper to be iterable.
  *

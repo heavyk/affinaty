@@ -1,5 +1,7 @@
 import eq from './eq.js';
 
+'use strict';
+
 /**
  * This function is like `assignValue` except that it doesn't assign
  * `undefined` values.

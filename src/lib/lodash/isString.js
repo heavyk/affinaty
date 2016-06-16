@@ -1,6 +1,8 @@
 import isArray from './isArray.js';
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var stringTag = '[object String]';
 

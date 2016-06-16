@@ -5,6 +5,8 @@ import isString from './isString.js';
 import keys from './keys.js';
 import stringSize from './_stringSize.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
     setTag = '[object Set]';

@@ -1,5 +1,7 @@
 import dropRight from './dropRight.js';
 
+'use strict';
+
 /**
  * Gets all but the last element of `array`.
  *

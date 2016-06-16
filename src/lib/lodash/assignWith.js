@@ -2,6 +2,8 @@ import copyObject from './_copyObject.js';
 import createAssigner from './_createAssigner.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * This method is like `_.assign` except that it accepts `customizer`
  * which is invoked to produce the assigned values. If `customizer` returns

@@ -1,5 +1,7 @@
 import isNumber from './isNumber.js';
 
+'use strict';
+
 /**
  * Checks if `value` is `NaN`.
  *

@@ -3,6 +3,8 @@ import baseFlatten from './_baseFlatten.js';
 import copyArray from './_copyArray.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Creates a new array concatenating `array` with any additional arrays
  * and/or values.

@@ -2,6 +2,8 @@ import baseFindIndex from './_baseFindIndex.js';
 import baseIteratee from './_baseIteratee.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
 

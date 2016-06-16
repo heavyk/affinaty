@@ -4,6 +4,8 @@ import isArrayLikeObject from './isArrayLikeObject.js';
 import last from './last.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * This method is like `_.xor` except that it accepts `comparator` which is
  * invoked to compare elements of `arrays`. The comparator is invoked with

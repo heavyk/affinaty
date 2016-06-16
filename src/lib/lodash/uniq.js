@@ -1,5 +1,7 @@
 import baseUniq from './_baseUniq.js';
 
+'use strict';
+
 /**
  * Creates a duplicate-free version of an array, using
  * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

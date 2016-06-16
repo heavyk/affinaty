@@ -3,6 +3,8 @@ import baseIntersection from './_baseIntersection.js';
 import castArrayLikeObject from './_castArrayLikeObject.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of unique values that are included in all given arrays
  * using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

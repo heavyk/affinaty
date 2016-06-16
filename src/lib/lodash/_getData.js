@@ -1,6 +1,8 @@
 import metaMap from './_metaMap.js';
 import noop from './noop.js';
 
+'use strict';
+
 /**
  * Gets metadata for `func`.
  *

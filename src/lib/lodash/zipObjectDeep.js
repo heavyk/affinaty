@@ -1,6 +1,8 @@
 import baseSet from './_baseSet.js';
 import baseZipObject from './_baseZipObject.js';
 
+'use strict';
+
 /**
  * This method is like `_.zipObject` except that it supports property paths.
  *

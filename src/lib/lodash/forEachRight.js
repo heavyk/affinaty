@@ -3,6 +3,8 @@ import baseEachRight from './_baseEachRight.js';
 import baseIteratee from './_baseIteratee.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * This method is like `_.forEach` except that it iterates over elements of
  * `collection` from right to left.

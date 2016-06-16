@@ -1,5 +1,7 @@
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Casts `value` to `identity` if it's not a function.
  *

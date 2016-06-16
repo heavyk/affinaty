@@ -1,5 +1,7 @@
 import baseGet from './_baseGet.js';
 
+'use strict';
+
 /**
  * The opposite of `_.property`; this method creates a function that returns
  * the value at a given path of `object`.

@@ -1,6 +1,8 @@
 import baseInRange from './_baseInRange.js';
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /**
  * Checks if `n` is between `start` and up to, but not including, `end`. If
  * `end` is not specified, it's set to `start` with `start` then set to `0`.

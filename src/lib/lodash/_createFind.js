@@ -2,6 +2,8 @@ import baseIteratee from './_baseIteratee.js';
 import isArrayLike from './isArrayLike.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Creates a `_.find` or `_.findLast` function.
  *

@@ -1,5 +1,7 @@
 import assocIndexOf from './_assocIndexOf.js';
 
+'use strict';
+
 /**
  * Sets the list cache `key` to `value`.
  *

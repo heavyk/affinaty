@@ -8,6 +8,8 @@ import isFunction from './isFunction.js';
 import isObject from './isObject.js';
 import isTypedArray from './isTypedArray.js';
 
+'use strict';
+
 /**
  * An alternative to `_.reduce`; this method transforms `object` to a new
  * `accumulator` object which is the result of running each of its own

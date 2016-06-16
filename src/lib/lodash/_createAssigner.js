@@ -1,6 +1,8 @@
 import isIterateeCall from './_isIterateeCall.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates a function like `_.assign`.
  *

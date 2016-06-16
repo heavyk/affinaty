@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Gets the number of `placeholder` occurrences in `array`.
  *

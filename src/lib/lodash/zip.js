@@ -1,6 +1,8 @@
 import rest from './rest.js';
 import unzip from './unzip.js';
 
+'use strict';
+
 /**
  * Creates an array of grouped elements, the first of which contains the
  * first elements of the given arrays, the second of which contains the

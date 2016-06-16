@@ -1,6 +1,8 @@
 import baseCreate from './_baseCreate.js';
 import isObject from './isObject.js';
 
+'use strict';
+
 /**
  * Creates a function that produces an instance of `Ctor` regardless of
  * whether it was invoked as part of a `new` expression or by `call` or `apply`.

@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import basePullAll from './_basePullAll.js';
 
+'use strict';
+
 /**
  * This method is like `_.pullAll` except that it accepts `iteratee` which is
  * invoked for each element of `array` and `values` to generate the criterion

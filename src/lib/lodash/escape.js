@@ -1,6 +1,8 @@
 import escapeHtmlChar from './_escapeHtmlChar.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match HTML entities and HTML characters. */
 var reUnescapedHtml = /[&<>"'`]/g,
     reHasUnescapedHtml = RegExp(reUnescapedHtml.source);

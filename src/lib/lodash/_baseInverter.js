@@ -1,5 +1,7 @@
 import baseForOwn from './_baseForOwn.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.invert` and `_.invertBy` which inverts
  * `object` with values transformed by `iteratee` and set by `setter`.

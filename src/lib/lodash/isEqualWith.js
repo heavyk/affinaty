@@ -1,5 +1,7 @@
 import baseIsEqual from './_baseIsEqual.js';
 
+'use strict';
+
 /**
  * This method is like `_.isEqual` except that it accepts `customizer` which
  * is invoked to compare values. If `customizer` returns `undefined`, comparisons

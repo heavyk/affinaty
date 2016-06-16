@@ -1,6 +1,8 @@
 import baseLodash from './_baseLodash.js';
 import wrapperClone from './_wrapperClone.js';
 
+'use strict';
+
 /**
  * Creates a clone of the chain sequence planting `value` as the wrapped value.
  *

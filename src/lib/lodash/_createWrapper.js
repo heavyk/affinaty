@@ -8,6 +8,8 @@ import mergeData from './_mergeData.js';
 import setData from './_setData.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

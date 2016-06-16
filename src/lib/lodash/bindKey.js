@@ -3,6 +3,8 @@ import getHolder from './_getHolder.js';
 import replaceHolders from './_replaceHolders.js';
 import rest from './rest.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var BIND_FLAG = 1,
     BIND_KEY_FLAG = 2,

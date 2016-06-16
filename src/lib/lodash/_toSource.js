@@ -1,3 +1,5 @@
+'use strict';
+
 /** Used to resolve the decompiled source of functions. */
 var funcToString = Function.prototype.toString;
 

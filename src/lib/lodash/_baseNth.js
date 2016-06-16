@@ -1,5 +1,7 @@
 import isIndex from './_isIndex.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.nth` which doesn't coerce `n` to an integer.
  *

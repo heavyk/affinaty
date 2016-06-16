@@ -1,5 +1,7 @@
 import createFlow from './_createFlow.js';
 
+'use strict';
+
 /**
  * This method is like `_.flow` except that it creates a function that
  * invokes the given functions from right to left.

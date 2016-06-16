@@ -1,5 +1,7 @@
 import baseClone from './_baseClone.js';
 
+'use strict';
+
 /**
  * Creates a shallow clone of `value`.
  *

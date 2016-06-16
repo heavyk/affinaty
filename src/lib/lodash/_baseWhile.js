@@ -1,5 +1,7 @@
 import baseSlice from './_baseSlice.js';
 
+'use strict';
+
 /**
  * The base implementation of methods like `_.dropWhile` and `_.takeWhile`
  * without support for iteratee shorthands.

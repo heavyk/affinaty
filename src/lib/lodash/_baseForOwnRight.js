@@ -1,6 +1,8 @@
 import baseForRight from './_baseForRight.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.forOwnRight` without support for iteratee shorthands.
  *

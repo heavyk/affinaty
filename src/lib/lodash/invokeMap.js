@@ -5,6 +5,8 @@ import isArrayLike from './isArrayLike.js';
 import isKey from './_isKey.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Invokes the method at `path` of each element in `collection`, returning
  * an array of the results of each invoked method. Any additional arguments

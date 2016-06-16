@@ -1,5 +1,7 @@
 import createRange from './_createRange.js';
 
+'use strict';
+
 /**
  * This method is like `_.range` except that it populates values in
  * descending order.

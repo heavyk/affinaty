@@ -3,6 +3,8 @@ import baseAggregator from './_baseAggregator.js';
 import baseIteratee from './_baseIteratee.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Creates a function like `_.groupBy`.
  *

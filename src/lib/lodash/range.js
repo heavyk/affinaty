@@ -1,5 +1,7 @@
 import createRange from './_createRange.js';
 
+'use strict';
+
 /**
  * Creates an array of numbers (positive and/or negative) progressing from
  * `start` up to, but not including, `end`. A step of `-1` is used if a negative

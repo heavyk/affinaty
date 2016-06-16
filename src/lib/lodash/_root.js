@@ -1,5 +1,7 @@
 import checkGlobal from './_checkGlobal.js';
 
+'use strict';
+
 /** Detect free variable `global` from Node.js. */
 var freeGlobal = checkGlobal(typeof global == 'object' && global);
 

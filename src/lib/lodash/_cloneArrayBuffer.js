@@ -1,5 +1,7 @@
 import Uint8Array from './_Uint8Array.js';
 
+'use strict';
+
 /**
  * Creates a clone of `arrayBuffer`.
  *

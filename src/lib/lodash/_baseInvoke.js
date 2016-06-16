@@ -5,6 +5,8 @@ import last from './last.js';
 import parent from './_parent.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.invoke` without support for individual
  * method arguments.

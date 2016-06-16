@@ -2,6 +2,8 @@ import baseRange from './_baseRange.js';
 import isIterateeCall from './_isIterateeCall.js';
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /**
  * Creates a `_.range` or `_.rangeRight` function.
  *

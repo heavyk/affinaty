@@ -5,6 +5,8 @@ import isSymbol from './isSymbol.js';
 import stringToPath from './_stringToPath.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * Converts `value` to a property path array.
  *

@@ -1,6 +1,8 @@
 import baseValues from './_baseValues.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Creates an array of the own enumerable string keyed property values of `object`.
  *

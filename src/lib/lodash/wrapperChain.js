@@ -1,5 +1,7 @@
 import chain from './chain.js';
 
+'use strict';
+
 /**
  * Creates a `lodash` wrapper instance with explicit method chain sequences enabled.
  *

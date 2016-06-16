@@ -1,6 +1,8 @@
 import baseGt from './_baseGt.js';
 import createRelationalOperation from './_createRelationalOperation.js';
 
+'use strict';
+
 /**
  * Checks if `value` is greater than `other`.
  *

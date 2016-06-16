@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.hasIn` without support for deep paths.
  *

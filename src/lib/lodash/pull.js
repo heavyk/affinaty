@@ -1,6 +1,8 @@
 import pullAll from './pullAll.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Removes all given values from `array` using
  * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

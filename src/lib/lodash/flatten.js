@@ -1,5 +1,7 @@
 import baseFlatten from './_baseFlatten.js';
 
+'use strict';
+
 /**
  * Flattens `array` a single level deep.
  *

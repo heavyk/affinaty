@@ -3,6 +3,8 @@ import getData from './_getData.js';
 import getFuncName from './_getFuncName.js';
 import lodash from './wrapperLodash.js';
 
+'use strict';
+
 /**
  * Checks if `func` has a lazy counterpart.
  *

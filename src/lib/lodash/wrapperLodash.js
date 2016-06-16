@@ -5,6 +5,8 @@ import isArray from './isArray.js';
 import isObjectLike from './isObjectLike.js';
 import wrapperClone from './_wrapperClone.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

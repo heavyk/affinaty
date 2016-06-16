@@ -3,6 +3,8 @@ import getHolder from './_getHolder.js';
 import replaceHolders from './_replaceHolders.js';
 import rest from './rest.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var PARTIAL_FLAG = 32;
 

@@ -4,6 +4,8 @@ import isArray from './isArray.js';
 import isLength from './isLength.js';
 import isString from './isString.js';
 
+'use strict';
+
 /**
  * Creates an array of index keys for `object` values of arrays,
  * `arguments` objects, and strings, otherwise `null` is returned.

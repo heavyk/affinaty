@@ -1,6 +1,8 @@
 import Stack from './_Stack.js';
 import baseIsEqual from './_baseIsEqual.js';
 
+'use strict';
+
 /** Used to compose bitmasks for comparison styles. */
 var UNORDERED_COMPARE_FLAG = 1,
     PARTIAL_COMPARE_FLAG = 2;

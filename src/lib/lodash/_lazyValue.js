@@ -2,6 +2,8 @@ import baseWrapperValue from './_baseWrapperValue.js';
 import getView from './_getView.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
 

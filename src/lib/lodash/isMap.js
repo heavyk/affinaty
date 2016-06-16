@@ -1,6 +1,8 @@
 import getTag from './_getTag.js';
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]';
 

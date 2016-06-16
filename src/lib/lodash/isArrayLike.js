@@ -2,6 +2,8 @@ import getLength from './_getLength.js';
 import isFunction from './isFunction.js';
 import isLength from './isLength.js';
 
+'use strict';
+
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
  * not a function and has a `value.length` that's an integer greater than or

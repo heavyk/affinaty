@@ -2,6 +2,8 @@ import apply from './_apply.js';
 import arrayMap from './_arrayMap.js';
 import unzip from './unzip.js';
 
+'use strict';
+
 /**
  * This method is like `_.unzip` except that it accepts `iteratee` to specify
  * how regrouped values should be combined. The iteratee is invoked with the

@@ -1,5 +1,7 @@
 import isSymbol from './isSymbol.js';
 
+'use strict';
+
 /** Used as references for various `Number` constants. */
 var NAN = 0 / 0;
 

@@ -2,6 +2,8 @@ import baseExtremum from './_baseExtremum.js';
 import baseLt from './_baseLt.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Computes the minimum value of `array`. If `array` is empty or falsey,
  * `undefined` is returned.

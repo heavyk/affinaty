@@ -1,5 +1,7 @@
 import baseEach from './_baseEach.js';
 
+'use strict';
+
 /**
  * Aggregates elements of `collection` on `accumulator` with keys transformed
  * by `iteratee` and values set by `setter`.

@@ -8,6 +8,8 @@ import isObjectLike from './isObjectLike.js';
 import isString from './isString.js';
 import keys from './keys.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
     setTag = '[object Set]';

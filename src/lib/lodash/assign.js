@@ -5,6 +5,8 @@ import isArrayLike from './isArrayLike.js';
 import isPrototype from './_isPrototype.js';
 import keys from './keys.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

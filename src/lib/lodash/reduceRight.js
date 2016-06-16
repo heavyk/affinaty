@@ -4,6 +4,8 @@ import baseIteratee from './_baseIteratee.js';
 import baseReduce from './_baseReduce.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * This method is like `_.reduce` except that it iterates over elements of
  * `collection` from right to left.

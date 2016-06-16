@@ -1,5 +1,7 @@
 import basePullAll from './_basePullAll.js';
 
+'use strict';
+
 /**
  * This method is like `_.pullAll` except that it accepts `comparator` which
  * is invoked to compare elements of `array` to `values`. The comparator is

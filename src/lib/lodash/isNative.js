@@ -1,6 +1,8 @@
 import baseIsNative from './_baseIsNative.js';
 import isMaskable from './_isMaskable.js';
 
+'use strict';
+
 /**
  * Checks if `value` is a pristine native function.
  *

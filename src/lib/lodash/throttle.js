@@ -1,6 +1,8 @@
 import debounce from './debounce.js';
 import isObject from './isObject.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

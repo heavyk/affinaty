@@ -1,6 +1,8 @@
 import baseUpdate from './_baseUpdate.js';
 import castFunction from './_castFunction.js';
 
+'use strict';
+
 /**
  * This method is like `_.set` except that accepts `updater` to produce the
  * value to set. Use `_.updateWith` to customize `path` creation. The `updater`

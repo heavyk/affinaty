@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This method invokes `interceptor` and returns `value`. The interceptor
  * is invoked with one argument; (value). The purpose of this method is to

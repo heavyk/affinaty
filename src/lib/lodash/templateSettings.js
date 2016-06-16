@@ -3,6 +3,8 @@ import reEscape from './_reEscape.js';
 import reEvaluate from './_reEvaluate.js';
 import reInterpolate from './_reInterpolate.js';
 
+'use strict';
+
 /**
  * By default, the template delimiters used by lodash are like those in
  * embedded Ruby (ERB). Change the following template settings to use

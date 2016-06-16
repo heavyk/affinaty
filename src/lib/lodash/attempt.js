@@ -2,6 +2,8 @@ import apply from './_apply.js';
 import isError from './isError.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Attempts to invoke `func`, returning either the result or the caught error
  * object. Any additional arguments are provided to `func` when it's invoked.

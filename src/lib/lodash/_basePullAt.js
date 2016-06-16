@@ -5,6 +5,8 @@ import last from './last.js';
 import parent from './_parent.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
 

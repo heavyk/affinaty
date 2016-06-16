@@ -1,5 +1,7 @@
 import LazyWrapper from './_LazyWrapper.js';
 
+'use strict';
+
 /**
  * Reverses the direction of lazy iteration.
  *

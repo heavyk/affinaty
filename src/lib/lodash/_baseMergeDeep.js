@@ -10,6 +10,8 @@ import isPlainObject from './isPlainObject.js';
 import isTypedArray from './isTypedArray.js';
 import toPlainObject from './toPlainObject.js';
 
+'use strict';
+
 /**
  * A specialized version of `baseMerge` for arrays and objects which performs
  * deep merges and tracks traversed objects enabling objects with circular

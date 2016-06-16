@@ -1,5 +1,7 @@
 import baseGet from './_baseGet.js';
 
+'use strict';
+
 /**
  * Gets the value at `path` of `object`. If the resolved value is
  * `undefined`, the `defaultValue` is used in its place.

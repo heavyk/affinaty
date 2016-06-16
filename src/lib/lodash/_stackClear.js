@@ -1,5 +1,7 @@
 import ListCache from './_ListCache.js';
 
+'use strict';
+
 /**
  * Removes all key-value entries from the stack.
  *

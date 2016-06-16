@@ -4,6 +4,8 @@ import bind from './bind.js';
 import rest from './rest.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * Binds methods of an object to the object itself, overwriting the existing
  * method.

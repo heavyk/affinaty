@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.findIndex` and `_.findLastIndex` without
  * support for iteratee shorthands.

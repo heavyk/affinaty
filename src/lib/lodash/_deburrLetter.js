@@ -1,3 +1,5 @@
+'use strict';
+
 /** Used to map latin-1 supplementary letters to basic latin letters. */
 var deburredLetters = {
   '\xc0': 'A',  '\xc1': 'A', '\xc2': 'A', '\xc3': 'A', '\xc4': 'A', '\xc5': 'A',

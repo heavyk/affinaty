@@ -1,6 +1,8 @@
 import baseGet from './_baseGet.js';
 import baseSet from './_baseSet.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.update`.
  *

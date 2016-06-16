@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This method is like `_.tap` except that it returns the result of `interceptor`.
  * The purpose of this method is to "pass thru" values replacing intermediate

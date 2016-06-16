@@ -1,6 +1,8 @@
 import baseDelay from './_baseDelay.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Defers invoking the `func` until the current call stack has cleared. Any
  * additional arguments are provided to `func` when it's invoked.

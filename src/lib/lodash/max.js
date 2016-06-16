@@ -2,6 +2,8 @@ import baseExtremum from './_baseExtremum.js';
 import baseGt from './_baseGt.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Computes the maximum value of `array`. If `array` is empty or falsey,
  * `undefined` is returned.

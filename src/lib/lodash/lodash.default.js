@@ -1,7 +1,7 @@
 /**
  * @license
  * lodash (Custom Build) <https://lodash.com/>
- * Build: `lodash modularize exports="es" -o ./src/lib/lodash`
+ * Build: `lodash modularize strict exports="es" -o ./src/lib/lodash`
  * Copyright jQuery Foundation and other contributors <https://jquery.org/>
  * Released under MIT license <https://lodash.com/license>
  * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -42,6 +42,8 @@ import rest from './rest.js';
 import thru from './thru.js';
 import toInteger from './toInteger.js';
 import lodash from './wrapperLodash.js';
+
+'use strict';
 
 /** Used as the semantic version number. */
 var VERSION = '4.13.1';

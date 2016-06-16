@@ -6,6 +6,8 @@ import reHasComplexSymbol from './_reHasComplexSymbol.js';
 import stringToArray from './_stringToArray.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used as references for the maximum length and index of an array. */
 var MAX_ARRAY_LENGTH = 4294967295;
 

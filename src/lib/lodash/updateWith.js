@@ -1,6 +1,8 @@
 import baseUpdate from './_baseUpdate.js';
 import castFunction from './_castFunction.js';
 
+'use strict';
+
 /**
  * This method is like `_.update` except that it accepts `customizer` which is
  * invoked to produce the objects of `path`.  If `customizer` returns `undefined`

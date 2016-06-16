@@ -1,5 +1,7 @@
 import eq from './eq.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

@@ -1,5 +1,7 @@
 import baseInverter from './_baseInverter.js';
 
+'use strict';
+
 /**
  * Creates a function like `_.invertBy`.
  *

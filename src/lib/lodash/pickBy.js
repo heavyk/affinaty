@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import basePickBy from './_basePickBy.js';
 
+'use strict';
+
 /**
  * Creates an object composed of the `object` properties `predicate` returns
  * truthy for. The predicate is invoked with two arguments: (value, key).

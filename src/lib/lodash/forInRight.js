@@ -2,6 +2,8 @@ import baseForRight from './_baseForRight.js';
 import baseIteratee from './_baseIteratee.js';
 import keysIn from './keysIn.js';
 
+'use strict';
+
 /**
  * This method is like `_.forIn` except that it iterates over properties of
  * `object` in the opposite order.

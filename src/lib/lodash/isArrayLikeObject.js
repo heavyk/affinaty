@@ -1,6 +1,8 @@
 import isArrayLike from './isArrayLike.js';
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /**
  * This method is like `_.isArrayLike` except that it also checks if `value`
  * is an object.

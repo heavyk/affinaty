@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The function whose prototype chain sequence wrappers inherit from.
  *

@@ -2,6 +2,8 @@ import addMapEntry from './_addMapEntry.js';
 import arrayReduce from './_arrayReduce.js';
 import mapToArray from './_mapToArray.js';
 
+'use strict';
+
 /**
  * Creates a clone of `map`.
  *

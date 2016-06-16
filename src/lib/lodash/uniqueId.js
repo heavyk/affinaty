@@ -1,5 +1,7 @@
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to generate unique IDs. */
 var idCounter = 0;
 

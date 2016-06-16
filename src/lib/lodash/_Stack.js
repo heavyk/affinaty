@@ -5,6 +5,8 @@ import stackGet from './_stackGet.js';
 import stackHas from './_stackHas.js';
 import stackSet from './_stackSet.js';
 
+'use strict';
+
 /**
  * Creates a stack cache object to store key-value pairs.
  *

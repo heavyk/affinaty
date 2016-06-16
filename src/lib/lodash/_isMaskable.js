@@ -2,6 +2,8 @@ import coreJsData from './_coreJsData.js';
 import isFunction from './isFunction.js';
 import stubFalse from './stubFalse.js';
 
+'use strict';
+
 /**
  * Checks if `func` is capable of being masked.
  *

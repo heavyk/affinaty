@@ -1,6 +1,8 @@
 import baseMerge from './_baseMerge.js';
 import createAssigner from './_createAssigner.js';
 
+'use strict';
+
 /**
  * This method is like `_.merge` except that it accepts `customizer` which
  * is invoked to produce the merged values of the destination and source

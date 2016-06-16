@@ -1,6 +1,8 @@
 import indexOfNaN from './_indexOfNaN.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max,
     nativeMin = Math.min;

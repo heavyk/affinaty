@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A method that returns `false`.
  *

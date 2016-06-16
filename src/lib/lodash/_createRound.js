@@ -2,6 +2,8 @@ import toInteger from './toInteger.js';
 import toNumber from './toNumber.js';
 import toString from './toString.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMin = Math.min;
 

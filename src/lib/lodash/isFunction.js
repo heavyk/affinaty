@@ -1,5 +1,7 @@
 import isObject from './isObject.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var funcTag = '[object Function]',
     genTag = '[object GeneratorFunction]';

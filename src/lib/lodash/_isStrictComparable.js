@@ -1,5 +1,7 @@
 import isObject from './isObject.js';
 
+'use strict';
+
 /**
  * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
  *

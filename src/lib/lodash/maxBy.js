@@ -2,6 +2,8 @@ import baseExtremum from './_baseExtremum.js';
 import baseGt from './_baseGt.js';
 import baseIteratee from './_baseIteratee.js';
 
+'use strict';
+
 /**
  * This method is like `_.max` except that it accepts `iteratee` which is
  * invoked for each element in `array` to generate the criterion by which

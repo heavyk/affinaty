@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.unary` without support for storing wrapper metadata.
  *

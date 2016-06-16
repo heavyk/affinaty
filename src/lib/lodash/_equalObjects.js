@@ -1,6 +1,8 @@
 import baseHas from './_baseHas.js';
 import keys from './keys.js';
 
+'use strict';
+
 /** Used to compose bitmasks for comparison styles. */
 var PARTIAL_COMPARE_FLAG = 2;
 

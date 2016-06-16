@@ -7,6 +7,8 @@ import isArray from './isArray.js';
 import isFlattenableIteratee from './_isFlattenableIteratee.js';
 import rest from './rest.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMin = Math.min;
 

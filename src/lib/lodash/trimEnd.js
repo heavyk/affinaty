@@ -4,6 +4,8 @@ import charsEndIndex from './_charsEndIndex.js';
 import stringToArray from './_stringToArray.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match leading and trailing whitespace. */
 var reTrimEnd = /\s+$/;
 

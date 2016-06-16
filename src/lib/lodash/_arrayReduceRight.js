@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A specialized version of `_.reduceRight` for arrays without support for
  * iteratee shorthands.

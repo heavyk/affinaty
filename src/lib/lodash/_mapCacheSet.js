@@ -1,5 +1,7 @@
 import getMapData from './_getMapData.js';
 
+'use strict';
+
 /**
  * Sets the map `key` to `value`.
  *

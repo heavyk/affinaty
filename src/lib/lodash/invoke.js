@@ -1,6 +1,8 @@
 import baseInvoke from './_baseInvoke.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Invokes the method at `path` of `object`.
  *

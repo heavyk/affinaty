@@ -1,6 +1,8 @@
 import identity from './identity.js';
 import partial from './partial.js';
 
+'use strict';
+
 /**
  * Creates a function that provides `value` to the wrapper function as its
  * first argument. Any additional arguments provided to the function are

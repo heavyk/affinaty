@@ -2,6 +2,8 @@ import baseFindKey from './_baseFindKey.js';
 import baseForOwnRight from './_baseForOwnRight.js';
 import baseIteratee from './_baseIteratee.js';
 
+'use strict';
+
 /**
  * This method is like `_.findKey` except that it iterates over elements of
  * a collection in the opposite order.

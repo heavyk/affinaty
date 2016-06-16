@@ -1,5 +1,7 @@
 import compareAscending from './_compareAscending.js';
 
+'use strict';
+
 /**
  * Used by `_.orderBy` to compare multiple properties of a value to another
  * and stable sort them.

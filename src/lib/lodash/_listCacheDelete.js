@@ -1,5 +1,7 @@
 import assocIndexOf from './_assocIndexOf.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
 

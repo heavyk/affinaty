@@ -1,6 +1,8 @@
 import arrayFilter from './_arrayFilter.js';
 import isFunction from './isFunction.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.functions` which creates an array of
  * `object` function property names filtered from `props`.

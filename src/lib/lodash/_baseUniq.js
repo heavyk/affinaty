@@ -5,6 +5,8 @@ import cacheHas from './_cacheHas.js';
 import createSet from './_createSet.js';
 import setToArray from './_setToArray.js';
 
+'use strict';
+
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
 

@@ -2,6 +2,8 @@ import baseCreate from './_baseCreate.js';
 import getPrototype from './_getPrototype.js';
 import isPrototype from './_isPrototype.js';
 
+'use strict';
+
 /**
  * Initializes an object clone.
  *

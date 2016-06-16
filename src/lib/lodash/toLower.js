@@ -1,5 +1,7 @@
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Converts `string`, as a whole, to lower case just like
  * [String#toLowerCase](https://mdn.io/toLowerCase).

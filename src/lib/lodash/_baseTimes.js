@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.times` without support for iteratee shorthands
  * or max array length checks.

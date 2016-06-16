@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.sum` and `_.sumBy` without support for
  * iteratee shorthands.

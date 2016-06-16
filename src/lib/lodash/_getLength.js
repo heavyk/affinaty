@@ -1,5 +1,7 @@
 import baseProperty from './_baseProperty.js';
 
+'use strict';
+
 /**
  * Gets the "length" property value of `object`.
  *

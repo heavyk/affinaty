@@ -2,6 +2,8 @@ import baseRandom from './_baseRandom.js';
 import isArrayLike from './isArrayLike.js';
 import values from './values.js';
 
+'use strict';
+
 /**
  * Gets a random element from `collection`.
  *

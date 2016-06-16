@@ -5,6 +5,8 @@ import reHasComplexSymbol from './_reHasComplexSymbol.js';
 import stringSize from './_stringSize.js';
 import stringToArray from './_stringToArray.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil;
 

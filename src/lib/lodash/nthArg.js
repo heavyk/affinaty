@@ -2,6 +2,8 @@ import baseNth from './_baseNth.js';
 import rest from './rest.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Creates a function that gets the argument at index `n`. If `n` is negative,
  * the nth argument from the end is returned.

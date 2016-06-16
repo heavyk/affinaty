@@ -1,6 +1,8 @@
 import baseFunctions from './_baseFunctions.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Creates an array of function property names from own enumerable properties
  * of `object`.

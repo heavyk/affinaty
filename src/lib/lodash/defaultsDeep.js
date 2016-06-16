@@ -3,6 +3,8 @@ import mergeDefaults from './_mergeDefaults.js';
 import mergeWith from './mergeWith.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * This method is like `_.defaults` except that it recursively assigns
  * default properties.

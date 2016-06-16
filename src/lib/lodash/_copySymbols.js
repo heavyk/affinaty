@@ -1,6 +1,8 @@
 import copyObject from './_copyObject.js';
 import getSymbols from './_getSymbols.js';
 
+'use strict';
+
 /**
  * Copies own symbol properties of `source` to `object`.
  *

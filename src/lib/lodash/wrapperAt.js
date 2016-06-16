@@ -6,6 +6,8 @@ import isIndex from './_isIndex.js';
 import rest from './rest.js';
 import thru from './thru.js';
 
+'use strict';
+
 /**
  * This method is the wrapper version of `_.at`.
  *

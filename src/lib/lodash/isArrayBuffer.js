@@ -1,5 +1,7 @@
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 var arrayBufferTag = '[object ArrayBuffer]';
 
 /** Used for built-in method references. */

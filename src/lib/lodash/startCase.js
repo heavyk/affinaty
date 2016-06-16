@@ -1,6 +1,8 @@
 import createCompounder from './_createCompounder.js';
 import upperFirst from './upperFirst.js';
 
+'use strict';
+
 /**
  * Converts `string` to
  * [start case](https://en.wikipedia.org/wiki/Letter_case#Stylistic_or_specialised_usage).

@@ -1,6 +1,8 @@
 import baseClone from './_baseClone.js';
 import baseConforms from './_baseConforms.js';
 
+'use strict';
+
 /**
  * Creates a function that invokes the predicate properties of `source` with
  * the corresponding property values of a given object, returning `true` if

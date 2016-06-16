@@ -1,6 +1,8 @@
 import baseClone from './_baseClone.js';
 import baseMatches from './_baseMatches.js';
 
+'use strict';
+
 /**
  * Creates a function that performs a partial deep comparison between a given
  * object and `source`, returning `true` if the given object has equivalent

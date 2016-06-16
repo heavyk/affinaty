@@ -1,6 +1,8 @@
 import baseMerge from './_baseMerge.js';
 import isObject from './isObject.js';
 
+'use strict';
+
 /**
  * Used by `_.defaultsDeep` to customize its `_.merge` use.
  *

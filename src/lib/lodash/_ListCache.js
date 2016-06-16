@@ -4,6 +4,8 @@ import listCacheGet from './_listCacheGet.js';
 import listCacheHas from './_listCacheHas.js';
 import listCacheSet from './_listCacheSet.js';
 
+'use strict';
+
 /**
  * Creates an list cache object.
  *

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Gets the index at which the first occurrence of `NaN` is found in `array`.
  *

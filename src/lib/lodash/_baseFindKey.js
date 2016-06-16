@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of methods like `_.findKey` and `_.findLastKey`,
  * without support for iteratee shorthands, which iterates over `collection`

@@ -2,6 +2,8 @@ import baseSlice from './_baseSlice.js';
 import isIterateeCall from './_isIterateeCall.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Creates a slice of `array` from `start` up to, but not including, `end`.
  *

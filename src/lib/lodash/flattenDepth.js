@@ -1,6 +1,8 @@
 import baseFlatten from './_baseFlatten.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Recursively flatten `array` up to `depth` times.
  *

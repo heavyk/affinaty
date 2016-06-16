@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Removes `key` and its value from the stack.
  *

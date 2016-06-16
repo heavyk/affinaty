@@ -1,6 +1,8 @@
 import baseFlatten from './_baseFlatten.js';
 import map from './map.js';
 
+'use strict';
+
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
 

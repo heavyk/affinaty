@@ -1,6 +1,8 @@
 import baseSortedIndex from './_baseSortedIndex.js';
 import eq from './eq.js';
 
+'use strict';
+
 /**
  * This method is like `_.indexOf` except that it performs a binary
  * search on a sorted `array`.

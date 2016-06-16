@@ -1,6 +1,8 @@
 import baseIsNative from './_baseIsNative.js';
 import getValue from './_getValue.js';
 
+'use strict';
+
 /**
  * Gets the native function at `key` of `object`.
  *

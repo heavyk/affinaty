@@ -2,6 +2,8 @@ import arrayPush from './_arrayPush.js';
 import baseDifference from './_baseDifference.js';
 import baseUniq from './_baseUniq.js';
 
+'use strict';
+
 /**
  * The base implementation of methods like `_.xor`, without support for
  * iteratee shorthands, that accepts an array of arrays to inspect.

@@ -2,6 +2,8 @@ import MapCache from './_MapCache.js';
 import setCacheAdd from './_setCacheAdd.js';
 import setCacheHas from './_setCacheHas.js';
 
+'use strict';
+
 /**
  *
  * Creates an array cache object to store unique values.

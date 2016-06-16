@@ -1,6 +1,8 @@
 import baseIsMatch from './_baseIsMatch.js';
 import getMatchData from './_getMatchData.js';
 
+'use strict';
+
 /**
  * This method is like `_.isMatch` except that it accepts `customizer` which
  * is invoked to compare values. If `customizer` returns `undefined`, comparisons

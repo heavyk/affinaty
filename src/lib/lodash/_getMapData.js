@@ -1,5 +1,7 @@
 import isKeyable from './_isKeyable.js';
 
+'use strict';
+
 /**
  * Gets the data for `map`.
  *

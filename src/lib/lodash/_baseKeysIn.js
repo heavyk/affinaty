@@ -1,6 +1,8 @@
 import Reflect from './_Reflect.js';
 import iteratorToArray from './_iteratorToArray.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

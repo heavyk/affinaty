@@ -1,6 +1,8 @@
 import baseForOwnRight from './_baseForOwnRight.js';
 import baseIteratee from './_baseIteratee.js';
 
+'use strict';
+
 /**
  * This method is like `_.forOwn` except that it iterates over properties of
  * `object` in the opposite order.

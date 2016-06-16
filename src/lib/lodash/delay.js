@@ -2,6 +2,8 @@ import baseDelay from './_baseDelay.js';
 import rest from './rest.js';
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /**
  * Invokes `func` after `wait` milliseconds. Any additional arguments are
  * provided to `func` when it's invoked.

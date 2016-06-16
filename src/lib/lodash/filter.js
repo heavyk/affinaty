@@ -3,6 +3,8 @@ import baseFilter from './_baseFilter.js';
 import baseIteratee from './_baseIteratee.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Iterates over elements of `collection`, returning an array of all elements
  * `predicate` returns truthy for. The predicate is invoked with three

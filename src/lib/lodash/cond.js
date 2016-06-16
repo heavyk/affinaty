@@ -3,6 +3,8 @@ import arrayMap from './_arrayMap.js';
 import baseIteratee from './_baseIteratee.js';
 import rest from './rest.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

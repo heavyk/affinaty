@@ -10,6 +10,8 @@ import reInterpolate from './_reInterpolate.js';
 import templateSettings from './templateSettings.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match empty string literals in compiled template source. */
 var reEmptyStringLeading = /\b__p \+= '';/g,
     reEmptyStringMiddle = /\b(__p \+=) '' \+/g,

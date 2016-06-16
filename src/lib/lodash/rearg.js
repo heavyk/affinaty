@@ -2,6 +2,8 @@ import baseFlatten from './_baseFlatten.js';
 import createWrapper from './_createWrapper.js';
 import rest from './rest.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var REARG_FLAG = 256;
 

@@ -1,5 +1,7 @@
 import baseIndexOf from './_baseIndexOf.js';
 
+'use strict';
+
 /**
  * Used by `_.trim` and `_.trimEnd` to get the index of the last string symbol
  * that is not found in the character symbols.

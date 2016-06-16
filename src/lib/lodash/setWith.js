@@ -1,5 +1,7 @@
 import baseSet from './_baseSet.js';
 
+'use strict';
+
 /**
  * This method is like `_.set` except that it accepts `customizer` which is
  * invoked to produce the objects of `path`.  If `customizer` returns `undefined`

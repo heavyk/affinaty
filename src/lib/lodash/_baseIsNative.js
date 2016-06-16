@@ -4,6 +4,8 @@ import isMasked from './_isMasked.js';
 import isObject from './isObject.js';
 import toSource from './_toSource.js';
 
+'use strict';
+
 /**
  * Used to match `RegExp`
  * [syntax characters](http://ecma-international.org/ecma-262/6.0/#sec-patterns).

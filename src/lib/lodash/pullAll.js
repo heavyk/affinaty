@@ -1,5 +1,7 @@
 import basePullAll from './_basePullAll.js';
 
+'use strict';
+
 /**
  * This method is like `_.pull` except that it accepts an array of values to remove.
  *

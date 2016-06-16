@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Checks if `value` is suitable for use as unique object key.
  *

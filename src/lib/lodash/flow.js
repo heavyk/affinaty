@@ -1,5 +1,7 @@
 import createFlow from './_createFlow.js';
 
+'use strict';
+
 /**
  * Creates a function that returns the result of invoking the given functions
  * with the `this` binding of the created function, where each successive

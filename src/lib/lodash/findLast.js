@@ -1,6 +1,8 @@
 import createFind from './_createFind.js';
 import findLastIndex from './findLastIndex.js';
 
+'use strict';
+
 /**
  * This method is like `_.find` except that it iterates over elements of
  * `collection` from right to left.

@@ -1,5 +1,7 @@
 import realNames from './_realNames.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

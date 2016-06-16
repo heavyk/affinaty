@@ -1,3 +1,5 @@
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil,
     nativeMax = Math.max;

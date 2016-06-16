@@ -5,6 +5,8 @@ import arrayMap from './_arrayMap.js';
 import baseUnary from './_baseUnary.js';
 import cacheHas from './_cacheHas.js';
 
+'use strict';
+
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
 

@@ -1,5 +1,7 @@
 import baseGet from './_baseGet.js';
 
+'use strict';
+
 /**
  * A specialized version of `baseProperty` which supports deep paths.
  *

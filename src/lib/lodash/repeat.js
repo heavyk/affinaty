@@ -3,6 +3,8 @@ import isIterateeCall from './_isIterateeCall.js';
 import toInteger from './toInteger.js';
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Repeats the given string `n` times.
  *

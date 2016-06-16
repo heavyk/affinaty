@@ -1,6 +1,8 @@
 import memoize from './memoize.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match property names within property paths. */
 var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(\.|\[\])(?:\4|$))/g;
 

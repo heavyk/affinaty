@@ -1,5 +1,7 @@
 import createCompounder from './_createCompounder.js';
 
+'use strict';
+
 /**
  * Converts `string` to
  * [snake case](https://en.wikipedia.org/wiki/Snake_case).

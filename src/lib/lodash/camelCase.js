@@ -1,6 +1,8 @@
 import capitalize from './capitalize.js';
 import createCompounder from './_createCompounder.js';
 
+'use strict';
+
 /**
  * Converts `string` to [camel case](https://en.wikipedia.org/wiki/CamelCase).
  *

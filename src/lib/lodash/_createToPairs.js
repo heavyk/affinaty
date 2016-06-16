@@ -3,6 +3,8 @@ import getTag from './_getTag.js';
 import mapToArray from './_mapToArray.js';
 import setToPairs from './_setToPairs.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
     setTag = '[object Set]';

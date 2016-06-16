@@ -1,6 +1,8 @@
 import baseClamp from './_baseClamp.js';
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /**
  * Clamps `number` within the inclusive `lower` and `upper` bounds.
  *

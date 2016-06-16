@@ -2,6 +2,8 @@ import constant from './constant.js';
 import createInverter from './_createInverter.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Creates an object composed of the inverted keys and values of `object`.
  * If `object` contains duplicate values, subsequent values overwrite

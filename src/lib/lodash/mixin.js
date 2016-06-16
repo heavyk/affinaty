@@ -6,6 +6,8 @@ import isFunction from './isFunction.js';
 import isObject from './isObject.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Adds all own enumerable string keyed function properties of a source
  * object to the destination object. If `object` is a function, then methods

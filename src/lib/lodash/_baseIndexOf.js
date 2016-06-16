@@ -1,5 +1,7 @@
 import indexOfNaN from './_indexOfNaN.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
  *

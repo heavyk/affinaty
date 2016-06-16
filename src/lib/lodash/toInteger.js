@@ -1,5 +1,7 @@
 import toFinite from './toFinite.js';
 
+'use strict';
+
 /**
  * Converts `value` to an integer.
  *

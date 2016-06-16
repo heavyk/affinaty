@@ -1,6 +1,8 @@
 import rest from './rest.js';
 import unzipWith from './unzipWith.js';
 
+'use strict';
+
 /**
  * This method is like `_.zip` except that it accepts `iteratee` to specify
  * how grouped values should be combined. The iteratee is invoked with the

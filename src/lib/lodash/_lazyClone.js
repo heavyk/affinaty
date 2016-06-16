@@ -1,6 +1,8 @@
 import LazyWrapper from './_LazyWrapper.js';
 import copyArray from './_copyArray.js';
 
+'use strict';
+
 /**
  * Creates a clone of the lazy wrapper object.
  *

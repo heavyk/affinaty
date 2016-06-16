@@ -2,6 +2,8 @@ import baseFor from './_baseFor.js';
 import baseIteratee from './_baseIteratee.js';
 import keysIn from './keysIn.js';
 
+'use strict';
+
 /**
  * Iterates over own and inherited enumerable string keyed properties of an
  * object and invokes `iteratee` for each property. The iteratee is invoked

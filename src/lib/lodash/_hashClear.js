@@ -1,5 +1,7 @@
 import nativeCreate from './_nativeCreate.js';
 
+'use strict';
+
 /**
  * Removes all key-value entries from the hash.
  *

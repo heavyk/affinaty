@@ -1,5 +1,7 @@
 import createWrapper from './_createWrapper.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var ARY_FLAG = 128;
 

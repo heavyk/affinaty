@@ -3,6 +3,8 @@ import baseEach from './_baseEach.js';
 import baseIteratee from './_baseIteratee.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Iterates over elements of `collection` and invokes `iteratee` for each element.
  * The iteratee is invoked with three arguments: (value, index|key, collection).

@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseWhile from './_baseWhile.js';
 
+'use strict';
+
 /**
  * Creates a slice of `array` excluding elements dropped from the beginning.
  * Elements are dropped until `predicate` returns falsey. The predicate is

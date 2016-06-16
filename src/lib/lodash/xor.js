@@ -3,6 +3,8 @@ import baseXor from './_baseXor.js';
 import isArrayLikeObject from './isArrayLikeObject.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of unique values that is the
  * [symmetric difference](https://en.wikipedia.org/wiki/Symmetric_difference)

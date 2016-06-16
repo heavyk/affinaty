@@ -3,6 +3,8 @@ import baseToString from './_baseToString.js';
 import toInteger from './toInteger.js';
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Checks if `string` ends with the given target string.
  *

@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.lt` which doesn't coerce arguments to numbers.
  *

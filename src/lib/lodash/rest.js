@@ -1,6 +1,8 @@
 import apply from './_apply.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

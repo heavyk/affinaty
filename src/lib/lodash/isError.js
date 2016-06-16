@@ -1,5 +1,7 @@
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var errorTag = '[object Error]';
 

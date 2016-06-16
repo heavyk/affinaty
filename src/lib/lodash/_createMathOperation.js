@@ -1,6 +1,8 @@
 import baseToNumber from './_baseToNumber.js';
 import baseToString from './_baseToString.js';
 
+'use strict';
+
 /**
  * Creates a function that performs a mathematical operation on two values.
  *

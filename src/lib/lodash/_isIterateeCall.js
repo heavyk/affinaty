@@ -3,6 +3,8 @@ import isArrayLike from './isArrayLike.js';
 import isIndex from './_isIndex.js';
 import isObject from './isObject.js';
 
+'use strict';
+
 /**
  * Checks if the given arguments are from an iteratee call.
  *

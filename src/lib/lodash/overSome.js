@@ -1,6 +1,8 @@
 import arraySome from './_arraySome.js';
 import createOver from './_createOver.js';
 
+'use strict';
+
 /**
  * Creates a function that checks if **any** of the `predicates` return
  * truthy when invoked with the arguments it receives.

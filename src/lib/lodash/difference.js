@@ -3,6 +3,8 @@ import baseFlatten from './_baseFlatten.js';
 import isArrayLikeObject from './isArrayLikeObject.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of unique `array` values not included in the other given
  * arrays using [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

@@ -4,6 +4,8 @@ import identity from './identity.js';
 import isArray from './isArray.js';
 import property from './property.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.iteratee`.
  *

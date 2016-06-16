@@ -5,6 +5,8 @@ import arrayMap from './_arrayMap.js';
 import baseUnary from './_baseUnary.js';
 import cacheHas from './_cacheHas.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMin = Math.min;
 

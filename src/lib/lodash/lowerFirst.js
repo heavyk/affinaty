@@ -1,5 +1,7 @@
 import createCaseFirst from './_createCaseFirst.js';
 
+'use strict';
+
 /**
  * Converts the first character of `string` to lower case.
  *

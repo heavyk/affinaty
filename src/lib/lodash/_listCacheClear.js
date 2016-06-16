@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Removes all key-value entries from the list cache.
  *

@@ -1,6 +1,8 @@
 import baseGet from './_baseGet.js';
 import baseSlice from './_baseSlice.js';
 
+'use strict';
+
 /**
  * Gets the parent value at `path` of `object`.
  *

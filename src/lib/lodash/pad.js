@@ -3,6 +3,8 @@ import stringSize from './_stringSize.js';
 import toInteger from './toInteger.js';
 import toString from './toString.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil,
     nativeFloor = Math.floor;

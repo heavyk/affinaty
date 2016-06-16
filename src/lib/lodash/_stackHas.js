@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Checks if a stack value for `key` exists.
  *

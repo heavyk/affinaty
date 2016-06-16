@@ -9,6 +9,8 @@ import setToArray from './_setToArray.js';
 import stringToArray from './_stringToArray.js';
 import values from './values.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
     setTag = '[object Set]';

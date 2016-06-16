@@ -2,6 +2,8 @@ import baseGetAllKeys from './_baseGetAllKeys.js';
 import getSymbols from './_getSymbols.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Creates an array of own enumerable property names and symbols of `object`.
  *

@@ -1,5 +1,7 @@
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match non-compound words composed of alphanumeric characters. */
 var reBasicWord = /[a-zA-Z0-9]+/g;
 

@@ -1,6 +1,8 @@
 import baseFlatten from './_baseFlatten.js';
 import map from './map.js';
 
+'use strict';
+
 /**
  * Creates a flattened array of values by running each element in `collection`
  * thru `iteratee` and flattening the mapped results. The iteratee is invoked

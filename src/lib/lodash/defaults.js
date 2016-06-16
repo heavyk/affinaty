@@ -3,6 +3,8 @@ import assignInDefaults from './_assignInDefaults.js';
 import assignInWith from './assignInWith.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Assigns own and inherited enumerable string keyed properties of source
  * objects to the destination object for all destination properties that

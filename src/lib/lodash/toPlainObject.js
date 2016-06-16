@@ -1,6 +1,8 @@
 import copyObject from './_copyObject.js';
 import keysIn from './keysIn.js';
 
+'use strict';
+
 /**
  * Converts `value` to a plain object flattening inherited enumerable string
  * keyed properties of `value` to own properties of the plain object.

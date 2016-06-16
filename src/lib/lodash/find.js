@@ -1,6 +1,8 @@
 import createFind from './_createFind.js';
 import findIndex from './findIndex.js';
 
+'use strict';
+
 /**
  * Iterates over elements of `collection`, returning the first element
  * `predicate` returns truthy for. The predicate is invoked with three

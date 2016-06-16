@@ -6,6 +6,8 @@ import compareAscending from './_compareAscending.js';
 import isIndex from './_isIndex.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Removes elements from `array` corresponding to `indexes` and returns an
  * array of removed elements.

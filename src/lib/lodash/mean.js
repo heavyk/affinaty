@@ -1,6 +1,8 @@
 import baseMean from './_baseMean.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Computes the mean of the values in `array`.
  *

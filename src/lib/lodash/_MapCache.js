@@ -4,6 +4,8 @@ import mapCacheGet from './_mapCacheGet.js';
 import mapCacheHas from './_mapCacheHas.js';
 import mapCacheSet from './_mapCacheSet.js';
 
+'use strict';
+
 /**
  * Creates a map cache object to store key-value pairs.
  *

@@ -5,6 +5,8 @@ import Set from './_Set.js';
 import WeakMap from './_WeakMap.js';
 import toSource from './_toSource.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var mapTag = '[object Map]',
     objectTag = '[object Object]',

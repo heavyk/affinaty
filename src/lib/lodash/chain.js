@@ -1,5 +1,7 @@
 import lodash from './wrapperLodash.js';
 
+'use strict';
+
 /**
  * Creates a `lodash` wrapper instance that wraps `value` with explicit method
  * chain sequences enabled. The result of such sequences must be unwrapped

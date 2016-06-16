@@ -1,5 +1,7 @@
 import arrayMap from './_arrayMap.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.toPairs` and `_.toPairsIn` which creates an array
  * of key-value pairs for `object` corresponding to the property names of `props`.

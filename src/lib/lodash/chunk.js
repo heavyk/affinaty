@@ -2,6 +2,8 @@ import baseSlice from './_baseSlice.js';
 import isIterateeCall from './_isIterateeCall.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeCeil = Math.ceil,
     nativeMax = Math.max;

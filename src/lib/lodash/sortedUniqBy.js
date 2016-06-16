@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseSortedUniq from './_baseSortedUniq.js';
 
+'use strict';
+
 /**
  * This method is like `_.uniqBy` except that it's designed and optimized
  * for sorted arrays.

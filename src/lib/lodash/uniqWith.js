@@ -1,5 +1,7 @@
 import baseUniq from './_baseUniq.js';
 
+'use strict';
+
 /**
  * This method is like `_.uniq` except that it accepts `comparator` which
  * is invoked to compare elements of `array`. The comparator is invoked with

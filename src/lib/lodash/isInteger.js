@@ -1,5 +1,7 @@
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Checks if `value` is an integer.
  *

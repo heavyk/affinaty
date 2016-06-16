@@ -1,5 +1,7 @@
 import Symbol from './_Symbol.js';
 
+'use strict';
+
 /** Used to convert symbols to primitives and strings. */
 var symbolProto = Symbol ? Symbol.prototype : undefined,
     symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;

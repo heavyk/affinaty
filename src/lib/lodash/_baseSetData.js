@@ -1,6 +1,8 @@
 import identity from './identity.js';
 import metaMap from './_metaMap.js';
 
+'use strict';
+
 /**
  * The base implementation of `setData` without support for hot loop detection.
  *

@@ -8,6 +8,8 @@ import reorder from './_reorder.js';
 import replaceHolders from './_replaceHolders.js';
 import root from './_root.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var BIND_FLAG = 1,
     BIND_KEY_FLAG = 2,

@@ -1,5 +1,7 @@
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /**
  * Creates a function that performs a relational operation on two values.
  *

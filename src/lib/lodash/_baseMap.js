@@ -1,6 +1,8 @@
 import baseEach from './_baseEach.js';
 import isArrayLike from './isArrayLike.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.map` without support for iteratee shorthands.
  *

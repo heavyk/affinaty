@@ -1,5 +1,7 @@
 import isArrayLike from './isArrayLike.js';
 
+'use strict';
+
 /**
  * Creates a `baseEach` or `baseEachRight` function.
  *

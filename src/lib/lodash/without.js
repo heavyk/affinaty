@@ -2,6 +2,8 @@ import baseDifference from './_baseDifference.js';
 import isArrayLikeObject from './isArrayLikeObject.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array excluding all given values using
  * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

@@ -4,6 +4,8 @@ import equalArrays from './_equalArrays.js';
 import mapToArray from './_mapToArray.js';
 import setToArray from './_setToArray.js';
 
+'use strict';
+
 /** Used to compose bitmasks for comparison styles. */
 var UNORDERED_COMPARE_FLAG = 1,
     PARTIAL_COMPARE_FLAG = 2;

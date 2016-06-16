@@ -1,6 +1,8 @@
 import isArray from './isArray.js';
 import isSymbol from './isSymbol.js';
 
+'use strict';
+
 /** Used to match property names within property paths. */
 var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
     reIsPlainProp = /^\w*$/;

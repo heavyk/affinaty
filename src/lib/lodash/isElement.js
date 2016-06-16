@@ -1,6 +1,8 @@
 import isObjectLike from './isObjectLike.js';
 import isPlainObject from './isPlainObject.js';
 
+'use strict';
+
 /**
  * Checks if `value` is likely a DOM element.
  *

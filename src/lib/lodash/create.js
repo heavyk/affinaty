@@ -1,6 +1,8 @@
 import baseAssign from './_baseAssign.js';
 import baseCreate from './_baseCreate.js';
 
+'use strict';
+
 /**
  * Creates an object that inherits from the `prototype` object. If a
  * `properties` object is given, its own enumerable string keyed properties

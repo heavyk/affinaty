@@ -4,6 +4,8 @@ import isString from './isString.js';
 import toInteger from './toInteger.js';
 import values from './values.js';
 
+'use strict';
+
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
 

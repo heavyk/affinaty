@@ -4,6 +4,8 @@ import baseIteratee from './_baseIteratee.js';
 import baseReduce from './_baseReduce.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Reduces `collection` to a value which is the accumulated result of running
  * each element in `collection` thru `iteratee`, where each successive

@@ -2,6 +2,8 @@ import baseIsMatch from './_baseIsMatch.js';
 import getMatchData from './_getMatchData.js';
 import matchesStrictComparable from './_matchesStrictComparable.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.matches` which doesn't clone `source`.
  *

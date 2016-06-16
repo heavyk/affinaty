@@ -1,5 +1,7 @@
 import baseClone from './_baseClone.js';
 
+'use strict';
+
 /**
  * This method is like `_.clone` except that it accepts `customizer` which
  * is invoked to produce the cloned value. If `customizer` returns `undefined`,

@@ -1,5 +1,7 @@
 import baseSlice from './_baseSlice.js';
 
+'use strict';
+
 /**
  * Casts `array` to a slice if it's needed.
  *

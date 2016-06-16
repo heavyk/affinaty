@@ -6,6 +6,8 @@ import isArray from './isArray.js';
 import isLaziable from './_isLaziable.js';
 import rest from './rest.js';
 
+'use strict';
+
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
 

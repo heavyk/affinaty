@@ -1,5 +1,7 @@
 import isObject from './isObject.js';
 
+'use strict';
+
 /** Built-in value references. */
 var objectCreate = Object.create;
 

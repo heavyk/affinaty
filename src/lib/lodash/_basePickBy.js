@@ -1,5 +1,7 @@
 import getAllKeysIn from './_getAllKeysIn.js';
 
+'use strict';
+
 /**
  * The base implementation of  `_.pickBy` without support for iteratee shorthands.
  *

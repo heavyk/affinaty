@@ -1,5 +1,7 @@
 import LodashWrapper from './_LodashWrapper.js';
 
+'use strict';
+
 /**
  * Executes the chain sequence and returns the wrapped result.
  *

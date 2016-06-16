@@ -5,6 +5,8 @@ import isArrayLike from './isArrayLike.js';
 import isIndex from './_isIndex.js';
 import isPrototype from './_isPrototype.js';
 
+'use strict';
+
 /**
  * Creates an array of the own enumerable property names of `object`.
  *

@@ -4,6 +4,8 @@ import castArrayLikeObject from './_castArrayLikeObject.js';
 import last from './last.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * This method is like `_.intersection` except that it accepts `comparator`
  * which is invoked to compare elements of `arrays`. Result values are chosen

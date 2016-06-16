@@ -1,3 +1,5 @@
+'use strict';
+
 /** Used for built-in method references. */
 var arrayProto = Array.prototype;
 

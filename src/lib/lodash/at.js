@@ -2,6 +2,8 @@ import baseAt from './_baseAt.js';
 import baseFlatten from './_baseFlatten.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of values corresponding to `paths` of `object`.
  *

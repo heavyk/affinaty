@@ -1,5 +1,7 @@
 import get from './get.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.at` without support for individual paths.
  *

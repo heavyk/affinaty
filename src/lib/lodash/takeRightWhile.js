@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseWhile from './_baseWhile.js';
 
+'use strict';
+
 /**
  * Creates a slice of `array` with elements taken from the end. Elements are
  * taken until `predicate` returns falsey. The predicate is invoked with

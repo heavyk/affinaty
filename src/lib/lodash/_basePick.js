@@ -1,5 +1,7 @@
 import arrayReduce from './_arrayReduce.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.pick` without support for individual
  * property identifiers.

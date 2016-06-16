@@ -1,6 +1,8 @@
 import baseCreate from './_baseCreate.js';
 import baseLodash from './_baseLodash.js';
 
+'use strict';
+
 /**
  * The base constructor for creating `lodash` wrapper objects.
  *

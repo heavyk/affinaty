@@ -1,6 +1,8 @@
 import isStrictComparable from './_isStrictComparable.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * Gets the property names, values, and compare flags of `object`.
  *

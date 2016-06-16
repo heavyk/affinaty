@@ -3,6 +3,8 @@ import stringSize from './_stringSize.js';
 import toInteger from './toInteger.js';
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Pads `string` on the right side if it's shorter than `length`. Padding
  * characters are truncated if they exceed `length`.

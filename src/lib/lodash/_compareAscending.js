@@ -1,5 +1,7 @@
 import isSymbol from './isSymbol.js';
 
+'use strict';
+
 /**
  * Compares values to sort them in ascending order.
  *

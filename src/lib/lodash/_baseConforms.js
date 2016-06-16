@@ -1,5 +1,7 @@
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.conforms` which doesn't clone `source`.
  *

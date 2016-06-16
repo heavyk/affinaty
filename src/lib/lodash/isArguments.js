@@ -1,5 +1,7 @@
 import isArrayLikeObject from './isArrayLikeObject.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]';
 

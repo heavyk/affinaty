@@ -16,6 +16,8 @@ import isHostObject from './_isHostObject.js';
 import isObject from './isObject.js';
 import keys from './keys.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
     arrayTag = '[object Array]',

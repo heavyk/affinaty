@@ -2,6 +2,8 @@ import arrayPush from './_arrayPush.js';
 import getPrototype from './_getPrototype.js';
 import getSymbols from './_getSymbols.js';
 
+'use strict';
+
 /** Built-in value references. */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 

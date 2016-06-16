@@ -7,6 +7,8 @@ import isArray from './isArray.js';
 import isFlattenableIteratee from './_isFlattenableIteratee.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates a function like `_.over`.
  *

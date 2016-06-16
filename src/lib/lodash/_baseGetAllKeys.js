@@ -1,6 +1,8 @@
 import arrayPush from './_arrayPush.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
  * `keysFunc` and `symbolsFunc` to get the enumerable property names and

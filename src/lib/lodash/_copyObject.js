@@ -1,5 +1,7 @@
 import assignValue from './_assignValue.js';
 
+'use strict';
+
 /**
  * Copies properties of `source` to `object`.
  *

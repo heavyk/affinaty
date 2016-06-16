@@ -2,6 +2,8 @@ import baseFindKey from './_baseFindKey.js';
 import baseForOwn from './_baseForOwn.js';
 import baseIteratee from './_baseIteratee.js';
 
+'use strict';
+
 /**
  * This method is like `_.find` except that it returns the key of the first
  * element `predicate` returns truthy for instead of the element itself.

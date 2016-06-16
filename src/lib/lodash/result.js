@@ -3,6 +3,8 @@ import isFunction from './isFunction.js';
 import isKey from './_isKey.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * This method is like `_.get` except that if the resolved value is a
  * function it's invoked with the `this` binding of its parent object and

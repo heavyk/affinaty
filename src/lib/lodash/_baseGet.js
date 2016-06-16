@@ -2,6 +2,8 @@ import castPath from './_castPath.js';
 import isKey from './_isKey.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.get` without support for default values.
  *

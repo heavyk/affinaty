@@ -1,5 +1,7 @@
 import assocIndexOf from './_assocIndexOf.js';
 
+'use strict';
+
 /**
  * Gets the list cache value for `key`.
  *

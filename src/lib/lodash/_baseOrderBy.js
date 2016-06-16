@@ -6,6 +6,8 @@ import baseUnary from './_baseUnary.js';
 import compareMultiple from './_compareMultiple.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.orderBy` without param guards.
  *

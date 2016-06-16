@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Creates a function that returns `value`.
  *

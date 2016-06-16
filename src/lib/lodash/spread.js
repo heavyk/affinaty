@@ -4,6 +4,8 @@ import castSlice from './_castSlice.js';
 import rest from './rest.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /** Used as the `TypeError` message for "Functions" methods. */
 var FUNC_ERROR_TEXT = 'Expected a function';
 

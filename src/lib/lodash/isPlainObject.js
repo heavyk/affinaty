@@ -2,6 +2,8 @@ import getPrototype from './_getPrototype.js';
 import isHostObject from './_isHostObject.js';
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var objectTag = '[object Object]';
 

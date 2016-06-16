@@ -1,5 +1,7 @@
 import drop from './drop.js';
 
+'use strict';
+
 /**
  * Gets all but the first element of `array`.
  *

@@ -1,5 +1,7 @@
 import cloneArrayBuffer from './_cloneArrayBuffer.js';
 
+'use strict';
+
 /**
  * Creates a clone of `dataView`.
  *

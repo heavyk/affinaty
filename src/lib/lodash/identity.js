@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This method returns the first argument given to it.
  *

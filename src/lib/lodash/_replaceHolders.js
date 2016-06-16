@@ -1,3 +1,5 @@
+'use strict';
+
 /** Used as the internal argument placeholder. */
 var PLACEHOLDER = '__lodash_placeholder__';
 

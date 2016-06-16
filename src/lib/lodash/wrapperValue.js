@@ -1,5 +1,7 @@
 import baseWrapperValue from './_baseWrapperValue.js';
 
+'use strict';
+
 /**
  * Executes the chain sequence to resolve the unwrapped value.
  *

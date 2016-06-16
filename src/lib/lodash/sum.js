@@ -1,6 +1,8 @@
 import baseSum from './_baseSum.js';
 import identity from './identity.js';
 
+'use strict';
+
 /**
  * Computes the sum of the values in `array`.
  *

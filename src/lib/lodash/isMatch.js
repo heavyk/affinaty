@@ -1,6 +1,8 @@
 import baseIsMatch from './_baseIsMatch.js';
 import getMatchData from './_getMatchData.js';
 
+'use strict';
+
 /**
  * Performs a partial deep comparison between `object` and `source` to
  * determine if `object` contains equivalent property values. This method is

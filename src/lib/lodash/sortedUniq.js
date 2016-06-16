@@ -1,5 +1,7 @@
 import baseSortedUniq from './_baseSortedUniq.js';
 
+'use strict';
+
 /**
  * This method is like `_.uniq` except that it's designed and optimized
  * for sorted arrays.

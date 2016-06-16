@@ -1,6 +1,8 @@
 import isArray from './isArray.js';
 import isFunction from './isFunction.js';
 
+'use strict';
+
 /**
  * Checks if `value` is a flattenable array and not a `_.matchesProperty`
  * iteratee shorthand.

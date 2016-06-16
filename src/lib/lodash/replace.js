@@ -1,5 +1,7 @@
 import toString from './toString.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var stringProto = String.prototype;
 

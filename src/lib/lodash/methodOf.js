@@ -1,6 +1,8 @@
 import baseInvoke from './_baseInvoke.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * The opposite of `_.method`; this method creates a function that invokes
  * the method at a given path of `object`. Any additional arguments are

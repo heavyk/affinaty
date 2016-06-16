@@ -2,6 +2,8 @@ import addSetEntry from './_addSetEntry.js';
 import arrayReduce from './_arrayReduce.js';
 import setToArray from './_setToArray.js';
 
+'use strict';
+
 /**
  * Creates a clone of `set`.
  *

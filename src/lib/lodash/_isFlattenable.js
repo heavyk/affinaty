@@ -1,6 +1,8 @@
 import isArguments from './isArguments.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Checks if `value` is a flattenable `arguments` object or array.
  *

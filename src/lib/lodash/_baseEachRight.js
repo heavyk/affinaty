@@ -1,6 +1,8 @@
 import baseForOwnRight from './_baseForOwnRight.js';
 import createBaseEach from './_createBaseEach.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.forEachRight` without support for iteratee shorthands.
  *

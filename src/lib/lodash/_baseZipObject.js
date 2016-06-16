@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * This base implementation of `_.zipObject` which assigns values using `assignFunc`.
  *

@@ -1,6 +1,8 @@
 import isArray from './isArray.js';
 import stringToPath from './_stringToPath.js';
 
+'use strict';
+
 /**
  * Casts `value` to a path array if it's not one.
  *

@@ -6,6 +6,8 @@ import getAllKeysIn from './_getAllKeysIn.js';
 import rest from './rest.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * The opposite of `_.pick`; this method creates an object composed of the
  * own and inherited enumerable string keyed properties of `object` that are

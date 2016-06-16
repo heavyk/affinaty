@@ -1,5 +1,7 @@
 import baseUnset from './_baseUnset.js';
 
+'use strict';
+
 /**
  * Removes the property at `path` of `object`.
  *

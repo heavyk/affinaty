@@ -1,5 +1,7 @@
 import createRelationalOperation from './_createRelationalOperation.js';
 
+'use strict';
+
 /**
  * Checks if `value` is greater than or equal to `other`.
  *

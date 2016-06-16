@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * The base implementation of `_.property` without support for deep paths.
  *

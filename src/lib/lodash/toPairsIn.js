@@ -1,6 +1,8 @@
 import createToPairs from './_createToPairs.js';
 import keysIn from './keysIn.js';
 
+'use strict';
+
 /**
  * Creates an array of own and inherited enumerable string keyed-value pairs
  * for `object` which can be consumed by `_.fromPairs`. If `object` is a map

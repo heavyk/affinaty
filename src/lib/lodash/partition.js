@@ -1,5 +1,7 @@
 import createAggregator from './_createAggregator.js';
 
+'use strict';
+
 /**
  * Creates an array of elements split into two groups, the first of which
  * contains elements `predicate` returns truthy for, the second of which

@@ -1,5 +1,7 @@
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Converts `string`, as a whole, to upper case just like
  * [String#toUpperCase](https://mdn.io/toUpperCase).

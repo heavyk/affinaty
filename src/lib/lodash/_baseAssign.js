@@ -1,6 +1,8 @@
 import copyObject from './_copyObject.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.assign` without support for multiple sources
  * or `customizer` functions.

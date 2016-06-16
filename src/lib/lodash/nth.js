@@ -1,6 +1,8 @@
 import baseNth from './_baseNth.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Gets the element at index `n` of `array`. If `n` is negative, the nth
  * element from the end is returned.

@@ -1,6 +1,8 @@
 import baseMerge from './_baseMerge.js';
 import createAssigner from './_createAssigner.js';
 
+'use strict';
+
 /**
  * This method is like `_.assign` except that it recursively merges own and
  * inherited enumerable string keyed properties of source objects into the

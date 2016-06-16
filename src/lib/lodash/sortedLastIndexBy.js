@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseSortedIndexBy from './_baseSortedIndexBy.js';
 
+'use strict';
+
 /**
  * This method is like `_.sortedLastIndex` except that it accepts `iteratee`
  * which is invoked for `value` and each element of `array` to compute their

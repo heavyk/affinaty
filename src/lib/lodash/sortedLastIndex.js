@@ -1,5 +1,7 @@
 import baseSortedIndex from './_baseSortedIndex.js';
 
+'use strict';
+
 /**
  * This method is like `_.sortedIndex` except that it returns the highest
  * index at which `value` should be inserted into `array` in order to

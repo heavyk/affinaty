@@ -5,6 +5,8 @@ import isFlattenableIteratee from './_isFlattenableIteratee.js';
 import isIterateeCall from './_isIterateeCall.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of elements, sorted in ascending order by the results of
  * running each element in a collection thru each iteratee. This method

@@ -1,5 +1,7 @@
 import createRound from './_createRound.js';
 
+'use strict';
+
 /**
  * Computes `number` rounded to `precision`.
  *

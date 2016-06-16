@@ -5,6 +5,8 @@ import isArrayLikeObject from './isArrayLikeObject.js';
 import last from './last.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * This method is like `_.union` except that it accepts `iteratee` which is
  * invoked for each element of each `arrays` to generate the criterion by

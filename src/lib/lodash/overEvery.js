@@ -1,6 +1,8 @@
 import arrayEvery from './_arrayEvery.js';
 import createOver from './_createOver.js';
 
+'use strict';
+
 /**
  * Creates a function that checks if **all** of the `predicates` return
  * truthy when invoked with the arguments it receives.

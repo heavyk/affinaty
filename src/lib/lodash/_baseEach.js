@@ -1,6 +1,8 @@
 import baseForOwn from './_baseForOwn.js';
 import createBaseEach from './_createBaseEach.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.forEach` without support for iteratee shorthands.
  *

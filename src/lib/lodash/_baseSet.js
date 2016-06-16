@@ -5,6 +5,8 @@ import isKey from './_isKey.js';
 import isObject from './isObject.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.set`.
  *

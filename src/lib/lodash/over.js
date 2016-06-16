@@ -1,6 +1,8 @@
 import arrayMap from './_arrayMap.js';
 import createOver from './_createOver.js';
 
+'use strict';
+
 /**
  * Creates a function that invokes `iteratees` with the arguments it receives
  * and returns their results.

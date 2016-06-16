@@ -2,6 +2,8 @@ import Set from './_Set.js';
 import noop from './noop.js';
 import setToArray from './_setToArray.js';
 
+'use strict';
+
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0;
 

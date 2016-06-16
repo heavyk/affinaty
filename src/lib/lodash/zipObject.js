@@ -1,6 +1,8 @@
 import assignValue from './_assignValue.js';
 import baseZipObject from './_baseZipObject.js';
 
+'use strict';
+
 /**
  * This method is like `_.fromPairs` except that it accepts two arrays,
  * one of property identifiers and one of corresponding values.

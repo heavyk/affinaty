@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A specialized version of `_.some` for arrays without support for iteratee
  * shorthands.

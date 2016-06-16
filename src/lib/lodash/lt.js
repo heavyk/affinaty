@@ -1,6 +1,8 @@
 import baseLt from './_baseLt.js';
 import createRelationalOperation from './_createRelationalOperation.js';
 
+'use strict';
+
 /**
  * Checks if `value` is less than `other`.
  *

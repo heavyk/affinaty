@@ -1,6 +1,8 @@
 import baseFill from './_baseFill.js';
 import isIterateeCall from './_isIterateeCall.js';
 
+'use strict';
+
 /**
  * Fills elements of `array` with `value` from `start` up to, but not
  * including, `end`.

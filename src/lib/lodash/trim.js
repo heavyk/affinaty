@@ -5,6 +5,8 @@ import charsStartIndex from './_charsStartIndex.js';
 import stringToArray from './_stringToArray.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used to match leading and trailing whitespace. */
 var reTrim = /^\s+|\s+$/g;
 

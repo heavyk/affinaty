@@ -6,6 +6,8 @@ import cloneSet from './_cloneSet.js';
 import cloneSymbol from './_cloneSymbol.js';
 import cloneTypedArray from './_cloneTypedArray.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var boolTag = '[object Boolean]',
     dateTag = '[object Date]',

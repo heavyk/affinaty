@@ -1,5 +1,7 @@
 import coreJsData from './_coreJsData.js';
 
+'use strict';
+
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
   var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');

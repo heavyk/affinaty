@@ -3,6 +3,8 @@ import baseIteratee from './_baseIteratee.js';
 import baseMap from './_baseMap.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Creates an array of values by running each element in `collection` thru
  * `iteratee`. The iteratee is invoked with three arguments:

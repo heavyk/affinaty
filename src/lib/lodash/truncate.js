@@ -8,6 +8,8 @@ import stringToArray from './_stringToArray.js';
 import toInteger from './toInteger.js';
 import toString from './toString.js';
 
+'use strict';
+
 /** Used as default options for `_.truncate`. */
 var DEFAULT_TRUNC_LENGTH = 30,
     DEFAULT_TRUNC_OMISSION = '...';

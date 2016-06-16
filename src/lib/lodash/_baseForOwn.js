@@ -1,6 +1,8 @@
 import baseFor from './_baseFor.js';
 import keys from './keys.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.forOwn` without support for iteratee shorthands.
  *

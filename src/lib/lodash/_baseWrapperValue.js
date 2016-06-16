@@ -2,6 +2,8 @@ import LazyWrapper from './_LazyWrapper.js';
 import arrayPush from './_arrayPush.js';
 import arrayReduce from './_arrayReduce.js';
 
+'use strict';
+
 /**
  * The base implementation of `wrapperValue` which returns the result of
  * performing a sequence of actions on the unwrapped `value`, where each

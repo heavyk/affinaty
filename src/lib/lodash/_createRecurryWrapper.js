@@ -1,6 +1,8 @@
 import isLaziable from './_isLaziable.js';
 import setData from './_setData.js';
 
+'use strict';
+
 /** Used to compose bitmasks for wrapper metadata. */
 var BIND_FLAG = 1,
     BIND_KEY_FLAG = 2,

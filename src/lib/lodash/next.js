@@ -1,5 +1,7 @@
 import toArray from './toArray.js';
 
+'use strict';
+
 /**
  * Gets the next value on a wrapped object following the
  * [iterator protocol](https://mdn.io/iteration_protocols#iterator).

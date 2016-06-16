@@ -1,5 +1,7 @@
 import stubArray from './stubArray.js';
 
+'use strict';
+
 /** Built-in value references. */
 var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 

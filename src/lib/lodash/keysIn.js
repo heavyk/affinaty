@@ -3,6 +3,8 @@ import indexKeys from './_indexKeys.js';
 import isIndex from './_isIndex.js';
 import isPrototype from './_isPrototype.js';
 
+'use strict';
+
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
 

@@ -7,6 +7,8 @@ import isLength from './isLength.js';
 import isString from './isString.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * Checks if `path` exists on `object`.
  *

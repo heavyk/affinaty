@@ -1,5 +1,7 @@
 import baseToString from './_baseToString.js';
 
+'use strict';
+
 /**
  * Converts `value` to a string. An empty string is returned for `null`
  * and `undefined` values. The sign of `-0` is preserved.

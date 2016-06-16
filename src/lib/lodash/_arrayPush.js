@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Appends the elements of `values` to `array`.
  *

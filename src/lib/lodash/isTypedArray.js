@@ -1,6 +1,8 @@
 import isLength from './isLength.js';
 import isObjectLike from './isObjectLike.js';
 
+'use strict';
+
 /** `Object#toString` result references. */
 var argsTag = '[object Arguments]',
     arrayTag = '[object Array]',

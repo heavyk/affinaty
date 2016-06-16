@@ -4,6 +4,8 @@ import basePick from './_basePick.js';
 import rest from './rest.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * Creates an object composed of the picked `object` properties.
  *

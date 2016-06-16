@@ -1,6 +1,8 @@
 import baseHas from './_baseHas.js';
 import hasPath from './_hasPath.js';
 
+'use strict';
+
 /**
  * Checks if `path` is a direct property of `object`.
  *

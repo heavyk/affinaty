@@ -6,6 +6,8 @@ import isStrictComparable from './_isStrictComparable.js';
 import matchesStrictComparable from './_matchesStrictComparable.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /** Used to compose bitmasks for comparison styles. */
 var UNORDERED_COMPARE_FLAG = 1,
     PARTIAL_COMPARE_FLAG = 2;

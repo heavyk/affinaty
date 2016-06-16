@@ -3,6 +3,8 @@ import baseFilter from './_baseFilter.js';
 import baseIteratee from './_baseIteratee.js';
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * The opposite of `_.filter`; this method returns the elements of `collection`
  * that `predicate` does **not** return truthy for.

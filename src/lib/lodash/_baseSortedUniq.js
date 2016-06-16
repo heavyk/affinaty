@@ -1,5 +1,7 @@
 import eq from './eq.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.sortedUniq` and `_.sortedUniqBy` without
  * support for iteratee shorthands.

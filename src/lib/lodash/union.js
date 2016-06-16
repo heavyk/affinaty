@@ -3,6 +3,8 @@ import baseUniq from './_baseUniq.js';
 import isArrayLikeObject from './isArrayLikeObject.js';
 import rest from './rest.js';
 
+'use strict';
+
 /**
  * Creates an array of unique values, in order, from all given arrays using
  * [`SameValueZero`](http://ecma-international.org/ecma-262/6.0/#sec-samevaluezero)

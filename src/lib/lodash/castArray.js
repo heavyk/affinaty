@@ -1,5 +1,7 @@
 import isArray from './isArray.js';
 
+'use strict';
+
 /**
  * Casts `value` as an array if it's not one.
  *

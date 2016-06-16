@@ -6,6 +6,8 @@ import getHolder from './_getHolder.js';
 import replaceHolders from './_replaceHolders.js';
 import root from './_root.js';
 
+'use strict';
+
 /**
  * Creates a function that wraps `func` to enable currying.
  *

@@ -1,6 +1,8 @@
 import SetCache from './_SetCache.js';
 import arraySome from './_arraySome.js';
 
+'use strict';
+
 /** Used to compose bitmasks for comparison styles. */
 var UNORDERED_COMPARE_FLAG = 1,
     PARTIAL_COMPARE_FLAG = 2;

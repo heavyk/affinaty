@@ -3,6 +3,8 @@ import LodashWrapper from './_LodashWrapper.js';
 import reverse from './reverse.js';
 import thru from './thru.js';
 
+'use strict';
+
 /**
  * This method is the wrapper version of `_.reverse`.
  *

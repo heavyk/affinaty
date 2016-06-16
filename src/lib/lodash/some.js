@@ -4,6 +4,8 @@ import baseSome from './_baseSome.js';
 import isArray from './isArray.js';
 import isIterateeCall from './_isIterateeCall.js';
 
+'use strict';
+
 /**
  * Checks if `predicate` returns truthy for **any** element of `collection`.
  * Iteration is stopped once `predicate` returns truthy. The predicate is

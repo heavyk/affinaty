@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Creates a base function for methods like `_.forIn` and `_.forOwn`.
  *

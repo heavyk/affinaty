@@ -1,6 +1,8 @@
 import baseClone from './_baseClone.js';
 import baseIteratee from './_baseIteratee.js';
 
+'use strict';
+
 /**
  * Creates a function that invokes `func` with the arguments of the created
  * function. If `func` is a property name, the created function returns the

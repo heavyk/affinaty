@@ -7,6 +7,8 @@ import isObject from './isObject.js';
 import isTypedArray from './isTypedArray.js';
 import keysIn from './keysIn.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.merge` without support for multiple sources.
  *

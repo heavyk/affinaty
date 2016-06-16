@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseUniq from './_baseUniq.js';
 
+'use strict';
+
 /**
  * This method is like `_.uniq` except that it accepts `iteratee` which is
  * invoked for each element in `array` to generate the criterion by which

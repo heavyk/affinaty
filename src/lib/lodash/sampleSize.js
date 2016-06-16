@@ -4,6 +4,8 @@ import isIterateeCall from './_isIterateeCall.js';
 import toArray from './toArray.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Gets `n` random elements at unique keys from `collection` up to the
  * size of `collection`.

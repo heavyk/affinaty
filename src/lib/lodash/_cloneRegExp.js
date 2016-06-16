@@ -1,3 +1,5 @@
+'use strict';
+
 /** Used to match `RegExp` flags from their coerced string values. */
 var reFlags = /\w*$/;
 

@@ -3,6 +3,8 @@ import basePropertyDeep from './_basePropertyDeep.js';
 import isKey from './_isKey.js';
 import toKey from './_toKey.js';
 
+'use strict';
+
 /**
  * Creates a function that returns the value at `path` of a given object.
  *

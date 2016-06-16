@@ -1,5 +1,7 @@
 import toNumber from './toNumber.js';
 
+'use strict';
+
 /** Used as references for various `Number` constants. */
 var INFINITY = 1 / 0,
     MAX_INTEGER = 1.7976931348623157e+308;

@@ -3,6 +3,8 @@ import reHasComplexSymbol from './_reHasComplexSymbol.js';
 import stringToArray from './_stringToArray.js';
 import toString from './toString.js';
 
+'use strict';
+
 /**
  * Creates a function like `_.lowerFirst`.
  *

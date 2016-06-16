@@ -4,6 +4,8 @@ import hashGet from './_hashGet.js';
 import hashHas from './_hashHas.js';
 import hashSet from './_hashSet.js';
 
+'use strict';
+
 /**
  * Creates a hash object.
  *

@@ -2,6 +2,8 @@ import Hash from './_Hash.js';
 import ListCache from './_ListCache.js';
 import Map from './_Map.js';
 
+'use strict';
+
 /**
  * Removes all key-value entries from the map.
  *

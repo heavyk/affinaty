@@ -1,6 +1,8 @@
 import baseIteratee from './_baseIteratee.js';
 import baseMean from './_baseMean.js';
 
+'use strict';
+
 /**
  * This method is like `_.mean` except that it accepts `iteratee` which is
  * invoked for each element in `array` to generate the value to be averaged.

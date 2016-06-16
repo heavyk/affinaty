@@ -1,6 +1,8 @@
 import baseSlice from './_baseSlice.js';
 import toInteger from './toInteger.js';
 
+'use strict';
+
 /**
  * Creates a slice of `array` with `n` elements dropped from the end.
  *

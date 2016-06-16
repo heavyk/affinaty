@@ -1,5 +1,7 @@
 import baseEach from './_baseEach.js';
 
+'use strict';
+
 /**
  * The base implementation of `_.some` without support for iteratee shorthands.
  *
