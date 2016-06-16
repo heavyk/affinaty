@@ -659,8 +659,6 @@ component.exports = {
     console.log('complete??')
   },
   set_members (mbox) {
-    // let thread = this.get('threads.' + mbox)
-    console.info('set members')
     let idx = this.exists[mbox]
     if (idx === void 0) return
     let members = {}

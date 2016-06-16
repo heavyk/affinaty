@@ -9,6 +9,7 @@ build/
 affinaty-web/*
 /test-dir
 /gobbler/.state.json
+*-bak
 
 
 # App artifacts

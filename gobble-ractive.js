@@ -140,8 +140,9 @@ function builder (definition, options) {
 	const importBlock = imports.join('\n')
 
 	const beforeScript = [
-		'"use strict"'.importBlock,
+		'"use strict"',
 		`// component: ${definition.name}`,
+		importBlock,
 		'var component = { exports: {} };'
 	].join('\n')
 
@@ -181,7 +182,7 @@ function to_fun (tpl, options) {
 
 function createOutro (definition, indent) {
 	indent = indent || ''
-	const css = definition.css // ? new CleanCSS().minify(definition.css).styles : ''
+	const css = definition.css || '' // ? new CleanCSS().minify(definition.css).styles : ''
 	const imports = definition.imports.map((imported, i) => `${stringify(imported.name)}: __import${definition.modules.length + i}__`)
 
 	let outro = [

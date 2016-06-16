@@ -85,7 +85,7 @@ component.exports = {
       if (a) pr = r
       r = rr
       ranges.push({
-        label: (r === '<' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' years',
+        label: (r === '<' ? '> ' + pr : (pr ? pr + '-' : '< ') + r) + ' años',
         value: 0, // s
         color: colors[a]
       })
@@ -101,7 +101,7 @@ component.exports = {
     const r1 = mid - (movil ? 30 : 55)
     const r2 = mid - 5
 
-    this.observe('ranges', (r, _r) => {
+    this.observe('ranges', (r) => {
       let total = 0
       for (var i = 0; i < r.length; i++) total += r[i]
 
