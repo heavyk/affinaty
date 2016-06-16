@@ -1,7 +1,7 @@
 
-import assign from '../lodash/object/assign'
+import assign from '../lodash/assign'
 import h from '../dom/hyper-hermes'
-import each from '../lodash/collection/each'
+import each from '../lodash/each'
 
 function nlElastic (node, keypath, padding) {
   function int(str) {

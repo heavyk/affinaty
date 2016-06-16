@@ -1,7 +1,7 @@
 
 import local from '../local'
-import assign from '../lib/lodash/object/assign'
-import isEqual from '../lib/lodash/lang/isEqual'
+import assign from '../lib/lodash/assign'
+import isEqual from '../lib/lodash/isEqual'
 import Ambition from '../lib/insightful/consciousness/ambition'
 import { insert_d } from '../lib/ordered-array'
 import { created_asc } from '../lib/order-by'

@@ -1,7 +1,7 @@
 
 import Modal from './partials/modal'
 
-import assign from './lib/lodash/object/assign'
+import assign from './lib/lodash/assign'
 
 let _modal
 

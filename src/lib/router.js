@@ -4,8 +4,8 @@ import { parseUri, scrollTo, joinPaths, parseQS, stringifyQS, stringifyHash, par
 
 import EventEmitter from './drip/emitter'
 
-import assign from './lodash/object/assign'
-import isEmpty from './lodash/lang/isEmpty'
+import assign from './lodash/assign'
+import isEmpty from './lodash/isEmpty'
 
 export default class Router extends EventEmitter {
   constructor (options, onunhandled, ondispatch) {

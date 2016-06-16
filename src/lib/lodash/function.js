@@ -1,55 +1,24 @@
-import after from './function/after';
-import ary from './function/ary';
-import backflow from './function/backflow';
-import before from './function/before';
-import bind from './function/bind';
-import bindAll from './function/bindAll';
-import bindKey from './function/bindKey';
-import compose from './function/compose';
-import curry from './function/curry';
-import curryRight from './function/curryRight';
-import debounce from './function/debounce';
-import defer from './function/defer';
-import delay from './function/delay';
-import flow from './function/flow';
-import flowRight from './function/flowRight';
-import memoize from './function/memoize';
-import modArgs from './function/modArgs';
-import negate from './function/negate';
-import once from './function/once';
-import partial from './function/partial';
-import partialRight from './function/partialRight';
-import rearg from './function/rearg';
-import restParam from './function/restParam';
-import spread from './function/spread';
-import throttle from './function/throttle';
-import wrap from './function/wrap';
-
-export default {
-  'after': after,
-  'ary': ary,
-  'backflow': backflow,
-  'before': before,
-  'bind': bind,
-  'bindAll': bindAll,
-  'bindKey': bindKey,
-  'compose': compose,
-  'curry': curry,
-  'curryRight': curryRight,
-  'debounce': debounce,
-  'defer': defer,
-  'delay': delay,
-  'flow': flow,
-  'flowRight': flowRight,
-  'memoize': memoize,
-  'modArgs': modArgs,
-  'negate': negate,
-  'once': once,
-  'partial': partial,
-  'partialRight': partialRight,
-  'rearg': rearg,
-  'restParam': restParam,
-  'spread': spread,
-  'throttle': throttle,
-  'wrap': wrap
-};
+export { default as after } from './after.js';
+export { default as ary } from './ary.js';
+export { default as before } from './before.js';
+export { default as bind } from './bind.js';
+export { default as bindKey } from './bindKey.js';
+export { default as curry } from './curry.js';
+export { default as curryRight } from './curryRight.js';
+export { default as debounce } from './debounce.js';
+export { default as defer } from './defer.js';
+export { default as delay } from './delay.js';
+export { default as flip } from './flip.js';
+export { default as memoize } from './memoize.js';
+export { default as negate } from './negate.js';
+export { default as once } from './once.js';
+export { default as overArgs } from './overArgs.js';
+export { default as partial } from './partial.js';
+export { default as partialRight } from './partialRight.js';
+export { default as rearg } from './rearg.js';
+export { default as rest } from './rest.js';
+export { default as spread } from './spread.js';
+export { default as throttle } from './throttle.js';
+export { default as unary } from './unary.js';
+export { default as wrap } from './wrap.js';
+export { default as default } from './function.default';

@@ -1,5 +1,5 @@
 import ClassList from './class-list.js'
-import each from '../lodash/collection/forEach'
+import each from '../lodash/forEach'
 var doc = window.document
 
 /*

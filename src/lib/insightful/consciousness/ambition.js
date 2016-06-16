@@ -7,7 +7,7 @@ var slice = [].slice
 // import EventEmitter from '../../drip/emitter'
 import EventEmitter from '../../drip/enhanced'
 
-import assign from '../../lodash/object/assign'
+import assign from '../../lodash/assign'
 
 class Ambition extends EventEmitter {
   constructor (topic, options) {

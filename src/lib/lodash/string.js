@@ -1,49 +1,32 @@
-import camelCase from './string/camelCase';
-import capitalize from './string/capitalize';
-import deburr from './string/deburr';
-import endsWith from './string/endsWith';
-import escape from './string/escape';
-import escapeRegExp from './string/escapeRegExp';
-import kebabCase from './string/kebabCase';
-import pad from './string/pad';
-import padLeft from './string/padLeft';
-import padRight from './string/padRight';
-import parseInt from './string/parseInt';
-import repeat from './string/repeat';
-import snakeCase from './string/snakeCase';
-import startCase from './string/startCase';
-import startsWith from './string/startsWith';
-import template from './string/template';
-import templateSettings from './string/templateSettings';
-import trim from './string/trim';
-import trimLeft from './string/trimLeft';
-import trimRight from './string/trimRight';
-import trunc from './string/trunc';
-import unescape from './string/unescape';
-import words from './string/words';
-
-export default {
-  'camelCase': camelCase,
-  'capitalize': capitalize,
-  'deburr': deburr,
-  'endsWith': endsWith,
-  'escape': escape,
-  'escapeRegExp': escapeRegExp,
-  'kebabCase': kebabCase,
-  'pad': pad,
-  'padLeft': padLeft,
-  'padRight': padRight,
-  'parseInt': parseInt,
-  'repeat': repeat,
-  'snakeCase': snakeCase,
-  'startCase': startCase,
-  'startsWith': startsWith,
-  'template': template,
-  'templateSettings': templateSettings,
-  'trim': trim,
-  'trimLeft': trimLeft,
-  'trimRight': trimRight,
-  'trunc': trunc,
-  'unescape': unescape,
-  'words': words
-};
+export { default as camelCase } from './camelCase.js';
+export { default as capitalize } from './capitalize.js';
+export { default as deburr } from './deburr.js';
+export { default as endsWith } from './endsWith.js';
+export { default as escape } from './escape.js';
+export { default as escapeRegExp } from './escapeRegExp.js';
+export { default as kebabCase } from './kebabCase.js';
+export { default as lowerCase } from './lowerCase.js';
+export { default as lowerFirst } from './lowerFirst.js';
+export { default as pad } from './pad.js';
+export { default as padEnd } from './padEnd.js';
+export { default as padStart } from './padStart.js';
+export { default as parseInt } from './parseInt.js';
+export { default as repeat } from './repeat.js';
+export { default as replace } from './replace.js';
+export { default as snakeCase } from './snakeCase.js';
+export { default as split } from './split.js';
+export { default as startCase } from './startCase.js';
+export { default as startsWith } from './startsWith.js';
+export { default as template } from './template.js';
+export { default as templateSettings } from './templateSettings.js';
+export { default as toLower } from './toLower.js';
+export { default as toUpper } from './toUpper.js';
+export { default as trim } from './trim.js';
+export { default as trimEnd } from './trimEnd.js';
+export { default as trimStart } from './trimStart.js';
+export { default as truncate } from './truncate.js';
+export { default as unescape } from './unescape.js';
+export { default as upperCase } from './upperCase.js';
+export { default as upperFirst } from './upperFirst.js';
+export { default as words } from './words.js';
+export { default as default } from './string.default';

@@ -1,11 +1,11 @@
 import { parseQS, parseHash, parseJSON } from './utils.js'
 
-import assign from './lodash/object/assign'
-import isEmpty from './lodash/lang/isEmpty'
-import uniq from './lodash/array/uniq'
-import flatten from './lodash/array/flatten'
-import map from './lodash/collection/map'
-import pick from './lodash/object/pick'
+import assign from './lodash/assign'
+import isEmpty from './lodash/isEmpty'
+import uniq from './lodash/uniq'
+import flatten from './lodash/flatten'
+import map from './lodash/map'
+import pick from './lodash/pick'
 
 export default class Route {
   constructor (pattern, Handler, data, observe, router) {

@@ -479,8 +479,9 @@ span.name {
 </style>
 
 <script>
-import assign from '../lib/lodash/object/assign'
-import each from '../lib/lodash/collection/each'
+import assign from '../lib/lodash/assign'
+import each from '../lib/lodash/each'
+import throttle from '../lib/lodash/throttle'
 import onresize from '../lib/dom/element-onresize'
 
 import { insert, insert_d, remove_d } from '../lib/ordered-array'
@@ -633,7 +634,7 @@ component.exports = {
     this.onteardown()
     // re-add resize listener
     let resizer
-    this.resizer = require('../lib/lodash/function/throttle')(resizer = () => {
+    this.resizer = throttle(resizer = () => {
       let iw = window.innerWidth
       let left = Math.min((iw / 3), 200)
       let right = iw - left - 40

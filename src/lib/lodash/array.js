@@ -1,87 +1,66 @@
-import chunk from './array/chunk';
-import compact from './array/compact';
-import difference from './array/difference';
-import drop from './array/drop';
-import dropRight from './array/dropRight';
-import dropRightWhile from './array/dropRightWhile';
-import dropWhile from './array/dropWhile';
-import fill from './array/fill';
-import findIndex from './array/findIndex';
-import findLastIndex from './array/findLastIndex';
-import first from './array/first';
-import flatten from './array/flatten';
-import flattenDeep from './array/flattenDeep';
-import head from './array/head';
-import indexOf from './array/indexOf';
-import initial from './array/initial';
-import intersection from './array/intersection';
-import last from './array/last';
-import lastIndexOf from './array/lastIndexOf';
-import object from './array/object';
-import pull from './array/pull';
-import pullAt from './array/pullAt';
-import remove from './array/remove';
-import rest from './array/rest';
-import slice from './array/slice';
-import sortedIndex from './array/sortedIndex';
-import sortedLastIndex from './array/sortedLastIndex';
-import tail from './array/tail';
-import take from './array/take';
-import takeRight from './array/takeRight';
-import takeRightWhile from './array/takeRightWhile';
-import takeWhile from './array/takeWhile';
-import union from './array/union';
-import uniq from './array/uniq';
-import unique from './array/unique';
-import unzip from './array/unzip';
-import unzipWith from './array/unzipWith';
-import without from './array/without';
-import xor from './array/xor';
-import zip from './array/zip';
-import zipObject from './array/zipObject';
-import zipWith from './array/zipWith';
-
-export default {
-  'chunk': chunk,
-  'compact': compact,
-  'difference': difference,
-  'drop': drop,
-  'dropRight': dropRight,
-  'dropRightWhile': dropRightWhile,
-  'dropWhile': dropWhile,
-  'fill': fill,
-  'findIndex': findIndex,
-  'findLastIndex': findLastIndex,
-  'first': first,
-  'flatten': flatten,
-  'flattenDeep': flattenDeep,
-  'head': head,
-  'indexOf': indexOf,
-  'initial': initial,
-  'intersection': intersection,
-  'last': last,
-  'lastIndexOf': lastIndexOf,
-  'object': object,
-  'pull': pull,
-  'pullAt': pullAt,
-  'remove': remove,
-  'rest': rest,
-  'slice': slice,
-  'sortedIndex': sortedIndex,
-  'sortedLastIndex': sortedLastIndex,
-  'tail': tail,
-  'take': take,
-  'takeRight': takeRight,
-  'takeRightWhile': takeRightWhile,
-  'takeWhile': takeWhile,
-  'union': union,
-  'uniq': uniq,
-  'unique': unique,
-  'unzip': unzip,
-  'unzipWith': unzipWith,
-  'without': without,
-  'xor': xor,
-  'zip': zip,
-  'zipObject': zipObject,
-  'zipWith': zipWith
-};
+export { default as chunk } from './chunk.js';
+export { default as compact } from './compact.js';
+export { default as concat } from './concat.js';
+export { default as difference } from './difference.js';
+export { default as differenceBy } from './differenceBy.js';
+export { default as differenceWith } from './differenceWith.js';
+export { default as drop } from './drop.js';
+export { default as dropRight } from './dropRight.js';
+export { default as dropRightWhile } from './dropRightWhile.js';
+export { default as dropWhile } from './dropWhile.js';
+export { default as fill } from './fill.js';
+export { default as findIndex } from './findIndex.js';
+export { default as findLastIndex } from './findLastIndex.js';
+export { default as first } from './first.js';
+export { default as flatten } from './flatten.js';
+export { default as flattenDeep } from './flattenDeep.js';
+export { default as flattenDepth } from './flattenDepth.js';
+export { default as fromPairs } from './fromPairs.js';
+export { default as head } from './head.js';
+export { default as indexOf } from './indexOf.js';
+export { default as initial } from './initial.js';
+export { default as intersection } from './intersection.js';
+export { default as intersectionBy } from './intersectionBy.js';
+export { default as intersectionWith } from './intersectionWith.js';
+export { default as join } from './join.js';
+export { default as last } from './last.js';
+export { default as lastIndexOf } from './lastIndexOf.js';
+export { default as nth } from './nth.js';
+export { default as pull } from './pull.js';
+export { default as pullAll } from './pullAll.js';
+export { default as pullAllBy } from './pullAllBy.js';
+export { default as pullAllWith } from './pullAllWith.js';
+export { default as pullAt } from './pullAt.js';
+export { default as remove } from './remove.js';
+export { default as reverse } from './reverse.js';
+export { default as slice } from './slice.js';
+export { default as sortedIndex } from './sortedIndex.js';
+export { default as sortedIndexBy } from './sortedIndexBy.js';
+export { default as sortedIndexOf } from './sortedIndexOf.js';
+export { default as sortedLastIndex } from './sortedLastIndex.js';
+export { default as sortedLastIndexBy } from './sortedLastIndexBy.js';
+export { default as sortedLastIndexOf } from './sortedLastIndexOf.js';
+export { default as sortedUniq } from './sortedUniq.js';
+export { default as sortedUniqBy } from './sortedUniqBy.js';
+export { default as tail } from './tail.js';
+export { default as take } from './take.js';
+export { default as takeRight } from './takeRight.js';
+export { default as takeRightWhile } from './takeRightWhile.js';
+export { default as takeWhile } from './takeWhile.js';
+export { default as union } from './union.js';
+export { default as unionBy } from './unionBy.js';
+export { default as unionWith } from './unionWith.js';
+export { default as uniq } from './uniq.js';
+export { default as uniqBy } from './uniqBy.js';
+export { default as uniqWith } from './uniqWith.js';
+export { default as unzip } from './unzip.js';
+export { default as unzipWith } from './unzipWith.js';
+export { default as without } from './without.js';
+export { default as xor } from './xor.js';
+export { default as xorBy } from './xorBy.js';
+export { default as xorWith } from './xorWith.js';
+export { default as zip } from './zip.js';
+export { default as zipObject } from './zipObject.js';
+export { default as zipObjectDeep } from './zipObjectDeep.js';
+export { default as zipWith } from './zipWith.js';
+export { default as default } from './array.default';

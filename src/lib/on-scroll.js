@@ -1,4 +1,4 @@
-import debounce from './lodash/function/debounce'
+import debounce from './lodash/debounce'
 
 export default function onScroll (el, percent_or_px, handler) {
   let _el = el && el.scrollHeight ? el : window

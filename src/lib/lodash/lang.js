@@ -1,63 +1,56 @@
-import clone from './lang/clone';
-import cloneDeep from './lang/cloneDeep';
-import eq from './lang/eq';
-import gt from './lang/gt';
-import gte from './lang/gte';
-import isArguments from './lang/isArguments';
-import isArray from './lang/isArray';
-import isBoolean from './lang/isBoolean';
-import isDate from './lang/isDate';
-import isElement from './lang/isElement';
-import isEmpty from './lang/isEmpty';
-import isEqual from './lang/isEqual';
-import isError from './lang/isError';
-import isFinite from './lang/isFinite';
-import isFunction from './lang/isFunction';
-import isMatch from './lang/isMatch';
-import isNaN from './lang/isNaN';
-import isNative from './lang/isNative';
-import isNull from './lang/isNull';
-import isNumber from './lang/isNumber';
-import isObject from './lang/isObject';
-import isPlainObject from './lang/isPlainObject';
-import isRegExp from './lang/isRegExp';
-import isString from './lang/isString';
-import isTypedArray from './lang/isTypedArray';
-import isUndefined from './lang/isUndefined';
-import lt from './lang/lt';
-import lte from './lang/lte';
-import toArray from './lang/toArray';
-import toPlainObject from './lang/toPlainObject';
-
-export default {
-  'clone': clone,
-  'cloneDeep': cloneDeep,
-  'eq': eq,
-  'gt': gt,
-  'gte': gte,
-  'isArguments': isArguments,
-  'isArray': isArray,
-  'isBoolean': isBoolean,
-  'isDate': isDate,
-  'isElement': isElement,
-  'isEmpty': isEmpty,
-  'isEqual': isEqual,
-  'isError': isError,
-  'isFinite': isFinite,
-  'isFunction': isFunction,
-  'isMatch': isMatch,
-  'isNaN': isNaN,
-  'isNative': isNative,
-  'isNull': isNull,
-  'isNumber': isNumber,
-  'isObject': isObject,
-  'isPlainObject': isPlainObject,
-  'isRegExp': isRegExp,
-  'isString': isString,
-  'isTypedArray': isTypedArray,
-  'isUndefined': isUndefined,
-  'lt': lt,
-  'lte': lte,
-  'toArray': toArray,
-  'toPlainObject': toPlainObject
-};
+export { default as castArray } from './castArray.js';
+export { default as clone } from './clone.js';
+export { default as cloneDeep } from './cloneDeep.js';
+export { default as cloneDeepWith } from './cloneDeepWith.js';
+export { default as cloneWith } from './cloneWith.js';
+export { default as eq } from './eq.js';
+export { default as gt } from './gt.js';
+export { default as gte } from './gte.js';
+export { default as isArguments } from './isArguments.js';
+export { default as isArray } from './isArray.js';
+export { default as isArrayBuffer } from './isArrayBuffer.js';
+export { default as isArrayLike } from './isArrayLike.js';
+export { default as isArrayLikeObject } from './isArrayLikeObject.js';
+export { default as isBoolean } from './isBoolean.js';
+export { default as isBuffer } from './isBuffer.js';
+export { default as isDate } from './isDate.js';
+export { default as isElement } from './isElement.js';
+export { default as isEmpty } from './isEmpty.js';
+export { default as isEqual } from './isEqual.js';
+export { default as isEqualWith } from './isEqualWith.js';
+export { default as isError } from './isError.js';
+export { default as isFinite } from './isFinite.js';
+export { default as isFunction } from './isFunction.js';
+export { default as isInteger } from './isInteger.js';
+export { default as isLength } from './isLength.js';
+export { default as isMap } from './isMap.js';
+export { default as isMatch } from './isMatch.js';
+export { default as isMatchWith } from './isMatchWith.js';
+export { default as isNaN } from './isNaN.js';
+export { default as isNative } from './isNative.js';
+export { default as isNil } from './isNil.js';
+export { default as isNull } from './isNull.js';
+export { default as isNumber } from './isNumber.js';
+export { default as isObject } from './isObject.js';
+export { default as isObjectLike } from './isObjectLike.js';
+export { default as isPlainObject } from './isPlainObject.js';
+export { default as isRegExp } from './isRegExp.js';
+export { default as isSafeInteger } from './isSafeInteger.js';
+export { default as isSet } from './isSet.js';
+export { default as isString } from './isString.js';
+export { default as isSymbol } from './isSymbol.js';
+export { default as isTypedArray } from './isTypedArray.js';
+export { default as isUndefined } from './isUndefined.js';
+export { default as isWeakMap } from './isWeakMap.js';
+export { default as isWeakSet } from './isWeakSet.js';
+export { default as lt } from './lt.js';
+export { default as lte } from './lte.js';
+export { default as toArray } from './toArray.js';
+export { default as toFinite } from './toFinite.js';
+export { default as toInteger } from './toInteger.js';
+export { default as toLength } from './toLength.js';
+export { default as toNumber } from './toNumber.js';
+export { default as toPlainObject } from './toPlainObject.js';
+export { default as toSafeInteger } from './toSafeInteger.js';
+export { default as toString } from './toString.js';
+export { default as default } from './lang.default';

@@ -13,7 +13,7 @@ export function assign (object, source) {
 }
 
 
-import compact from './lodash/array/compact'
+import compact from './lodash/compact'
 /*
 export function compact (collection) {
   return pick(collection, function (value) {
@@ -22,7 +22,7 @@ export function compact (collection) {
 }
 */
 
-import isEmpty from './lodash/lang/isEmpty'
+import isEmpty from './lodash/isEmpty'
 /*
 export function isEmpty (value) {
   if (!value || typeof value !== 'object') {
@@ -103,7 +103,7 @@ export function parseQS (qs, keys) {
     : parsed
 }
 
-import pick from './lodash/object/pick'
+import pick from './lodash/pick'
 /*
 export function pick (object, keys) {
   var data = {}
@@ -187,7 +187,7 @@ export function removeClass (node, className) {
   }
 }
 
-// import repeat from './lodash/string/repeat'
+// import repeat from './lodash/repeat'
 
 export default {
   assign,
