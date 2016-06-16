@@ -157,26 +157,25 @@ function context (createElement) {
         var is_observable = l.name === 'observable'
         var v = is_observable ? l.call(e) : l.call(this, e)
         // console.log('v', l.length, l.name, v)
-        e.appendChild(
+        if (v !== void 0) e.appendChild(
           r = isNode(v) ? v
             : Array.isArray(v) ? arrayFragment(e, v)
             : doc.createTextNode(v)
         )
         // assume we want to make a scope...
         // call the function and if it returns an element, or an array, appendChild
-        if (is_observable) {
+        if (r && is_observable) {
           // assume it's an observable!
           // TODO: allow for an observable-array implementation
-          // if (typeof v === 'function') {
-            cleanupFuncs.push(l(function (v) {
-              if (isNode(v) && r.parentElement) {
-                r.parentElement.replaceChild(v, r), r = v
-              // TODO: observable-array cleanup
-              } else {
-                r.textContent = v
-              }
-            }))
-          // }
+          cleanupFuncs.push(l(function (v) {
+            // console.log(v)
+            if (isNode(v) && r.parentElement) {
+              r.parentElement.replaceChild(v, r), r = v
+            // TODO: observable-array cleanup
+            } else {
+              r.textContent = v
+            }
+          }))
         }
       }
 

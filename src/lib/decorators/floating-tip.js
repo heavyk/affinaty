@@ -37,7 +37,7 @@ function floatingTip (node, text, width) {
       doc.addEventListener('mousemove', onmousemove)
     }
     T.style.display = 'block'
-    c.innerHTML = text
+    c.innerHTML = typeof text === 'function' ? text() : text
     T.style.width = width ? width + 'px' : 'auto'
     if (!width && ie) {
       // t.style.display = 'none'
