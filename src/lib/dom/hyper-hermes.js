@@ -1,7 +1,8 @@
 import ClassList from './class-list.js'
+import observable from './observable.js'
 import each from '../lodash/forEach'
 var doc = window.document
-
+var observable_name = observable().name
 /*
 TODO ITEMS:
  * extract out the attribute setting function and make it available to the attribute observable so setting attributes will work properyly for shortcut syntax
@@ -57,12 +58,12 @@ function context (createElement) {
             if (/^on\w+/.test(k)) {
               if (e.addEventListener) {
                 e.addEventListener(k.substring(2), attr_val, false)
-                cleanupFuncs.push(function() {
+                cleanupFuncs.push(function () {
                   e.removeEventListener(k.substring(2), attr_val, false)
                 })
               } else {
                 e.attachEvent(k, attr_val)
-                cleanupFuncs.push(function() {
+                cleanupFuncs.push(function () {
                   e.detachEvent(k, attr_val)
                 })
               }
@@ -89,13 +90,13 @@ function context (createElement) {
             } else ClassList(e).add(attr_val)
           } else if (k === 'on') {
             if ('object' === typeof attr_val) {
-              for (var s in attr_val) (function(event, listener) {
+              for (var s in attr_val) (function (event, listener) {
                 if ('function' === typeof listener) {
                   // ???
                   (e.on || e.addEventListener)
                     .call(e, event, listener, false)
 
-                  cleanupFuncs.push(function() {
+                  cleanupFuncs.push(function () {
                     // copied from observable
                     (e.removeListener || e.removeEventListener || e.off)
                       .call(e, event, listener, false)
@@ -113,7 +114,7 @@ function context (createElement) {
             if ('string' === typeof attr_val) {
               e.style.cssText = attr_val
             } else {
-              for (var s in attr_val) (function(s, v) {
+              for (var s in attr_val) (function (s, v) {
                 if ('function' === typeof v) {
                   // observable
                   e.style.setProperty(s, v())
@@ -154,7 +155,7 @@ function context (createElement) {
           }
         })
       } else if ('function' === typeof l) {
-        var is_observable = l.name === 'observable'
+        var is_observable = l.name === observable_name
         var v = is_observable ? l.call(e) : l.call(this, e)
         // console.log('v', l.length, l.name, v)
         if (v !== void 0) e.appendChild(
@@ -218,7 +219,7 @@ function forEachReverse (arr, fn) {
 function arrayFragment(e, arr) {
   var frag = doc.createDocumentFragment()
   var first = e.childNodes.length
-  forEach(arr, function(v) {
+  forEach(arr, function (v) {
     frag.appendChild(
       isNode(v) ? v
         : Array.isArray(v) ? arrayFragment(frag, v)
@@ -232,13 +233,13 @@ function arrayFragment(e, arr) {
     arr.on('change', function (ev) {
       switch (ev.type) {
       case 'unshift':
-        forEachReverse(ev.values, function(v) {
+        forEachReverse(ev.values, function (v) {
           e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[first])
           last++
         })
       break
       case 'push':
-        forEach(ev.values, function(v) {
+        forEach(ev.values, function (v) {
           e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
           last++
         })
@@ -250,9 +251,21 @@ function arrayFragment(e, arr) {
         e.removeChild(e.childNodes[first])
         last--
         break
+        case 'splice':
+          if (ev.removed) forEach(ev.removed, function (v) {
+            e.removeChild(v)
+            last--
+          })
+          var len = ev.arguments.length
+          if (len > 2) {
+            for (var i = 2; i < len; i++) {
+              var v = ev.arguments[i]
+              e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
+            }
+          }
+          break
       case 'sort':    // TODO
       case 'reverse': // TODO
-      case 'splice':  // TODO
       default:
         debugger
       }
