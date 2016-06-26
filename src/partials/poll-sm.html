@@ -66,7 +66,7 @@
   <selection-sm d="{{ ~/d }}" />
 
   {{#if ~/d.foto}}
-    <p class="foto" on-tap="modal('foto', {title: ~/d.text, src: ~/d.foto, size: 'm', shape: 'sq'})">
+    <p class="foto" on-tap="modal('foto', {src: ~/d.foto, size: 'm', shape: 'sq', header: false})">
       <foto src="{{~/d.foto}}" size="t" shape="sq" />
     </p>
   {{/if ~/d.foto}}
