@@ -1,5 +1,5 @@
 import common from './common'
-import concat from 'tea-concat'
+import concat from './concat'
 
 function EnhancedEmitter (opts, _ctx) {
   opts = opts || {}
