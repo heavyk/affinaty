@@ -57,6 +57,10 @@ function to_fun_old (object, filter, indent, startingIndent) {
 			})) + ']'
 		}
 		var keys = Object.keys(object)
+		keys.sort()
+		if (object.t) {
+			console.log(object)
+		}
 		return keys.length ? '{' + join(keys.map(function (key) {
 			return (legalKey(key) ? key : JSON.stringify(key)) + ':' + walk(object[key], filter, indent, nextIndent, seen.slice())
 		})) + '}' : '{}'
@@ -220,17 +224,34 @@ function ractive (source, options) {
 	var parsed = rcu.parse(source)
 	parsed.name = path.basename(this.src)
 
+	console.log('before postcss')
 	postcss(options.postcss).process(parsed.css).then(function (result) {
 		result.warnings().forEach(function (warn) {
 			console.warn(warn.toString())
 		})
 		parsed.css = result.css
+		console.log('done postcss')
 	})
 
+	console.log('before builer')
 	return builder(parsed, options)
 }
 
 ractive.defaults = {
 	accept: '.html',
 	ext: '.js'
+}
+
+var fs = require('fs')
+if (!module.parent) {
+	const POSTCSS_PLUGINS = [
+		require('postcss-import'),
+		require('precss'),
+		require('postcss-color-function'),
+		require('autoprefixer-core', { browsers: ['last 2 versions'] }),
+	]
+	var file = './src/partials/poll-stats.html'
+	var code = fs.readFileSync(file, 'utf8')
+	// code.dest
+	console.log(ractive.call({src: file}, code, {postcss: POSTCSS_PLUGINS}), code)
 }
