@@ -248,14 +248,13 @@ window.onload = function () {
       }
     })
   } else {
-    api.signOut(true)
+    api.signOut()
     router.init()
   }
   if (window.isMobile) {
     Ractive.footer = new footer({ el: 'footer' })
     setTimeout(function(){
   		// Hide the address bar!
-      console.info('set scroll')
   		window.scrollTo(0, 1);
   	}, 0)
   }
