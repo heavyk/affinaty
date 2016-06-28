@@ -155,7 +155,7 @@ function context (createElement) {
           }
         })
       } else if ('function' === typeof l) {
-        var is_observable = l.name === observable_name
+        var is_observable = !!l.observable
         var v = is_observable ? l.call(e) : l.call(this, e)
         // console.log('v', l.length, l.name, v)
         if (v !== void 0) e.appendChild(

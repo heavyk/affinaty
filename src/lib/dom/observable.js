@@ -226,4 +226,21 @@ export function focus (e) { return toggle(e, 'focus', 'blur')}
 
 export { attribute as input }
 
+
+not.observable = true
+value.observable = true
+property.observable = true
+transform.observable = true
+attribute.observable = true
+select.observable = true
+toggle.observable = true
+compute.observable = true
+boolean.observable = true
+signal.observable = true
+hover.observable = true
+focus.observable = true
+
+// set a value on the function  (unused)
+// ;[ not, value, property, transform, attribute, select, toggle, compute, boolean, signal, hover, focus ].forEach(function (f) { f.observable = true })
+
 export default value
