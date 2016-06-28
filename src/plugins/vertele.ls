@@ -6,17 +6,20 @@
 ``import { attribute, value } from '../lib/dom/observable'``
 ``import floatingTip from '../lib/decorators/floating-tip'``
 ``import describeConeSection from '../lib/svg/describeConeSection'``
+``import xhr from '../lib/xhr'``
 
 # TODO: write my own svg optimizer which uses ceil(num, 2) // for 6.01 2-digit precision
 # ``import ceil from '../lib/lodash/ceil'``
 
+
 const doc = document
-# set the domain (to allow parent window modification)
-doc.domain = doc.domain
-console.info "set frame to: #{doc.domain}"
+const IS_LOCAL = ~doc.location.host.index-of 'localhost'
 
 onload = !->
   if IS_LOCAL
+    # set the domain (to allow parent window modification)
+    doc.domain = doc.domain
+    console.info "set frame to: #{doc.domain}"
     style = doc.body.style
     style.background = '#fff'
     style.'font-family' = 'Helvetica Neue,Helvetica,Arial,sans-serif'
@@ -34,15 +37,10 @@ unless doc.body
   window.addEventListener \DOMContentLoaded, onload, false
 else set-timeout onload, 1
 
-const IS_LOCAL = ~doc.location.host.indexOf 'localhost'
-
-const fetch = window.fetch or require \whatwg-fetch
-
 const s = h.context (el) ->
   doc.createElementNS 'http://www.w3.org/2000/svg', el
 
-console.log doc.referrer
-const API_ROOT = if IS_LOCAL
+const API_ROOT = if localStorage.host === 'local'
   "http://localhost:1155/api"
 else "http://affinaty.com:1155/api"
 
@@ -166,20 +164,18 @@ function stats-module (el, id, _config, _data)
   set_planets = value!
   set_province_stats = value!
 
-  # TODO: set a loading indicator
-  fetch "#{API_ROOT}/#{config.type}-stats?_id=#{id}&ages=[#{AGES}]"
-    .then (res) -> res.json!
-    .then (res) !->
-      set-timeout !->
-        # set data
-        set_data res.data
-      , 0
-    .catch (e) !->
-      console.error "error processing...", e.stack
+  load_data = !->
+    # TODO: set a loading indicator
+    xhr url: "#{API_ROOT}/#{config.type}-stats?_id=#{id}&ages=[#{AGES}]", (err, res) !->
+      if err => return console.error "error processing...", err
+      set_data res.data
 
   set_data (data) !->
     unless data => return
-    if data.totals => return set_totals data.totals
+    if data.totals
+      set_totals data.totals
+      if data.options => set_options data.options
+      return
     const options = data.options or DEBATE_OPTIONS
     const len = options.length
     total = 0
@@ -210,7 +206,7 @@ function stats-module (el, id, _config, _data)
     set_total total
     set_totals totals
     set_ranges ranges
-  #/function calc (data)
+  #!set_data
 
   (options) <-! set_options
 
@@ -220,6 +216,7 @@ function stats-module (el, id, _config, _data)
 
   unless options
     # TODO: show loading box
+    console.log "returning..."
     return
 
   const len = options.length
@@ -257,6 +254,8 @@ function stats-module (el, id, _config, _data)
       panel_title = value ''
       set_panel = value 'percent'
       # set_panel = value 'province'
+      window.set_panel = set_panel
+
       buttons = []
       svg_els = [
         s \style, """
@@ -374,6 +373,7 @@ function stats-module (el, id, _config, _data)
           s \path fill: '#9e9e9e', d: "m 51.66555,62.53055 c -0.793,0.625 -1.654,1.186 -2.604,1.644 -0.996,0.484 -2.025,0.808 -3.062,1.042 1.095,1.962 2.543,3.697 4.229,5.216 0.526,-0.202 1.057,-0.366 1.574,-0.616 1.557,-0.751 2.922,-1.722 4.188,-2.78 -1.77,-1.189 -3.257,-2.713 -4.325,-4.506 z"
 
         b.activate = !->
+          unless set_planets! => load_data!
           n = this.childNodes
           fill n.0, '#f00'
           fill n.2, SEX_COLOR.0
@@ -397,6 +397,7 @@ function stats-module (el, id, _config, _data)
           s \path fill: '#777777' d: "m 47.76455,40.96255 -8.704,-14.326 c -14.133,8.755 -19.789,26.854 -12.667,42.267 l 15.208,-7.203 c -3.437,-7.557 -0.698,-16.388 6.163,-20.738"
 
         b.activate = !->
+          unless set_ranges! => load_data!
           n = this.childNodes
           fill n.0, '#f00'
           for b from 2 til n.length
@@ -418,14 +419,9 @@ function stats-module (el, id, _config, _data)
           fill n.0, '#f00'
           fill n.2, '#d00'
           unless stats = set_province_stats!
-            fetch "#{API_ROOT}/#{config.type}-location-stats?_id=#{id}"
-              .then (res) -> res.json!
-              .then (res) !->
-                set-timeout !->
-                  set_province_stats res.data
-                , 0
-              .catch (e) !->
-                console.error "error processing...", e.stack
+            xhr url: "#{API_ROOT}/#{config.type}-location-stats?_id=#{id}", (err, res) !->
+              if err => return console.error "error processing...", err
+              set_province_stats res.data
 
         b.deactivate = !->
           n = this.childNodes
@@ -889,14 +885,9 @@ plugin-boilerplate = (el, id, _config, _data) ->
 vertele-profile = (el, id, _config, _data) ->
   {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data
 
-  fetch "#{API_ROOT}/#{config.type}*?creator=#{id}&limit=10"
-    .then (res) -> res.json!
-    .then (res) !->
-      set-timeout !->
-        set_data res.data
-      , 0
-    .catch (e) !->
-      console.error "error processing...", e.stack
+  xhr url: "#{API_ROOT}/#{config.type}*?creator=#{id}&limit=2&sort=+created", (err, res) !->
+    if err => return console.error "error processing...", err
+    set_data res.data
 
   els = new ObservArray
   set_data (data) !->
@@ -948,7 +939,7 @@ vertele-encuesta = (el, id, _config, _data) ->
                 els.push h \div.option-text, on: {click}, o.text
           return els
       h \div.block, null, (el) !->
-        stats-module el, id, config
+        stats-module el, id, config, _data
 
 window.affinaty =
   vertele: vertele-encuesta
