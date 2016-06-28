@@ -26,12 +26,8 @@ function isSet(val) {
   return 'function' !== typeof val
 }
 
-function isFunction (fun) {
-  return 'function' === typeof fun
-}
-
 function assertObservable (observable) {
-  if(!isFunction(observable))
+  if(typeof observable !== 'function')
     throw new Error('transform expects an observable')
   return observable
 }
@@ -65,6 +61,7 @@ export function value (initialValue) {
   observable.set = function (val) {
     all(listeners, _val = val)
   }
+  observable.observable = true
   return observable
 
   function observable(val) {
@@ -116,7 +113,7 @@ export function not(observable) {
 
 function listen (element, event, attr, listener) {
   function onEvent () {
-    listener(isFunction(attr) ? attr() : element[attr])
+    listener(typeof attr === 'function' ? attr() : element[attr])
   }
   on(element, event, onEvent)
   onEvent()
@@ -227,18 +224,20 @@ export function focus (e) { return toggle(e, 'focus', 'blur')}
 export { attribute as input }
 
 
-not.observable = true
-value.observable = true
-property.observable = true
-transform.observable = true
-attribute.observable = true
-select.observable = true
-toggle.observable = true
-compute.observable = true
-boolean.observable = true
-signal.observable = true
-hover.observable = true
-focus.observable = true
+// something must be done about this..
+//  for now, only the value function is identified as 'obseorvable'
+// not.observable = true
+// value.observable = true
+// property.observable = true
+// transform.observable = true
+// attribute.observable = true
+// select.observable = true
+// toggle.observable = true
+// compute.observable = true
+// boolean.observable = true
+// signal.observable = true
+// hover.observable = true
+// focus.observable = true
 
 // set a value on the function  (unused)
 // ;[ not, value, property, transform, attribute, select, toggle, compute, boolean, signal, hover, focus ].forEach(function (f) { f.observable = true })
