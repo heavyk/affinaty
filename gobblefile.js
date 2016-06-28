@@ -26,7 +26,7 @@ const EXTERNAL_LIBS = [
 	 'url',
 	 'querystring',
 	 'smart-app-banner',
-	 'engine.io-client',
+	//  'engine.io-client',
 ]
 
 const POSTCSS_PLUGINS = [
@@ -76,13 +76,15 @@ const BABEL_PLUGINS = [
 
 gobble.cwd(__dirname)
 
-var affinaty = gobble([
-	gobble('src')
-		.transform(require('./gobble-ractive.js'), {
-			type: 'es6',
-			postcss: POSTCSS_PLUGINS,
-		})
-		.transform('rollup', {
+var src = gobble('src')
+	.transform(require('./gobble-livescript'), {bare: true})
+	.transform(require('./gobble-ractive.js'), {
+		type: 'es6',
+		postcss: POSTCSS_PLUGINS,
+	})
+
+var bundles = {
+	affinaty: src.transform('rollup', {
 			entry: 'affinaty-web.js',
 			// entry: 'affinaty-cpanel.js',
 			dest: 'app.js',
@@ -90,7 +92,6 @@ var affinaty = gobble([
 			external: EXTERNAL_LIBS,
 			plugins: [
 				babel({
-					// "presets": [ "es2015-rollup" ],
 					exclude: 'node_modules/**',
 					plugins: BABEL_PLUGINS,
 					compact: false,
@@ -101,17 +102,44 @@ var affinaty = gobble([
 			entries: [ './app' ],
 			dest: 'app.js',
 			standalone: 'app',
-			debug: false
+			debug: false,
+			// expose: { ractive: 'ractive/ractive-legacy.js' }  // <-- use ractive-legacy instead of modern build
+			// expose: { ractive: 'ractive/ractive-runtime.js' }  // <-- use ractive-runtime instead of modern build
 		})
 		.transformIf(gobble.env() !== 'production', function (source, options) {
 			return typeof source === 'string'
 				? source.replace('deferred.reject(e)', 'console.error(e.stack) ; debugger ; deferred.reject(e)')
 				: source
-		})
+		}),
 		// .moveTo( 'js' )
 		// .transformIf(gobble.env() === 'production', 'uglifyjs')
-
-	, gobble('files/styles')
+	plugins: src.transform('rollup', {
+			// TODO: if 'plugins/vertele.js' doesn't exist, it'll give you like this totally wack error message about not loading null
+			entry: 'plugins/vertele.js',
+			dest: 'plugins/plugin-vertele.js',
+			// format: 'cjs',
+			format: 'umd',
+			external: EXTERNAL_LIBS,
+			plugins: [
+				babel({
+					exclude: 'node_modules/**',
+					plugins: BABEL_PLUGINS,
+					compact: false,
+				})
+			]
+		})
+		// .transform('uglifyjs'),
+		.transformIf(gobble.env() === 'production', 'uglifyjs'),
+		// .copyTo( 'plugins/vertele.min.js' ),
+		// .transform('browserify', {
+		// 	entries: [ './plugins/plugin-vertele' ],
+		// 	dest: 'plugin-vertele.js',
+		// 	standalone: 'app',
+		// 	debug: false
+		// })
+		// .transform('uglifyjs'),
+		// .moveTo( 'plugins' )
+	styles: gobble('files/styles')
 		.transform('less', {
 	    src: 'screen.less',
 	    dest: 'screen.css',
@@ -119,11 +147,15 @@ var affinaty = gobble([
 		.transform('postcss', {
 			plugins: POSTCSS_PLUGINS,
 			src: 'screen.css',
-		})
+		}),
 		// .moveTo( 'css' )
+	files: gobble('files'),
+}
 
-	, gobble('files')
-])
+// var affinaty = gobble( obj_values(bundles) )
+var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : bundles.plugins )
+
+// .transform('uglifyjs')
 .transformIf(gobble.env() === 'production', 'uglifyjs')
 .transform(function hashFiles (source, options) {
 	var file = path.basename(this.src)
@@ -160,26 +192,84 @@ var affinaty = gobble([
 // }
 
 // for future: build the website like this
-// if (!module.parent && false) {
-//
-//   var builder = built.build({
-//     dest: 'build',
-//     force: true
-//   })
-//   builder.catch(function(e) {
-//     console.log('error:', e.stack)
-//   })
-//   builder.on('info', console.info.bind(console))
-//   builder.on('error', console.error.bind(console))
-//   builder.on('complete', function() {
-//     console.log('complete!', arguments)
-//     // built.serve()
-//   })
-//
-// } else {
-  // module.exports = built
+if (!module.parent && false) {
+
+  var builder = affinaty.build({
+    dest: 'test-dir',
+    force: true
+  })
+  builder.catch(function(e) {
+    console.log('error:', e.stack)
+  })
+  builder.on('info', console.info.bind(console))
+  builder.on('error', console.error.bind(console))
+  builder.on('complete', function() {
+    console.log('complete!', arguments)
+    // built.serve()
+  })
+	builder.then(function () {
+		console.log('builder.then')
+	})
+
+} else {
   module.exports = affinaty
+}
+
+// for (var i in require.cache) {
+// 	if (require.cache.hasOwnProperty(i)) {
+// 		// console.log(affinaty[i])
+// 		console.log(i)
+//
+// 	}
 // }
+
+// console.log(require.cache)
+
+/*
+function delete_children(children) {
+	for (var i = 0; i < children.length; i++) {
+		var f = children[i]
+		if (!require.cache[f]) continue
+		var childrens_children = require.cache[f].children
+		if (childrens_children.length) delete_children(childrens_children)
+		console.log('deleting require.cache for: ' + f)
+		delete require.cache[f]
+	}
+}
+
+var watch_file = 'gobble-ractive.js'
+var watcher = fs.watch(`./${watch_file}`, function (event) {
+	console.log(`${watch_file} changed...`)
+	// delete require.cache[]
+	for (var i in require.cache) {
+		// console.log(i)
+		if (typeof i !== `string`) continue
+		var f = path.basename(i)
+		if (f === watch_file) {
+			// console.log(affinaty[i])
+			// console.log(require.cache[i])
+			console.log('reloading...')
+			delete_children([i])
+			// console.log('found it!!', Object.keys(require.cache[i]))
+			// console.log('found it!!', Object.keys(require.cache[i].children))
+			// console.log('found it!!', require.cache[i].children)
+
+		}
+	}
+	fs.appendFile('./gobblefile.js', '\n', function () {
+		console.log('appended a \\n to gobblefile.js')
+	})
+})
+*/
+
+
+function obj_values (obj) {
+	var arr = []
+	for (var i in obj) {
+		if (obj.hasOwnProperty(i)) arr.push(obj[i])
+	}
+	return arr
+}
 
 // TODO: run the build and then update gh-pages every commit :)
 
