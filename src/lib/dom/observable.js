@@ -3,72 +3,62 @@
 // knicked from: https://github.com/dominictarr/observable/blob/master/index.js
 // mostly unmodified...
 // * exported classes
+// * remove utility functions (micro-optimization, reduces readability)
+// * change from object traversal to arrays
+//  * change all() from `for (var k in ary) ary[k](val)` -> `for (var i = 0; i < ary.length; i++) ary[i](val)`
+//  * in remove() use `.splice` instead of `delete`, however, to avoid the case that a listener is removed inside of a listener, I will instead splice inside of a setTimeout
+// * add .observable property to all returned functions (necessary for hyper-hermes to know that it's an observable instead of a context)
+// (TODO) use isEqual function to compare values before setting the observable (and remove `signal`)
+// (TODO) add better documentation for each function
 
 
 // bind a to b -- One Way Binding
 export function bind1(a, b) {
   a(b()); b(a)
 }
+
 //bind a to b and b to a -- Two Way Binding
 export function bind2(a, b) {
   b(a()); a(b); b(a);
 }
 
-//---util-funtions------
-
-//check if this call is a get.
-function isGet(val) {
-  return undefined === val
-}
-
-//check if this call is a set, else, it's a listen
-function isSet(val) {
-  return 'function' !== typeof val
-}
-
-function assertObservable (observable) {
-  if(typeof observable !== 'function')
-    throw new Error('transform expects an observable')
-  return observable
-}
-
 //trigger all listeners
 function all(ary, val) {
-  for(var k in ary)
-    ary[k](val)
+  for (var i = 0; i < ary.length; i++) ary[i](val)
 }
 
-//remove a listener
+// remove a listener
 function remove(ary, item) {
-  delete ary[ary.indexOf(item)]
+  var i = ary.indexOf(item)
+  if (~i) setTimeout(function () { ary,splice(i, 1) }, 1)
 }
 
-//register a listener
+// register a listener
 function on(emitter, event, listener) {
   (emitter.on || emitter.addEventListener)
     .call(emitter, event, listener, false)
 }
 
+// unregister a listener
 function off(emitter, event, listener) {
   (emitter.removeListener || emitter.removeEventListener || emitter.off)
     .call(emitter, event, listener, false)
 }
 
-//An observable that stores a value.
-
+// An observable that stores a value.
 export function value (initialValue) {
   var _val = initialValue, listeners = []
   observable.set = function (val) {
     all(listeners, _val = val)
   }
-  observable.observable = true
+  observable.observable = 'value'
   return observable
 
   function observable(val) {
     return (
-      isGet(val) ? _val
-    : isSet(val) ? all(listeners, _val = val)
-    : (listeners.push(val), val(_val), function () {
+      val === undefined ? _val                               /* getter */
+    : 'function' !== typeof val ? all(listeners, _val = val) /* setter */
+    : (listeners.push(val), val(_val), function () {         /* listener */
         remove(listeners, val)
       })
     )
@@ -82,30 +72,35 @@ could change this to work with backbone Model - but it would become ugly.
 */
 
 export function property (model, key) {
-  return function (val) {
+  observable.observable = 'property'
+  return observable
+
+  function observable (val) {
     return (
-      isGet(val) ? model.get(key) :
-      isSet(val) ? model.set(key, val) :
+      val === undefined ? model.get(key) :
+      'function' !== typeof val ? model.set(key, val) :
       (on(model, 'change:'+key, val), val(model.get(key)), function () {
         off(model, 'change:'+key, val)
       })
-    )}}
+    )
+  }
+}
 
-/*
-note the use of the elvis operator `?:` in chained else-if formation,
-and also the comma operator `,` which evaluates each part and then
-returns the last value.
-only 8 lines! that isn't much for what this baby can do!
-*/
+export function transform (in_observable, down, up) {
+  if(typeof in_observable !== 'function')
+    throw new Error('transform expects an observable')
 
-export function transform (observable, down, up) {
-  assertObservable(observable)
-  return function (val) {
+  observable.observable = 'transform'
+  return observable
+
+  function observable (val) {
     return (
-      isGet(val) ? down(observable())
-    : isSet(val) ? observable((up || down)(val))
-    : observable(function (_val) { val(down(_val)) })
-    )}}
+      val === undefined ? down(in_observable())
+    : 'function' !== typeof val ? in_observable((up || down)(val))
+    : in_observable(function (_val) { val(down(_val)) })
+    )
+  }
+}
 
 export function not(observable) {
   return transform(observable, function (v) { return !v })
@@ -125,12 +120,16 @@ function listen (element, event, attr, listener) {
 //observe html element - aliased as `input`
 export function attribute(element, attr, event) {
   attr = attr || 'value'; event = event || 'input'
-  return function (val) {
+  observable.observable = 'attribute'
+  return attribute
+
+  function observable (val) {
     return (
-      isGet(val) ? element[attr]
-    : isSet(val) ? element[attr] = val
+      val === undefined ? element[attr]
+    : 'function' !== typeof val ? element[attr] = val
     : listen(element, event, attr, val)
-    )}
+    )
+  }
 }
 
 // observe a select element
@@ -143,10 +142,13 @@ export function select(element) {
       if(element.options[i].value == val) element.selectedIndex = i;
     }
   }
-  return function (val) {
+  observable.observable = 'select'
+  return observable
+
+  function observable (val) {
     return (
-      isGet(val) ? element.options[element.selectedIndex].value
-    : isSet(val) ? _set(val)
+      val === undefined ? element.options[element.selectedIndex].value
+    : 'function' !== typeof val ? _set(val)
     : listen(element, 'change', _attr, val)
     )}
 }
@@ -162,8 +164,8 @@ export function toggle (el, up, down) {
       i && val(i = false)
     }
     return (
-      isGet(val) ? i
-    : isSet(val) ? undefined //read only
+      val === undefined ? i
+    : 'function' !== typeof val ? undefined //read only
     : (on(el, up, onUp), on(el, down || up, onDown), val(i), function () {
       off(el, up, onUp); off(el, down || up, onDown)
     })
@@ -210,12 +212,14 @@ export function signal () {
   var _val, listeners = []
   return function (val) {
     return (
-      isGet(val) ? _val
-        : isSet(val) ? (!(_val===val) ? all(listeners, _val = val):"")
+      val === undefined ? _val
+        : 'function' !== typeof val ? (!(_val===val) ? all(listeners, _val = val):"")
         : (listeners.push(val), val(_val), function () {
            remove(listeners, val)
         })
-    )}}
+    )
+  }
+}
 
 
 export function hover (e) { return toggle(e, 'mouseover', 'mouseout')}
