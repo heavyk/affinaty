@@ -1,5 +1,6 @@
 ``import each from '../lib/lodash/forEach'``
 ``import defaults from '../lib/lodash/defaultsDeep'``
+``import isEqual from '../lib/lodash/isEqual'``
 ``import h from '../lib/dom/hyper-hermes'``
 ``import CL from '../lib/dom/class-list'``
 ``import ObservArray from '../lib/dom/observable-array'``
@@ -33,9 +34,8 @@ onload = !->
 
 
 # if this script was added in the header, wait for it, else load it soon(tm)
-unless doc.body
-  window.addEventListener \DOMContentLoaded, onload, false
-else set-timeout onload, 1
+if doc.body => set-timeout onload, 1
+else window.addEventListener \DOMContentLoaded, onload, false
 
 const s = h.context (el) ->
   doc.createElementNS 'http://www.w3.org/2000/svg', el
@@ -199,9 +199,12 @@ function stats-module (el, id, _config, _data)
       ranges[i] = sum
       total += sum
 
-    totals.reverse!
+    if options is DEBATE_OPTIONS
+      # only reverse options when it's a debate (because the totals are returned backwards from how they're displayed)
+      totals.reverse!
 
-    set_options options
+    if not is-equal set_options!, options
+      set_options options
     set_planets planets
     set_total total
     set_totals totals
@@ -230,25 +233,13 @@ function stats-module (el, id, _config, _data)
   v_rval = new Array ages_len
   v_rval_graph = new Array ages_len
 
-  # window.v = {
-  #   v_bar_width
-  #   v_bar_fill
-  #   v_label
-  #   v_label_x
-  #   v_label_fill
-  #   v_totals
-  #   v_icon
-  #   v_rval
-  #   v_rval_graph
-  # }
-
   # element lists
   icons = new Array len
 
   el.appendChild \
     s \svg width: svg_width, height: svg_height, !->
       last_y = -option_height / 2
-      svg_height (((len+1) * option_height) + last_y) + bottom_panel_y
+      svg_height Math.max (((len+1) * option_height) + last_y) + bottom_panel_y, 220
       panels = new Array 4
       panel_title = value ''
       set_panel = value 'percent'
@@ -776,6 +767,7 @@ function stats-module (el, id, _config, _data)
 
         province-list = []
         each provinces, (p, code) !->
+          p.set-attribute \code, code
           province-list.push p
           floating-tip p, ->
             count = stats[code] || 0
@@ -832,6 +824,8 @@ plugin-boilerplate = (el, id, _config, _data) ->
     el.parentNode.append-child h \style """
     .vertele-encuesta div.block {
       display: inline-block;
+      vertical-align: top;
+      min-height: 200px;
     }
     .vertele-encuesta div.option-text:hover {
       background: \#009f00;
@@ -847,8 +841,8 @@ plugin-boilerplate = (el, id, _config, _data) ->
       white-space: nowrap;
       text-overflow: ellipsis;
       text-decoration: none;
-      margin: 0 0 6px;
-      padding: 12px 8px;
+      margin: 0 0 4px 4px;
+      padding: 11px 7px;
       font-size: 14px;
       font-weight: 300;
       line-height: 1.42857143;
@@ -910,8 +904,8 @@ vertele-encuesta = (el, id, _config, _data) ->
   el.append-child \
     h \div.vertele-encuesta,
       h \h3.destacada, null, set_title
-      h \div.block, s: {'text-align': 'center', 'width': '50%'},
-        s \svg width: 150, height: 36, s: {margin: '20px 0'},
+      h \div.block, s: {'text-align': 'center', 'width': '50%'}, # need min-height of 220 because of the map
+        s \svg width: 150, height: 36, s: {margin: '21px 0'},
           s \g, transform: 'scale(.7)', fill: '#fd270d',
             # ¿Qué Opinas?
             s \path, d: "m 8.78904,16.36714 q 0.29297,-0.9375 0.82032,-1.42578 0.54687,-0.48828 1.1914,-0.48828 0.6836,0 1.19141,0.29297 0.52734,0.29297 0.52734,0.95703 0,1.32813 -0.33203,2.38281 -0.33203,1.03516 -0.87891,1.91407 -0.54687,0.85937 -1.25,1.58203 -0.68359,0.72265 -1.42578,1.38672 -0.72265,0.66406 -1.42578,1.32812 -0.68359,0.66406 -1.23047,1.40625 -0.54687,0.74219 -0.8789,1.62109 -0.33203,0.85938 -0.33203,1.95313 0,0.9375 0.19531,1.5625 0.19531,0.60547 0.54687,0.97656 0.35157,0.3711 0.82032,0.52735 0.46875,0.15625 1.03515,0.15625 0.54688,0 1.13281,-0.19532 0.58594,-0.21484 1.13282,-0.54687 0.5664,-0.33203 1.03515,-0.74219 0.46875,-0.42969 0.80078,-0.85937 0.27344,-0.3711 0.625,-0.52735 0.35157,-0.15625 0.6836,-0.15625 0.37109,0 0.72265,0.17578 0.35157,0.17578 0.60547,0.48828 0.27344,0.3125 0.42969,0.72266 0.15625,0.39063 0.15625,0.85938 0,0.21484 -0.0781,0.44921 -0.0586,0.23438 -0.21485,0.44922 -0.58594,0.87891 -1.38672,1.5625 -0.80078,0.6836 -1.73828,1.15235 -0.91797,0.44922 -1.93359,0.68359 -0.9961,0.23438 -1.95313,0.23438 -1.1914,0 -2.5,-0.3711 Q 3.57422,35.48824 2.48047,34.68746 1.40625,33.86714 0.70313,32.63667 0,31.38667 0,29.64839 0,27.57808 0.48828,26.11324 0.97656,24.64839 1.75781,23.55464 2.55859,22.46089 3.53516,21.64058 4.51172,20.80074 5.48828,20.01949 6.46484,19.21871 7.32422,18.37886 8.20313,17.51949 8.78906,16.36714 Z M 8.10545,8.6913596 q 0,-0.0781 0.0195,-0.39062 0.0195,-0.3125 0.11719,-0.72266 0.11719,-0.41016 0.33203,-0.85937 0.23437,-0.46875 0.64453,-0.85938 0.41016,-0.39062 1.03516,-0.64453 0.625,-0.25391 1.52343,-0.25391 0.72266,0 1.3086,0.19532 0.58594,0.17578 0.99609,0.5664 0.42969,0.3711 0.66406,0.97656 0.23438,0.58594 0.23438,1.42579 0,0.70312 -0.21484,1.38671 -0.19532,0.6640704 -0.625,1.1914104 -0.42969,0.52734 -1.11329,0.83984 -0.68359,0.3125 -1.62109,0.3125 -1.62109,0 -2.46094,-0.82031 Q 8.10542,10.2148 8.10542,8.6913596 Z"
