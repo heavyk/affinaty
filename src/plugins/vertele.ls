@@ -42,7 +42,7 @@ const s = h.context (el) ->
 
 const API_ROOT = if localStorage.host === 'local'
   "http://localhost:1155/api"
-else "http://affinaty.com:1155/api"
+else "http://affinaty.com/api"
 
 const DEFAULT_CONFIG =
   type: \poll
@@ -216,7 +216,6 @@ function stats-module (el, id, _config, _data)
 
   unless options
     # TODO: show loading box
-    console.log "returning..."
     return
 
   const len = options.length
