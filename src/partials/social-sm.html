@@ -117,7 +117,7 @@ component.exports = {
     //   Ractive.nexus.debate.fire('-', id)
     // })
     this.on('share', () => {
-      this.modal('share-dialog', {title: 'Compartir a través de', type, id, d: this.get('d')})
+      this.modal('share-dialog', {header: false, type, id, d: this.get('d')})
     })
   },
   onteardown() {
