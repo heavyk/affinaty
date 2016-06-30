@@ -1,3 +1,6 @@
+// knicked from: https://github.com/k4wo/tiny-xhr/blob/master/index.js
+//  * use callbacks instead promises
+
 import qs from './qs'
 
 function xhr (opt, cb) {
@@ -33,7 +36,7 @@ function xhr (opt, cb) {
     if (xhr.readyState === 4 && xhr.status === 200) {
       try {
         cb(null, JSON.parse(xhr.response))
-      } catch(e ) {
+      } catch(e) {
         cb(null, xhr.response)
       }
     } else {
@@ -41,8 +44,8 @@ function xhr (opt, cb) {
     }
   }
 
-  xhr.onerror = function () {
-    reject(xhr)
+  xhr.onerror = function (e) {
+    cb(e)
   }
   xhr.send(data)
 }
