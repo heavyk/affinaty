@@ -243,6 +243,7 @@ function stats-module (el, id, _config, _data)
       panels = new Array 4
       panel_title = value ''
       set_panel = value 'percent'
+
       # set_panel = value 'province'
       window.set_panel = set_panel
 
@@ -679,7 +680,7 @@ function stats-module (el, id, _config, _data)
         return els
       # end g.age-stats
 
-      svg_els.push panels.3 = s \g.province-stats, transform: "translate(0 #{bottom_panel_y})", ->
+      svg_els.push panels.3 = s \g.province-stats, transform: "translate(0 #{bottom_panel_y + (((option_height * len) - 120) / 2)})", ->
         var stats, total
         const COLORS = config.map_colors || <[#ff0000 #dd0000 #bb0000 #990000 #770000]>
 
@@ -738,6 +739,7 @@ function stats-module (el, id, _config, _data)
           CA: s \path.province d: 'm 263.26049,285.52614 c 1.56992,1.4584 1.38639,3.8853 0.47999,5.28037 -2.24339,5.00698 -5.35579,-3.96811 -7.19983,1.4401 1.67811,1.75779 0.0676,4.62481 0.23999,6.24042 -2.05572,2.13558 -4.97499,1.86158 -5.99986,5.04035 -1.1736,0.22137 -5.16887,-0.30935 -2.63994,1.20008 2.24093,1.96532 3.50797,-2.6163 5.51987,0 0.40052,2.4272 3.1269,4.75601 2.87994,7.92055 4.84052,-1.15275 -1.70463,4.52245 -0.71999,6.96047 -2.00874,-3.24901 -4.54847,1.12551 -3.35992,0.72005 -0.0596,-0.154 0.30326,1.29591 -0.23999,2.8802 -2.9063,0.0324 -5.49808,4.1757 -6.71985,0.24002 -2.35531,-1.40044 -5.21362,-0.37553 -6.23985,-3.36023 -1.75451,-4.01759 -4.75311,-1.21376 -6.71985,-3.12022 -1.44345,-3.87242 -3.13583,-3.9635 -4.55989,-7.20049 -1.26857,-1.831 -2.88029,-6.32937 -3.59992,-6.48045 1.57895,-0.58282 0.64271,0.49199 1.67996,0.96007 -0.40683,4.61104 5.18011,-2.272 0.95998,0.24002 -0.56469,-1.16758 0.86177,-3.22627 -1.67996,-4.3203 -3.11555,-0.19774 -4.03102,-1.53067 -4.79989,-5.04035 0.39647,-1.19362 4.55514,-2.05878 2.87993,-5.04034 1.90339,-4.43708 6.91404,0.40566 10.31976,0.72005 4.45854,1.3526 4.50324,-1.05403 7.63944,-2.86 3.34866,1.74912 3.72987,-2.98622 5.80025,-0.98027 1.43735,0.37661 2.24185,3.63855 3.35993,0.72005 1.31261,-1.12483 1.72727,-2.63364 0.95997,-4.08028 3.8059,-1.78758 1.547,4.12318 1.43997,3.36023 0.6389,2.06561 2.79645,-1.7148 3.83991,-2.16015 1.46002,-2.40937 2.51943,5.62026 5.03989,1.68012 0.58282,0.0739 0.9028,-1.72836 1.43996,-0.96007 z'
         }
 
+        set_top_5 = value!
         set_province_stats (data) !->
           stats := {}
           total := 0
@@ -756,24 +758,42 @@ function stats-module (el, id, _config, _data)
             else
               stats_positions[v] = [p]
 
-          stats_rank = for v, p of stats_positions => {p, v}
+          stats_rank = for v, p of stats_positions => {p, v: +v}
           stats_rank.sort (a, b) -> if a.v > b.v => -1 else if a.v < b.v => 1 else 0
+          top_5 = []
           for r, i in stats_rank
             for _p in r.p
               p = provinces[_p]
               p.set-attribute \fill, if i >= COLORS.length
-                "rgb(#{Math.round (v / max) * 255},0,0)"
+                "rgb(#{127 + (Math.round (r.v / max) * 128)},0,0)"
               else COLORS[i]
+              if top_5.length < 5
+                top_5.push p: _p, v: r.v
+          set_top_5 top_5
 
         province-list = []
         each provinces, (p, code) !->
-          p.set-attribute \code, code
           province-list.push p
           floating-tip p, ->
             count = stats[code] || 0
             "#{PROVINCE_LIST[code]}: #{count} (#{if total => Math.round count / total * 100 else 0}% de #{total})"
 
-        s \g.map transform: "scale(.4)", province-list
+        return
+          * s \g.map transform: "scale(.4)", fill: '#555', province-list
+          * s \g.top, null, (el) !->
+              # els = new ObservArray
+              set_top_5 (top_5) !->
+                # temporary - remove me
+                # while els.length => els.pop!
+                x = svg_width!
+                y = 40
+                while e = el.childNodes.0
+                  el.removeChild e
+                for r in top_5
+                  count = stats[r.p]
+                  el.append-child s \text, 'text-anchor': \end, x: x, y: (y += 20), 'font-size': 12,
+                    "#{PROVINCE_LIST[r.p]}: #{if total => Math.round count / total * 100 else 0}%"
+              # els
       # end g.province-stats
 
       set_panel (panel) !->
