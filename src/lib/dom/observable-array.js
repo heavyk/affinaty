@@ -64,33 +64,26 @@ function ObservableArray (_v) {
       var element
       if (!this.length) return
       element = shift.call(this)
-      this.emit('change', {
-        type: 'shift',
-        value: element
-      })
+      this.emit('change', { type: 'shift', value: element })
       return element
     }),
-    sort: d(function (compareFn) {
+    sort: d(function (compare) {
       var tmp
       if (this.length <= 1) return this
       tmp = Array.from(this)
-      sort.call(this, compareFn)
+      sort.call(this, compare)
       if (!isCopy.call(this, tmp)) {
         this.emit('change', {
           type: 'sort',
-          compareFn: compareFn
+          compare: compare,
+          orig: tmp,
         })
       }
       return this
     }),
     empty: d(function () {
-      var tmp
-      if (this.length <= 1) return this
-      tmp = Array.from(this)
-      sort.call(this, compareFn)
-      if (!isCopy.call(this, tmp)) {
-        this.emit('change', { type: 'empty' })
-      }
+      arr.length = 0
+			this.emit('change', { type: 'empty' })
       return this
     }),
     splice: d(function (start, deleteCount /*, …items*/) {
@@ -104,11 +97,7 @@ function ObservableArray (_v) {
       }
       result = splice.apply(this, arguments)
       if ((!items && result.length) || !isCopy.call(items, result)) {
-        this.emit('change', {
-          type: 'splice',
-          arguments: arguments,
-          removed: result
-        })
+        this.emit('change', { type: 'splice', arguments: arguments, removed: result })
       }
       return result
     }),
@@ -116,10 +105,7 @@ function ObservableArray (_v) {
       var result
       if (!arguments.length) return this.length
       result = unshift.apply(this, arguments)
-      this.emit('change', {
-        type: 'unshift',
-        values: arguments
-      })
+      this.emit('change', { type: 'unshift', values: arguments })
       return result
     }),
     set: d(function (index, value) {
@@ -131,10 +117,7 @@ function ObservableArray (_v) {
         if (eq(old, value)) return
       }
       this[index] = value
-      event = {
-        type: 'set',
-        index: index
-      }
+      event = { type: 'set', index: index }
       if (had) event.oldValue = old
       this.emit('change', event)
     })

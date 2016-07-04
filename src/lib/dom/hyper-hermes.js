@@ -141,8 +141,7 @@ function context (createElement) {
                 default:
                   console.error('unknown namespaced attribute: ' + k)
               }
-            } else
-            if (k === 'src' && e.tagName === 'IMG' && ~attr_val.indexOf('holder.js')) {
+            } else if (k === 'src' && e.tagName === 'IMG' && ~attr_val.indexOf('holder.js')) {
               e.dataset.src = attr_val
               console.log('you are using holder ... fix this')
               // setTimeout(function () {
@@ -251,20 +250,29 @@ function arrayFragment(e, arr) {
         e.removeChild(e.childNodes[first])
         last--
         break
-        case 'splice':
-          if (ev.removed) forEach(ev.removed, function (v) {
-            e.removeChild(v)
-            last--
-          })
-          var len = ev.arguments.length
-          if (len > 2) {
-            for (var i = 2; i < len; i++) {
-              var v = ev.arguments[i]
-              e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
-            }
+      case 'splice':
+        if (ev.removed) forEach(ev.removed, function (v) {
+          e.removeChild(v)
+          last--
+        })
+        var len = ev.arguments.length
+        if (len > 2) {
+          for (var i = 2; i < len; i++) {
+            var v = ev.arguments[i]
+            e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
           }
-          break
-      case 'sort':    // TODO
+        }
+        break
+      case 'sort':
+        for (var i = 0, orig = ev.orig; i < orig.length; i++) {
+          var o = orig[i]
+          var idx = arr.indexOf(o)
+          if (i !== idx) {
+            e.removeChild(o)
+            e.insertBefore(arr[idx], e.childNodes[idx])
+          }
+        }
+        break
       case 'reverse': // TODO
       default:
         debugger
@@ -277,6 +285,4 @@ function arrayFragment(e, arr) {
 
 var h = context(function (el) { return doc.createElement(el) })
 h.context = context
-if (typeof module === 'object') module.exports = h
-
 export default h
