@@ -33,19 +33,19 @@
       {{/if}}
     </div>
     {{else}}
-    <div class="text-container" style="width: {{~/text.length <= 2 ? '100%' : ~/movil ? '75%' : '88%'}}">
+    <div class="text-container" style="width: {{~/text.length <= 2 ? '100%' : '83%'}}">
+      <!-- on-blur-focus="toggle-focus" -->
       <textarea
         class="animate"
-        {{!~/movil ? 'on-blur-focus="toggle-focus"'}}      
         on-nlSubmit="add"
         maxlength="2048"
         value="{{~/text}}"
         placeholder="Escribe tu mensaje"
         decorator="nlElastic" />
     </div>
-    <div class="submit" style="display: {{~/focused && ~/text.length > 2 ? 'block' : 'none'}}">
+    <div class="submit" style="display: {{~/text.length > 2 ? 'block' : 'none'}}">
       <button type="submit" on-tap="add">
-        <i class="fa fa-comment-o"></i> Enviar
+        <i class="fa fa-comment-o" /> Enviar
       </button>
     </div>
     {{/if}}
@@ -145,10 +145,9 @@ textarea.animate {
 }
 .submit {
   position: absolute;
-  right: 44px;
-  bottom: 8px;
+  right: 0;
   top: 15px;
-  margin: 5px;
+  /*margin: 5px;*/
 }
 .submit button {
   padding: 1px 20px;
