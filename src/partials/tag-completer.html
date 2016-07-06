@@ -108,11 +108,12 @@ component.exports = {
     this.set({ recent, selected, list })
     this.on('add', (event) => {
       let i, t = assign({}, event.context)
-      if (t.title && !~findIndex(selected, 'title', t.title)) {
-        if (~(i = findIndex(recent, 'title', t.title))) {
+      let find_title = (_t) => _t.title === t.title
+      if (t.title && !~findIndex(selected, find_title)) {
+        if (~(i = findIndex(recent, find_title))) {
           selected.push(recent[i])
           recent.splice(i, 1)
-        } else if (~(i = findIndex(list, 'title', t.title))) {
+        } else if (~(i = findIndex(list, find_title))) {
           selected.push(list[i])
         } else {
           api.action('tag+', {title: t.title}, (tag) => {
