@@ -2,9 +2,10 @@
 ``import defaults from '../lib/lodash/defaultsDeep'``
 ``import isEqual from '../lib/lodash/isEqual'``
 ``import h from '../lib/dom/hyper-hermes'``
+``import { svgArrayFragment } from '../lib/dom/hyper-hermes'``
 ``import CL from '../lib/dom/class-list'``
 ``import ObservArray from '../lib/dom/observable-array'``
-``import { attribute, value } from '../lib/dom/observable'``
+``import { value } from '../lib/dom/observable'``
 ``import floatingTip from '../lib/decorators/floating-tip'``
 ``import describeConeSection from '../lib/svg/describeConeSection'``
 ``import xhr from '../lib/xhr'``
@@ -26,10 +27,10 @@ onload = !->
     style.'font-family' = 'Helvetica Neue,Helvetica,Arial,sans-serif'
     style.padding = 0
 
-  for e in document.querySelectorAll('div[data-affinaty-profile]')
+  for e in document.querySelectorAll 'div[data-affinaty-profile]'
     vertele-profile e, e.dataset.affinaty-profile
 
-  for e in document.querySelectorAll('div[data-affinaty-encuesta]')
+  for e in document.querySelectorAll 'div[data-affinaty-encuesta]'
     vertele-encuesta e, e.dataset.affinaty-encuesta
 
 
@@ -39,6 +40,7 @@ else window.addEventListener \DOMContentLoaded, onload, false
 
 const s = h.context (el) ->
   doc.createElementNS 'http://www.w3.org/2000/svg', el
+, svg-array-fragment
 
 const API_ROOT = if localStorage.host === 'local'
   "http://localhost:1155/api"
@@ -854,7 +856,7 @@ plugin-boilerplate = (el, id, _config, _data) ->
     .vertele-encuesta div.option-text {
       border: 1px solid \#ccc;
       border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25);
-      text-shadow: 0 -1px 0 rgba(0,0,0,.25);
+      /* text-shadow: 0 -1px 0 rgba(0,0,0,.25); */
       border-radius: 6px;
       background: \#fffefe;
       overflow: hidden;
@@ -865,7 +867,6 @@ plugin-boilerplate = (el, id, _config, _data) ->
       padding: 11px 7px;
       font-size: 14px;
       font-weight: 300;
-      line-height: 1.42857143;
       text-align: center;
       cursor: pointer;
       outline: none;

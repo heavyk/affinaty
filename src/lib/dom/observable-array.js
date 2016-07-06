@@ -81,6 +81,11 @@ function ObservableArray (_v) {
       }
       return this
     }),
+    // empty: d(function () {
+    //   var len = this.length
+    //   if (!len) return
+    //   return this.splice(0, len)
+    // }),
     empty: d(function () {
       arr.length = 0
 			this.emit('change', { type: 'empty' })

@@ -2,13 +2,12 @@ import ClassList from './class-list.js'
 import observable from './observable.js'
 import each from '../lodash/forEach'
 var doc = window.document
-var observable_name = observable().name
 /*
 TODO ITEMS:
  * extract out the attribute setting function and make it available to the attribute observable so setting attributes will work properyly for shortcut syntax
 */
 
-function context (createElement) {
+function context (createElement, arrayFragment) {
 
   var cleanupFuncs = []
 
@@ -157,11 +156,12 @@ function context (createElement) {
         var is_observable = !!l.observable
         var v = is_observable ? l.call(e) : l.call(this, e)
         // console.log('v', l.length, l.name, v)
-        if (v !== void 0) e.appendChild(
+        if (v !== void 0) {
           r = isNode(v) ? v
             : Array.isArray(v) ? arrayFragment(e, v)
             : doc.createTextNode(v)
-        )
+          if (r) e.appendChild(r)
+        }
         // assume we want to make a scope...
         // call the function and if it returns an element, or an array, appendChild
         if (r && is_observable) {
@@ -197,11 +197,11 @@ function context (createElement) {
   return h
 }
 
-function isNode (el) {
+export function isNode (el) {
   return el && el.nodeName && el.nodeType
 }
 
-function isText (el) {
+export function isText (el) {
   return el && el.nodeName === '#text' && el.nodeType == 3
 }
 
@@ -230,6 +230,77 @@ function arrayFragment(e, arr) {
   if (typeof arr.on === 'function') {
     // if it's an EE, then it's likely an observable-array (like) Array,
     arr.on('change', function (ev) {
+      var i, j, o
+      switch (ev.type) {
+      case 'unshift':
+        forEachReverse(ev.values, function (o) {
+          e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[first])
+          last++
+        })
+      break
+      case 'push':
+        forEach(ev.values, function (o) {
+          e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
+          last++
+        })
+        break
+      case 'pop':
+        e.removeChild(e.childNodes[--last])
+        break
+      case 'shift':
+        e.removeChild(e.childNodes[first])
+        last--
+        break
+      case 'splice':
+        if (ev.removed) forEach(ev.removed, function (v) {
+          e.removeChild(v)
+          last--
+        })
+        j = ev.arguments.length
+        if (j > 2) {
+          for (i = 2; i < j; i++) {
+            o = ev.arguments[i]
+            e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
+          }
+        }
+        break
+      case 'sort':
+        for (i = 0, orig = ev.orig; i < orig.length; i++) {
+          o = orig[i]
+          j = arr.indexOf(o)
+          if (i !== j) {
+            e.removeChild(o)
+            e.insertBefore(arr[j], e.childNodes[j])
+          }
+        }
+        break
+      case 'empty':
+        while (o = e.childNodes[first])
+          e.removeChild(o)
+        break
+      case 'reverse': // TODO
+      default:
+        debugger
+      }
+    })
+  }
+  return frag
+}
+
+export function svgArrayFragment(e, arr) {
+  var first = e.childNodes.length
+  forEach(arr, function (v) {
+    var o = isNode(v) ? v
+      : Array.isArray(v) ? svgArrayFragment(e, v)
+      : doc.createTextNode(v)
+    if (o) e.appendChild(o)
+  })
+
+  if (typeof arr.on === 'function') {
+    var last = first + arr.length
+    // if it's an EE, then it's likely an observable-array (like) Array,
+    arr.on('change', function (ev) {
+      var i, j, o
       switch (ev.type) {
       case 'unshift':
         forEachReverse(ev.values, function (v) {
@@ -255,23 +326,27 @@ function arrayFragment(e, arr) {
           e.removeChild(v)
           last--
         })
-        var len = ev.arguments.length
-        if (len > 2) {
-          for (var i = 2; i < len; i++) {
-            var v = ev.arguments[i]
-            e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
+        j = ev.arguments.length
+        if (j > 2) {
+          for (i = 2; i < j; i++) {
+            o = ev.arguments[i]
+            e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
           }
         }
         break
       case 'sort':
-        for (var i = 0, orig = ev.orig; i < orig.length; i++) {
-          var o = orig[i]
-          var idx = arr.indexOf(o)
-          if (i !== idx) {
+        for (i = 0, orig = ev.orig; i < orig.length; i++) {
+          o = orig[i]
+          j = arr.indexOf(o)
+          if (i !== j) {
             e.removeChild(o)
-            e.insertBefore(arr[idx], e.childNodes[idx])
+            e.insertBefore(arr[j], e.childNodes[j])
           }
         }
+        break
+      case 'empty':
+        while (o = e.childNodes[first])
+          e.removeChild(o)
         break
       case 'reverse': // TODO
       default:
@@ -279,10 +354,9 @@ function arrayFragment(e, arr) {
       }
     })
   }
-  return frag
 }
 
 
-var h = context(function (el) { return doc.createElement(el) })
+var h = context(function (el) { return doc.createElement(el) }, arrayFragment)
 h.context = context
 export default h
