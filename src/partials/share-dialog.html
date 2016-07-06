@@ -86,6 +86,7 @@ li.active {
 
 <script>
 import Validator from '../validator'
+import truncate from '../lib/lodash/truncate'
 
 var euc = encodeURIComponent
 var doc = document
@@ -173,8 +174,8 @@ component.exports = {
     let share_window
     this.observe('active', (active) => {
       if (share_window) share_window.close()
+      let d = this.parent.get('parent').get('d')
       if (active === 'facebook') {
-        let d = this.parent.get('parent').get('d')
         var dialog_url = 'http://www.facebook.com/dialog/feed?app_id=' + api.fb_app +
           '&link=' + euc(url) +
           '&name=' + euc('Compartido desde affinaty.com') +
@@ -202,7 +203,8 @@ component.exports = {
         share_window = window.open(dialog_url, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
       } else if (active === 'twitter') {
         // TODO: calculate the middle of the window (for sign-in also)
-        share_window = window.open(`https://twitter.com/intent/tweet?text=${euc(url)}`, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
+        let txt = truncate(d.text, {length: 140 - url.length - 1}) + ' ' + url
+        share_window = window.open(`https://twitter.com/intent/tweet?text=${euc(txt)}`, '_blank', 'toolbar=0,status=0,width=500,height=300,left=100,top=100')
       } else return // skip share_window closing logic
 
       let i = setInterval(() => {
