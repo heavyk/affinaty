@@ -28,10 +28,10 @@ onload = !->
     style.padding = 0
 
   for e in document.querySelectorAll 'div[data-affinaty-profile]'
-    vertele-profile e, e.dataset.affinaty-profile
+    vertele-profile e, e.dataset.affinaty-profile, e.dataset.affinaty-profile-config
 
   for e in document.querySelectorAll 'div[data-affinaty-encuesta]'
-    vertele-encuesta e, e.dataset.affinaty-encuesta
+    vertele-encuesta e, e.dataset.affinaty-encuesta, e.dataset.affinaty-encuesta-config
 
 
 # if this script was added in the header, wait for it, else load it soon(tm)
@@ -49,6 +49,7 @@ else "http://affinaty.com/api"
 const DEFAULT_CONFIG =
   type: \poll
   winning_icon: 'star',
+  percents: 1
   bar:
     fg: '#FB7868'
     bg: '#f6f6f6'
@@ -604,7 +605,7 @@ function stats-module (el, id, _config, _data)
             deg = if sum => v / sum * 360 else 0
             # console.log 'planets.'+i, v, '/', sum, '->', deg
             angles[i] ([prev, prev += deg, prev])
-            counts[i] v
+            counts[i] if config.percents => "#{Math.round v / sum * 100}%" else v
 
         return gauges
       # end g.sex-stats
@@ -678,7 +679,8 @@ function stats-module (el, id, _config, _data)
             percent = if total > 0 => v / total else 0
             deg = percent * 360
             v_rval_graph[i].set-attribute \d, (describe-cone-section mid_x, mid_y, r1, r2, prev, prev += deg)
-            v_rval[i] "#{Math.round percent * 100}%"
+            v_rval[i] (if config.percents => "#{Math.round percent * 100}%" else v)
+            console.log (if config.percents => "#{Math.round percent * 100}%" else v)
         return els
       # end g.age-stats
 
@@ -778,7 +780,10 @@ function stats-module (el, id, _config, _data)
           province-list.push p
           floating-tip p, ->
             count = stats[code] || 0
-            "#{PROVINCE_LIST[code]}: #{count} (#{if total => Math.round count / total * 100 else 0}% de #{total})"
+            "#{PROVINCE_LIST[code]}: " + if config.percents
+              "#{if total => Math.round count / total * 100 else 0}% de #{total}"
+            else
+              "#{count} de #{total}"
 
         return
           * s \g.map transform: "scale(.4)", fill: '#555', province-list
@@ -794,7 +799,9 @@ function stats-module (el, id, _config, _data)
                 for r in top_5
                   count = stats[r.p]
                   el.append-child s \text, 'text-anchor': \end, x: x, y: (y += 20), 'font-size': 12,
-                    "#{PROVINCE_LIST[r.p]}: #{if total => Math.round count / total * 100 else 0}%"
+                    "#{PROVINCE_LIST[r.p]}: " + if config.percents
+                      "#{if total => Math.round count / total * 100 else 0}%"
+                    else count
               # els
       # end g.province-stats
 
@@ -833,8 +840,17 @@ function stats-module (el, id, _config, _data)
   return el
 #/function stats-module
 
+parse-json = (s) ->
+  try
+    return if typeof s is \string
+      JSON.parse s
+    else s
+  catch => return {}
+
 plugin-boilerplate = (el, id, _config, _data) ->
-  const config = defaults {}, _config, DEFAULT_CONFIG
+  const config = defaults {}, (parse-json _config), DEFAULT_CONFIG
+
+  console.log config
 
   el._id = id
   unless set_data = el.set_data
