@@ -15,7 +15,7 @@
         <textarea
           placeholder="Escribe texto de tu encuesta..."
           name="text"
-          maxlength="2048"
+          maxlength="5000"
           value="{{~/d.text}}"
           class="{{~/errors.d.text ? 'invalid' : ''}}">
         </textarea>
@@ -162,7 +162,7 @@ component.exports = {
     let options = [{text: ''}, {text: ''}]
     // let options = [{text: 'eneny'}, {text: 'eonyenyeny'}]
     this.validator = new Validator('d', {
-      'text': {required: true, min: 2, max: 2048},
+      'text': {required: true, min: 2, max: 5000},
       'category': {required: true, type: 'id'},
       'options': {required: true, type: 'array', min: 2, max: 5},
       'tag': {required: true, type: 'array', min: 1, max: 3},
