@@ -1,4 +1,6 @@
+``import pluginBoilerplate from '../lib/plugins/plugin-boilerplate'``
 ``import each from '../lib/lodash/forEach'``
+``import truncate from '../lib/lodash/truncate'``
 ``import defaults from '../lib/lodash/defaultsDeep'``
 ``import isEqual from '../lib/lodash/isEqual'``
 ``import h from '../lib/dom/hyper-hermes'``
@@ -18,6 +20,51 @@ const doc = document
 const IS_LOCAL = ~doc.location.host.index-of 'localhost'
 
 onload = !->
+  # add necessary styles (TODO: separate file, dude)
+  doc.body.append-child h \style """
+  .vertele-encuesta div.block {
+    display: inline-block;
+    vertical-align: top;
+    min-height: 200px;
+  }
+  .vertele-encuesta div.option-text:hover {
+    background: \#009f00;
+    color: \#fff;
+  }
+  .vertele-encuesta div.option-text {
+    border: 1px solid \#ccc;
+    border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25);
+    /* text-shadow: 0 -1px 0 rgba(0,0,0,.25); */
+    border-radius: 6px;
+    background: \#fffefe;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    margin: 4px 0 8px 4px;
+    padding: 11px 7px;
+    font-size: 15px;
+    font-weight: 300;
+    text-align: center;
+    cursor: pointer;
+    outline: none;
+    box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2),0 1px 2px rgba(0,0,0,.05);
+  }
+  \#T {
+    position:absolute;
+    display:block;
+  }
+  \#Tcont {
+    display:block;
+    padding: 2px 12px 3px 7px;
+    margin:5px;
+    background:\#666;
+    color:\#fff;
+    border: solid 1px \#ccc;
+    border-radius: 12px;
+  }
+  """
+
   if IS_LOCAL
     # set the domain (to allow parent window modification)
     doc.domain = doc.domain
@@ -48,6 +95,7 @@ else "http://affinaty.com/api"
 
 const DEFAULT_CONFIG =
   type: \poll
+  limit: 1
   winning_icon: 'star',
   percents: 1
   bar:
@@ -122,7 +170,7 @@ empty-array = (num) ->
   a
 
 function stats-module (el, id, _config, _data)
-  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data
+  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data, DEFAULT_CONFIG
 
   const width = el.clientWidth || config.width || 300
   const movil = window.is-mobile
@@ -449,6 +497,18 @@ function stats-module (el, id, _config, _data)
                 x: bar_x
                 y: last_y,
                   o.text
+                  (el) !->
+                    set-timeout !->
+                      px = el.get-computed-text-length! + el_total.get-computed-text-length!
+                      _p = width - bar_x # v_bar_width[i]!
+                      len = o.text.length
+                      ch_w = px / len
+                      if px > _p
+                        remain = px % _p
+                        remove = Math.ceil remain / ch_w
+                        el.innerHTML = truncate o.text, {length: len - remove}
+                    , 1
+
             * s \rect.bar-shadow,
                 width: width - bar_x
                 height: bar_height
@@ -473,7 +533,8 @@ function stats-module (el, id, _config, _data)
                 x: (v_label_x[i] := value bar_x)
                 y: last_y + 25,
                   v_label[i] := value ''
-            * s \text.total,
+            * el_total =\
+              s \text.total,
                 'text-anchor': 'end'
                 y: last_y
                 x: width - 5,
@@ -840,82 +901,11 @@ function stats-module (el, id, _config, _data)
   return el
 #/function stats-module
 
-parse-json = (s) ->
-  try
-    return if typeof s is \string
-      JSON.parse s
-    else s
-  catch => return {}
-
-plugin-boilerplate = (el, id, _config, _data) ->
-  const config = defaults {}, (parse-json _config), DEFAULT_CONFIG
-
-  console.log config
-
-  el._id = id
-  unless set_data = el.set_data
-    set_data = el.set_data = value!
-  unless set_config = config.config
-    set_config = config.config = value config
-
-    # add necessary styles (TODO: separate file, dude)
-    el.parentNode.append-child h \style """
-    .vertele-encuesta div.block {
-      display: inline-block;
-      vertical-align: top;
-      min-height: 200px;
-    }
-    .vertele-encuesta div.option-text:hover {
-      background: \#009f00;
-      color: \#fff;
-    }
-    .vertele-encuesta div.option-text {
-      border: 1px solid \#ccc;
-      border-color: rgba(0,0,0,.1) rgba(0,0,0,.1) rgba(0,0,0,.25);
-      /* text-shadow: 0 -1px 0 rgba(0,0,0,.25); */
-      border-radius: 6px;
-      background: \#fffefe;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      text-decoration: none;
-      margin: 0 0 4px 4px;
-      padding: 11px 7px;
-      font-size: 14px;
-      font-weight: 300;
-      text-align: center;
-      cursor: pointer;
-      outline: none;
-      box-shadow: inset 0 1px 0 hsla(0,0%,100%,.2),0 1px 2px rgba(0,0,0,.05);
-    }
-    \#T {
-      position:absolute;
-      display:block;
-    }
-    \#Tcont {
-      display:block;
-      padding: 2px 12px 3px 7px;
-      margin:5px;
-      background:\#666;
-      color:\#fff;
-      border: solid 1px \#ccc;
-      border-radius: 12px;
-    }
-    """
-
-  # remove all children
-  while e = el.childNodes.0
-    el.removeChild e
-
-  if _data
-    set_data _data
-
-  return {config, set_config, set_data}
 
 vertele-profile = (el, id, _config, _data) ->
-  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data
+  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data, DEFAULT_CONFIG
 
-  xhr url: "#{API_ROOT}/#{config.type}*?creator=#{id}&limit=2&sort=+created", (err, res) !->
+  xhr url: "#{API_ROOT}/#{config.type}*?creator=#{id}&limit=#{config.limit}&sort=+created", (err, res) !->
     if err => return console.error "error processing...", err
     set_data res.data
 
@@ -923,7 +913,7 @@ vertele-profile = (el, id, _config, _data) ->
   set_data (data) !->
     unless data => return
     for d in data
-      els.push h \div.encusta, null, (el) ->
+      els.push h \div.encuesta, null, (el) ->
         vertele-encuesta el, d._id, config, d
 
   el.append-child \
@@ -931,9 +921,14 @@ vertele-profile = (el, id, _config, _data) ->
 
 
 vertele-encuesta = (el, id, _config, _data) ->
-  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data
+  {config, set_config, set_data} = plugin-boilerplate el, id, _config, _data, DEFAULT_CONFIG
 
   set_title = value ''
+
+  unless set_data!
+    xhr url: "#{API_ROOT}/poll?_id=#{id}", (err, res) !->
+      if err => return console.error "error processing...", err
+      set_data res.data
 
   # it'd be a good idea to have a global observable with the current options so that fetching options / data can happen at the same time
   # pass around a pipeline between the functions (actually, use the root element as the anchor for the pipeline)
@@ -969,7 +964,8 @@ vertele-encuesta = (el, id, _config, _data) ->
                 els.push h \div.option-text, on: {click}, o.text
           return els
       h \div.block, null, (el) !->
-        stats-module el, id, config, _data
+        set_data (d) !->
+          stats-module el, id, config, d
 
 window.affinaty =
   vertele: vertele-encuesta
