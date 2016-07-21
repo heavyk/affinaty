@@ -46,15 +46,20 @@
         <date-select value="{{~/me.birthdate}}" />
       </div>
 
-      {{#if !~/prevote && !~/me.foto}}
-      <button on-tap="set('active', 'foto')" class="button-sign-up" style="background: #fff; color: #333">
-        <img src="/img/icon-foto.svg" width="30" height="30" style="margin: 0 10px -8px 0">
-        Elige una foto
+      {{#if !~/prevote}}
+      <button on-tap="set('active', 'foto')" type="button" class="button-sign-up" style="background: #fff; color: #333">
+        {{#if ~/me.foto}}
+          <foto src="{{~/me.foto}}" size="a" observe="true" /><br />
+          Modificar foto
+        {{else}}
+          <img src="/img/icon-foto.svg" width="30" height="30" style="margin: 0 10px -8px 0">
+          Elige una foto
+        {{/if}}
         <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
       </button>
       {{/if}}
 
-      <button on-tap="submit" class="button-sign-up">
+      <button on-tap="submit-all" class="button-sign-up">
         {{#if ~/prevote}}
         Votar
         {{else}}
@@ -75,7 +80,7 @@
         {{/if}}
       </div>
 
-      <button on-tap="set('active', '')" class="button-sign-up">
+      <button on-tap="set('active', '')" type="button" class="button-sign-up">
         Continuar <span class="angle"><i class="fa fa-angle-right"></i><i class="fa fa-angle-right"></i></span>
       </button>
     </div>
@@ -268,7 +273,7 @@ component.exports = {
       if (this.v.submitted)
         this.set('errors', this.v.validate(this).errors)
     })
-    this.on('submit', (e) => {
+    this.on('submit-all', (e) => {
       e.original.preventDefault()
       e.original.stopImmediatePropagation()
       this.v.submitted = true
