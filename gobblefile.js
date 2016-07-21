@@ -113,11 +113,9 @@ var bundles = {
 		}),
 		// .moveTo( 'js' )
 		// .transformIf(gobble.env() === 'production', 'uglifyjs')
-	plugins: src.transform('rollup', {
-			// TODO: if 'plugins/vertele.js' doesn't exist, it'll give you like this totally wack error message about not loading null
-			entry: 'plugins/vertele.js',
-			dest: 'plugins/plugin-vertele.js',
-			// format: 'cjs',
+	boobleBobble: src.transform('rollup', {
+			entry: 'plugins/booble-bobble.js',
+			dest: 'plugins/booble-bobble.js',
 			format: 'umd',
 			external: EXTERNAL_LIBS,
 			plugins: [
@@ -127,18 +125,49 @@ var bundles = {
 					compact: false,
 				})
 			]
-		})
-		// .transform('uglifyjs'),
-		.transformIf(gobble.env() === 'production', 'uglifyjs'),
-		// .copyTo( 'plugins/vertele.min.js' ),
-		// .transform('browserify', {
-		// 	entries: [ './plugins/plugin-vertele' ],
-		// 	dest: 'plugin-vertele.js',
-		// 	standalone: 'app',
-		// 	debug: false
-		// })
-		// .transform('uglifyjs'),
-		// .moveTo( 'plugins' )
+		}),
+	pluginVertele: src.transform('rollup', {
+			// TODO: if 'plugins/vertele.js' doesn't exist, it'll give you like this totally wack error message about not loading null
+			entry: 'plugins/vertele.js',
+			dest: 'plugins/vertele.js',
+			format: 'umd',
+			external: EXTERNAL_LIBS,
+			plugins: [
+				babel({
+					exclude: 'node_modules/**',
+					plugins: BABEL_PLUGINS,
+					compact: false,
+				})
+			]
+		}),
+	pluginAffinaty: src.transform('rollup', {
+			// TODO: temporary -- this is just a copy of vertele (for now)
+			entry: 'plugins/vertele.js',
+			dest: 'plugins/affinaty.js',
+			format: 'umd',
+			external: EXTERNAL_LIBS,
+			plugins: [
+				babel({
+					exclude: 'node_modules/**',
+					plugins: BABEL_PLUGINS,
+					compact: false,
+				})
+			]
+		}),
+	pluginVertelePortada: src.transform('rollup', {
+			// TODO: if 'plugins/vertele.js' doesn't exist, it'll give you like this totally wack error message about not loading null
+			entry: 'plugins/vertele-portada.js',
+			dest: 'plugins/vertele-portada.js',
+			format: 'umd',
+			external: EXTERNAL_LIBS,
+			plugins: [
+				babel({
+					exclude: 'node_modules/**',
+					plugins: BABEL_PLUGINS,
+					compact: false,
+				})
+			]
+		}),
 	styles: gobble('files/styles')
 		.transform('less', {
 	    src: 'screen.less',
@@ -153,9 +182,11 @@ var bundles = {
 }
 
 // var affinaty = gobble( obj_values(bundles) )
-var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : bundles.plugins )
+var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : [ bundles.affinaty, bundles.styles, bundles.files ])
+// var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : bundles.pluginVertele )
+// var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : bundles.pluginVertelePortada )
+// var affinaty = gobble( gobble.env() === 'production' ? obj_values(bundles) : bundles.boobleBobble )
 
-// .transform('uglifyjs')
 .transformIf(gobble.env() === 'production', 'uglifyjs')
 .transform(function hashFiles (source, options) {
 	var file = path.basename(this.src)

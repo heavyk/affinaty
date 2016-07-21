@@ -160,12 +160,7 @@ component.exports = {
     this.closeButton = this.find('.close')
 
     let resizeHandler = () => {
-      let outerHeight = this.outer.clientHeight
-      let modalHeight = this.modal.clientHeight
-      let verticalSpace = (outerHeight - modalHeight) / 2
-      this.modal.style.top = verticalSpace + 'px'
-      // console.log(outerHeight, modalHeight, verticalSpace)
-      // if (this.footer) this.footer.style.top = ((verticalSpace + modalHeight)) + 'px'
+      this.modal.style.top = ((this.outer.clientHeight - this.modal.clientHeight) / 2) + 'px'
     }
 
     this.on('resize', resizeHandler)
