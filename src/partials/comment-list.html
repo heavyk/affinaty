@@ -59,16 +59,17 @@
               <div class="comment-body" decorator="markdown:{{.text}}"></div>
             </div>
           {{/each ~/list}}
-          {{#if ~/load_more}}
-            <button class="load-more" on-click="go()">Cargar más</button>
-          {{/if}}
         {{/if ~/loading}}
       </div>
     </div>
+    {{#if ~/load_more}}
+    <button class="load-more" on-click="go()">Cargar más</button>
+    {{/if}}
   </div>
 </div>
 
 <style>
+/*@import '../../../node_modules/gemini-scrollbar/gemini-scrollbar.css';*/
 
 .comments-container {
   background-color: #fff;
@@ -286,7 +287,8 @@ component.exports = {
     let container = this.find('.list-container')
 
     let _resizer, resizer = throttle(_resizer = () => {
-      this.set('height', window.innerHeight - 65 - title.scrollHeight - adder.scrollHeight)
+      let more = this.get('load_more')
+      this.set('height', window.innerHeight - (more ? 32 + 65 : 65) - title.scrollHeight - adder.scrollHeight)
     }, true)
     onresize.addResizeListener(container, resizer)
     resizer()
