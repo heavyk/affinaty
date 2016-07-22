@@ -198,20 +198,20 @@ function context (createElement, arrayFragment) {
 }
 
 export function isNode (el) {
-  return el && el.nodeName && el.nodeType
+  return el && el.nodeType
 }
 
 export function isText (el) {
-  return el && el.nodeName === '#text' && el.nodeType == 3
+  return el && el.nodeType == 3
 }
 
-function forEach (arr, fn) {
+export function forEach (arr, fn) {
   // micro-optimization here: http://jsperf.com/for-vs-foreach/292
   // was: if (arr.forEach) return arr.forEach(fn)
   for (var i = 0; i < arr.length; ++i) fn(arr[i], i)
 }
 
-function forEachReverse (arr, fn) {
+export function forEachReverse (arr, fn) {
   for (var i = arr.length - 1; i >= 0; i--) fn(arr[i], i)
 }
 
@@ -265,10 +265,10 @@ function arrayFragment(e, arr) {
         }
         break
       case 'sort':
-        for (i = 0, orig = ev.orig; i < orig.length; i++) {
+        i = 0
+        for (var orig = ev.orig; i < orig.length; i++) {
           o = orig[i]
-          j = arr.indexOf(o)
-          if (i !== j) {
+          if (i !== (j = arr.indexOf(o))) {
             e.removeChild(o)
             e.insertBefore(arr[j], e.childNodes[j])
           }
@@ -280,7 +280,7 @@ function arrayFragment(e, arr) {
         break
       case 'reverse': // TODO
       default:
-        debugger
+        console.log('unknown event', ev)
       }
     })
   }

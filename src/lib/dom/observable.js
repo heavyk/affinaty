@@ -1,5 +1,7 @@
 "use strict";
 
+import { forEach } from './hyper-hermes'
+
 // knicked from: https://github.com/dominictarr/observable/blob/master/index.js
 // mostly unmodified...
 // * exported classes
@@ -56,9 +58,9 @@ export function value (initialValue) {
 
   function observable(val) {
     return (
-      val === undefined ? _val                               /* getter */
-    : 'function' !== typeof val ? all(listeners, _val = val) /* setter */
-    : (listeners.push(val), val(_val), function () {         /* listener */
+      val === undefined ? _val                                                     /* getter */
+    : 'function' !== typeof val ? all(listeners, _val = val)                       /* setter */
+    : (listeners.push(val), (_val === undefined ? _val : val(_val)), function () { /* listener */
         remove(listeners, val)
       })
     )
@@ -176,19 +178,19 @@ function error (message) {
 }
 
 export function compute (observables, compute) {
-  var cur = observables.map(function (e) {
-    return e()
-  }), init = true
+  var init = true
+  var cur = new Array(observables.length)
 
   var v = value()
 
-  observables.forEach(function (f, i) {
+  forEach(observables, function (f, i) {
+    cur[i] = f()
     f(function (val) {
       cur[i] = val
-      if(init) return
-      v(compute.apply(null, cur))
+      if(init === false) v(compute.apply(null, cur))
     })
   })
+  
   v(compute.apply(null, cur))
   init = false
   v(function () {
@@ -226,24 +228,5 @@ export function hover (e) { return toggle(e, 'mouseover', 'mouseout')}
 export function focus (e) { return toggle(e, 'focus', 'blur')}
 
 export { attribute as input }
-
-
-// something must be done about this..
-//  for now, only the value function is identified as 'obseorvable'
-// not.observable = true
-// value.observable = true
-// property.observable = true
-// transform.observable = true
-// attribute.observable = true
-// select.observable = true
-// toggle.observable = true
-// compute.observable = true
-// boolean.observable = true
-// signal.observable = true
-// hover.observable = true
-// focus.observable = true
-
-// set a value on the function  (unused)
-// ;[ not, value, property, transform, attribute, select, toggle, compute, boolean, signal, hover, focus ].forEach(function (f) { f.observable = true })
 
 export default value
