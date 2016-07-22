@@ -278,7 +278,13 @@ function arrayFragment(e, arr) {
         while (o = e.childNodes[first])
           e.removeChild(o)
         break
-      case 'reverse': // TODO
+      case 'reverse':
+        // this can potentially be optimized...
+        while (o = e.childNodes[0])
+          e.removeChild(o)
+        for (i = 0; i < arr.length; i++)
+          e.appendChild(arr[i])
+        break
       default:
         console.log('unknown event', ev)
       }
