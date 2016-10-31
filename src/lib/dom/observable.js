@@ -1,6 +1,7 @@
 "use strict";
 
 import { forEach } from './hyper-hermes'
+// import isEqual from '../lodash/isEqual'
 
 // knicked from: https://github.com/dominictarr/observable/blob/master/index.js
 // mostly unmodified...
@@ -32,7 +33,7 @@ function all(ary, val) {
 // remove a listener
 function remove(ary, item) {
   var i = ary.indexOf(item)
-  if (~i) setTimeout(function () { ary,splice(i, 1) }, 1)
+  if (~i) setTimeout(function () { ary.splice(i, 1) }, 1)
 }
 
 // register a listener
@@ -92,7 +93,7 @@ export function transform (in_observable, down, up) {
   if(typeof in_observable !== 'function')
     throw new Error('transform expects an observable')
 
-  observable.observable = 'transform'
+  observable.observable = 'value'
   return observable
 
   function observable (val) {
@@ -120,10 +121,11 @@ function listen (element, event, attr, listener) {
 }
 
 //observe html element - aliased as `input`
-export function attribute(element, attr, event) {
-  attr = attr || 'value'; event = event || 'input'
+export function attribute(element, _attr, _event) {
+  var attr = _attr || 'value'
+  var event = _event || 'input'
   observable.observable = 'attribute'
-  return attribute
+  return observable
 
   function observable (val) {
     return (
@@ -190,7 +192,7 @@ export function compute (observables, compute) {
       if(init === false) v(compute.apply(null, cur))
     })
   })
-  
+
   v(compute.apply(null, cur))
   init = false
   v(function () {
@@ -215,7 +217,7 @@ export function signal () {
   return function (val) {
     return (
       val === undefined ? _val
-        : 'function' !== typeof val ? (!(_val===val) ? all(listeners, _val = val):"")
+        : 'function' !== typeof val ? (!(_val === val) ? all(listeners, _val = val) : "")
         : (listeners.push(val), val(_val), function () {
            remove(listeners, val)
         })

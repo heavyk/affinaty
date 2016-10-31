@@ -1,120 +1,121 @@
+// hyper-hermes
+// knicked from https://github.com/dominictarr/hyperscript
+// many modifications...
+// also took some inspiration from https://github.com/Raynos/mercury
+
 import ClassList from './class-list.js'
-import observable from './observable.js'
-import each from '../lodash/forEach'
+// import observable from './observable.js'
 var doc = window.document
+
 /*
 TODO ITEMS:
  * extract out the attribute setting function and make it available to the attribute observable so setting attributes will work properyly for shortcut syntax
 */
 
+function txt (t) {
+  return doc.createTextNode(t)
+}
+
 function context (createElement, arrayFragment) {
 
   var cleanupFuncs = []
 
+  function add_event (e, event, listener, opts) {
+    (e.on || e.addEventListener)
+      .call(e, event, listener, opts)
+
+    cleanupFuncs.push(function () {
+      // copied from observable
+      (e.removeListener || e.removeEventListener || e.off)
+        .call(e, event, listener, opts)
+    })
+  }
+
+
   function h() {
     var args = [].slice.call(arguments), e = null
     function item (l) {
-      var r
+      var r, s, i, o
       function parseClass (string) {
         var m = string.split(/([\.#]?[a-zA-Z0-9_:-]+)/)
         if (/^\.|#/.test(m[1])) e = createElement('div')
         forEach(m, function (v) {
-          var s = v.substring(1, v.length)
-          if (!v) return
-          if (!e) {
-            e = createElement(v)
-          } else if (v[0] === '.') {
-            ClassList(e).add(s)
-          } else if (v[0] === '#') {
-            e.setAttribute('id', s)
+          if (typeof v === 'string' && (i = v.length)) {
+            if (!e) {
+              e = createElement(v)
+            } else {
+              s = v.substring(1, i)
+              if (v[0] === '.') {
+                ClassList(e).add(s)
+              } else if (v[0] === '#') {
+                e.setAttribute('id', s)
+              }
+            }
           }
         })
       }
 
-      if (l == null) {
-        ;
-      } else if ('string' === typeof l) {
+      if (l != null)
+      if (typeof l === 'string') {
         if (!e) {
           parseClass(l)
         } else {
-          e.appendChild(r = doc.createTextNode(l))
+          e.appendChild(r = txt(l))
         }
-      } else if ('number' === typeof l
-        || 'boolean' === typeof l
+      } else if (typeof l === 'number'
+        || typeof l === 'boolean'
         || l instanceof Date
         || l instanceof RegExp ) {
-          e.appendChild(r = doc.createTextNode(l.toString()))
+          e.appendChild(r = txt(l.toString()))
       } else if (Array.isArray(l)) {
         forEach(l, item)
-      } else if (isNode(l)) {
+      } else if (isNode(l) || l instanceof window.Text) {
         e.appendChild(r = l)
-      } else if (l instanceof window.Text) {
-        e.appendChild(r = l)
-      } else if ('object' === typeof l) {
-        // for (var k in l) {
-        each(l, function (attr_val, k) {
-          if ('function' === typeof attr_val) {
-            if (/^on\w+/.test(k)) {
-              if (e.addEventListener) {
-                e.addEventListener(k.substring(2), attr_val, false)
-                cleanupFuncs.push(function () {
-                  e.removeEventListener(k.substring(2), attr_val, false)
-                })
-              } else {
-                e.attachEvent(k, attr_val)
-                cleanupFuncs.push(function () {
-                  e.detachEvent(k, attr_val)
-                })
-              }
+      } else if (typeof l === 'object') {
+        // each(l, function (attr_val, k) {
+        for (var k in l) (function (attr_val, k) {
+          if (typeof attr_val === 'function') {
+            // TODO: not sure which one is faster: regex or substr test
+            // if (/^on\w+/.test(k)) {
+            if (k.substr(0, 2) === 'on') {
+              add_event(e, k.substr(2), attr_val, false)
             } else {
               // observable
-              // e[k] = attr_val()
               e.setAttribute(k, attr_val())
               cleanupFuncs.push(attr_val(function (v) {
-                // e[k] = v
                 e.setAttribute(k, v)
                 // console.log('set attribute', k, '->', v)
               }))
             }
           } else if (k === 'data') {
-            for(var s in attr_val) e.dataset[s] = attr_val[s]
+            for(s in attr_val) e.dataset[s] = attr_val[s]
           } else if (k === 'for') {
             e.htmlFor = attr_val
           } else if (k === 'c' || k === 'class') {
             // e.className = Array.isArray(attr_val) ? attr_val.join(' ') : attr_val
             if (Array.isArray(attr_val)) {
               forEach(attr_val, function (c) {
-                ClassList(e).add(c)
+                if (c) ClassList(e).add(c)
               })
-            } else ClassList(e).add(attr_val)
+            } else if (attr_val) ClassList(e).add(attr_val)
           } else if (k === 'on') {
-            if ('object' === typeof attr_val) {
-              for (var s in attr_val) (function (event, listener) {
-                if ('function' === typeof listener) {
-                  // ???
-                  (e.on || e.addEventListener)
-                    .call(e, event, listener, false)
-
-                  cleanupFuncs.push(function () {
-                    // copied from observable
-                    (e.removeListener || e.removeEventListener || e.off)
-                      .call(e, event, listener, false)
-                  })
-                }
-              })(s, attr_val[s])
-            // } else if ('function' === typeof attr_val) {
-            //   // another event listener ...
-            //   // re-emit listened events into this listener...
-            //   // for(k in attr_val._listeners) { ... }
-            // } else {
-            //   debugger
+            if (typeof attr_val === 'object') {
+              for (s in attr_val)
+                if (typeof (o = attr_val[s]) === 'function')
+                  add_event(e, s, o, false)
+            }
+          } else if (k === 'capture') {
+            if (typeof attr_val === 'object') {
+              for (s in attr_val)
+                if (typeof (o = attr_val[s]) === 'function')
+                  add_event(e, s, o, true)
             }
           } else if (k === 's' || k === 'style') {
-            if ('string' === typeof attr_val) {
+            if (typeof attr_val === 'string') {
               e.style.cssText = attr_val
             } else {
-              for (var s in attr_val) (function (s, v) {
-                if ('function' === typeof v) {
+              for (s in attr_val) (function (s, v) {
+                if (typeof v === 'function') {
                   // observable
                   e.style.setProperty(s, v())
                   cleanupFuncs.push(v(function (val) {
@@ -128,43 +129,44 @@ function context (createElement, arrayFragment) {
           } else if (k.substr(0, 5) === "data-") {
             e.setAttribute(k, attr_val)
           } else if (typeof attr_val !== 'undefined') {
-            // this is an ugly hack to be able to use holder.js
-            // I'd like to perhaps move it out to a wrapper function
-            // TODO: add composition hooks instead of this shit...
-            if (~k.indexOf(':')) {
-              var attr = k.split(':')
-              switch (attr[0]) {
+            // for namespaced attributes, such as xlink:href
+            // (I'm really not aware of any others than xlink... PRs accepted!)
+            if (~(i = k.indexOf(':'))) {
+              // var attr = k.split(':')
+              // debugger
+              switch (k.substr(0, i)) {
                 case 'xlink':
-                  e.setAttributeNS('http://www.w3.org/1999/xlink', attr[1], attr_val)
-                  break
-                default:
-                  console.error('unknown namespaced attribute: ' + k)
+                  // debugger
+                  e.setAttributeNS('http://www.w3.org/1999/xlink', k.substr(++i), attr_val)
+                //   break
+                // default:
+                //   console.error('unknown namespaced attribute: ' + k)
               }
-            } else if (k === 'src' && e.tagName === 'IMG' && ~attr_val.indexOf('holder.js')) {
-              e.dataset.src = attr_val
-              console.log('you are using holder ... fix this')
-              // setTimeout(function () {
-              //   require('holderjs').run({images: e})
-              // },0)
+            // } else if (k === 'src' && e.tagName === 'IMG' && ~attr_val.indexOf('holder.js')) {
+            //   e.dataset.src = attr_val
+            //   console.log('you are using holder ... fix this')
+            //   // setTimeout(function () {
+            //   //   require('holderjs').run({images: e})
+            //   // },0)
             } else {
               // e[k] = attr_val
+              console.log('set-attribute', k, attr_val)
               e.setAttribute(k, attr_val)
             }
           }
-        })
-      } else if ('function' === typeof l) {
-        var is_observable = !!l.observable
-        var v = is_observable ? l.call(e) : l.call(this, e)
-        // console.log('v', l.length, l.name, v)
-        if (v !== void 0) {
-          r = isNode(v) ? v
-            : Array.isArray(v) ? arrayFragment(e, v)
-            : doc.createTextNode(v)
+        })(l[k], k)
+      } else if (typeof l === 'function') {
+        i = l.observable && l.observable === 'value' ? 1 : 0
+        o = i ? l.call(e) : l.call(this, e)
+        if (o !== undefined) {
+          r = isNode(o) ? o
+            : Array.isArray(o) ? arrayFragment(e, o, cleanupFuncs)
+            : txt(o)
           if (r) e.appendChild(r)
         }
         // assume we want to make a scope...
         // call the function and if it returns an element, or an array, appendChild
-        if (r && is_observable) {
+        if (r && i) {
           // assume it's an observable!
           // TODO: allow for an observable-array implementation
           cleanupFuncs.push(l(function (v) {
@@ -181,13 +183,14 @@ function context (createElement, arrayFragment) {
 
       return r
     }
-    while(args.length) {
+    while (args.length) {
       item(args.shift())
     }
 
     return e
   }
 
+  h.cleanupFuncs = cleanupFuncs
   h.cleanup = function () {
     for (var i = 0; i < cleanupFuncs.length; i++) {
       cleanupFuncs[i]()
@@ -205,9 +208,8 @@ export function isText (el) {
   return el && el.nodeType == 3
 }
 
+// micro-optimization: http://jsperf.com/for-vs-foreach/292
 export function forEach (arr, fn) {
-  // micro-optimization here: http://jsperf.com/for-vs-foreach/292
-  // was: if (arr.forEach) return arr.forEach(fn)
   for (var i = 0; i < arr.length; ++i) fn(arr[i], i)
 }
 
@@ -215,15 +217,36 @@ export function forEachReverse (arr, fn) {
   for (var i = arr.length - 1; i >= 0; i--) fn(arr[i], i)
 }
 
-function arrayFragment(e, arr) {
+function arrayFragment(e, arr, cleanupFuncs) {
   var frag = doc.createDocumentFragment()
   var first = e.childNodes.length
-  forEach(arr, function (v) {
-    frag.appendChild(
-      isNode(v) ? v
-        : Array.isArray(v) ? arrayFragment(frag, v)
-        : doc.createTextNode(v)
-    )
+  forEach(arr, function (_v) {
+    var i, v = _v
+    if (typeof v === 'function') {
+      i = v.observable && v.observable === 'value' ? 1 : 0
+      v = i ? v.call(e) : v.call(this, e)
+    }
+
+    if (v) {
+      frag.appendChild(
+        isNode(v) ? v
+          : Array.isArray(v) ? arrayFragment(frag, v, cleanupFuncs)
+          : txt(v)
+      )
+
+      if (i === 1) {
+        // assume it's an observable!
+        cleanupFuncs.push(_v(function (__v) {
+          // console.log(v)
+          if (isNode(__v) && v.parentElement) {
+            v.parentElement.replaceChild(__v, v), v = __v
+          // TODO: observable-array cleanup
+          } else {
+            v.textContent = __v
+          }
+        }))
+      }
+    }
   })
 
   var last = first + arr.length
@@ -234,13 +257,13 @@ function arrayFragment(e, arr) {
       switch (ev.type) {
       case 'unshift':
         forEachReverse(ev.values, function (o) {
-          e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[first])
+          e.insertBefore(isNode(o) ? o : txt(o), e.childNodes[first])
           last++
         })
       break
       case 'push':
         forEach(ev.values, function (o) {
-          e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
+          e.insertBefore(isNode(o) ? o : txt(o), e.childNodes[last])
           last++
         })
         break
@@ -260,7 +283,7 @@ function arrayFragment(e, arr) {
         if (j > 2) {
           for (i = 2; i < j; i++) {
             o = ev.arguments[i]
-            e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
+            e.insertBefore(isNode(o) ? o : txt(o), e.childNodes[last])
           }
         }
         break
@@ -293,13 +316,35 @@ function arrayFragment(e, arr) {
   return frag
 }
 
-export function svgArrayFragment(e, arr) {
+export function svgArrayFragment(e, arr, cleanupFuncs) {
   var first = e.childNodes.length
-  forEach(arr, function (v) {
-    var o = isNode(v) ? v
-      : Array.isArray(v) ? svgArrayFragment(e, v)
-      : doc.createTextNode(v)
-    if (o) e.appendChild(o)
+  forEach(arr, function (_v) {
+    var i, v = _v
+    if (typeof v === 'function') {
+      i = v.observable && v.observable === 'value' ? 1 : 0
+      v = i ? v.call(e) : v.call(this, e)
+    }
+
+    if (v) {
+      e.appendChild(
+        isNode(v) ? v
+          : Array.isArray(v) ? svgArrayFragment(e, v, cleanupFuncs)
+          : txt(v)
+      )
+
+      if (i === 1) {
+        // assume it's an observable!
+        cleanupFuncs.push(_v(function (__v) {
+          // console.log(v)
+          if (isNode(__v) && v.parentElement) {
+            v.parentElement.replaceChild(__v, v), v = __v
+          // TODO: observable-array cleanup
+          } else {
+            v.textContent = __v
+          }
+        }))
+      }
+    }
   })
 
   if (typeof arr.on === 'function') {
@@ -310,13 +355,13 @@ export function svgArrayFragment(e, arr) {
       switch (ev.type) {
       case 'unshift':
         forEachReverse(ev.values, function (v) {
-          e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[first])
+          e.insertBefore(isNode(v) ? v : txt(v), e.childNodes[first])
           last++
         })
       break
       case 'push':
         forEach(ev.values, function (v) {
-          e.insertBefore(isNode(v) ? v : doc.createTextNode(v), e.childNodes[last])
+          e.insertBefore(isNode(v) ? v : txt(v), e.childNodes[last])
           last++
         })
         break
@@ -336,7 +381,7 @@ export function svgArrayFragment(e, arr) {
         if (j > 2) {
           for (i = 2; i < j; i++) {
             o = ev.arguments[i]
-            e.insertBefore(isNode(o) ? o : doc.createTextNode(o), e.childNodes[last])
+            e.insertBefore(isNode(o) ? o : txt(o), e.childNodes[last])
           }
         }
         break
@@ -354,7 +399,13 @@ export function svgArrayFragment(e, arr) {
         while (o = e.childNodes[first])
           e.removeChild(o)
         break
-      case 'reverse': // TODO
+      case 'reverse':
+        // this can potentially be optimized...
+        while (o = e.childNodes[0])
+          e.removeChild(o)
+        for (i = 0; i < arr.length; i++)
+          e.appendChild(arr[i])
+        break
       default:
         debugger
       }
@@ -362,7 +413,23 @@ export function svgArrayFragment(e, arr) {
   }
 }
 
+export function dom_context () {
+  return context(function (el) {
+    return doc.createElement(el)
+  }, arrayFragment)
+}
 
-var h = context(function (el) { return doc.createElement(el) }, arrayFragment)
-h.context = context
+var h = dom_context()
+h.context = dom_context
+
+export function svg_context () {
+  return context(function (el) {
+    return doc.createElementNS('http://www.w3.org/2000/svg', el)
+  }, svgArrayFragment)
+}
+
+var s = svg_context()
+s.context = svg_context
+
+export { s }
 export default h

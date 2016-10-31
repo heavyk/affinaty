@@ -1,0 +1,40 @@
+<link rel='ractive' href='../partials/debate-sm.html'>
+<link rel='ractive' href='../partials/poll-sm.html'>
+<!-- <link rel='ractive' href='../partials/debate-create.html'> -->
+
+<div>
+  opinions: {{list.length}}
+</div>
+<div class="opinions">
+  {{#each list}}
+    <div class="opinion">
+      <a href="/debate/{{debate}}">
+        debate: {{debate}}, pos: {{pos}}
+      </a>
+    </div>
+  {{else}}
+    loading...
+  {{/each}}
+</div>
+
+<style>
+.opinion {
+  padding: 5px;
+  border-top: solid 1px #222;
+}
+</style>
+
+<script>
+import scroll from '../lib/on-scroll.js'
+import assign from '../lib/lodash/assign'
+import isEqual from '../lib/lodash/isEqual'
+import { insert } from '../lib/ordered-array'
+
+component.exports = {
+  isolated: true,
+  oninit () {
+    console.warn('not done yet')
+    debugger
+  },
+}
+</script>

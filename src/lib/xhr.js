@@ -23,7 +23,7 @@ function xhr (opt, cb) {
       url += '?' + data
     }
   }
-  console.log('xhr.open', method, url)
+  // console.log('xhr.open', method, url)
   xhr.open(method, url, true)
 
   if (opt.headers) {
@@ -48,6 +48,32 @@ function xhr (opt, cb) {
     cb(e)
   }
   xhr.send(data)
+}
+
+export function binary (url, cb) {
+  return new BinaryXHR(url, cb)
+}
+
+function BinaryXHR (url, cb) {
+  // if (!this instanceof BinaryXHR) return new BinaryXHR(url, cb)
+  var xhr = new XMLHttpRequest()
+  this.xhr = xhr
+  xhr.open('GET', url, true)
+  xhr.responseType = 'arraybuffer'
+  xhr.onreadystatechange = () => {
+    if (this.readyState === 4) {
+      if (this.status !== 200) {
+        cb(this.status, this.response)
+      } else if (this.response && this.response.byteLength > 0) {
+        cb(false, this.response)
+      } else if (this.response && this.response.byteLength === 0) {
+        cb('response length 0')
+      } else {
+        cb('no response')
+      }
+    }
+  }
+  xhr.send(null)
 }
 
 export default xhr

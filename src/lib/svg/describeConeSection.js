@@ -2,6 +2,13 @@ import polarToCartesian from '../calc/polarToCartesian'
 
 
 export default function describeConeSection(x, y, radius, radius2, start_angle, end_angle) {
+  typeof x === 'function' && (x = x())
+  typeof y === 'function' && (y = y())
+  typeof radius === 'function' && (radius = radius())
+  typeof radius2 === 'function' && (radius2 = radius2())
+  typeof start_angle === 'function' && (start_angle = start_angle())
+  typeof end_angle === 'function' && (end_angle = end_angle())
+
   var deg = (end_angle - start_angle)
   var arc_sweep = deg <= 180 ? 0 : 1
 

@@ -210,36 +210,63 @@ function createOutro (definition, indent) {
 // ----------------
 
 
+var sander = require('sander')
+var path = require('path')
+var genny = require('genny')
+var fs = require('fs')
 
+function ractive (inputdir, outputdir, options, callback) {
+	var file, sourceMap = options.sourceMap !== false
 
-function ractive (source, options) {
-	options = options || {}
-	options.sourceMap = options.sourceMap !== false
-
-	if (options.sourceMap) {
+	if (sourceMap) {
 		options.sourceMapFile = this.dest
 		options.sourceMapSource = this.src
 	}
 
-	var parsed = rcu.parse(source)
-	parsed.name = path.basename(this.src)
+	genny.run(function* (resume) {
+		var paths = yield sander.lsr(inputdir)
 
-	console.log('before postcss')
-	postcss(options.postcss).process(parsed.css).then(function (result) {
-		result.warnings().forEach(function (warn) {
-			console.warn(warn.toString())
-		})
-		parsed.css = result.css
-		console.log('done postcss')
+		for (var i = 0; i < paths.length; i++) {
+			var p = file = paths[i]
+			var ext = path.extname(p)
+			// console.log('starting', p)
+			if (ext === '.html') {
+				var source = yield fs.readFile(inputdir + '/' + p, 'utf8', resume())
+				var parsed = rcu.parse(source)
+				parsed.name = path.basename(p)
+
+				var result = yield function (cb) {
+					postcss(options.postcss).process(parsed.css).then(function (result) { cb(null, result) }).catch(cb)
+				}
+
+				// console.log('result', result)
+				var warnings = result.warnings()
+				if (warnings.length) {
+					console.warn(`warnings for '${p}':`)
+					warnings.forEach(function (warn) {
+						console.warn(' * ' + warn.toString())
+					})
+				}
+
+				parsed.css = result.css
+				var out = builder(parsed, options)
+
+				var outfile = outputdir + '/' + path.dirname(p) + '/' + path.basename(p, ext) + '.js'
+				// console.log('writing', outfile)
+				yield sander.writeFile(outfile, out.code)
+				if (sourceMap && out.map) {
+					yield sander.writeFile(outfile + '.map', out.map)
+				}
+			} else {
+				yield sander.symlink(inputdir + '/' + p).to(outputdir + '/' + p)
+			}
+			// console.log('done', p)
+		}
+		callback(null)
+	}, function (err) {
+		if (err) console.error('ERROR:', file, err.stack)
+		callback(err)
 	})
-
-	console.log('before builer')
-	return builder(parsed, options)
-}
-
-ractive.defaults = {
-	accept: '.html',
-	ext: '.js'
 }
 
 var fs = require('fs')
