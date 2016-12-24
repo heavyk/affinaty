@@ -10,6 +10,8 @@ poems =
     dest: 'plugins/booble-bobble.js'
     webpack:
       stuff: true
+  'plugins/zibble-zabble.js':
+    dest: 'plugins/zibble-zabble.js'
   'plugins/mastering-the-zodiac.js':
     dest: 'plugins/mastering-the-zodiac.js'
   'plugins/juego-x.js':
